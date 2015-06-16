@@ -1,8 +1,9 @@
 
 abstract class Obstacle {
-  int x, y, w=500, h=100;
+  int x, y, w=100, h=100;
   float vx, vy;
-
+  color obstacleColor = color(100,100,50);
+  boolean dead;
   Obstacle(int _x, int _y) {
     x=_x;
     y=_y;
@@ -12,6 +13,7 @@ abstract class Obstacle {
     y+=vy;
   }
   void display() {
+    fill(obstacleColor);
     rect(x, y, w, h);
   }
   void collision() {
@@ -20,12 +22,15 @@ abstract class Obstacle {
         println("onTop");  
      }
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-
         println("collision!!!!");  
         p.collision();
-      
+        death();
     }
-
   }
+  
+  void death(){
+   dead=true;
+  }
+  
 }
 

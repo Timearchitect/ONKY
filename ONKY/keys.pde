@@ -1,6 +1,9 @@
 void keyPressed() {
 
-
+    
+  if (key== 'r') {
+    p.x=0;
+  }
   if (keyCode == UP) {
     p.jump();
   }
@@ -13,6 +16,13 @@ void keyPressed() {
   if (keyCode == RIGHT) {
     p.accel();
   }
+    
+  if (key== 'a') {
+    p.deAccel();
+  }
+  if (key== 'd') {
+    p.accel();
+  }
   if (key==' ') {
     p.jump();
   }
@@ -20,7 +30,8 @@ void keyPressed() {
     p.jump();
   }
   if (key=='x') {
-    p.punch();
+    p.punching=true;
+    p.punchTime=30;
   }
 
 }
