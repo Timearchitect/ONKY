@@ -1,6 +1,6 @@
 
 abstract class Obstacle {
-  int x, y, w=100, h=100;
+  int x, y, w=500, h=100;
   float vx, vy;
 
   Obstacle(int _x, int _y) {

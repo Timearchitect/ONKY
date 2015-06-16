@@ -6,7 +6,6 @@
  *
  */
 
-
 Player p= new Player();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 int floorHeight=700, spawnHeight=250, playerOffsetX=100;
@@ -39,7 +38,6 @@ void draw() {
 
   popMatrix();
 }
-
 
 void displayFloor() {
   rect(0, floorHeight, 10000, 1000);
