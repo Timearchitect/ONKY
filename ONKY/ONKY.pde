@@ -5,13 +5,24 @@
  *  av Alrik He
  *
  */
+import ddf.minim.*;
+
+Minim minim;
+AudioPlayer BGM;
+AudioPlayer boxDestroySound;
+AudioPlayer boxKnockSound;
+AudioPlayer jumpSound;
+
 
 Player p = new Player();
+
 int score;
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
 //ArrayList<Particle> particles = new ArrayList<Particle>();
+ArrayList<Powerup> powerups = new ArrayList<Powerup>();
+
 
 int floorHeight=700, spawnHeight=250, playerOffsetX=100;
 float scaleFactor=1;
@@ -30,7 +41,25 @@ void setup() {
   paralaxLayers.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
   paralaxLayers.add(new ParalaxObject(0, 370, 90, 450, 0.9));
 
+powerups.add( new  Powerup(11000, 600, 20000) );
+
+
+
   p.SpriteSheetRunning = loadImage("onky_running.png");
+
+
+  // we pass this to Minim so that it can load files from the data directory
+  minim = new Minim(this);
+
+  // loadFile will look in all the same places as loadImage does.
+  // this means you can find files that are in the data folder and the 
+  // sketch folder. you can also pass an absolute path, or a URL.
+  //BGM = minim.loadFile("BGM.wav");
+  boxDestroySound = minim.loadFile("boxSmash.wav");
+  boxKnockSound = minim.loadFile("boxKnock.wav");
+  //jumpSound = minim.loadFile("jump.wav");
+ // BGM.play();
+   
 }
 
 void draw() {
@@ -116,15 +145,15 @@ void displaySign() {
 
 void loadObstacle() {
 
-  
-  
-   spawnTunnel(500) ;
-  
+
+
+  spawnTunnel(500) ;
+
   for (int i=1; i<100; i++) {
     /*obstacles.add(new Box(i*100+3000, int(floorHeight-100) ) );
      obstacles.add(new Box(i*100+3000, int(floorHeight-200) ) );
      obstacles.add(new Box(i*100+3000, int(floorHeight-300) ) );
-     obstacles.add(new Box(i*100+3000, int(floorHeight-400) ) );
+     obstacles.add(new Box(*100+3000, int(floorHeight-400) ) );
      obstacles.add(new Box(i*100+3000, int(floorHeight-500) ) );*/
 
     spawnWall(i*2000);
@@ -185,12 +214,11 @@ void spawnTunnel(int x) {
 }
 
 
-
-
 void reset() {
   score=0;
   p.x=0;
 }
+
 void calcDispScore() {
 
   score=int(p.x);
