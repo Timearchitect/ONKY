@@ -11,6 +11,8 @@ int score;
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
+//ArrayList<Particle> particles = new ArrayList<Particle>();
+
 int floorHeight=700, spawnHeight=250, playerOffsetX=100;
 float scaleFactor=1;
 
@@ -27,10 +29,15 @@ void setup() {
   paralaxLayers.add(new ParalaxObject(300, 350, 50, 200, 0.7)); 
   paralaxLayers.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
   paralaxLayers.add(new ParalaxObject(0, 370, 90, 450, 0.9));
+
+  p.SpriteSheetRunning = loadImage("onky_running.png");
 }
 
 void draw() {
   background(255);
+
+  //-----------------------------         Paralax           -----------------------------------------------------------
+
   for (Paralax px : paralaxLayers) {
     px.update();
     px.display();
@@ -38,7 +45,7 @@ void draw() {
 
   pushMatrix();
   scale(scaleFactor);
-  rotate(radians(-1));
+  rotate(radians(0));
   translate(-p.x+playerOffsetX, 0);
 
   displaySign();
@@ -46,6 +53,8 @@ void draw() {
 
   p.update();
   p.display();
+
+  //-----------------------------         Obstacle           -----------------------------------------------------------
 
   for (Obstacle o : obstacles) {
     o.update();
@@ -57,6 +66,18 @@ void draw() {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
   }
 
+  //-----------------------------         Powerup           -----------------------------------------------------------
+
+  /*  for (Powerup par : powerups) {
+   pow.update();
+   pow.display();
+   }
+   for (int i=powerups.size () -1; i>=0; i--) {
+   if (powerups.get(i).dead)powerups.remove(powerups.get(i));
+   }*/
+
+  //-----------------------------         Debris           -----------------------------------------------------------
+
   for (Debris d : debris) {
     d.update();
     d.display();
@@ -64,6 +85,17 @@ void draw() {
   for (int i=debris.size () -1; i>=0; i--) {
     if (debris.get(i).dead)debris.remove(debris.get(i));
   }
+
+  //-----------------------------         Particle           -----------------------------------------------------------
+
+  /* for (Particle par : particles) {
+   par.update();
+   par.display();
+   }
+   for (int i=particles.size () -1; i>=0; i--) {
+   if (particles.get(i).dead)particles.remove(particles.get(i));
+   }
+   */
 
   popMatrix();
   calcDispScore();
@@ -83,18 +115,77 @@ void displaySign() {
 }
 
 void loadObstacle() {
-  obstacles.add(new Box(1100, floorHeight-100));
-  obstacles.add(new Box(1100, floorHeight-200));
-  obstacles.add(new Box(1100, floorHeight-300));
-  obstacles.add(new Box(1100, floorHeight-400));
+
+  
+  
+   spawnTunnel(500) ;
+  
   for (int i=1; i<100; i++) {
-    obstacles.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-    obstacles.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-    obstacles.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-    obstacles.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-    obstacles.add(new Tire(i*10300, floorHeight-100) );
+    /*obstacles.add(new Box(i*100+3000, int(floorHeight-100) ) );
+     obstacles.add(new Box(i*100+3000, int(floorHeight-200) ) );
+     obstacles.add(new Box(i*100+3000, int(floorHeight-300) ) );
+     obstacles.add(new Box(i*100+3000, int(floorHeight-400) ) );
+     obstacles.add(new Box(i*100+3000, int(floorHeight-500) ) );*/
+
+    spawnWall(i*2000);
+
+    /*  obstacles.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     obstacles.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     obstacles.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     obstacles.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     obstacles.add(new Tire(i*10300, floorHeight-100) );*/
   }
 }
+
+void spawnWall(int x) {
+  int breakableIndex= int(random(3))+1;
+  switch(breakableIndex) {
+  case 3:
+    obstacles.add(new Box(x, int(floorHeight-600) ) ); // 3
+    obstacles.add(new IronBox(x, int(floorHeight-400) ) ); // 2
+    obstacles.add(new IronBox(x, int(floorHeight-200) ) ); // 1
+    obstacles.add(new Box(x+200, int(floorHeight-600) ) ); // 3
+    obstacles.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    obstacles.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    break;
+  case 2:
+    obstacles.add(new IronBox(x, int(floorHeight-600) ) ); // 3
+    obstacles.add(new Box(x, int(floorHeight-400) ) ); // 2
+    obstacles.add(new IronBox(x, int(floorHeight-200) ) ); // 1
+    obstacles.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    obstacles.add(new Box(x+200, int(floorHeight-400) ) ); // 2
+    obstacles.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    break;
+  case 1:
+    obstacles.add(new IronBox(x, int(floorHeight-600) ) ); // 3
+    obstacles.add(new IronBox(x, int(floorHeight-400) ) ); // 2
+    obstacles.add(new Box(x, int(floorHeight-200) ) ); // 1
+    obstacles.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    obstacles.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    obstacles.add(new Box(x+200, int(floorHeight-200) ) ); // 1
+    break;
+  }
+}
+
+void spawnTunnel(int x) {
+
+  obstacles.add(new IronBox(x, int(floorHeight-200) ) ); 
+  obstacles.add(new IronBox(x+200, int(floorHeight-400) ) ); 
+  obstacles.add(new IronBox(x+400, int(floorHeight-400) ) ); 
+  obstacles.add(new IronBox(x+600, int(floorHeight-400) ) );
+
+  obstacles.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
+  obstacles.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
+
+
+  obstacles.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
+  obstacles.add(new IronBox(x+1200, int(floorHeight-800) ) ); 
+  obstacles.add(new IronBox(x+1200, int(floorHeight-1000) ) ); 
+  obstacles.add(new IronBox(x+1200, int(floorHeight-1200) ) );
+}
+
+
+
 
 void reset() {
   score=0;

@@ -9,6 +9,7 @@ void keyPressed() {
   }
   if (keyCode == DOWN) {
     p.duck();
+    p.startSmash();
   }
   if (keyCode == LEFT) {
     p.deAccel();
@@ -31,6 +32,8 @@ void keyPressed() {
   }
     if (key=='s') {
     p.duck();
+    p.startSmash();
+
   }
   if (key=='x') {
     p.startPunch();

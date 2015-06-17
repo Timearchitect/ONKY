@@ -1,6 +1,6 @@
 
 abstract class Obstacle {
-  int x, y, w=100, h=100;
+  int x, y, w=200, h=200;
   float vx, vy, impactForce;
   color obstacleColor = color(100, 100, 50);
   boolean dead;
@@ -25,16 +25,23 @@ abstract class Obstacle {
       println("collision!!!!"); 
       impactForce=p.vx; 
       p.collision();
-      death();
+     // death();
     }
   }
-  void hitCollision() {
+  void hitCollision() {  // hit by punching & smashing
 
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
       println("KILLED A BOX");  
       impactForce=p.vx+5;
       death();
     }
+    
+     if (p.smashing && p.x+p.smashRange > x && p.x+p.w < x + w  && p.y+p.h+p.smashRange > y&&  p.y < y + h) {
+      println("KILLED A BOX");  
+      impactForce=p.vx+5;
+      death();
+    }
+    
   }
   void death() {
     fragment();
