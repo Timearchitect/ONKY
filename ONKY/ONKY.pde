@@ -10,6 +10,7 @@ Player p = new Player();
 int score;
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+ArrayList<Debris> debris = new ArrayList<Debris>();
 int floorHeight=700, spawnHeight=250, playerOffsetX=100;
 float scaleFactor=1;
 
@@ -42,6 +43,7 @@ void draw() {
 
   displaySign();
   displayFloor();
+
   p.update();
   p.display();
 
@@ -55,17 +57,26 @@ void draw() {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
   }
 
+  for (Debris d : debris) {
+    d.update();
+    d.display();
+  }
+  for (int i=debris.size () -1; i>=0; i--) {
+    if (debris.get(i).dead)debris.remove(debris.get(i));
+  }
+
   popMatrix();
   calcDispScore();
 }
 
 void displayFloor() {
   fill(0);
-  rect(0, floorHeight, 50000, 1000);
+  rect(p.x-playerOffsetX*2, floorHeight, width*2, 1000);
 }
 
 void displaySign() {
-  for ( int i=0; i<200; i++) {
+  stroke(255);
+  for ( int i=0; i<500; i++) {
     line(i*100, 0, i*100, height);
     if (i%10==0)text(i*100+" meter", i*100, height*0.3);
   }
@@ -76,12 +87,12 @@ void loadObstacle() {
   obstacles.add(new Box(1100, floorHeight-200));
   obstacles.add(new Box(1100, floorHeight-300));
   obstacles.add(new Box(1100, floorHeight-400));
-  for (int i=0; i<100; i++) {
-    obstacles.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
-    obstacles.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
-    obstacles.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
-    obstacles.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
-
+  for (int i=1; i<100; i++) {
+    obstacles.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+    obstacles.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+    obstacles.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+    obstacles.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+    obstacles.add(new Tire(i*10300, floorHeight-100) );
   }
 }
 

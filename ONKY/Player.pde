@@ -35,7 +35,8 @@ class Player {
     pushMatrix();
     translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
-
+  
+    stroke(0);
     fill(playerColor);
     rect(-w*0.5, -h*0.5, w, h*0.5);
     fill(255);

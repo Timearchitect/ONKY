@@ -1,8 +1,8 @@
 
 abstract class Obstacle {
   int x, y, w=100, h=100;
-  float vx, vy;
-  color obstacleColor = color(100,100,50);
+  float vx, vy, impactForce;
+  color obstacleColor = color(100, 100, 50);
   boolean dead;
   Obstacle(int _x, int _y) {
     x=_x;
@@ -18,29 +18,29 @@ abstract class Obstacle {
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y-10&&  p.y+p.h-10 < y +10) {
-        p.checkIfObstacle(y-10);
-        println("onTop");  
-     }
+      p.checkIfObstacle(y-10);
+      println("onTop");
+    }
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-        println("collision!!!!");  
-        p.collision();
-        death();
+      println("collision!!!!"); 
+      impactForce=p.vx; 
+      p.collision();
+      death();
     }
   }
-    void hitCollision() {
+  void hitCollision() {
 
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
-        println("KILLED A BOX");  
-        death();
+      println("KILLED A BOX");  
+      impactForce=p.vx+5;
+      death();
     }
   }
-  void death(){
+  void death() {
     fragment();
-   dead=true;
+    dead=true;
   }
-  void fragment(){
-  
-  
+  void fragment() {
   }
 }
 
