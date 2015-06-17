@@ -35,6 +35,9 @@ void keyPressed() {
   if (key=='x') {
     p.startPunch();
   }
+  if (key=='0') {
+    p.startPunch();
+  }
 
 }
 

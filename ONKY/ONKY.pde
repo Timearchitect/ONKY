@@ -80,7 +80,7 @@ void loadObstacle() {
     obstacles.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
     obstacles.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
     obstacles.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
-    obstacles.add(new Box(i*10100, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
+    obstacles.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-50+spawnHeight) ) );
 
   }
 }

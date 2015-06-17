@@ -35,8 +35,12 @@ abstract class Obstacle {
     }
   }
   void death(){
+    fragment();
    dead=true;
   }
+  void fragment(){
   
+  
+  }
 }
 
