@@ -1,8 +1,8 @@
 class Player {
-  float x, y, w=50, h=100, vx=5, vy, ax, ay=0.8, angle;
-  final int MAX_JUMP=2,PUNCH_MAX_CD=20;
-  int cooldown, invis=100, health, maxHealth=100, jumpCount, punchTime,punchCooldown=PUNCH_MAX_CD,punchRange=100;
-  boolean dead, onGround, punching;
+  float x, y, w=50, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
+  final int MAX_JUMP=2, PUNCH_MAX_CD=20;
+  int cooldown, invis=50, health, maxHealth=100, jumpCount, punchTime, punchCooldown=PUNCH_MAX_CD, punchRange=100, duckTime, duckCooldown;
+  boolean dead, onGround, punching, ducking;
   color playerColor= color(255, 0, 0);
   Player() {
   }
@@ -13,17 +13,24 @@ class Player {
     vx+=ax;
     vy+=ay;
 
-    if(punchCooldown>0)punchCooldown--;
+    if (vx<0)vx*= decayFactor;
+
+    if (punchTime<=0 && punchCooldown>0)punchCooldown--;
+
     if (0<invis) {
       recover();
     } else {
       playerColor = color(255);
     }
-    println(invis);
+
     checkIfGround();
-    if (jumpCount<1)angle+=15; 
-    else angle=0;
+
+    checkDuck();
+
+    if (jumpCount<1)angle+=15;
   }
+
+
   void display() {
     pushMatrix();
     translate(x+w*0.5, y+h*0.5);
@@ -39,7 +46,7 @@ class Player {
   }
   void collision() {
     invis=100;
-    vx=0;
+    vx= -vx*0.4;
     playerColor= color(0); // change color on hit to black
   }
   void jump() {
@@ -55,7 +62,9 @@ class Player {
     vx--;
   }
   void duck() {
-    vy=20;
+    vy=22;
+    ducking=true;
+    duckTime=50;
   }
   void checkIfObstacle(int top) {
     if (top<y+h) { 
@@ -63,6 +72,7 @@ class Player {
       onGround=true;
       y=top-h;
       vy=0;
+      angle=5;
     }
   }
   void checkIfGround() {
@@ -70,13 +80,19 @@ class Player {
       jumpCount=MAX_JUMP;
       onGround=true;
       y=floorHeight-h;
-      //vy=0;
+      angle=2;
     }
   }
   void recover() {
     invis--;
+    angle=-22;
   }
-
+  void startPunch() {
+    if(punchCooldown<=0 && !punching){
+      p.punching=true;
+      p.punchTime=30;
+    }
+  }
   void punch() {
 
     fill(255, 0, 0);
@@ -86,6 +102,15 @@ class Player {
       punchCooldown=PUNCH_MAX_CD;
     } else {
       punchTime--;
+    }
+  }
+  void checkDuck() {
+    if (duckTime<0) {
+      h=90;
+      ducking=false;
+    } else {
+      h=45;
+      duckTime--;
     }
   }
 }

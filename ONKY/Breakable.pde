@@ -27,7 +27,13 @@ abstract class Obstacle {
         death();
     }
   }
-  
+    void hitCollision() {
+
+    if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
+        println("KILLED A BOX");  
+        death();
+    }
+  }
   void death(){
    dead=true;
   }

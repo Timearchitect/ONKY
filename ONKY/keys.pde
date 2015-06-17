@@ -2,7 +2,7 @@ void keyPressed() {
 
     
   if (key== 'r') {
-    p.x=0;
+    reset();
   }
   if (keyCode == UP) {
     p.jump();
@@ -29,9 +29,11 @@ void keyPressed() {
   if (key=='w') {
     p.jump();
   }
+    if (key=='s') {
+    p.duck();
+  }
   if (key=='x') {
-    p.punching=true;
-    p.punchTime=30;
+    p.startPunch();
   }
 
 }
