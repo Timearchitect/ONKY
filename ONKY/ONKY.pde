@@ -45,7 +45,7 @@ void setup() {
 
 
 
-  p.SpriteSheetRunning = loadImage("onky_running.png");
+  p.SpriteSheetRunning = loadImage("onky_running2.png");
 
 
   // we pass this to Minim so that it can load files from the data directory

@@ -147,9 +147,9 @@ class Player {
   }
 
   void cutSprite (int index) {
-    final int interval= 160, imageWidth=162, imageheight=132;
+    final int interval= 160, imageWidth=160, imageheight=130;
     index= int(index%16);
-    cell = SpriteSheetRunning.get(index*(interval), 0, imageWidth, imageheight);
+    cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
   }
 }
 
