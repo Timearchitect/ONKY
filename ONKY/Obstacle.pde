@@ -23,11 +23,17 @@ abstract class Obstacle {
     }
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       println("collision!!!!"); 
+      if (p.vx>5) {
+      knockSound();
+      }
+      
       impactForce=p.vx; 
       p.collision();
-     // death();
+      // death();
     }
   }
+
+
   void hitCollision() {  // hit by punching & smashing
 
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -35,19 +41,29 @@ abstract class Obstacle {
       impactForce=p.vx+5;
       death();
     }
-    
-     if (p.smashing && p.x+p.smashRange > x && p.x+p.w < x + w  && p.y+p.h+p.smashRange > y&&  p.y < y + h) {
+
+    if (p.smashing && p.x+p.smashRange > x && p.x+p.w < x + w  && p.y+p.h+p.smashRange > y&&  p.y < y + h) {
       println("KILLED A BOX");  
       impactForce=p.vx+5;
       death();
     }
-    
   }
+  
   void death() {
+    destroySound();
     fragment();
     dead=true;
   }
   void fragment() {
+  }
+  
+    void knockSound() {
+    boxKnockSound.rewind();
+    boxKnockSound.play();
+  }
+    void destroySound() {
+      boxDestroySound.rewind();
+      boxDestroySound.play();
   }
 }
 

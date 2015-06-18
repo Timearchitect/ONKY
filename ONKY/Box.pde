@@ -7,8 +7,7 @@ class Box extends Obstacle{
     }
     void death(){
       super.death();
-      boxDestroySound.rewind();
-      boxDestroySound.play();
+
       for(int i =0; i< 4; i++){
         debris.add( new BoxDebris(this,x,y,random(15)+impactForce*0.5,random(30)-30));
       }

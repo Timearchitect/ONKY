@@ -41,7 +41,7 @@ void setup() {
   paralaxLayers.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
   paralaxLayers.add(new ParalaxObject(0, 370, 90, 450, 0.9));
 
-powerups.add( new  Powerup(11000, 600, 20000) );
+  powerups.add( new  Powerup(11000, 600, 20000) );
 
 
 
@@ -58,8 +58,7 @@ powerups.add( new  Powerup(11000, 600, 20000) );
   boxDestroySound = minim.loadFile("boxSmash.wav");
   boxKnockSound = minim.loadFile("boxKnock.wav");
   //jumpSound = minim.loadFile("jump.wav");
- // BGM.play();
-   
+  // BGM.play();
 }
 
 void draw() {

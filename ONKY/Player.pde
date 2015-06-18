@@ -19,7 +19,7 @@ class Player {
     y+=vy;
     vx+=ax;
     vy+=ay;
-    if (vx<12 && vx>0)vx*=1.1;
+    if (vx<12 && vx>0)vx*=1.08;
     if (vx<0)vx*= decayFactor;
 
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
@@ -29,6 +29,7 @@ class Player {
     } else {
       playerColor = color(255);
     }
+    cutSprite(int(x/40));
 
     checkIfGround();
 
@@ -42,7 +43,6 @@ class Player {
     pushMatrix();
     translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
-    cutSprite(int(x/50));
 
     /*stroke(0);
      fill(playerColor);
