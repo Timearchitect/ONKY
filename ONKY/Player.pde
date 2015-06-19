@@ -19,6 +19,7 @@ class Player {
     y+=vy;
     vx+=ax;
     vy+=ay;
+
     if (vx<12 && vx>0)vx*=1.08;
     if (vx<0)vx*= decayFactor;
 
@@ -36,8 +37,9 @@ class Player {
     checkDuck();
 
     if (jumpCount<1)angle+=15;
+    
+    if(int(random(60))<vx)particles.add(new speedParticle(int(x+w),int(random(90)+p.y)));
   }
-
 
   void display() {
     pushMatrix();
@@ -119,6 +121,17 @@ class Player {
       punchTime--;
     }
   }
+  void uppercut() {
+    fill(255, 0, 0);
+    rect(x+w, y, punchRange, 75);
+    if (punchTime<0) {
+      punching=false;
+      punchCooldown=PUNCH_MAX_CD;
+    } else {
+      punchTime--;
+    }
+  }
+
   void startSmash() {
     if (smashCooldown<=0 && !smashing) {
       smashing=true;

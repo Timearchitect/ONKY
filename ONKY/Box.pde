@@ -9,10 +9,17 @@ class Box extends Obstacle{
       super.death();
 
       for(int i =0; i< 8; i++){
-        debris.add( new BoxDebris(this,x,y,random(15)+impactForce*0.5,random(30)-30));
+        entities.add( new BoxDebris(this,int(x+random(w)-w*0.5),int(y+random(h)-h*0.5),random(15)+impactForce*0.5,random(30)-20));
       }
     }
-
+    void knockSound() {
+    boxKnockSound.rewind();
+    boxKnockSound.play();
+  }
+    void destroySound() {
+      boxDestroySound.rewind();
+      boxDestroySound.play();
+  }
 }
 class Tire extends Obstacle{
 
@@ -24,7 +31,7 @@ class Tire extends Obstacle{
     void death(){
       super.death();
       for(int i =0; i< 6; i++){
-        debris.add( new TireDebris(this,x,y,random(15)+impactForce*0.5,random(40)-30));
+        entities.add( new TireDebris(this,int(x+random(w)-w*0.5),int(y+random(h)-h*0.5),random(15)+impactForce*0.5,random(30)-20));
       }
     }
 
@@ -37,7 +44,7 @@ class IronBox extends Obstacle{
       
     }
     void death(){
-    
+     super.death();
     }
 
 }
@@ -51,7 +58,7 @@ class PlatForm extends Obstacle{
       
     }
     void death(){
-    
+     super.death();
     }
   void hitCollision() {  // hit by punching & smashing
     

@@ -1,16 +1,18 @@
 
-abstract class Obstacle {
-  int x, y, w=200, h=200;
-  float vx, vy, impactForce;
+abstract class Obstacle extends Entity{
+ float impactForce;
   color obstacleColor = color(100, 100, 50);
-  boolean dead;
+  
   Obstacle(int _x, int _y) {
-    x=_x;
-    y=_y;
+    super( _x, _y, 200, 200);
+    obstacles.add( this);
+
   }
   void update() {
     x+=vx;
     y+=vy;
+    collision();
+    hitCollision();
   }
   void display() {
     fill(obstacleColor);
@@ -50,20 +52,16 @@ abstract class Obstacle {
   }
   
   void death() {
+    super.death();
     destroySound();
-    fragment();
-    dead=true;
+
   }
-  void fragment() {
-  }
-  
+
     void knockSound() {
-    boxKnockSound.rewind();
-    boxKnockSound.play();
+
   }
     void destroySound() {
-      boxDestroySound.rewind();
-      boxDestroySound.play();
+
   }
 }
 

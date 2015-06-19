@@ -16,13 +16,18 @@ AudioPlayer jumpSound;
 
 Player p = new Player();
 
+
+
 int score;
+ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
+
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
-//ArrayList<Particle> particles = new ArrayList<Particle>();
+ArrayList<Particle> particles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
-
+Paralax paralax= new Paralax();
+ParalaxObject paralaxObject=new ParalaxObject();
 
 int floorHeight=700, spawnHeight=250, playerOffsetX=100;
 float scaleFactor=1;
@@ -32,14 +37,14 @@ void setup() {
   //size(720, 1080); // vertical
   size( 1080, 720); // horisontal
 
-  paralaxLayers.add(new Paralax(0, 250, 5000, 2000, 1)); 
+  entities.add(new Paralax(0, 250, 5000, 2000, 1)); 
 
-  paralaxLayers.add(new ParalaxObject(0, 300, 30, 100, 0.6)); 
-  paralaxLayers.add(new ParalaxObject(255, 350, 30, 100, 0.6)); 
-  paralaxLayers.add(new ParalaxObject(0, 350, 50, 200, 0.7)); 
-  paralaxLayers.add(new ParalaxObject(300, 350, 50, 200, 0.7)); 
-  paralaxLayers.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
-  paralaxLayers.add(new ParalaxObject(0, 370, 90, 450, 0.9));
+  entities.add(new ParalaxObject(0, 300, 30, 100, 0.6)); 
+  entities.add(new ParalaxObject(255, 350, 30, 100, 0.6)); 
+  entities.add(new ParalaxObject(0, 350, 50, 200, 0.7)); 
+  entities.add(new ParalaxObject(300, 350, 50, 200, 0.7)); 
+  entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
+  entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
 
   powerups.add( new  Powerup(11000, 600, 20000) );
 
@@ -64,7 +69,9 @@ void setup() {
 void draw() {
   background(255);
 
-  //-----------------------------         Paralax           -----------------------------------------------------------
+
+
+  //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
 
   for (Paralax px : paralaxLayers) {
     px.update();
@@ -82,13 +89,13 @@ void draw() {
   p.update();
   p.display();
 
-  //-----------------------------         Obstacle           -----------------------------------------------------------
+  //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
 
   for (Obstacle o : obstacles) {
     o.update();
     o.display();
-    o.collision();
-    o.hitCollision();
+    //o.collision();
+    // o.hitCollision();
   }
   for (int i=obstacles.size () -1; i>=0; i--) {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
@@ -104,26 +111,55 @@ void draw() {
    if (powerups.get(i).dead)powerups.remove(powerups.get(i));
    }*/
 
-  //-----------------------------         Debris           -----------------------------------------------------------
+  //-----------------------------         Debris    / Entity       -----------------------------------------------------------
 
-  for (Debris d : debris) {
-    d.update();
-    d.display();
-  }
-  for (int i=debris.size () -1; i>=0; i--) {
-    if (debris.get(i).dead)debris.remove(debris.get(i));
-  }
+    for (Debris d : debris) {
+   d.update();
+   d.display();
+   }
+   for (int i=debris.size () -1; i>=0; i--) {
+   if (debris.get(i).dead)debris.remove(debris.get(i));
+   }
 
   //-----------------------------         Particle           -----------------------------------------------------------
 
-  /* for (Particle par : particles) {
+   for (Particle par : particles) {
    par.update();
    par.display();
    }
    for (int i=particles.size () -1; i>=0; i--) {
    if (particles.get(i).dead)particles.remove(particles.get(i));
    }
-   */
+   
+
+  //-----------------------------         Entities           -----------------------------------------------------------
+
+
+  /* for (Entity e : entities) {
+  /* if(!(e instanceof Paralax)){
+   }*/
+
+  /*if (e.getClass() == Paralax.class) {
+   }*/
+
+  /* if( !paralaxLayers.contains( e)){   // works
+   }*/
+
+
+
+  /*  if (! e.getClass().isInstance(paralax) && ! e.getClass().isInstance(paralaxObject)) {   // works
+   e.display();
+   e.update();
+   }
+   }*/
+  /* for (int i=entities.size () -1; i>=0; i--) {
+   if (entities.get(i).dead)entities.remove(entities.get(i));
+   }*/
+
+  //----------------------------¨-------------------------------------------------------------------------------------
+
+
+
 
   popMatrix();
   calcDispScore();
@@ -145,23 +181,23 @@ void displaySign() {
 void loadObstacle() {
 
 
-
+  spawnTires(5000);
   spawnTunnel(500) ;
 
   for (int i=1; i<100; i++) {
-    /*obstacles.add(new Box(i*100+3000, int(floorHeight-100) ) );
-     obstacles.add(new Box(i*100+3000, int(floorHeight-200) ) );
-     obstacles.add(new Box(i*100+3000, int(floorHeight-300) ) );
-     obstacles.add(new Box(*100+3000, int(floorHeight-400) ) );
-     obstacles.add(new Box(i*100+3000, int(floorHeight-500) ) );*/
+    /*entities.add(new Box(i*100+3000, int(floorHeight-100) ) );
+     entities.add(new Box(i*100+3000, int(floorHeight-200) ) );
+     entities.add(new Box(i*100+3000, int(floorHeight-300) ) );
+     entities.add(new Box(*100+3000, int(floorHeight-400) ) );
+     entities.add(new Box(i*100+3000, int(floorHeight-500) ) );*/
 
     spawnWall(i*2000);
 
-    /*  obstacles.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     obstacles.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     obstacles.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     obstacles.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     obstacles.add(new Tire(i*10300, floorHeight-100) );*/
+    /*  entities.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     entities.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     entities.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     entities.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
+     entities.add(new Tire(i*10300, floorHeight-100) );*/
   }
 }
 
@@ -169,49 +205,54 @@ void spawnWall(int x) {
   int breakableIndex= int(random(3))+1;
   switch(breakableIndex) {
   case 3:
-    obstacles.add(new Box(x, int(floorHeight-600) ) ); // 3
-    obstacles.add(new IronBox(x, int(floorHeight-400) ) ); // 2
-    obstacles.add(new IronBox(x, int(floorHeight-200) ) ); // 1
-    obstacles.add(new Box(x+200, int(floorHeight-600) ) ); // 3
-    obstacles.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
-    obstacles.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    entities.add(new Box(x, int(floorHeight-600) ) ); // 3
+    entities.add(new IronBox(x, int(floorHeight-400) ) ); // 2
+    entities.add(new IronBox(x, int(floorHeight-200) ) ); // 1
+    entities.add(new Box(x+200, int(floorHeight-600) ) ); // 3
+    entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
     break;
   case 2:
-    obstacles.add(new IronBox(x, int(floorHeight-600) ) ); // 3
-    obstacles.add(new Box(x, int(floorHeight-400) ) ); // 2
-    obstacles.add(new IronBox(x, int(floorHeight-200) ) ); // 1
-    obstacles.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
-    obstacles.add(new Box(x+200, int(floorHeight-400) ) ); // 2
-    obstacles.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    entities.add(new IronBox(x, int(floorHeight-600) ) ); // 3
+    entities.add(new Box(x, int(floorHeight-400) ) ); // 2
+    entities.add(new IronBox(x, int(floorHeight-200) ) ); // 1
+    entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    entities.add(new Box(x+200, int(floorHeight-400) ) ); // 2
+    entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
     break;
   case 1:
-    obstacles.add(new IronBox(x, int(floorHeight-600) ) ); // 3
-    obstacles.add(new IronBox(x, int(floorHeight-400) ) ); // 2
-    obstacles.add(new Box(x, int(floorHeight-200) ) ); // 1
-    obstacles.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
-    obstacles.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
-    obstacles.add(new Box(x+200, int(floorHeight-200) ) ); // 1
+    entities.add(new IronBox(x, int(floorHeight-600) ) ); // 3
+    entities.add(new IronBox(x, int(floorHeight-400) ) ); // 2
+    entities.add(new Box(x, int(floorHeight-200) ) ); // 1
+    entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
     break;
   }
 }
 
 void spawnTunnel(int x) {
 
-  obstacles.add(new IronBox(x, int(floorHeight-200) ) ); 
-  obstacles.add(new IronBox(x+200, int(floorHeight-400) ) ); 
-  obstacles.add(new IronBox(x+400, int(floorHeight-400) ) ); 
-  obstacles.add(new IronBox(x+600, int(floorHeight-400) ) );
+  entities.add(new IronBox(x, int(floorHeight-200) ) ); 
+  entities.add(new IronBox(x+200, int(floorHeight-400) ) ); 
+  entities.add(new IronBox(x+400, int(floorHeight-400) ) ); 
+  entities.add(new IronBox(x+600, int(floorHeight-400) ) );
 
-  obstacles.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
-  obstacles.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
+  entities.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
+  entities.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
 
 
-  obstacles.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
-  obstacles.add(new IronBox(x+1200, int(floorHeight-800) ) ); 
-  obstacles.add(new IronBox(x+1200, int(floorHeight-1000) ) ); 
-  obstacles.add(new IronBox(x+1200, int(floorHeight-1200) ) );
+  entities.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
+  entities.add(new IronBox(x+1200, int(floorHeight-800) ) ); 
+  entities.add(new IronBox(x+1200, int(floorHeight-1000) ) ); 
+  entities.add(new IronBox(x+1200, int(floorHeight-1200) ) );
 }
 
+void spawnTires(int x) {
+  entities.add(new Tire(x, int(floorHeight-200) ) ); 
+  entities.add(new Tire(x+500, int(floorHeight-200) ) );
+  entities.add(new Tire(x+1000, int(floorHeight-200) ) );
+}
 
 void reset() {
   score=0;
