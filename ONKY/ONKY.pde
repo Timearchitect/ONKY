@@ -186,7 +186,7 @@ void loadObstacle() {
 
 
   for (int i=1; i<100; i++) {
-    switch(int(random(9))) {
+    switch(int(random(12))) {
     case 0:
       spawnDuck(i*2200);
 
@@ -218,6 +218,15 @@ void loadObstacle() {
     case 7:
       spawnHeap(i*2200);
       break;
+    case 8:
+      spawnFloatingBlock(i*2200);
+    break;
+    case 9:
+    spawnTireTower(i*2200);
+    break;
+    case 10:
+    spawnBoxDuck(i*2200);
+    break;
     default:
       spawnSingleWall(i*2200);
     }
@@ -320,11 +329,30 @@ void spawnTirePool(int x) {
 
   entities.add(new IronBox(x+1000, int(floorHeight-200) ) );
 }
+void spawnTireTower(int x) {
+  entities.add(new Tire(x, int(floorHeight-200) ) ); 
+  entities.add(new Tire(x, int(floorHeight-400) ) ); 
+  entities.add(new Tire(x, int(floorHeight-600) ) ); 
+  entities.add(new Tire(x, int(floorHeight-800) ) ); 
+
+}
+
 void spawnDuck(int x) {
   entities.add(new IronBox(x, int(floorHeight-860) ) ); 
   entities.add(new IronBox(x, int(floorHeight-660) ) );
   entities.add(new IronBox(x, int(floorHeight-460) ) );
   entities.add(new IronBox(x, int(floorHeight-260) ) );
+}
+void spawnBoxDuck(int x) {
+  entities.add(new IronBox(x+400, int(floorHeight-860) ) ); 
+  entities.add(new IronBox(x+400, int(floorHeight-660) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-460) ) );
+ // entities.add(new Box(x, int(floorHeight-260) ) );
+    entities.add(new Box(x+200, int(floorHeight-260) ) );
+  entities.add(new Box(x+400, int(floorHeight-260) ) );
+    entities.add(new Box(x+600, int(floorHeight-200) ) );
+
+
 }
 void spawnBlock(int x) {
 
@@ -338,6 +366,18 @@ void spawnBlock(int x) {
   //entities.add(new Box(x+400, int(floorHeight-400) ) );
   entities.add(new Box(x+400, int(floorHeight-200) ) );
 }
+void spawnFloatingBlock(int x) {
+
+  //  entities.add(new Box(x, int(floorHeight-600) ) );
+  // entities.add(new Box(x, int(floorHeight-400) ) );
+  //  entities.add(new Box(x, int(floorHeight-200) ) );
+  entities.add(new Box(x+200, int(floorHeight-600) ) );
+  entities.add(new Box(x+200, int(floorHeight-400) ) );
+  //  entities.add(new Box(x+200, int(floorHeight-200) ) );
+  entities.add(new Box(x+400, int(floorHeight-600) ) );
+  entities.add(new Box(x+400, int(floorHeight-400) ) );
+  // entities.add(new Box(x+400, int(floorHeight-200) ) );
+}
 void spawnSteps(int x) {
 
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
@@ -347,21 +387,21 @@ void spawnSteps(int x) {
   entities.add(new IronBox(x+400, int(floorHeight-200) ) );
 
   // entities.add(new IronBox(x+200, int(floorHeight-600) ) );
-  entities.add(new IronBox(x+400, int(floorHeight-400) ) );
+  entities.add(new Box(x+400, int(floorHeight-400) ) );
   entities.add(new IronBox(x+400, int(floorHeight-200) ) );
-  entities.add(new IronBox(x+600, int(floorHeight-400) ) );
+  entities.add(new Box(x+600, int(floorHeight-400) ) );
   entities.add(new IronBox(x+600, int(floorHeight-200) ) );
-  entities.add(new IronBox(x+800, int(floorHeight-400) ) );
+  entities.add(new Box(x+800, int(floorHeight-400) ) );
   entities.add(new IronBox(x+800, int(floorHeight-200) ) );
 
-  entities.add(new IronBox(x+1000, int(floorHeight-600) ) );
-  entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
+  entities.add(new Box(x+1000, int(floorHeight-600) ) );
+  entities.add(new Box(x+1000, int(floorHeight-400) ) );
   entities.add(new IronBox(x+1000, int(floorHeight-200) ) );
   entities.add(new IronBox(x+1200, int(floorHeight-600) ) );
-  entities.add(new IronBox(x+1200, int(floorHeight-400) ) );
+  entities.add(new Box(x+1200, int(floorHeight-400) ) );
   entities.add(new IronBox(x+1200, int(floorHeight-200) ) );
   entities.add(new IronBox(x+1400, int(floorHeight-600) ) );
-  entities.add(new IronBox(x+1400, int(floorHeight-400) ) );
+  entities.add(new Box(x+1400, int(floorHeight-400) ) );
   entities.add(new IronBox(x+1400, int(floorHeight-200) ) );
 }
 void spawnHeap(int x) {
@@ -381,7 +421,6 @@ void spawnHeap(int x) {
   // entities.add(new Box(x+800, int(floorHeight-600) ) );
   // entities.add(new Box(x+800, int(floorHeight-400) ) );
   entities.add(new Box(x+800, int(floorHeight-200) ) );
-  
 }
 void reset() {
   score=0;
@@ -392,8 +431,8 @@ void calcDispScore() {
   speedLevel=int(score*0.0001+10);
   score=int(p.x);
   fill(100, 255, 0);
-  textSize(30);
-  text(speedLevel+"  SCORE: "+score, width-300, 100);
+  textSize(40);
+  text("Speed:"+(speedLevel-10)+"  SCORE: "+score, width-500, 80);
   textSize(18);
 }
 void playSound(AudioPlayer sound) {

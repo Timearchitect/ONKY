@@ -26,7 +26,9 @@ class Paralax extends Entity {
     //if(x+w<0)x=0;
   }
 
+
   void display() {
+    noStroke();
     fill(0, 0, 255);
     rect(x, y, w, h);
   }
@@ -54,6 +56,7 @@ class ParalaxObject extends Paralax {
   }
 
   void display() {
+        noStroke();
     fill(0, 100, 100);
     rect(x, y, w, h);
   }
