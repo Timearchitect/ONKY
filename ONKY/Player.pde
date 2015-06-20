@@ -19,7 +19,7 @@ class Player {
     y+=vy;
     vx+=ax;
     vy+=ay;
-
+    if (vx<0 && vx>-1) vx=1;
     if (vx<12 && vx>0)vx*=1.08;
     if (vx<0)vx*= decayFactor;
 
@@ -68,8 +68,11 @@ class Player {
   }
   void jump() {
     if (jumpCount>0) {
+            jumpSound.rewind();
+      jumpSound.play();
       jumpCount--;
       vy=-20;
+
     }
   }
   void accel() {
