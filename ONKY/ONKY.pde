@@ -9,18 +9,15 @@ import ddf.minim.*;
 
 Minim minim;
 AudioPlayer BGM;
-AudioPlayer boxDestroySound;
-AudioPlayer boxKnockSound;
+AudioPlayer boxDestroySound,boxKnockSound;
+AudioPlayer ironBoxDestroySound,ironBoxKnockSound;
 AudioPlayer jumpSound;
-
 
 Player p = new Player();
 
 
-
 int score;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
-
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
@@ -59,11 +56,13 @@ void setup() {
   // loadFile will look in all the same places as loadImage does.
   // this means you can find files that are in the data folder and the 
   // sketch folder. you can also pass an absolute path, or a URL.
-  //BGM = minim.loadFile("BGM.wav");
+  BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
   boxDestroySound = minim.loadFile("boxSmash.wav");
   boxKnockSound = minim.loadFile("boxKnock.wav");
-  //jumpSound = minim.loadFile("jump.wav");
-  // BGM.play();
+  ironBoxDestroySound = minim.loadFile("ironBoxSmash.wav");
+  ironBoxKnockSound = minim.loadFile("ironBoxKnock.wav");
+  jumpSound = minim.loadFile("jump.wav");
+  BGM.play();BGM.loop();
 }
 
 void draw() {
@@ -113,24 +112,24 @@ void draw() {
 
   //-----------------------------         Debris    / Entity       -----------------------------------------------------------
 
-    for (Debris d : debris) {
-   d.update();
-   d.display();
-   }
-   for (int i=debris.size () -1; i>=0; i--) {
-   if (debris.get(i).dead)debris.remove(debris.get(i));
-   }
+  for (Debris d : debris) {
+    d.update();
+    d.display();
+  }
+  for (int i=debris.size () -1; i>=0; i--) {
+    if (debris.get(i).dead)debris.remove(debris.get(i));
+  }
 
   //-----------------------------         Particle           -----------------------------------------------------------
 
-   for (Particle par : particles) {
-   par.update();
-   par.display();
-   }
-   for (int i=particles.size () -1; i>=0; i--) {
-   if (particles.get(i).dead)particles.remove(particles.get(i));
-   }
-   
+  for (Particle par : particles) {
+    par.update();
+    par.display();
+  }
+  for (int i=particles.size () -1; i>=0; i--) {
+    if (particles.get(i).dead)particles.remove(particles.get(i));
+  }
+
 
   //-----------------------------         Entities           -----------------------------------------------------------
 
@@ -181,27 +180,44 @@ void displaySign() {
 void loadObstacle() {
 
 
-  spawnTires(5000);
-  spawnTunnel(500) ;
 
   for (int i=1; i<100; i++) {
-    /*entities.add(new Box(i*100+3000, int(floorHeight-100) ) );
-     entities.add(new Box(i*100+3000, int(floorHeight-200) ) );
-     entities.add(new Box(i*100+3000, int(floorHeight-300) ) );
-     entities.add(new Box(*100+3000, int(floorHeight-400) ) );
-     entities.add(new Box(i*100+3000, int(floorHeight-500) ) );*/
+    switch(int(random(9))) {
+    case 0:
+      spawnDuck(i*2200);
 
-    spawnWall(i*2000);
+      break;
 
-    /*  entities.add(new Box(i*1000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     entities.add(new Box(i*2000, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     entities.add(new Box(i*2200, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     entities.add(new IronBox(i*10100, int(random(floorHeight-spawnHeight)-100+spawnHeight) ) );
-     entities.add(new Tire(i*10300, floorHeight-100) );*/
+    case 1:
+      spawnTires(i*2200);
+
+      break;
+
+    case 2:
+      spawnTunnel(i*2200);
+
+      break;
+    case 3:
+      spawnBlock(i*2200);
+
+      break;
+    case 4:
+      spawnDoubleWall(i*2200);
+
+      break;
+    case 5:
+      spawnTirePool(i*2200);
+      break;
+    case 6:
+      spawnSteps(i*2200);
+      break;
+    default:
+      spawnSingleWall(i*2200);
+    }
   }
 }
 
-void spawnWall(int x) {
+void spawnDoubleWall(int x) {
   int breakableIndex= int(random(3))+1;
   switch(breakableIndex) {
   case 3:
@@ -230,7 +246,35 @@ void spawnWall(int x) {
     break;
   }
 }
-
+void spawnSingleWall(int x) {
+  int breakableIndex= int(random(3))+1;
+  switch(breakableIndex) {
+  case 3:
+    entities.add(new Box(x, int(floorHeight-600) ) ); // 3
+    entities.add(new IronBox(x, int(floorHeight-400) ) ); // 2
+    entities.add(new IronBox(x, int(floorHeight-200) ) ); // 1
+    //   entities.add(new Box(x+200, int(floorHeight-600) ) ); // 3
+    //  entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    //  entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    break;
+  case 2:
+    entities.add(new IronBox(x, int(floorHeight-600) ) ); // 3
+    entities.add(new Box(x, int(floorHeight-400) ) ); // 2
+    entities.add(new IronBox(x, int(floorHeight-200) ) ); // 1
+    //  entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    //   entities.add(new Box(x+200, int(floorHeight-400) ) ); // 2
+    //   entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    break;
+  case 1:
+    entities.add(new IronBox(x, int(floorHeight-600) ) ); // 3
+    entities.add(new IronBox(x, int(floorHeight-400) ) ); // 2
+    entities.add(new Box(x, int(floorHeight-200) ) ); // 1
+    //    entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    //   entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    //   entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
+    break;
+  }
+}
 void spawnTunnel(int x) {
 
   entities.add(new IronBox(x, int(floorHeight-200) ) ); 
@@ -238,8 +282,8 @@ void spawnTunnel(int x) {
   entities.add(new IronBox(x+400, int(floorHeight-400) ) ); 
   entities.add(new IronBox(x+600, int(floorHeight-400) ) );
 
-  entities.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
-  entities.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
+  // entities.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
+  // entities.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
 
 
   entities.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
@@ -252,6 +296,66 @@ void spawnTires(int x) {
   entities.add(new Tire(x, int(floorHeight-200) ) ); 
   entities.add(new Tire(x+500, int(floorHeight-200) ) );
   entities.add(new Tire(x+1000, int(floorHeight-200) ) );
+}
+void spawnTirePool(int x) {
+  entities.add(new IronBox(x-200, int(floorHeight-200) ) ); 
+  entities.add(new Tire(x, int(floorHeight-200) ) ); 
+  entities.add(new Tire(x+200, int(floorHeight-200) ) );
+  entities.add(new Tire(x+400, int(floorHeight-200) ) );
+  entities.add(new Tire(x+600, int(floorHeight-200) ) );
+  entities.add(new Tire(x+800, int(floorHeight-200) ) );
+
+  entities.add(new Tire(x, int(floorHeight-400) ) ); 
+  entities.add(new Tire(x+200, int(floorHeight-400) ) );
+  entities.add(new Tire(x+400, int(floorHeight-400) ) );
+  entities.add(new Tire(x+600, int(floorHeight-400) ) );
+  entities.add(new Tire(x+800, int(floorHeight-400) ) );
+
+  entities.add(new IronBox(x+1000, int(floorHeight-200) ) );
+}
+void spawnDuck(int x) {
+  entities.add(new IronBox(x, int(floorHeight-860) ) ); 
+  entities.add(new IronBox(x, int(floorHeight-660) ) );
+  entities.add(new IronBox(x, int(floorHeight-460) ) );
+  entities.add(new IronBox(x, int(floorHeight-260) ) );
+}
+void spawnBlock(int x) {
+
+  entities.add(new Box(x, int(floorHeight-600) ) );
+  entities.add(new Box(x, int(floorHeight-400) ) );
+  //entities.add(new Box(x, int(floorHeight-200) ) );
+  //entities.add(new Box(x+200, int(floorHeight-600) ) );
+  entities.add(new Box(x+200, int(floorHeight-400) ) );
+  entities.add(new Box(x+200, int(floorHeight-200) ) );
+  //entities.add(new Box(x+400, int(floorHeight-600) ) );
+  //entities.add(new Box(x+400, int(floorHeight-400) ) );
+  entities.add(new Box(x+400, int(floorHeight-200) ) );
+}
+void spawnSteps(int x) {
+
+  // entities.add(new IronBox(x, int(floorHeight-600) ) );
+  // entities.add(new IronBox(x, int(floorHeight-400) ) );
+  entities.add(new IronBox(x, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+200, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-200) ) );
+
+  // entities.add(new IronBox(x+200, int(floorHeight-600) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+600, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+600, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+800, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+800, int(floorHeight-200) ) );
+
+  entities.add(new IronBox(x+1000, int(floorHeight-600) ) );
+  entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+1000, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+1200, int(floorHeight-600) ) );
+  entities.add(new IronBox(x+1200, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+1200, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+1400, int(floorHeight-600) ) );
+  entities.add(new IronBox(x+1400, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+1400, int(floorHeight-200) ) );
 }
 
 void reset() {
