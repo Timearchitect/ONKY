@@ -48,7 +48,8 @@ void setup() {
 
 
   p.SpriteSheetRunning = loadImage("onky_running3.png");
-   p.FrontFlip = loadImage("frontFlip.png");
+  p.FrontFlip = loadImage("frontFlip.png");
+  p.Life = loadImage("extraLife.png");
 
   // we pass this to Minim so that it can load files from the data directory
   minim = new Minim(this);
@@ -86,7 +87,7 @@ void draw() {
   rotate(radians(0));
   translate(-p.x+playerOffsetX, 0);
 
- // displaySign();
+  // displaySign();
   displayFloor();
 
   p.update();
@@ -96,7 +97,7 @@ void draw() {
 
   for (Obstacle o : obstacles) {
     o.update();
-    if(o.x<p.x+width && o.x+o.w>p.x -200)o.display();
+    if (o.x<p.x+width && o.x+o.w>p.x -200)o.display();
     //o.collision();
     // o.hitCollision();
   }
@@ -165,6 +166,7 @@ void draw() {
 
 
   popMatrix();
+  displayLife();
   calcDispScore();
 }
 
@@ -374,7 +376,7 @@ void spawnFloatingBlock(int x) {
   //  entities.add(new Box(x+200, int(floorHeight-200) ) );
   entities.add(new Box(x+400, int(floorHeight-600) ) );
   entities.add(new Box(x+400, int(floorHeight-400) ) );
-  entities.add(new PlatForm(x+250, int(floorHeight-200), 300, 25,true) );
+  entities.add(new PlatForm(x+250, int(floorHeight-200), 300, 25, true) );
 
   // entities.add(new Box(x+400, int(floorHeight-200) ) );
 }
@@ -438,8 +440,7 @@ void reset() {
 
   obstacles.clear();
   loadObstacle();
-  p.x=0;
-  p.vx=10;
+  p.reset();
   score=0;
 }
 
@@ -454,5 +455,9 @@ void calcDispScore() {
 void playSound(AudioPlayer sound) {
   sound.rewind();
   sound.play();
+}
+void displayLife() {
+  for (int i=0; i<p.lives; i++)
+    image(p.Life, 0+50+i*50, 0+60,40,40);
 }
 

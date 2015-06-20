@@ -46,7 +46,7 @@ class Tire extends Obstacle {
 
   void surface() {
     if (p.vx>7)p.vx*=0.8;
-    if (int(random(8))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx, -random(20)));
+    if (int(random(9))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
 class IronBox extends Obstacle {
