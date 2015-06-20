@@ -1,6 +1,6 @@
 class Player {
   Powerup usedPowerup  ;
-  PImage SpriteSheetRunning ; //setup
+  PImage SpriteSheetRunning, FrontFlip ; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
@@ -48,9 +48,6 @@ class Player {
     rotate(radians(angle));
     fill(255);
 
-
-    //  tint(500-invisTint,500-invisTint, 500-invisTint);
-    // ellipse(0, 0, w, h);
     /*stroke(0);  
      fill(playerColor);
      rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
@@ -58,11 +55,18 @@ class Player {
      rect(-w*0.5, 0, w, h*0.5);*/
 
     if (invis>1 && invis % 3 ==0) {
-          cell.filter(INVERT);
+      cell.filter(INVERT);
     } else {
     }
-          image(cell, -w*0.5, -h*0.5, w, h);
 
+    if (jumpCount>0) { 
+      image(cell, -w*0.5, -h*0.5, w, h);
+    } else {
+      image(FrontFlip, -w*0.5, -h*0.5, w, h);
+    }
+    
+    
+    
     if (usedPowerup!=null)  usedPowerup.use();
 
 
@@ -104,9 +108,10 @@ class Player {
     vx--;
   }
   void duck() {
-   if(!onGround){ vy=28;
-  entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
- }
+    if (!onGround) { 
+      vy=28;
+      entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
+    }
     if (jumpCount<2 && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 80, 80));
     ducking=true;
     duckTime=50;
