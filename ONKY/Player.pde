@@ -20,7 +20,7 @@ class Player {
     vx+=ax;
     vy+=ay;
     if (vx<0 && vx>-1) vx=1;
-    if (vx<12 && vx>0)vx*=1.08;
+    if (vx<speedLevel && vx>0)vx*=1.08;
     if (vx<0)vx*= decayFactor;
 
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
@@ -37,8 +37,8 @@ class Player {
     checkDuck();
 
     if (jumpCount<1)angle+=15;
-    
-    if(int(random(60))<vx)particles.add(new speedParticle(int(x+w),int(random(90)+p.y)));
+
+    if (int(random(60))<vx)particles.add(new speedParticle(int(x+w), int(random(90)+p.y)));
   }
 
   void display() {
@@ -46,10 +46,10 @@ class Player {
     translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
 
-    /*stroke(0);
+    /*stroke(0);  
      fill(playerColor);
-     rect(-w*0.5, -h*0.5, w, h*0.5);
-     fill(255);
+     rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
+     fill(255); 
      rect(-w*0.5, 0, w, h*0.5);*/
     image(cell, -w*0.5, -h*0.5, w, h);
 
@@ -62,19 +62,26 @@ class Player {
     smash();
   }
   void collision() {
+    if(invis==0){
+      playSound(ughSound);
+      background(255,0,0);}
     invis=100;
-    vx= -vx*0.4;
+    vx= -vx*0.5;
+
     playerColor= color(0); // change color on hit to black
   }
   void jump() {
+    ducking=false;
     if (jumpCount>0) {
-            jumpSound.rewind();
+      jumpSound.rewind();
       jumpSound.play();
+           if (jumpCount==1) particles.add( new SpinParticle(  int(x),  int(y)));
+
       jumpCount--;
       vy=-20;
-
     }
   }
+  
   void accel() {
     vx++;
   }
@@ -82,7 +89,8 @@ class Player {
     vx--;
   }
   void duck() {
-    vy=22;
+    vy=30;
+    if(jumpCount<2 && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 80, 80));
     ducking=true;
     duckTime=50;
   }
@@ -109,24 +117,30 @@ class Player {
   }
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
+      playSound(sliceSound);
+      entities.add(new slashParticle(int(p.x), int(p.y), 0));
       punching=true;
       punchTime=30;
     }
   }
   void punch() {
 
-    fill(255, 0, 0);
-    rect(x+w, y, punchRange, 75);
+    //   fill(255, 0, 0);  // hitbox
+    //  rect(x+w, y, punchRange, 75);
     if (punchTime<0) {
       punching=false;
       punchCooldown=PUNCH_MAX_CD;
     } else {
       punchTime--;
+      if (punchTime==15) {
+        entities.add(new slashParticle(int(p.x), int(p.y), 1));
+        playSound(diceSound);
+      }
     }
   }
   void uppercut() {
     fill(255, 0, 0);
-    rect(x+w, y, punchRange, 75);
+    rect(x+w, y, punchRange, 75);   // hitbox
     if (punchTime<0) {
       punching=false;
       punchCooldown=PUNCH_MAX_CD;
@@ -143,8 +157,8 @@ class Player {
   }
   void smash() {
 
-    fill(255, 0, 0);
-    rect(x+w*0.5, y+h, smashRange, smashRange);
+    // fill(255, 0, 0);
+    // rect(x+w*0.5, y+h, smashRange, smashRange);  // hitbox
     if (smashTime<0) {
       smashing=false;
       smashCooldown=200;

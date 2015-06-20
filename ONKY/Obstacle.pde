@@ -27,7 +27,7 @@ abstract class Obstacle extends Entity {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       println("collision!!!!"); 
       if (p.vx>5) {
-        knockSound();
+        knock();
       }
 
       impactForce=p.vx; 
@@ -37,7 +37,9 @@ abstract class Obstacle extends Entity {
   }
   void surface() {
   }
-
+    void knock(){
+     knockSound();
+    }
   void hitCollision() {  // hit by punching & smashing
 
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -54,10 +56,12 @@ abstract class Obstacle extends Entity {
   }
   void death() {
     super.death();
+    background(255);
     println("KILLED A BOX");  
     destroySound();
   }
   void hit() {
+    
     hitSound();
   }
 

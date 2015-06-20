@@ -2,11 +2,11 @@ class Box extends Obstacle {
 
   Box(int _x, int _y) {
     super(_x, _y);
-    obstacleColor = color(100, 100, 50);
+    obstacleColor = color(120, 120, 80);
   }
   void death() {
     super.death();
-
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -28,6 +28,8 @@ class Tire extends Obstacle {
   }
   void death() {
     super.death();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+
     for (int i =0; i< 6; i++) {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -59,6 +61,10 @@ class IronBox extends Obstacle {
     hitBrightness=255;
     x+=p.vx;
     y+=-p.vy;
+  }
+  void knock() {
+    super.knock();
+    hitBrightness=255;
   }
   void knockSound() {
     ironBoxDestroySound.rewind();

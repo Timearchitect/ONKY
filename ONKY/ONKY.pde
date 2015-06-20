@@ -9,13 +9,13 @@ import ddf.minim.*;
 
 Minim minim;
 AudioPlayer BGM;
-AudioPlayer boxDestroySound,boxKnockSound;
-AudioPlayer ironBoxDestroySound,ironBoxKnockSound;
-AudioPlayer jumpSound;
+AudioPlayer boxDestroySound, boxKnockSound;
+AudioPlayer ironBoxDestroySound, ironBoxKnockSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound;
 
 Player p = new Player();
 
-
+int speedLevel=12;
 int score;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
@@ -62,11 +62,15 @@ void setup() {
   ironBoxDestroySound = minim.loadFile("ironBoxSmash.wav");
   ironBoxKnockSound = minim.loadFile("ironBoxKnock.wav");
   jumpSound = minim.loadFile("jump.wav");
-  BGM.play();BGM.loop();
+  sliceSound = minim.loadFile("slice.wav");
+  diceSound= minim.loadFile("dice.wav");
+  ughSound= minim.loadFile("ugh.wav");
+  BGM.play();
+  BGM.loop();
 }
 
 void draw() {
-  background(255);
+  background(80);
 
 
 
@@ -210,6 +214,9 @@ void loadObstacle() {
       break;
     case 6:
       spawnSteps(i*2200);
+      break;
+    case 7:
+      spawnHeap(i*2200);
       break;
     default:
       spawnSingleWall(i*2200);
@@ -357,18 +364,40 @@ void spawnSteps(int x) {
   entities.add(new IronBox(x+1400, int(floorHeight-400) ) );
   entities.add(new IronBox(x+1400, int(floorHeight-200) ) );
 }
+void spawnHeap(int x) {
 
+  // entities.add(new Box(x, int(floorHeight-600) ) );
+  //entities.add(new Box(x, int(floorHeight-400) ) );
+  entities.add(new Box(x, int(floorHeight-200) ) );
+  // entities.add(new Box(x+200, int(floorHeight-600) ) );
+  // entities.add(new Box(x+200, int(floorHeight-400) ) );
+  entities.add(new Box(x+200, int(floorHeight-200) ) );
+  //entities.add(new Box(x+400, int(floorHeight-600) ) );
+  entities.add(new Tire(x+400, int(floorHeight-400) ) );
+  entities.add(new Box(x+400, int(floorHeight-200) ) );
+  //  entities.add(new Box(x+600, int(floorHeight-600) ) );
+  entities.add(new Tire(x+600, int(floorHeight-400) ) );
+  entities.add(new Box(x+600, int(floorHeight-200) ) );
+  // entities.add(new Box(x+800, int(floorHeight-600) ) );
+  // entities.add(new Box(x+800, int(floorHeight-400) ) );
+  entities.add(new Box(x+800, int(floorHeight-200) ) );
+  
+}
 void reset() {
   score=0;
   p.x=0;
 }
 
 void calcDispScore() {
-
+  speedLevel=int(score*0.0001+10);
   score=int(p.x);
   fill(100, 255, 0);
   textSize(30);
-  text("SCORE: "+score, width-300, 100);
+  text(speedLevel+"  SCORE: "+score, width-300, 100);
   textSize(18);
+}
+void playSound(AudioPlayer sound) {
+  sound.rewind();
+  sound.play();
 }
 
