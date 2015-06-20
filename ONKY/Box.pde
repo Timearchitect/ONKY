@@ -11,6 +11,15 @@ class Box extends Obstacle {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
+  void display() {
+    super.display();
+
+    stroke(155, 155, 100);
+    strokeWeight(8);
+    line(x, y, x+w, y+h);
+    line(x, y+h, x+w, y);
+    strokeWeight(1);
+  }
   void knockSound() {
     boxKnockSound.rewind();
     boxKnockSound.play();
@@ -34,6 +43,7 @@ class Tire extends Obstacle {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
+
   void surface() {
     if (p.vx>7)p.vx*=0.8;
     if (int(random(8))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx, -random(20)));
@@ -46,6 +56,17 @@ class IronBox extends Obstacle {
     obstacleColor = color(150, 150, 150);
     tx=_x;
     ty=_y;
+  }
+  void display() {
+    super.display();
+    stroke(250, 250, 250);
+    strokeWeight(8);
+    point(x+10, y+10);
+      point(x+w-10, y+10);
+      point(x+w-10, y+h-10);
+      point(x+10, y+h-10);
+
+    strokeWeight(1);
   }
   void update() {
     super.update();
@@ -77,10 +98,30 @@ class IronBox extends Obstacle {
 }
 
 class PlatForm extends Obstacle {
+  boolean hanging;
 
-
-  PlatForm(int _x, int _y) {
+  PlatForm(int _x, int _y, int _w, int _h) {
     super(_x, _y);
+    w=_w;
+    h=_h;
+    obstacleColor = color(255, 50, 50);
+  }
+  PlatForm(int _x, int _y, int _w, int _h, boolean _hanging) {
+    super(_x, _y);
+    hanging=_hanging;
+    w=_w;
+    h=_h;
+    obstacleColor = color(255, 50, 50);
+  }
+  void display() {
+    super.display();
+    if (hanging) {
+      stroke(200, 200, 200);
+      strokeWeight(6);
+      line(x, y, x, 0);
+      line(x+w, y, x+w, 0);
+      strokeWeight(1);
+    }
   }
   void death() {
     //super.death();

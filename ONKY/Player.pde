@@ -4,7 +4,7 @@ class Player {
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
-  int cooldown, invis=50, health, maxHealth=100;
+  int cooldown, invis=50, invisTint, health, maxHealth=100;
   int  jumpCount;
   int punchTime, punchCooldown=PUNCH_MAX_CD, punchRange=100;
   int duckTime, duckCooldown;
@@ -47,14 +47,21 @@ class Player {
     translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
     fill(255);
+
+
+    //  tint(500-invisTint,500-invisTint, 500-invisTint);
     // ellipse(0, 0, w, h);
     /*stroke(0);  
      fill(playerColor);
      rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
      fill(255); 
      rect(-w*0.5, 0, w, h*0.5);*/
-    image(cell, -w*0.5, -h*0.5, w, h);
 
+    if (invis>1 && invis % 3 ==0) {
+          cell.filter(INVERT);
+    } else {
+    }
+          image(cell, -w*0.5, -h*0.5, w, h);
 
     if (usedPowerup!=null)  usedPowerup.use();
 
@@ -69,6 +76,7 @@ class Player {
       background(255, 0, 0);
     }
     invis=100;
+    invisTint=200;
     vx= -vx*0.5;
 
     playerColor= color(0); // change color on hit to black
@@ -96,7 +104,9 @@ class Player {
     vx--;
   }
   void duck() {
-    vy=30;
+   if(!onGround){ vy=28;
+  entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
+ }
     if (jumpCount<2 && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 80, 80));
     ducking=true;
     duckTime=50;
@@ -116,82 +126,83 @@ class Player {
     if (floorHeight<y+h) { 
       if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
 
-        jumpCount=MAX_JUMP;
-        onGround=true;
-        y=floorHeight-h;
-        angle=2;
-      }
-    }
-    void recover() {
-      invis--;
-      angle=-22;
-    }
-    void startPunch() {
-      if (punchCooldown<=0 && !punching) {
-        playSound(sliceSound);
-        entities.add(new slashParticle(int(p.x), int(p.y), 0));
-        punching=true;
-        punchTime=30;
-      }
-    }
-    void punch() {
-
-      //   fill(255, 0, 0);  // hitbox
-      //  rect(x+w, y, punchRange, 75);
-      if (punchTime<0) {
-        punching=false;
-        punchCooldown=PUNCH_MAX_CD;
-      } else {
-        punchTime--;
-        if (punchTime==15) {
-          entities.add(new slashParticle(int(p.x), int(p.y), 1));
-          playSound(diceSound);
-        }
-      }
-    }
-    void uppercut() {
-      fill(255, 0, 0);
-      rect(x+w, y, punchRange, 75);   // hitbox
-      if (punchTime<0) {
-        punching=false;
-        punchCooldown=PUNCH_MAX_CD;
-      } else {
-        punchTime--;
-      }
-    }
-
-    void startSmash() {
-      if (smashCooldown<=0 && !smashing) {
-        smashing=true;
-        smashTime=30;
-      }
-    }
-    void smash() {
-
-      // fill(255, 0, 0);
-      // rect(x+w*0.5, y+h, smashRange, smashRange);  // hitbox
-      if (smashTime<0) {
-        smashing=false;
-        smashCooldown=200;
-      } else {
-        smashTime--;
-      }
-    }
-    void checkDuck() {
-      if (duckTime<0) {
-        if (ducking)p.y-=45;
-        h=90;
-        ducking=false;
-      } else {
-        h=45;
-        duckTime--;
-      }
-    }
-
-    void cutSprite (int index) {
-      final int interval= 160, imageWidth=160, imageheight=130;
-      index= int(index%16);
-      cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
+      jumpCount=MAX_JUMP;
+      onGround=true;
+      y=floorHeight-h;
+      angle=2;
     }
   }
+  void recover() {
+    invis--;
+    angle=-22;
+    invisTint-=2;
+  }
+  void startPunch() {
+    if (punchCooldown<=0 && !punching) {
+      playSound(sliceSound);
+      entities.add(new slashParticle(int(p.x), int(p.y), 0));
+      punching=true;
+      punchTime=30;
+    }
+  }
+  void punch() {
+
+    //   fill(255, 0, 0);  // hitbox
+    //  rect(x+w, y, punchRange, 75);
+    if (punchTime<0) {
+      punching=false;
+      punchCooldown=PUNCH_MAX_CD;
+    } else {
+      punchTime--;
+      if (punchTime==15) {
+        entities.add(new slashParticle(int(p.x), int(p.y), 1));
+        playSound(diceSound);
+      }
+    }
+  }
+  void uppercut() {
+    fill(255, 0, 0);
+    rect(x+w, y, punchRange, 75);   // hitbox
+    if (punchTime<0) {
+      punching=false;
+      punchCooldown=PUNCH_MAX_CD;
+    } else {
+      punchTime--;
+    }
+  }
+
+  void startSmash() {
+    if (smashCooldown<=0 && !smashing) {
+      smashing=true;
+      smashTime=30;
+    }
+  }
+  void smash() {
+
+    // fill(255, 0, 0);
+    // rect(x+w*0.5, y+h, smashRange, smashRange);  // hitbox
+    if (smashTime<0) {
+      smashing=false;
+      smashCooldown=200;
+    } else {
+      smashTime--;
+    }
+  }
+  void checkDuck() {
+    if (duckTime<0) {
+      if (ducking)p.y-=45;
+      h=90;
+      ducking=false;
+    } else {
+      h=45;
+      duckTime--;
+    }
+  }
+
+  void cutSprite (int index) {
+    final int interval= 160, imageWidth=160, imageheight=130;
+    index= int(index%16);
+    cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
+  }
+}
 

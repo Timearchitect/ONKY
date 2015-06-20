@@ -86,7 +86,7 @@ void draw() {
   rotate(radians(0));
   translate(-p.x+playerOffsetX, 0);
 
-  displaySign();
+ // displaySign();
   displayFloor();
 
   p.update();
@@ -96,7 +96,7 @@ void draw() {
 
   for (Obstacle o : obstacles) {
     o.update();
-    o.display();
+    if(o.x<p.x+width && o.x+o.w>p.x -200)o.display();
     //o.collision();
     // o.hitCollision();
   }
@@ -183,8 +183,6 @@ void displaySign() {
 
 void loadObstacle() {
 
-
-
   for (int i=1; i<100; i++) {
     switch(int(random(12))) {
     case 0:
@@ -220,13 +218,16 @@ void loadObstacle() {
       break;
     case 8:
       spawnFloatingBlock(i*2200);
-    break;
+      break;
     case 9:
-    spawnTireTower(i*2200);
-    break;
+      spawnTireTower(i*2200);
+      break;
     case 10:
-    spawnBoxDuck(i*2200);
-    break;
+      spawnBoxDuck(i*2200);
+      break;
+    case 11:
+      spawnPlatform(i*2200);
+      break;
     default:
       spawnSingleWall(i*2200);
     }
@@ -333,8 +334,7 @@ void spawnTireTower(int x) {
   entities.add(new Tire(x, int(floorHeight-200) ) ); 
   entities.add(new Tire(x, int(floorHeight-400) ) ); 
   entities.add(new Tire(x, int(floorHeight-600) ) ); 
-  entities.add(new Tire(x, int(floorHeight-800) ) ); 
-
+  entities.add(new Tire(x, int(floorHeight-800) ) );
 }
 
 void spawnDuck(int x) {
@@ -347,20 +347,18 @@ void spawnBoxDuck(int x) {
   entities.add(new IronBox(x+400, int(floorHeight-860) ) ); 
   entities.add(new IronBox(x+400, int(floorHeight-660) ) );
   entities.add(new IronBox(x+400, int(floorHeight-460) ) );
- // entities.add(new Box(x, int(floorHeight-260) ) );
-    entities.add(new Box(x+200, int(floorHeight-260) ) );
-  entities.add(new Box(x+400, int(floorHeight-260) ) );
-    entities.add(new Box(x+600, int(floorHeight-200) ) );
-
-
+  // entities.add(new Box(x, int(floorHeight-260) ) );
+  entities.add(new Box(x+250, int(floorHeight-260) ) );
+  entities.add(new Box(x+450, int(floorHeight-260) ) );
+  entities.add(new Box(x+650, int(floorHeight-200) ) );
 }
 void spawnBlock(int x) {
 
   entities.add(new Box(x, int(floorHeight-600) ) );
-  entities.add(new Box(x, int(floorHeight-400) ) );
+  entities.add(new Box(x+50, int(floorHeight-400) ) );
   //entities.add(new Box(x, int(floorHeight-200) ) );
   //entities.add(new Box(x+200, int(floorHeight-600) ) );
-  entities.add(new Box(x+200, int(floorHeight-400) ) );
+  entities.add(new Box(x+250, int(floorHeight-400) ) );
   entities.add(new Box(x+200, int(floorHeight-200) ) );
   //entities.add(new Box(x+400, int(floorHeight-600) ) );
   //entities.add(new Box(x+400, int(floorHeight-400) ) );
@@ -376,6 +374,8 @@ void spawnFloatingBlock(int x) {
   //  entities.add(new Box(x+200, int(floorHeight-200) ) );
   entities.add(new Box(x+400, int(floorHeight-600) ) );
   entities.add(new Box(x+400, int(floorHeight-400) ) );
+  entities.add(new PlatForm(x+250, int(floorHeight-200), 300, 25,true) );
+
   // entities.add(new Box(x+400, int(floorHeight-200) ) );
 }
 void spawnSteps(int x) {
@@ -422,9 +422,25 @@ void spawnHeap(int x) {
   // entities.add(new Box(x+800, int(floorHeight-400) ) );
   entities.add(new Box(x+800, int(floorHeight-200) ) );
 }
+
+void spawnPlatform(int x) {
+
+  entities.add(new PlatForm(x, int(floorHeight-100), 1000, 50 ) );
+  entities.add(new Box(x+1150, int(floorHeight-480) ) );
+  entities.add(new PlatForm(x+400, int(floorHeight-300), 1000, 50) );
+  entities.add(new Tire(x+1400, int(floorHeight-700) ) );
+  entities.add(new PlatForm(x+800, int(floorHeight-500), 1000, 50) );
+}
+
 void reset() {
-  score=0;
+  background(0);
+  BGM.rewind();
+
+  obstacles.clear();
+  loadObstacle();
   p.x=0;
+  p.vx=10;
+  score=0;
 }
 
 void calcDispScore() {

@@ -19,27 +19,28 @@ abstract class Obstacle extends Entity {
     rect(x, y, w, h);
   }
   void collision() {
-    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y-10&&  p.y+p.h-10 < y +10) {
-      p.checkIfObstacle(y-10);
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5 < y +20) {
+      p.checkIfObstacle(y-5);
+
       surface();
       println("onTop");
-    }
-    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      println("collision!!!!"); 
-      if (p.vx>5) {
-        knock();
+    } else {
+      if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+        println("collision!!!!"); 
+        if (p.vx>5) {
+          knock();
+        }
+        impactForce=p.vx; 
+        p.collision();
+        // death();
       }
-
-      impactForce=p.vx; 
-      p.collision();
-      // death();
     }
   }
   void surface() {
   }
-    void knock(){
-     knockSound();
-    }
+  void knock() {
+    knockSound();
+  }
   void hitCollision() {  // hit by punching & smashing
 
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -61,7 +62,7 @@ abstract class Obstacle extends Entity {
     destroySound();
   }
   void hit() {
-    
+
     hitSound();
   }
 
