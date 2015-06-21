@@ -11,11 +11,13 @@ Minim minim;
 AudioPlayer BGM;
 AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
+AudioPlayer rubberSound;
+
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound;
 
 Player p = new Player();
 
-int speedLevel=12;
+int speedLevel=14; // default speed level
 int score, tokens;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
@@ -27,11 +29,11 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Paralax paralax= new Paralax();
 ParalaxObject paralaxObject=new ParalaxObject();
 
-boolean debug;
+boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
 float scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
-final int MAX_SHAKE=200
-;
+final int MAX_SHAKE=200;
+
 void setup() {
   loadObstacle();
   //size(720, 1080); // vertical
@@ -46,8 +48,8 @@ void setup() {
   entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
   entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
 
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1,10)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2,12)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
 
 
 
@@ -74,6 +76,9 @@ void setup() {
   sliceSound = minim.loadFile("slice.wav");
   diceSound= minim.loadFile("dice.wav");
   ughSound= minim.loadFile("ugh.wav");
+  rubberSound= minim.loadFile("rubberBounce.mp3");
+
+  BGM.setGain(-10);
   BGM.play();
   BGM.loop();
 }
@@ -82,7 +87,7 @@ void draw() {
   background(80);
   shake();
   smoothScale();
-  if(!debug)adjustZoomLevel();
+  if (!debug)adjustZoomLevel();
   //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
 
   for (Paralax px : paralaxLayers) {
@@ -105,7 +110,7 @@ void draw() {
 
   for (Obstacle o : obstacles) {
     o.update();
-    if (o.x<(p.x+width)/(scaleFactor) && o.x+o.w>p.x -playerOffsetX)o.display();
+    if (o.x+shakeX<(p.x+width)/(scaleFactor) && o.x+o.w>p.x -playerOffsetX)o.display();
     //o.collision();
     // o.hitCollision();
   }
@@ -172,15 +177,15 @@ void draw() {
 
 
   popMatrix();
-  
-  
-    //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
+
+
+  //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
   for (Paralax px : ForegroundParalaxLayers) {
     px.update();
     px.display();
   }
-  
+
   displayLife();
   calcDispScore();
   if (debug)debugScreen();
@@ -188,7 +193,7 @@ void draw() {
 }
 
 void shake() {
-  if(MAX_SHAKE<skakeFactor) skakeFactor=MAX_SHAKE;
+  if (MAX_SHAKE<skakeFactor) skakeFactor=MAX_SHAKE;
   skakeFactor*=shakeDecay;
   shakeX=random(skakeFactor)-skakeFactor*0.5;
   shakeY=random(skakeFactor)-skakeFactor*0.5;
@@ -197,10 +202,9 @@ void smoothScale() {
   float scaleDiff=targetScaleFactor-scaleFactor;
   scaleFactor+=scaleDiff*0.1;
 }
- void adjustZoomLevel(){
- targetScaleFactor= map(p.vx,0,50,1,0.2);
- 
- }
+void adjustZoomLevel() {
+  targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
+}
 void displayFloor() {
   fill(0);
   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
@@ -238,11 +242,13 @@ void calcDispScore() {
 void debugScreen() {
   fill(100, 255, 0);
   textSize(40);
-  text("Entities: "+ entities.size()+"particles: "+particles.size()+" obstacles: "+obstacles.size(), 50, height-50);
+  text("Entities: "+ entities.size()+"particles: "+particles.size()+" obstacles: "+obstacles.size() +"debris:"+debris.size(), 50, height-50);
 }
 void playSound(AudioPlayer sound) {
-  sound.rewind();
-  sound.play();
+  if (!mute) {
+    sound.rewind();
+    sound.play();
+  }
 }
 void displayLife() {
   for (int i=0; i<p.lives; i++)

@@ -45,7 +45,7 @@ class Tire extends Obstacle {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
-
+    playSound(rubberSound);
     for (int i =0; i< 6; i++) {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }

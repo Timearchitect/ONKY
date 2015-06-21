@@ -25,19 +25,24 @@ abstract class Debris extends Entity {
       vx+=ax;
       vy+=ay;
       opacity+=opacityDecay;
-      if (opacity<0)death();
+     if (opacity<=1)death();
+
     }
+
   }
   void death() {
     super.death();
+    dead=true;
   }
   void bounceOnFloor() {
     if (y+25>floorHeight) {
+        hitFloor();
         vy*=(-(bounceForce));
         vx*=(bounceFriction);
         VAngle*=(random(1));
     }
   }
+   void hitFloor(){}
 }
 class BoxDebris extends Debris {
 
@@ -74,6 +79,10 @@ class TireDebris extends Debris {
   }
   void update() {
     super.update();
+  }
+  void hitFloor(){
+    super.hitFloor();
+   if(opacity>50)playSound(rubberSound);
   }
   void display() {
     if (!dead) {

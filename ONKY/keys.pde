@@ -2,6 +2,12 @@ void keyPressed() {
   if (key== '#') {
     debug=!debug;
   }
+ if (key== '¤') {
+    mute=!mute;
+    BGM.pause();
+    if(!mute)    BGM.play();
+
+  }
     
   if (key== 'r') {
     gameReset();
