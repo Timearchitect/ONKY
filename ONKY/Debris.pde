@@ -86,4 +86,27 @@ class TireDebris extends Debris {
     }
   }
 }
+class GlassDebris extends Debris {
 
+
+   GlassDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
+    super( _o, _x, _y, _vx, _vy);
+    VAngle=random(4)-2;
+    bounceFriction=0.7;
+    bounceForce=0.5;
+  }
+  void update() {
+    super.update();
+  }
+  void display() {
+    if (!dead) {
+      pushMatrix();
+      translate(x, y);
+      rotate(radians(angle));
+      fill(owner.obstacleColor, opacity);
+      noStroke();
+      triangle(-10,0,10,0,0,-40);
+      popMatrix();
+    }
+  }
+}

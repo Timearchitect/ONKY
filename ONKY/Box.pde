@@ -21,12 +21,10 @@ class Box extends Obstacle {
     strokeWeight(1);
   }
   void knockSound() {
-    boxKnockSound.rewind();
-    boxKnockSound.play();
+    playSound(boxKnockSound);
   }
   void destroySound() {
-    boxDestroySound.rewind();
-    boxDestroySound.play();
+    playSound(boxDestroySound);
   }
 }
 class Tire extends Obstacle {
@@ -62,9 +60,9 @@ class IronBox extends Obstacle {
     stroke(250, 250, 250);
     strokeWeight(8);
     point(x+10, y+10);
-      point(x+w-10, y+10);
-      point(x+w-10, y+h-10);
-      point(x+10, y+h-10);
+    point(x+w-10, y+10);
+    point(x+w-10, y+h-10);
+    point(x+10, y+h-10);
 
     strokeWeight(1);
   }
@@ -75,7 +73,6 @@ class IronBox extends Obstacle {
     y+=diffY*0.2;
   }
   void death() {
-    //  super.death();
   }
   void hit() {  // hit by punching & smashing
     super.hit();
@@ -88,12 +85,10 @@ class IronBox extends Obstacle {
     hitBrightness=255;
   }
   void knockSound() {
-    ironBoxDestroySound.rewind();
-    ironBoxDestroySound.play();
+    playSound(ironBoxDestroySound);
   }
   void  hitSound() {
-    ironBoxDestroySound.rewind();
-    ironBoxDestroySound.play();
+    playSound(ironBoxDestroySound);
   }
 }
 
@@ -124,10 +119,59 @@ class PlatForm extends Obstacle {
     }
   }
   void death() {
-    //super.death();
   }
   void hitCollision() {  // hit by punching & smashing
-    //x+=p.vx;
+  }
+}
+
+class Glass extends Obstacle {
+
+  Glass(int _x, int _y, int _w, int _h) {
+    super(_x, _y);
+    w=_w;
+    h=_h;
+    obstacleColor = color(0, 150, 255,100);
+  }
+
+  void display() {
+    super.display();
+    rect(x, y, w, h);
+  }
+  void death() {
+    super.death();
+    for (int i =0; i< 8; i++) {
+      entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+    }
+  }
+  void destroySound() {
+    playSound(shatterSound);
+  }
+  void hit() {
+    super.hit();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+  }
+  void knock() {
+    super.knock();
+    p.vx*=0.8;
+    death();
+  }
+  void collision() {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5 < y +20) {
+      p.checkIfObstacle(y-5);
+
+      surface();
+      println("onTop");
+    } else {
+      if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+        println("collision!!!!"); 
+        if (p.vx>5) {
+          knock();
+        }
+        impactForce=p.vx; 
+        //p.collision();
+        // death();
+      }
+    }
   }
 }
 

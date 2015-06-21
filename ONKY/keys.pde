@@ -2,7 +2,7 @@ void keyPressed() {
 
     
   if (key== 'r') {
-    reset();
+    gameReset();
   }
   if (keyCode == UP) {
     p.jump();
