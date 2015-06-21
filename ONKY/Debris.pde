@@ -30,7 +30,7 @@ abstract class Debris extends Entity {
     }
   }
   void death() {
-    dead=true;
+    super.death();
   }
   void bounceOnFloor() {
     if (y+25>floorHeight) {

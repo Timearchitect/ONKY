@@ -16,9 +16,10 @@ AudioPlayer jumpSound, sliceSound, diceSound, ughSound;
 Player p = new Player();
 
 int speedLevel=12;
-int score;
+int score, tokens;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
+ArrayList<Paralax> ForegroundParalaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
 ArrayList<Particle> particles = new ArrayList<Particle>();
@@ -26,8 +27,9 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Paralax paralax= new Paralax();
 ParalaxObject paralaxObject=new ParalaxObject();
 
-int floorHeight=700, spawnHeight=250, playerOffsetX=100,playerOffsety=200;
-float scaleFactor=0.5;
+boolean debug;
+int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
+float scaleFactor=0.5,speedFactor=1;
 
 void setup() {
   loadObstacle();
@@ -43,7 +45,7 @@ void setup() {
   entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
   entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
 
-  powerups.add( new  Powerup(2000, 600, 200) );
+  entities.add( new  Powerup(2000, 600, 200) );
 
 
 
@@ -77,8 +79,6 @@ void setup() {
 void draw() {
   background(80);
 
-
-
   //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
 
   for (Paralax px : paralaxLayers) {
@@ -91,10 +91,7 @@ void draw() {
   rotate(radians(0));
   translate(-p.x+playerOffsetX, 0);
 
-
-
-
-  // displaySign();
+  if (debug)displaySign();
   displayFloor();
 
   p.update();
@@ -142,7 +139,12 @@ void draw() {
     if (particles.get(i).dead)particles.remove(particles.get(i));
   }
 
+  //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
+  for (Paralax px : ForegroundParalaxLayers) {
+    px.update();
+    px.display();
+  }
   //-----------------------------         Entities           -----------------------------------------------------------
 
 
@@ -170,17 +172,16 @@ void draw() {
   //----------------------------¨-------------------------------------------------------------------------------------
 
 
-
-
   popMatrix();
   displayLife();
   calcDispScore();
+  if (debug)debugScreen();
   if (p.lives<0)gameReset();
 }
 
 void displayFloor() {
   fill(0);
-  rect(p.x-playerOffsetX*2, floorHeight, width*2, 1000);
+  rect(p.x-playerOffsetX, floorHeight, width/(scaleFactor)+playerOffsetX, 1000);
 }
 
 void displaySign() {
@@ -191,9 +192,11 @@ void displaySign() {
   }
 }
 
-
 void gameReset() {
+  entities.clear();
   obstacles.clear();
+  powerups.clear();
+  debris.clear();
   background(0);
   BGM.rewind();
 
@@ -209,6 +212,11 @@ void calcDispScore() {
   textSize(40);
   text("Speed:"+(speedLevel-10)+"  SCORE: "+score, width-500, 80);
   textSize(18);
+}
+void debugScreen() {
+  fill(100, 255, 0);
+  textSize(40);
+  text("Entities: "+ entities.size()+"particles: "+particles.size()+" obstacles: "+obstacles.size(), 50, height-50);
 }
 void playSound(AudioPlayer sound) {
   sound.rewind();

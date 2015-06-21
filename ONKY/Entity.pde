@@ -25,6 +25,8 @@
   
   void death() {
         dead=true;
+            entities.remove(this);
+
   }
   
 

@@ -36,12 +36,13 @@ class Powerup extends Entity{
   }
   void use(){
     time--;
+    tokens++;
     background(255,0,0);
     if(time<=0)death();
   }
   
   void death() {
-    dead=true;
+    super.death();
   }
 }
 

@@ -1,5 +1,7 @@
 void keyPressed() {
-
+  if (key== '#') {
+    debug=!debug;
+  }
     
   if (key== 'r') {
     gameReset();

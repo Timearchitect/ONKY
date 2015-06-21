@@ -1,3 +1,5 @@
+
+
 class Particle extends Entity {
   float opacity=255;
   Particle(int _x, int  _y) {
@@ -13,6 +15,33 @@ class Particle extends Entity {
   void death() {
     super.death();
   }
+}
+
+class TrailParticle extends Particle {
+  PImage cell;
+  float opacity=255;
+  TrailParticle(int _x, int  _y, PImage _cell) {
+     super( _x, _y);
+    particles.add(this);
+    cell=_cell;
+   w=100;
+   h=80;
+  }
+
+  void update() {
+    if (opacity>0)opacity*=0.9;
+    if (opacity<=1)death();
+  }
+
+  void display() {
+    tint(255, opacity);
+    image(cell, x, y, w, h);
+      g.removeCache(cell);// this is avoiding the leak
+
+    noTint();
+  }
+
+
 }
 
 class speedParticle extends Particle {
@@ -40,9 +69,7 @@ class speedParticle extends Particle {
     strokeWeight(1);
   }
 
-  void death() {
-    super.death();
-  }
+
 }
 
 class slashParticle extends Particle {
@@ -76,9 +103,7 @@ class slashParticle extends Particle {
     strokeWeight(1);
   }
 
-  void death() {
-    super.death();
-  }
+
 }
 
 
@@ -88,11 +113,11 @@ class LineParticle extends Particle {
   LineParticle(int _x, int _y, int _size) {
     super( _x, _y);
     particles.add(this);
-    particleColor=color(255,0,0);
+    particleColor=color(255, 0, 0);
     size=_size;
     angle=random(360);
   }
-   LineParticle(int _x, int _y, int _size, float _angle) {
+  LineParticle(int _x, int _y, int _size, float _angle) {
     super( _x, _y);
     particles.add(this);
     particleColor=color(255);
@@ -118,9 +143,7 @@ class LineParticle extends Particle {
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);
     strokeWeight(1);
   }
-  void death() {
-    super.death();
-  }
+
 }
 class SpinParticle extends Particle {
   float size=100, angle;
@@ -145,11 +168,8 @@ class SpinParticle extends Particle {
     stroke(255, opacity);
     strokeWeight(ceil (opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
-        strokeWeight(1);
+    strokeWeight(1);
+  }
 
-  }
-  void death() {
-    super.death();
-  }
 }
 
