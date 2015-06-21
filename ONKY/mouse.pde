@@ -1,13 +1,13 @@
 void mouseWheel(MouseEvent event) {  // krympa och förstora
 
     int temp = event.getCount() ;
-    scaleFactor += temp * 0.05;
-    if (scaleFactor<=0) {
-      scaleFactor=0.1;
+    targetScaleFactor += temp * 0.05;
+    if (targetScaleFactor<=0) {
+      targetScaleFactor=0.1;
     }
 
-    if (scaleFactor > 2) {
-      scaleFactor=2;
+    if (targetScaleFactor > 2) {
+      targetScaleFactor=2;
     }
 
 }

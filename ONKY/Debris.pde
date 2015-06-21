@@ -20,7 +20,6 @@ abstract class Debris extends Entity {
     if (!dead) {
       angle+=VAngle;
       bounceOnFloor();
-
       x+=vx;
       y+=vy;
       vx+=ax;

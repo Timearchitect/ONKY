@@ -29,8 +29,9 @@ ParalaxObject paralaxObject=new ParalaxObject();
 
 boolean debug;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
-float scaleFactor=0.5,speedFactor=1;
-
+float scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
+final int MAX_SHAKE=200
+;
 void setup() {
   loadObstacle();
   //size(720, 1080); // vertical
@@ -45,7 +46,8 @@ void setup() {
   entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
   entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
 
-  entities.add( new  Powerup(2000, 600, 200) );
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1,10)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2,12)); 
 
 
 
@@ -78,7 +80,9 @@ void setup() {
 
 void draw() {
   background(80);
-
+  shake();
+  smoothScale();
+  if(!debug)adjustZoomLevel();
   //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
 
   for (Paralax px : paralaxLayers) {
@@ -89,7 +93,7 @@ void draw() {
   pushMatrix();
   scale(scaleFactor);
   rotate(radians(0));
-  translate(-p.x+playerOffsetX, 0);
+  translate(-p.x+playerOffsetX+shakeX, shakeY);
 
   if (debug)displaySign();
   displayFloor();
@@ -139,12 +143,7 @@ void draw() {
     if (particles.get(i).dead)particles.remove(particles.get(i));
   }
 
-  //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
-  for (Paralax px : ForegroundParalaxLayers) {
-    px.update();
-    px.display();
-  }
   //-----------------------------         Entities           -----------------------------------------------------------
 
 
@@ -173,15 +172,38 @@ void draw() {
 
 
   popMatrix();
+  
+  
+    //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
+
+  for (Paralax px : ForegroundParalaxLayers) {
+    px.update();
+    px.display();
+  }
+  
   displayLife();
   calcDispScore();
   if (debug)debugScreen();
   if (p.lives<0)gameReset();
 }
 
+void shake() {
+  if(MAX_SHAKE<skakeFactor) skakeFactor=MAX_SHAKE;
+  skakeFactor*=shakeDecay;
+  shakeX=random(skakeFactor)-skakeFactor*0.5;
+  shakeY=random(skakeFactor)-skakeFactor*0.5;
+}
+void smoothScale() {
+  float scaleDiff=targetScaleFactor-scaleFactor;
+  scaleFactor+=scaleDiff*0.1;
+}
+ void adjustZoomLevel(){
+ targetScaleFactor= map(p.vx,0,50,1,0.2);
+ 
+ }
 void displayFloor() {
   fill(0);
-  rect(p.x-playerOffsetX, floorHeight, width/(scaleFactor)+playerOffsetX, 1000);
+  rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }
 
 void displaySign() {

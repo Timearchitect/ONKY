@@ -20,6 +20,15 @@ class Box extends Obstacle {
     line(x, y+h, x+w, y);
     strokeWeight(1);
   }
+  void hit() {
+    super.hit();
+    scaleFactor+=scaleFactor*0.05;
+    skakeFactor=50;
+  }
+  void knock() {
+    super.knock();
+    skakeFactor=100;
+  }
   void knockSound() {
     playSound(boxKnockSound);
   }
@@ -41,7 +50,10 @@ class Tire extends Obstacle {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
-
+  void hit() {
+    super.hit();
+    skakeFactor=50;
+  }
   void surface() {
     if (p.vx>7)p.vx*=0.8;
     if (int(random(9))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
@@ -76,13 +88,15 @@ class IronBox extends Obstacle {
   }
   void hit() {  // hit by punching & smashing
     super.hit();
+    skakeFactor=50; 
     hitBrightness=255;
     x+=p.vx;
     y+=-p.vy;
   }
   void knock() {
     super.knock();
-    hitBrightness=255;
+    skakeFactor=100; 
+    //  hitBrightness=255;
   }
   void knockSound() {
     playSound(ironBoxDestroySound);
@@ -130,7 +144,7 @@ class Glass extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    obstacleColor = color(0, 150, 255,100);
+    obstacleColor = color(0, 150, 255, 100);
   }
 
   void display() {
@@ -150,8 +164,11 @@ class Glass extends Obstacle {
     super.hit();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
   }
+
   void knock() {
     super.knock();
+    scaleFactor+=scaleFactor*0.05;
+    skakeFactor=10;
     p.vx*=0.8;
     death();
   }

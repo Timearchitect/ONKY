@@ -38,7 +38,7 @@ class Paralax extends Entity {
 
 class ParalaxObject extends Paralax {
 
-
+  int repeatDistance=1;
   ParalaxObject() { // DUMMY
     super();
   }
@@ -46,17 +46,21 @@ class ParalaxObject extends Paralax {
 
     super(_x, _y, _w, _h, _factor);
   }
+  ParalaxObject(int _x, int _y, int _w, int _h, float _factor, int _repeatDistance) {
+    super(_x, _y, _w, _h, _factor);
 
+    repeatDistance=_repeatDistance;
+  }
   void update() {
     x-=int(p.vx*factor);
     //y+=int(p.vy*0.8);
-    if (x+w<0)x=width;
+    if (x+w<0)x=width*repeatDistance;
 
     //if(x+w<0)x=0;
   }
 
   void display() {
-        noStroke();
+    noStroke();
     fill(0, 100, 100);
     rect(x, y, w, h);
   }
