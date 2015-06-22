@@ -92,8 +92,10 @@ class Player {
     if (invis==0) {
       lives--;
       playSound(ughSound);
+      screenAngle=-6;
       background(255, 0, 0);
     }
+
     invis=100;
     vx= -vx*0.5;
   }
@@ -106,7 +108,7 @@ class Player {
       }
       jumpSound.rewind();
       jumpSound.play();
-      if (jumpCount==1) particles.add( new SpinParticle(  int(x), int(y)));
+      if (jumpCount==1) particles.add( new SpinParticle( this));
 
       jumpCount--;
       vy=-20;

@@ -257,28 +257,29 @@ void spawnHeap(int x) {
 
   // entities.add(new Box(x, int(floorHeight-600) ) );
   //entities.add(new Box(x, int(floorHeight-400) ) );
-  if (index==0) entities.add(new Box(x, int(floorHeight-200) ) );
+  if (index!=0) entities.add(new Box(x, int(floorHeight-200) ) );
   // entities.add(new Box(x+200, int(floorHeight-600) ) );
   // entities.add(new Box(x+200, int(floorHeight-400) ) );
   entities.add(new Box(x+200, int(floorHeight-200) ) );
   //entities.add(new Box(x+400, int(floorHeight-600) ) );
-  if (index==3) entities.add(new Tire(x+400, int(floorHeight-400) ) );
-  if (index==2)entities.add(new Box(x+400, int(floorHeight-200) ) );
+  if (index!=3) entities.add(new Tire(x+400, int(floorHeight-400) ) );
+  if (index!=2)entities.add(new Box(x+400, int(floorHeight-200) ) );
   //  entities.add(new Box(x+600, int(floorHeight-600) ) );
   entities.add(new Tire(x+600, int(floorHeight-400) ) );
-  if (index==2) entities.add(new Box(x+600, int(floorHeight-200) ) );
+  if (index!=2) entities.add(new Box(x+600, int(floorHeight-200) ) );
   // entities.add(new Box(x+800, int(floorHeight-600) ) );
   // entities.add(new Box(x+800, int(floorHeight-400) ) );
-  if (index==1)  entities.add(new Box(x+800, int(floorHeight-200) ) );
+  if (index!=1)  entities.add(new Box(x+800, int(floorHeight-200) ) );
 }
 
 void spawnPlatform(int x) {
-
-  entities.add(new PlatForm(x, int(floorHeight-100), 1000, 50 ) );
+  int index= int(random(3));
+  if (index==0) entities.add( new  Powerup(x+1000, int(floorHeight-600), 200) );
+  entities.add(new PlatForm(x, int(floorHeight-100), 500, 50 ,true) );
   entities.add(new Box(x+1150, int(floorHeight-480) ) );
-  entities.add(new PlatForm(x+400, int(floorHeight-300), 1000, 50) );
+  entities.add(new PlatForm(x+400, int(floorHeight-300), 1000, 50,true) );
   entities.add(new Tire(x+1400, int(floorHeight-700) ) );
-  entities.add(new PlatForm(x+800, int(floorHeight-500), 1000, 50) );
+  entities.add(new PlatForm(x+800, int(floorHeight-500), 900, 50,true) );
 }
 
 void spawnBoxPlatform(int x) {

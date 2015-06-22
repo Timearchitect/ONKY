@@ -55,7 +55,7 @@ class Tire extends Obstacle {
     skakeFactor=50;
   }
   void surface() {
-    if (p.vx>7)p.vx*=0.8;
+    if (p.vx>9)p.vx*=0.82;
     if (int(random(9))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
@@ -151,18 +151,16 @@ class Glass extends Obstacle {
     super.display();
     rect(x, y, w, h);
   }
-  void death() {
-    super.death();
-    for (int i =0; i< 8; i++) {
-      entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
-    }
-  }
+
   void destroySound() {
     playSound(shatterSound);
   }
   void hit() {
     super.hit();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+    for (int i =0; i< 8; i++) {
+      entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(40)+impactForce*2, random(20)-20));
+    }
   }
 
   void knock() {
@@ -170,6 +168,9 @@ class Glass extends Obstacle {
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=10;
     p.vx*=0.8;
+        for (int i =0; i< 8; i++) {
+      entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+    }
     death();
   }
   void collision() {

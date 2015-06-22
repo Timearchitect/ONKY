@@ -21,11 +21,11 @@ class TrailParticle extends Particle {
   PImage cell;
   float opacity=255;
   TrailParticle(int _x, int  _y, PImage _cell) {
-     super( _x, _y);
+    super( _x, _y);
     particles.add(this);
     cell=_cell;
-   w=100;
-   h=80;
+    w=100;
+    h=80;
   }
 
   void update() {
@@ -36,12 +36,10 @@ class TrailParticle extends Particle {
   void display() {
     tint(255, opacity);
     image(cell, x, y, w, h);
-      g.removeCache(cell);// this is avoiding the leak
+    g.removeCache(cell);// this is avoiding the leak
 
     noTint();
   }
-
-
 }
 
 class speedParticle extends Particle {
@@ -68,8 +66,6 @@ class speedParticle extends Particle {
 
     strokeWeight(1);
   }
-
-
 }
 
 class slashParticle extends Particle {
@@ -102,8 +98,6 @@ class slashParticle extends Particle {
 
     strokeWeight(1);
   }
-
-
 }
 
 
@@ -143,22 +137,30 @@ class LineParticle extends Particle {
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);
     strokeWeight(1);
   }
-
 }
 class SpinParticle extends Particle {
   float size=100, angle;
+  Player player=null;
+  SpinParticle( Player _player) {
+    super( 0, 0);
+    particles.add(this);
+    player=_player;
+    angle=random(0, 360);
+  }
   SpinParticle( int _x, int _y) {
     super( _x, _y);
     particles.add(this);
-
+    size=150;
     angle=random(0, 360);
   }
   void update() {
 
     angle+=16;
     opacity-=8;
-    x=int(p.x+p.w*0.5);
-    y=int(p.y+p.h*0.5);
+    if (player!=null) {
+      x=int(p.x+p.w*0.5);
+      y=int(p.y+p.h*0.5);
+    } 
     if (opacity<=1)death();
   }
 
@@ -170,6 +172,5 @@ class SpinParticle extends Particle {
     arc(x, y, size, size, radians(angle), radians(angle+180));
     strokeWeight(1);
   }
-
 }
 

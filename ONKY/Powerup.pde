@@ -23,15 +23,21 @@ class Powerup extends Entity{
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      println("Got powerup");  
+      println("killed powerup");  
+              playSound(collectSound);
+            particles.add( new SpinParticle(  int(x), int(y)));
+
       death();
     }
   }
    void collision() {
       if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
         println("Grab!!!!"); 
-        death();
+         playSound(collectSound);
+         particles.add( new SpinParticle(  int(x), int(y)));
+
         p.usedPowerup=this;
+         death();
       }
   }
   void use(){

@@ -14,6 +14,9 @@ abstract class Obstacle extends Entity {
     collision();
     hitCollision();
   }
+  void gravity(){
+  
+  }
   void display() {
     fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness,alpha(obstacleColor));
     rect(x, y, w, h);
@@ -60,9 +63,10 @@ abstract class Obstacle extends Entity {
     background(255);
     println("KILLED A BOX");  
     destroySound();
+    
   }
   void hit() {
-
+    objectsDestroyed++;
     hitSound();
   }
 

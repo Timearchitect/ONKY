@@ -13,12 +13,12 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound;
 
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound;
 
 Player p = new Player();
 
 int speedLevel=14; // default speed level
-int score, tokens;
+int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Paralax> ForegroundParalaxLayers = new ArrayList<Paralax>();
@@ -31,7 +31,7 @@ ParalaxObject paralaxObject=new ParalaxObject();
 
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
-float scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
+float screenAngle,scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
 final int MAX_SHAKE=200;
 
 void setup() {
@@ -77,7 +77,7 @@ void setup() {
   diceSound= minim.loadFile("dice.wav");
   ughSound= minim.loadFile("ugh.wav");
   rubberSound= minim.loadFile("rubberBounce.mp3");
-
+  collectSound= minim.loadFile("grab.wav");
   BGM.setGain(-10);
   BGM.play();
   BGM.loop();
@@ -87,6 +87,7 @@ void draw() {
   background(80);
   shake();
   smoothScale();
+      screenAngle*=0.9;
   if (!debug)adjustZoomLevel();
   //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
 
@@ -97,7 +98,7 @@ void draw() {
 
   pushMatrix();
   scale(scaleFactor);
-  rotate(radians(0));
+  rotate(radians(screenAngle));
   translate(-p.x+playerOffsetX+shakeX, shakeY);
 
   if (debug)displaySign();
@@ -110,7 +111,10 @@ void draw() {
 
   for (Obstacle o : obstacles) {
     o.update();
-    if (o.x+shakeX<(p.x+width)/(scaleFactor) && o.x+o.w>p.x -playerOffsetX)o.display();
+    if (o.x+shakeX*2<(p.x+width)/(scaleFactor) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {
+      o.gravity();
+      o.display();
+    }
     //o.collision();
     // o.hitCollision();
   }
@@ -228,15 +232,19 @@ void gameReset() {
 
   loadObstacle();
   p.reset();
+  p.y=floorHeight;
+  p.invis=0;
   score=0;
+  tokens=0;
+  objectsDestroyed=0;
 }
 
 void calcDispScore() {
   speedLevel=int(score*0.0001+10);
   score=int(p.x);
   fill(100, 255, 0);
-  textSize(40);
-  text("Speed:"+(speedLevel-10)+"  SCORE: "+score, width-500, 80);
+  textSize(35);
+  text("Speed:"+(speedLevel-10) +" + "+ int(p.vx-speedLevel)+"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-800, 80);
   textSize(18);
 }
 void debugScreen() {
