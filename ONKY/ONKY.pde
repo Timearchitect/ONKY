@@ -6,7 +6,7 @@
  *
  */
 import ddf.minim.*;
-
+int renderObject;
 Minim minim;
 AudioPlayer BGM;
 AudioPlayer boxDestroySound, boxKnockSound;
@@ -16,7 +16,7 @@ AudioPlayer rubberSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound;
 
 Player p = new Player();
-
+PImage Block;
 int speedLevel=14; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -60,7 +60,8 @@ void setup() {
   p.Jump = loadImage("jump.png");
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
-
+  
+  Block = loadImage("block200.png");
   // we pass this to Minim so that it can load files from the data directory
   minim = new Minim(this);
 
@@ -110,10 +111,13 @@ void draw() {
   p.display();
 
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
-
+ renderObject=0;
   for (Obstacle o : obstacles) {
 
-    if (o.x+shakeX*2<(p.x+width/(scaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {
+    //if (o.x+shakeX*2<(p.x+width/(scaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
+   // if((o.x+shakeX)/(scaleFactor)>p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor  && o.x-o.w-shakeX<p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor+(width-100+shakeX)/scaleFactor){
+  if(o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width-50)/scaleFactor){
+      renderObject++;
     /*      strokeWeight(55);
       stroke(255, 0, 0);
       line((p.x+width/(scaleFactor)), 0, (p.x+width/(scaleFactor)), 3000);
@@ -269,7 +273,7 @@ void calcDispScore() {
 void debugScreen() {
   fill(100, 255, 0);
   textSize(40);
-  text("Entities: "+ entities.size()+"particles: "+particles.size()+" obstacles: "+obstacles.size() +"debris:"+debris.size(), 50, height-50);
+  text("renderO"+renderObject+"Entities: "+ entities.size()+"particles: "+particles.size()+" obstacles: "+obstacles.size() +"debris:"+debris.size(), 50, height-50);
 }
 void playSound(AudioPlayer sound) {
   if (!mute) {

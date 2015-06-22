@@ -1,8 +1,9 @@
 class Box extends Obstacle {
-
+  //PImage image;
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(120, 120, 80);
+   // image=Block;
   }
   void death() {
     super.death();
@@ -12,13 +13,14 @@ class Box extends Obstacle {
     }
   }
   void display() {
-    super.display();
-
+    image(Block,x,y,200,200);
+   /* super.display();
+    
     stroke(155, 155, 100);
     strokeWeight(8);
     line(x, y, x+w, y+h);
     line(x, y+h, x+w, y);
-    strokeWeight(1);
+    strokeWeight(1);*/
   }
   void hit() {
     super.hit();

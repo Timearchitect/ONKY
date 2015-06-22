@@ -1,10 +1,5 @@
 abstract class Debris extends Entity {
-  // int x, y, w, h, opacityDecay=-2;
-  float opacityDecay=-2;
-  // float angle, VAngle, vx, vy, ax, ay=0.9, opacity=255;
-
-  float angle, VAngle=1, ax, ay=0.9, opacity=255, bounceFriction, bounceForce;
-  boolean dead;
+  float opacityDecay=-2,angle, VAngle=1, ax, ay=0.9, opacity=255, bounceFriction, bounceForce;
   Obstacle owner; 
 
   Debris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
@@ -13,11 +8,8 @@ abstract class Debris extends Entity {
     owner=_o;
   }
 
-  void display() {
-  }
 
   void update() {
-    if (!dead) {
       angle+=VAngle*speedFactor;
       bounceOnFloor();
       x+=vx*speedFactor;
@@ -25,21 +17,16 @@ abstract class Debris extends Entity {
       vx+=ax*speedFactor;
       vy+=ay*speedFactor;
       opacity+=opacityDecay*speedFactor;
-     if (opacity<=1)death();
-
-    }
+     if (opacity<20)death();
 
   }
-  void death() {
-    super.death();
-    dead=true;
-  }
+
   void bounceOnFloor() {
     if (y+25>floorHeight) {
         hitFloor();
-        vy*=(-(bounceForce));
-        vx*=(bounceFriction);
-        VAngle*=(random(1));
+        vy*=-(bounceForce);
+        vx*=bounceFriction;
+        VAngle*=random(1);
     }
   }
    void hitFloor(){}
@@ -53,19 +40,15 @@ class BoxDebris extends Debris {
     bounceFriction=0.7;
     bounceForce=0.5;
   }
-  void update() {
-    super.update();
-  }
+
   void display() {
-    if (!dead) {
       pushMatrix();
       translate(x, y);
       rotate(radians(angle));
-      fill(owner.obstacleColor, opacity);
+      fill(owner.obstacleColor, int(opacity));
       noStroke();
       rect(-25, -25, 50, 50);
       popMatrix();
-    }
   }
 }
 
@@ -77,21 +60,17 @@ class TireDebris extends Debris {
     bounceFriction=1;
     bounceForce=0.8;
   }
-  void update() {
-    super.update();
-  }
+
   void hitFloor(){
     super.hitFloor();
    if(opacity>50)playSound(rubberSound);
   }
   void display() {
-    if (!dead) {
-      stroke(0, opacity);
+      stroke(0, int(opacity));
       strokeWeight(20);
       noFill();
       ellipse(x, y, 60, 60);
       strokeWeight(1);
-    }
   }
 }
 class GlassDebris extends Debris {
@@ -103,18 +82,15 @@ class GlassDebris extends Debris {
     bounceFriction=0.7;
     bounceForce=0.5;
   }
-  void update() {
-    super.update();
-  }
+
   void display() {
-    if (!dead) {
+         noStroke();
       pushMatrix();
       translate(x, y);
       rotate(radians(angle));
-      fill(owner.obstacleColor, opacity);
-      noStroke();
+      fill(owner.obstacleColor, int(opacity));
       triangle(-10,0,10,0,0,-40);
       popMatrix();
-    }
+    
   }
 }

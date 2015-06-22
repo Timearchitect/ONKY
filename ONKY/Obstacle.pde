@@ -1,7 +1,7 @@
 
 abstract class Obstacle extends Entity {
   float impactForce;
-  color obstacleColor = color(100, 100, 50);
+  color obstacleColor;
   int hitBrightness;
   Obstacle(int _x, int _y) {
     super( _x, _y, 200, 200);
@@ -14,11 +14,10 @@ abstract class Obstacle extends Entity {
     collision();
     hitCollision();
   }
-  void gravity(){
-  
+  void gravity() {
   }
   void display() {
-    fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness,alpha(obstacleColor));
+    fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness, alpha(obstacleColor));
     rect(x, y, w, h);
   }
   void collision() {
@@ -60,10 +59,9 @@ abstract class Obstacle extends Entity {
   }
   void death() {
     super.death();
+    destroySound();
     background(255);
     println("KILLED A BOX");  
-    destroySound();
-    
   }
   void hit() {
     objectsDestroyed++;

@@ -19,18 +19,19 @@ class Particle extends Entity {
 
 class TrailParticle extends Particle {
   PImage cell;
-  float opacity=100;
+ 
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     particles.add(this);
     cell=_cell;
+     opacity=100;
     w=100;
     h=80;
   }
 
   void update() {
-    if (opacity>0)opacity*=1-0.1*speedFactor;
-    if (opacity<=1)death();
+    if (opacity>10)opacity*=1-0.1*speedFactor;
+    else death();
   }
 
   void display() {
@@ -54,8 +55,9 @@ class speedParticle extends Particle {
   void update() {
 
     w+=1*speedFactor;
-    if (opacity>0)opacity-=1*speedFactor;
-    if (w>200 || opacity>0)death();
+    if (opacity>10)opacity-=4*speedFactor;
+    else death();
+    
   }
 
   void display() {
