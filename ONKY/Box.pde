@@ -1,9 +1,7 @@
 class Box extends Obstacle {
-  //PImage image;
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(120, 120, 80);
-   // image=Block;
   }
   void death() {
     super.death();
@@ -13,19 +11,55 @@ class Box extends Obstacle {
     }
   }
   void display() {
-    image(Block,x,y,200,200);
-   /* super.display();
-    
+    super.display();
     stroke(155, 155, 100);
     strokeWeight(8);
     line(x, y, x+w, y+h);
     line(x, y+h, x+w, y);
-    strokeWeight(1);*/
+    strokeWeight(1);
   }
   void hit() {
     super.hit();
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=50;
+  }
+  void knock() {
+    super.knock();
+    skakeFactor=100;
+  }
+  void knockSound() {
+    playSound(boxKnockSound);
+  }
+  void destroySound() {
+    playSound(boxDestroySound);
+  }
+}
+class Block extends Obstacle {
+  Block(int _x, int _y) {
+    super(_x, _y);
+    obstacleColor = color(100, 100, 100);
+  }
+  void death() {
+    //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+    for (int i =0; i< 1; i++) {
+      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+    }
+  }
+  void display() {
+    image(Block,x,y,200,200);
+
+  }
+  void update(){
+    super.update();
+  vx*=0.95;
+  if(vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
+  }
+  
+  void hit() {
+    super.hit();
+    vx+=(p.vx+6)*0.2;
+  //  scaleFactor+=scaleFactor*0.05;
+  //  skakeFactor=50;
   }
   void knock() {
     super.knock();
@@ -98,7 +132,7 @@ class IronBox extends Obstacle {
   void knock() {
     super.knock();
     skakeFactor=100; 
-    //  hitBrightness=255;
+    hitBrightness=255;
   }
   void knockSound() {
     playSound(ironBoxDestroySound);
@@ -166,7 +200,7 @@ class Glass extends Obstacle {
   }
 
   void knock() {
-    super.knock();
+   // super.knock();
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=10;
     p.vx*=0.8;
@@ -178,18 +212,13 @@ class Glass extends Obstacle {
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5 < y +20) {
       p.checkIfObstacle(y-5);
-
       surface();
-      println("onTop");
     } else {
       if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-        println("collision!!!!"); 
         if (p.vx>5) {
           knock();
         }
         impactForce=p.vx; 
-        //p.collision();
-        // death();
       }
     }
   }
