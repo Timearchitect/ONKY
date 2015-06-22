@@ -2,13 +2,21 @@ void keyPressed() {
   if (key== '#') {
     debug=!debug;
   }
- if (key== '¤') {
+  if (key== '0') {
+    if (debug)p.lives=99;
+  }
+  if (key== '¤') {
     mute=!mute;
     BGM.pause();
-    if(!mute)    BGM.play();
-
+    if (!mute)    BGM.play();
   }
+  if (key== '-') {
+    if(targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
+  }
+  if (key== '+') {
     
+    if(targetSpeedFactor<1)targetSpeedFactor+=0.1;
+  }
   if (key== 'r') {
     gameReset();
   }
@@ -25,7 +33,7 @@ void keyPressed() {
   if (keyCode == RIGHT) {
     p.accel();
   }
-    
+
   if (key== 'a') {
     p.deAccel();
   }
@@ -38,10 +46,9 @@ void keyPressed() {
   if (key=='w') {
     p.jump();
   }
-    if (key=='s') {
+  if (key=='s') {
     p.duck();
     p.startSmash();
-
   }
   if (key=='x') {
     p.startPunch();
@@ -49,7 +56,6 @@ void keyPressed() {
   if (key=='0') {
     p.startPunch();
   }
-
 }
 
 
@@ -68,5 +74,4 @@ void keyReleased() {
   if (key=='w') {
   }
 }
-
 

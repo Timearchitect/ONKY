@@ -8,9 +8,9 @@ abstract class Obstacle extends Entity {
     obstacles.add( this);
   }
   void update() {
-    x+=vx;
-    y+=vy;
-    if (hitBrightness>0)hitBrightness*=0.8;
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
+    if (hitBrightness>0)hitBrightness*=0.8*speedFactor;
     collision();
     hitCollision();
   }

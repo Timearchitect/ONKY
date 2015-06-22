@@ -1,6 +1,6 @@
 abstract class Debris extends Entity {
   // int x, y, w, h, opacityDecay=-2;
-  int opacityDecay=-2;
+  float opacityDecay=-2;
   // float angle, VAngle, vx, vy, ax, ay=0.9, opacity=255;
 
   float angle, VAngle=1, ax, ay=0.9, opacity=255, bounceFriction, bounceForce;
@@ -18,13 +18,13 @@ abstract class Debris extends Entity {
 
   void update() {
     if (!dead) {
-      angle+=VAngle;
+      angle+=VAngle*speedFactor;
       bounceOnFloor();
-      x+=vx;
-      y+=vy;
-      vx+=ax;
-      vy+=ay;
-      opacity+=opacityDecay;
+      x+=vx*speedFactor;
+      y+=vy*speedFactor;
+      vx+=ax*speedFactor;
+      vy+=ay*speedFactor;
+      opacity+=opacityDecay*speedFactor;
      if (opacity<=1)death();
 
     }

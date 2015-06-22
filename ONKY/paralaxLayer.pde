@@ -16,8 +16,8 @@ class Paralax extends Entity {
   }
 
   void update() {
-    x+=vx;
-    y+=vy;
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
     if (x+w<width)x=0;
     //if(x+w<0)x=0;
   }
@@ -46,7 +46,7 @@ class ParalaxObject extends Paralax {
     repeatDistance=_repeatDistance;
   }
   void update() {
-    x-=int(p.vx*factor);
+    x-=int(p.vx*factor*speedFactor);
     if (x+w<0)x=width*repeatDistance;
   }
 

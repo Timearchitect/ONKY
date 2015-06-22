@@ -19,7 +19,7 @@ class Particle extends Entity {
 
 class TrailParticle extends Particle {
   PImage cell;
-  float opacity=255;
+  float opacity=100;
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     particles.add(this);
@@ -29,12 +29,12 @@ class TrailParticle extends Particle {
   }
 
   void update() {
-    if (opacity>0)opacity*=0.9;
+    if (opacity>0)opacity*=1-0.1*speedFactor;
     if (opacity<=1)death();
   }
 
   void display() {
-    tint(255, opacity);
+    tint(255, int(opacity));
     image(cell, x, y, w, h);
     g.removeCache(cell);// this is avoiding the leak
 
@@ -53,13 +53,13 @@ class speedParticle extends Particle {
 
   void update() {
 
-    w++;
-    if (opacity>0)opacity--;
-    if (w>200)death();
+    w+=1*speedFactor;
+    if (opacity>0)opacity-=1*speedFactor;
+    if (w>200 || opacity>0)death();
   }
 
   void display() {
-    stroke(255, opacity);
+    stroke(255, int(opacity));
     strokeWeight(3);
     noFill();
     line(x+p.vx-w, y, x-w, y);
@@ -79,19 +79,19 @@ class slashParticle extends Particle {
 
   void update() {
 
-    if (opacity>0)opacity*=0.9;
-    if (opacity<=1)death();
+    if (opacity>0)opacity*=1-0.1*speedFactor;
+    if (opacity<=20)death();
   }
 
   void display() {
     noFill();
-    stroke(255, 0, 0, opacity);
-    strokeWeight(int(opacity*0.15));
+    stroke(255, 0, 0, int(opacity));
+    strokeWeight(int(opacity*0.18));
     if (type==0)curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
     else  curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
 
-    stroke(255, opacity+50);
-    strokeWeight(int(opacity*0.04));
+    stroke(255, int(opacity+50));
+    strokeWeight(int(opacity*0.05));
     noFill();
     if (type==0)curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
     else  curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
@@ -119,8 +119,8 @@ class LineParticle extends Particle {
     angle=_angle;
   }
   void update() {
-    size*=1.1;
-    if (opacity>0)opacity*=0.7;
+    size*=1+0.1*speedFactor;
+    if (opacity>0)opacity*=1-0.3*speedFactor;
     if (opacity<=1)death();
   }
 
@@ -128,11 +128,11 @@ class LineParticle extends Particle {
 
     noFill();
 
-    stroke(particleColor, opacity);
+    stroke(particleColor, int(opacity));
     strokeWeight(int(0.2*opacity));
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);
 
-    stroke(255, opacity+100);
+    stroke(255, int(opacity)+100);
     strokeWeight(int(0.1*opacity));
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);
     strokeWeight(1);
@@ -155,8 +155,9 @@ class SpinParticle extends Particle {
   }
   void update() {
 
-    angle+=16;
-    opacity-=8;
+    angle+=16*speedFactor;
+    opacity-=8*speedFactor;
+    if(opacity<0)opacity=0;
     if (player!=null) {
       x=int(p.x+p.w*0.5);
       y=int(p.y+p.h*0.5);
@@ -167,8 +168,8 @@ class SpinParticle extends Particle {
   void display() {
 
     noFill();
-    stroke(255, opacity);
-    strokeWeight(ceil (opacity*0.1));
+    stroke(255, int(opacity));
+    strokeWeight(int(opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
     strokeWeight(1);
   }

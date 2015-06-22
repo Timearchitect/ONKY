@@ -13,8 +13,8 @@ class Powerup extends Entity{
     h=100;
   }
   void update() {
-    x+=vx;
-    y+=vy;
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
     collision();
   }
   void display() {

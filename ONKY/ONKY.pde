@@ -31,10 +31,11 @@ ParalaxObject paralaxObject=new ParalaxObject();
 
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
-float screenAngle,scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
+float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1,targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
 final int MAX_SHAKE=200;
 
 void setup() {
+  noSmooth();
   loadObstacle();
   //size(720, 1080); // vertical
   size( 1080, 720); // horisontal
@@ -87,7 +88,8 @@ void draw() {
   background(80);
   shake();
   smoothScale();
-      screenAngle*=0.9;
+  smoothSlow();
+  screenAngle*=0.9;
   if (!debug)adjustZoomLevel();
   //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
 
@@ -110,8 +112,17 @@ void draw() {
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
 
   for (Obstacle o : obstacles) {
+
+    if (o.x+shakeX*2<(p.x+width/(scaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {
+    /*      strokeWeight(55);
+      stroke(255, 0, 0);
+      line((p.x+width/(scaleFactor)), 0, (p.x+width/(scaleFactor)), 3000);
+      strokeWeight(5);
+
+      stroke(0, 255, 0);
+      line((p.x -playerOffsetX), 0, (p.x -playerOffsetX), 3000);*/
     o.update();
-    if (o.x+shakeX*2<(p.x+width)/(scaleFactor) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {
+
       o.gravity();
       o.display();
     }
@@ -121,7 +132,10 @@ void draw() {
   for (int i=obstacles.size () -1; i>=0; i--) {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
   }
-
+  if(debug){
+      fill(0,255,0,100);
+      rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor,0+50-shakeY,(width-100+shakeX)/scaleFactor,height/scaleFactor-100+shakeY);
+  }
   //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
 
   for (Powerup pow : powerups) {
@@ -206,6 +220,10 @@ void smoothScale() {
   float scaleDiff=targetScaleFactor-scaleFactor;
   scaleFactor+=scaleDiff*0.1;
 }
+void smoothSlow() {
+  float speedDiff=targetSpeedFactor-speedFactor;
+  speedFactor+=speedDiff*0.05;
+}
 void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
@@ -234,6 +252,7 @@ void gameReset() {
   p.reset();
   p.y=floorHeight;
   p.invis=0;
+  speedFactor=1;
   score=0;
   tokens=0;
   objectsDestroyed=0;
@@ -244,7 +263,7 @@ void calcDispScore() {
   score=int(p.x);
   fill(100, 255, 0);
   textSize(35);
-  text("Speed:"+(speedLevel-10) +" + "+ int(p.vx-speedLevel)+"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-800, 80);
+  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-10) +" + "+ int(p.vx-speedLevel)+"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 80);
   textSize(18);
 }
 void debugScreen() {
