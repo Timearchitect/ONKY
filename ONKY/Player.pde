@@ -32,8 +32,6 @@ class Player {
 
     if (0<invis) {
       recover();
-    } else {
-      playerColor = color(255);
     }
     cutSprite(int(x/40));
 
@@ -84,10 +82,9 @@ class Player {
       }
     }
 
-
     popMatrix();
     if (punching && punchCooldown==0)punch();
-    smash();
+   // smash();
   }
   void collision() {
     if (invis==0) {
@@ -107,27 +104,25 @@ class Player {
       if (jumpCount==2) {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
       }
-      jumpSound.rewind();
-      jumpSound.play();
+      playSound(jumpSound);
       if (jumpCount==1) particles.add( new SpinParticle( this));
-
       jumpCount--;
       vy=-20;
     }
   }
 
   void accel() {
-    vx++;
+    if(vx<MAX_SPEED)vx++;
   }
   void deAccel() {
-    vx--;
+    if(vx>0)vx--;
   }
   void duck() {
     if (!onGround) { 
-      vy=25;
-      entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
+      vy=24;
+      entities.add(new LineParticle(int(x+w*0.5), int(y+h), 10, 0));
     }
-    if (jumpCount<2 && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 80, 80));
+    if (jumpCount<2 && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
     ducking=true;
     duckTime=50;
   }
@@ -154,8 +149,8 @@ class Player {
   }
   void recover() {
     invis-=1*speedFactor;
+    if(invis<1)invis=0;
     angle=-22;
-    //  invisTint-=2;
   }
   void startPunch() {
     if (punchCooldown<=0 && !punching) {

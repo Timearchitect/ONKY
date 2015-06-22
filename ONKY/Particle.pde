@@ -19,12 +19,12 @@ class Particle extends Entity {
 
 class TrailParticle extends Particle {
   PImage cell;
- 
+
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     particles.add(this);
     cell=_cell;
-     opacity=100;
+    opacity=100;
     w=100;
     h=80;
   }
@@ -57,7 +57,6 @@ class speedParticle extends Particle {
     w+=1*speedFactor;
     if (opacity>10)opacity-=4*speedFactor;
     else death();
-    
   }
 
   void display() {
@@ -142,7 +141,7 @@ class LineParticle extends Particle {
 }
 class SpinParticle extends Particle {
   float size=100, angle;
-  Player player=null;
+  Player player;
   SpinParticle( Player _player) {
     super( 0, 0);
     particles.add(this);
@@ -159,7 +158,7 @@ class SpinParticle extends Particle {
 
     angle+=16*speedFactor;
     opacity-=8*speedFactor;
-    if(opacity<0)opacity=0;
+    if (opacity<0)opacity=0;
     if (player!=null) {
       x=int(p.x+p.w*0.5);
       y=int(p.y+p.h*0.5);
@@ -174,6 +173,27 @@ class SpinParticle extends Particle {
     strokeWeight(int(opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
     strokeWeight(1);
+  }
+}
+class smokeParticle extends Particle {
+
+  smokeParticle(int _x, int  _y, float _vx, float  _vy) {
+    super( _x, _y);
+    particles.add(this);
+    opacity=100;
+    vy=_vy;
+    vx=_vx;
+  }
+
+  void update() {
+    if (opacity>10)opacity-=4*speedFactor;
+    else death();
+  }
+
+  void display() {
+    fill(255, int(opacity));
+    noStroke();
+    ellipse(x,y,w,h);
   }
 }
 

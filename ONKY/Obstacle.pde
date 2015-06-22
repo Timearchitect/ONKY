@@ -61,7 +61,6 @@ abstract class Obstacle extends Entity {
     super.death();
     destroySound();
     background(255);
-    println("KILLED A BOX");  
   }
   void hit() {
     objectsDestroyed++;
