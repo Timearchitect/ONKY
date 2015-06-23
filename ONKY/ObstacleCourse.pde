@@ -395,8 +395,9 @@ void spawnBoxBlock(int x) {
 }
 
 void spawnBush(int x) {
-  entities.add(new Bush(x-0, int(floorHeight-100) ) );
-  entities.add(new Bush(x-200, int(floorHeight-100) ) );
-  entities.add(new Bush(x-400, int(floorHeight-100) ) );
+  int noBushes = int(random(5));
+  for(int i=0; i<noBushes; i++){
+  entities.add(new Bush(x-0+i*100, int(floorHeight-100) ) );
+  }
 }
 
