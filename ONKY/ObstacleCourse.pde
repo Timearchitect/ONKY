@@ -57,10 +57,12 @@ void loadObstacle() {
     case 17:
       spawnBoxBlock(i*2200);
       break;  
-
+    case 18:
+      spawnBush(i*2200);
+      break;
     default:
-
-      spawnSingleWall(i*2200);
+    spawnBush(i*2200);  
+    //  spawnSingleWall(i*2200);
     }
   }
 }
@@ -390,5 +392,11 @@ void spawnBoxBlock(int x) {
   entities.add(new Box(x-400, int(floorHeight-600) ) );
   if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
   if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
+}
+
+void spawnBush(int x) {
+  entities.add(new Bush(x-0, int(floorHeight-100) ) );
+  entities.add(new Bush(x-200, int(floorHeight-100) ) );
+  entities.add(new Bush(x-400, int(floorHeight-100) ) );
 }
 

@@ -230,24 +230,21 @@ class Bush extends Obstacle {
   Bush(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
-    w=200;
-    h=200;
+    w=100;
+    h=100;
   }
   void death() {
-    //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
-    for (int i =0; i< 1; i++) {
+    super.death();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+    for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
   void display() {
+   fill(obstacleColor);
     rect( x, y, w, h);
   }
-  void update() {
-    super.update();
-    vx*=0.95;
-    if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
-  }
-
+  
   void hit() {
     super.hit();
     vx+=(p.vx+6)*0.2;
@@ -256,7 +253,11 @@ class Bush extends Obstacle {
   }
   void knock() {
     super.knock();
-    skakeFactor=100;
+    for (int i =0; i< 1; i++) {
+      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+    }
+    //skakeFactor=100;
+    
   }
   void knockSound() {
     playSound(boxKnockSound);
@@ -264,7 +265,20 @@ class Bush extends Obstacle {
   void destroySound() {
     playSound(boxDestroySound);
   }
-}
+  void collision() {
+    
+      if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+        println("collision!!!!"); 
+        if (p.vx>5) {
+          knock();
+        }
+        impactForce=p.vx; 
+        
+        // death();
+      }
+    }
+  }
+
 
 // kommentar
 
