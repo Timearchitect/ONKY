@@ -2,6 +2,7 @@ class Box extends Obstacle {
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(120, 120, 80);
+    health=3;
   }
   void death() {
     super.death();
@@ -40,6 +41,7 @@ class Tire extends Obstacle {
   Tire(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 0, 0);
+       health=3;
   }
   void death() {
     super.death();
@@ -144,6 +146,7 @@ class Glass extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(0, 150, 255, 100);
+       health=1;
   }
 
   void display() {
@@ -192,6 +195,7 @@ class Block extends Obstacle {
     obstacleColor = color(100, 100, 100);
     w=200;
     h=200;
+       health=8;
   }
   void death() {
     //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
@@ -232,6 +236,7 @@ class Bush extends Obstacle {
     obstacleColor = color(0, 255, 50);
     w=100;
     h=100;
+       health=1;
   }
   void death() {
     super.death();

@@ -11,11 +11,11 @@ void keyPressed() {
     if (!mute)    BGM.play();
   }
   if (key== '-') {
-  //  if (targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
+    if (targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
   }
   if (key== '+') {
 
-   // if (targetSpeedFactor<1)targetSpeedFactor+=0.1;
+    if (targetSpeedFactor<1)targetSpeedFactor+=0.1;
   }
   if (key== 'r') {
     gameReset();
@@ -35,10 +35,10 @@ void keyPressed() {
   }
 
   if (key== 'a') {
-    p.deAccel();
+    //p.deAccel();
   }
   if (key== 'd') {
-    p.accel();
+    //p.accel();
   }
   if (key==' ') {
     p.jump();

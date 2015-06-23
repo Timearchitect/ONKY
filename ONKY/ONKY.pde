@@ -24,6 +24,7 @@ ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Paralax> ForegroundParalaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
+ArrayList<Projectile> projectiles= new ArrayList<Projectile>();
 ArrayList<Particle> particles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Paralax paralax= new Paralax();
@@ -52,7 +53,8 @@ void setup() {
   ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
   ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
 
-  entities.add(new invisPowerup(1000,600,200));
+  entities.add(new invisPowerup(1000,600,2000));
+  entities.add(new LaserPowerup(2000,600,2000));
 
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
@@ -118,19 +120,11 @@ void draw() {
     // if((o.x+shakeX)/(scaleFactor)>p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor  && o.x-o.w-shakeX<p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor+(width-100+shakeX)/scaleFactor){
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) {
       renderObject++;
-      /*      strokeWeight(55);
-       stroke(255, 0, 0);
-       line((p.x+width/(scaleFactor)), 0, (p.x+width/(scaleFactor)), 3000);
-       strokeWeight(5);
-       
-       stroke(0, 255, 0);
-       line((p.x -playerOffsetX), 0, (p.x -playerOffsetX), 3000);*/
+  
       o.update();
      // o.gravity();
       o.display();
     }
-    //o.collision();
-    // o.hitCollision();
   }
   for (int i=obstacles.size () -1; i>=0; i--) {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
@@ -168,7 +162,15 @@ void draw() {
   for (int i=particles.size () -1; i>=0; i--) {
     if (particles.get(i).dead)particles.remove(particles.get(i));
   }
+  //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
 
+  for (Projectile pro : projectiles) {
+    pro.update();
+    pro.display();
+  }
+  for (int i=projectiles.size () -1; i>=0; i--) {
+    if (projectiles.get(i).dead)projectiles.remove(projectiles.get(i));
+  }
 
   //-----------------------------         Entities           -----------------------------------------------------------
 
@@ -226,8 +228,8 @@ void smoothScale() {
   scaleFactor=1;
 }
 void smoothSlow() {
- // float speedDiff=targetSpeedFactor-speedFactor;
-  //speedFactor+=speedDiff*0.05;
+  float speedDiff=targetSpeedFactor-speedFactor;
+  speedFactor+=speedDiff*0.05;
 }
 void smoothAngle() {
   if (screenAngle!=0) {

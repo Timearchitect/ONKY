@@ -3,7 +3,7 @@ void loadObstacle() {
 
   for (int i=1; i<100; i++) {
     switch(int(random(30))) {
-   /* case 0:
+    case 0:
       spawnDuck(i*2200);
       break;
     case 1:
@@ -59,11 +59,11 @@ void loadObstacle() {
       break;  
     case 18:
       spawnBush(i*2200);
-      break;*/
+      break;
     default:
    // spawnBush(i*2200);  
-          spawnBlocks(i*2200);
-    //  spawnSingleWall(i*2200);
+     //  spawnBlocks(i*2200);
+      spawnSingleWall(i*2200);
     }
   }
 }
@@ -140,7 +140,6 @@ void spawnTunnel(int x) {
   // entities.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
   // entities.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
 
-
   entities.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
   entities.add(new IronBox(x+1200, int(floorHeight-800) ) ); 
   entities.add(new IronBox(x+1200, int(floorHeight-1000) ) ); 
@@ -169,7 +168,7 @@ void spawnTirePool(int x) {
 
   entities.add(new IronBox(x+1000, int(floorHeight-200) ) );
 
-  if (index==1) entities.add( new  Powerup(x+450, int(floorHeight-350), 200) );
+  if (index==1) entities.add( new  Powerup(x+500, int(floorHeight-350), 200) );
 }
 void spawnTireTower(int x) {
   entities.add(new Tire(x, int(floorHeight-200) ) ); 
@@ -351,8 +350,8 @@ void spawnBiuldingFrame(int x) {
 void spawnTowerFrame(int x) {
   int index= int(random(2));
 
-  entities.add(new Glass(x, int(floorHeight-200), 50, 200));
-  entities.add(new PlatForm(x, int(floorHeight-1000), 50, 800 ) );
+  entities.add(new Glass(x, int(floorHeight-400), 50, 400));
+  entities.add(new PlatForm(x, int(floorHeight-1000), 50, 600 ) );
   for (int j=0; j<6; j++) {
     for (int i=0; i<4; i++) {
       entities.add(new Glass(x+50+j*200, int(floorHeight-i*150-200), 200, 50));
@@ -362,7 +361,6 @@ void spawnTowerFrame(int x) {
     entities.add(new PlatForm(x+1250, int(floorHeight-600), 50, 600 ) );
     entities.add(new Glass(x+1250, int(floorHeight-1000), 50, 400));
   } else {
-
     entities.add(new PlatForm(x+1250, int(floorHeight-350), 50, 350 ) );
     entities.add(new Glass(x+1250, int(floorHeight-550), 50, 200));
     entities.add(new PlatForm(x+1250, int(floorHeight-950), 50, 400 ) );
@@ -376,8 +374,7 @@ void spawnBlocks(int x) {
   //  entities.add(new Block(x+200, int(floorHeight-200) ) );
   // entities.add(new Block(x+400, int(floorHeight-200) ) );
 
-
-  if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
+  if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-750), 200) );
   if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
 }
 void spawnBoxBlock(int x) {
@@ -396,9 +393,11 @@ void spawnBoxBlock(int x) {
 }
 
 void spawnBush(int x) {
-  int noBushes = int(random(5));
+  int noBushes = int(random(6));
   for(int i=0; i<noBushes; i++){
-  entities.add(new Bush(x-0+i*100, int(floorHeight-100) ) );
+    entities.add(new Bush(x-0+i*100, int(floorHeight-100) ) );
   }
+    if (noBushes==4) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
+
 }
 

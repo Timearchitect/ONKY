@@ -8,7 +8,7 @@ class Player {
   final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
   int cooldown, health, maxHealth=100, jumpCount=MAX_JUMP, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
-  float punchTime,invis;
+  float punchTime, invis;
   int duckTime, duckCooldown;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
   boolean dead, onGround, punching, smashing, ducking;
@@ -24,11 +24,12 @@ class Player {
     vx+=ax*speedFactor;
     vy+=ay*speedFactor;
 
-    if (vx<0 && vx>-1) vx=1;
+    if (vx<1 && vx>-1) vx=1;
     if (vx<speedLevel && vx>0)vx*=1+0.08*speedFactor;
     if (vx<0)vx*= decayFactor*speedFactor;
 
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
+    if (jumpCount==0)angle+=15*speedFactor;
 
     if (0<invis) {
       recover();
@@ -39,7 +40,6 @@ class Player {
 
     checkDuck();
 
-    if (jumpCount<1)angle+=15*speedFactor;
     if (millis()> trailspawnTimer+80/speedFactor) {
       entities.add(new TrailParticle(int(x), int(y), cell));
       trailspawnTimer=millis();
@@ -67,24 +67,28 @@ class Player {
 
     if (invis>1 && invis % 4 <=1) {
       cell.filter(INVERT);
+    
     }
 
 
     if (ducking && onGround) { 
-      image(Slide, -100*0.3, -80*0.5, 100, 80);
+      cell=Slide;
+      image(cell, -100*0.3, -80*0.5, 100, 80);
     } else {
       if (jumpCount==2) { 
         image(cell, -w*0.5, -h*0.5, w, h);
       } else if (jumpCount==1) {
-        image(Jump, -w*0.5, -h*0.5, w, h);
+        cell=Jump;
+        image(Jump, -w*0.5, -h*0.5, 100, 80);
       } else {
-        image(FrontFlip, -w*0.5, -h*0.5, w, h);
+        cell=FrontFlip;
+        image(cell, -w*0.5, -h*0.5, 100, 80);
       }
     }
 
     popMatrix();
     if (punching && punchCooldown==0)punch();
-   // smash();
+    // smash();
   }
   void collision() {
     if (invis==0) {
@@ -108,14 +112,15 @@ class Player {
       if (jumpCount==1) particles.add( new SpinParticle( this));
       jumpCount--;
       vy=-20;
-    }
+    }      
+
   }
 
   void accel() {
-    if(vx<MAX_SPEED)vx++;
+    if (vx<MAX_SPEED)vx++;
   }
   void deAccel() {
-    if(vx>0)vx--;
+    if (vx>0)vx--;
   }
   void duck() {
     if (!onGround) { 
@@ -149,7 +154,7 @@ class Player {
   }
   void recover() {
     invis-=1*speedFactor;
-    if(invis<1)invis=0;
+    if (invis<1)invis=0;
     angle=-22;
   }
   void startPunch() {

@@ -1,6 +1,6 @@
 class Powerup extends Entity {
   PImage icon;
-  float angle;
+  float angle, offsetX, offsetY;
   int  time;
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
@@ -12,23 +12,23 @@ class Powerup extends Entity {
     h=100;
   }
   void update() {
-    angle++;
-    //x=cos(radians(angle))*0.5 ;
-    y=round(sin(radians(angle))*2+y);
+    angle+=8;
+    offsetX=cos(radians(angle))*14;
+    offsetY=sin(radians(angle))*14;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
     collision();
   }
   void display() {
     fill(255);
-    ellipse(x, y, w, h);
+    ellipse(x+offsetX, y+offsetY, w, h);
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
       println("killed powerup");  
       playSound(collectSound);
       p.usedPowerup=this;
-      particles.add( new SpinParticle(  int(x), int(y)));
+      particles.add( new SpinParticle( int(x), int(y)));
       death();
     }
   }
@@ -36,7 +36,7 @@ class Powerup extends Entity {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       println("Grab!!!!"); 
       playSound(collectSound);
-      particles.add( new SpinParticle(  int(x), int(y)));
+      particles.add( new SpinParticle( int(x), int(y)));
       p.usedPowerup=this;
       death();
     }
@@ -47,7 +47,6 @@ class Powerup extends Entity {
     background(255, 0, 0);
     if (time<=0)death();
   }
-
 }
 
 
@@ -55,7 +54,7 @@ class invisPowerup extends Powerup {
   PImage icon;
   int  time;
   invisPowerup(int _x, int _y, int _time) {
-    super(_x, _y,_time);
+    super(_x, _y, _time);
     powerups.add( this);
     time=_time;
     x=_x;
@@ -69,7 +68,7 @@ class invisPowerup extends Powerup {
     collision();
   }
   void display() {
-    fill(255);
+    fill(255,100,0);
     ellipse(x, y, w, h);
   }
   void hitCollision() {
@@ -78,7 +77,7 @@ class invisPowerup extends Powerup {
       playSound(collectSound);
       p.usedPowerup=this;
       particles.add( new SpinParticle(  int(x), int(y)));
-      death();
+    //  death();
     }
   }
   void collision() {
@@ -87,16 +86,59 @@ class invisPowerup extends Powerup {
       playSound(collectSound);
       particles.add( new SpinParticle(  int(x), int(y)));
       p.usedPowerup=this;
-      death();
+      //death();
     }
   }
   void use() {
-    p.invis=5000;
+    p.invis=4000;
     time--;
     tokens++;
-    background(255, 0, 0);
+    //background(255, 0, 0);
     if (time<=0)death();
   }
-
 }
-
+class LaserPowerup extends Powerup {
+  PImage icon;
+  int  time;
+  LaserPowerup(int _x, int _y, int _time) {
+    super(_x, _y, _time);
+    powerups.add( this);
+    time=_time;
+    x=_x;
+    y=_y;
+    w=100;
+    h=100;
+  }
+  void update() {
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
+    collision();
+  }
+  void display() {
+    fill(255,0,0);
+    ellipse(x, y, w, h);
+  }
+  void hitCollision() {
+    if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      println("killed powerup");  
+      playSound(collectSound);
+      p.usedPowerup=this;
+      particles.add( new SpinParticle(  int(x), int(y)));
+    //  death();
+    }
+  }
+  void collision() {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      println("Grab!!!!"); 
+      playSound(collectSound);
+      particles.add( new SpinParticle(  int(x), int(y)));
+      p.usedPowerup=this;
+      //death();
+    }
+  }
+  void use() {
+   if(time%10==0)projectiles.add( new Projectile(  int(p.x+p.w*0.5), int(p.y+p.h*0.3), 25, 0));
+    time--;
+    if (time<=0)death();
+  }
+}
