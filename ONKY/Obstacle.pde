@@ -15,6 +15,12 @@ abstract class Obstacle extends Entity {
     hitCollision();
   }
   void gravity() {
+    for (Obstacle o : obstacles) {
+      if ( o.x>x+w && o.x+o.w<x && o.y+o.h<y) y++;
+      else {
+        vy=0;
+      }
+    }
   }
   void display() {
     fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness, alpha(obstacleColor));

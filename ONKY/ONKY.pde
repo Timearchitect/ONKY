@@ -32,7 +32,7 @@ ParalaxObject paralaxObject=new ParalaxObject();
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
-final int MAX_SHAKE=200,MAX_SPEED=45;
+final int MAX_SHAKE=200, MAX_SPEED=45;
 
 void setup() {
   noSmooth();
@@ -52,7 +52,7 @@ void setup() {
   ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
   ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
 
-
+  entities.add(new invisPowerup(1000,600,200));
 
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
@@ -102,7 +102,7 @@ void draw() {
   pushMatrix();
   scale(scaleFactor);
   rotate(radians(screenAngle));
-  translate(-p.x+playerOffsetX+shakeX,(-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
+  translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
 
   if (debug)displaySign();
   displayFloor();
@@ -126,8 +126,7 @@ void draw() {
        stroke(0, 255, 0);
        line((p.x -playerOffsetX), 0, (p.x -playerOffsetX), 3000);*/
       o.update();
-
-      // o.gravity();
+     // o.gravity();
       o.display();
     }
     //o.collision();

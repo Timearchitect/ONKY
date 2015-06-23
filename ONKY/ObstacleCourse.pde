@@ -54,7 +54,12 @@ void loadObstacle() {
     case 16:
       spawnBlocks(i*2200);
       break;
+    case 17:
+      spawnBoxBlock(i*2200);
+      break;  
+
     default:
+
       spawnSingleWall(i*2200);
     }
   }
@@ -365,12 +370,25 @@ void spawnBlocks(int x) {
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
   entities.add(new Block(x-100, int(floorHeight-200) ) );
-//  entities.add(new Block(x+200, int(floorHeight-200) ) );
- // entities.add(new Block(x+400, int(floorHeight-200) ) );
+  //  entities.add(new Block(x+200, int(floorHeight-200) ) );
+  // entities.add(new Block(x+400, int(floorHeight-200) ) );
 
 
   if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
-    if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
-
+  if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
+}
+void spawnBoxBlock(int x) {
+  int index= int(random(2));
+  entities.add(new Box(x-0, int(floorHeight-200) ) );
+  entities.add(new Box(x-0, int(floorHeight-400) ) );
+  entities.add(new Box(x-0, int(floorHeight-600) ) );
+  entities.add(new Box(x-200, int(floorHeight-200) ) );
+  entities.add(new Box(x-200, int(floorHeight-400) ) );
+  entities.add(new Box(x-200, int(floorHeight-600) ) );
+  entities.add(new Box(x-400, int(floorHeight-200) ) );
+  entities.add(new Box(x-400, int(floorHeight-400) ) );
+  entities.add(new Box(x-400, int(floorHeight-600) ) );
+  if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
+  if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
 }
 
