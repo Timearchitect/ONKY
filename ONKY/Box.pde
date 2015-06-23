@@ -265,4 +265,8 @@ class Bush extends Obstacle {
     playSound(boxDestroySound);
   }
 }
+
 // kommentar
+
+// hejasn
+
