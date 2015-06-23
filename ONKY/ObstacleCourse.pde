@@ -3,7 +3,7 @@ void loadObstacle() {
 
   for (int i=1; i<100; i++) {
     switch(int(random(30))) {
-    case 0:
+   /* case 0:
       spawnDuck(i*2200);
       break;
     case 1:
@@ -59,9 +59,10 @@ void loadObstacle() {
       break;  
     case 18:
       spawnBush(i*2200);
-      break;
+      break;*/
     default:
-    spawnBush(i*2200);  
+   // spawnBush(i*2200);  
+          spawnBlocks(i*2200);
     //  spawnSingleWall(i*2200);
     }
   }

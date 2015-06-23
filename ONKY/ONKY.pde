@@ -220,12 +220,14 @@ void shake() {
   shakeY=random(skakeFactor)-skakeFactor*0.5;
 }
 void smoothScale() {
-  float scaleDiff=targetScaleFactor-scaleFactor;
-  scaleFactor+=scaleDiff*0.1;
+ // float scaleDiff=targetScaleFactor-scaleFactor;
+ // scaleFactor+=scaleDiff*0.1;
+  targetScaleFactor=1;
+  scaleFactor=1;
 }
 void smoothSlow() {
-  float speedDiff=targetSpeedFactor-speedFactor;
-  speedFactor+=speedDiff*0.05;
+ // float speedDiff=targetSpeedFactor-speedFactor;
+  //speedFactor+=speedDiff*0.05;
 }
 void smoothAngle() {
   if (screenAngle!=0) {

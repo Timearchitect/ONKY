@@ -11,11 +11,11 @@ void keyPressed() {
     if (!mute)    BGM.play();
   }
   if (key== '-') {
-    if (targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
+  //  if (targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
   }
   if (key== '+') {
 
-    if (targetSpeedFactor<1)targetSpeedFactor+=0.1;
+   // if (targetSpeedFactor<1)targetSpeedFactor+=0.1;
   }
   if (key== 'r') {
     gameReset();
@@ -28,10 +28,10 @@ void keyPressed() {
     p.startSmash();
   }
   if (keyCode == LEFT) {
-    p.deAccel();
+  //  p.deAccel();
   }
   if (keyCode == RIGHT) {
-    p.accel();
+   // p.accel();
   }
 
   if (key== 'a') {

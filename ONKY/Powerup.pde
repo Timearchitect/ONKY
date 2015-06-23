@@ -1,5 +1,6 @@
 class Powerup extends Entity {
   PImage icon;
+  float angle;
   int  time;
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
@@ -11,6 +12,9 @@ class Powerup extends Entity {
     h=100;
   }
   void update() {
+    angle++;
+    //x=cos(radians(angle))*0.5 ;
+    y=round(sin(radians(angle))*2+y);
     x+=vx*speedFactor;
     y+=vy*speedFactor;
     collision();
