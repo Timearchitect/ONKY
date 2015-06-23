@@ -226,8 +226,8 @@ class Block extends Obstacle {
   }
 }
 
-class Block extends Obstacle {
-  Block(int _x, int _y) {
+class Bush extends Obstacle {
+  Bush(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
     w=200;
@@ -240,7 +240,7 @@ class Block extends Obstacle {
     }
   }
   void display() {
-    rect(Block, x, y, w, h);
+    rect( x, y, w, h);
   }
   void update() {
     super.update();
