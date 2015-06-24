@@ -16,7 +16,7 @@ AudioPlayer rubberSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
 Player p = new Player();
-PImage Block;
+PImage Block, laserIcon;
 int speedLevel=14; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -31,7 +31,7 @@ Paralax paralax= new Paralax();
 ParalaxObject paralaxObject=new ParalaxObject();
 
 boolean debug, mute;
-int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
+int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
 final int MAX_SHAKE=200, MAX_SPEED=18;
 
@@ -41,20 +41,7 @@ void setup() {
   //size(720, 1080); // vertical
   size( 1080, 720); // horisontal
 
-  entities.add(new Paralax(0, 250, 5000, 2000, 1)); 
-
-  entities.add(new ParalaxObject(0, 300, 30, 100, 0.6)); 
-  entities.add(new ParalaxObject(255, 350, 30, 100, 0.6)); 
-  entities.add(new ParalaxObject(0, 350, 50, 200, 0.7)); 
-  entities.add(new ParalaxObject(300, 350, 50, 200, 0.7)); 
-  entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
-  entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
-
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
-
-  //entities.add(new invisPowerup(1000, 600, 2000));
-  entities.add(new LaserPowerup(2000, 600, 2000));
+ 
 
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
@@ -62,6 +49,7 @@ void setup() {
   p.Jump = loadImage("jump.png");
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
+  laserIcon = loadImage("laserIcon.jpg");
 
   Block = loadImage("block200.png");
   // we pass this to Minim so that it can load files from the data directory
@@ -87,6 +75,24 @@ void setup() {
   BGM.setGain(-10);
   BGM.play();
   BGM.loop();
+  
+  
+   entities.add(new Paralax(0, 250, 5000, 2000, 1)); 
+
+  entities.add(new ParalaxObject(0, 300, 30, 100, 0.6)); 
+  entities.add(new ParalaxObject(255, 350, 30, 100, 0.6)); 
+  entities.add(new ParalaxObject(0, 350, 50, 200, 0.7)); 
+  entities.add(new ParalaxObject(300, 350, 50, 200, 0.7)); 
+  entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
+  entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
+
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
+
+  //entities.add(new invisPowerup(1000, 600, 2000));
+  entities.add(new LaserPowerup(2000, 600, 2000));
+  entities.add(new LaserPowerup(2000, 400, 2000));
+
 }
 
 void draw() {
@@ -102,14 +108,13 @@ void draw() {
     px.update();
     px.display();
   }
-  if(p.usedPowerup!=null)p.usedPowerup.displayIcon();
-
+  if (debug) displaySign();
   pushMatrix();
   scale(scaleFactor);
   rotate(radians(screenAngle));
   translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
 
-  if (debug)displaySign();
+  // if (debug)displaySign();
   displayFloor();
 
   p.update();
@@ -122,7 +127,6 @@ void draw() {
     // if((o.x+shakeX)/(scaleFactor)>p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor  && o.x-o.w-shakeX<p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor+(width-100+shakeX)/scaleFactor){
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) {
       renderObject++;
-
       o.update();
       // o.gravity();
       o.display();
@@ -133,7 +137,10 @@ void draw() {
   }
   if (debug) {
     fill(0, 255, 0, 100);
-    rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, 0+50-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
+  //  rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, 0+50-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
+   rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
+   
+  
   }
   //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
 
@@ -167,7 +174,7 @@ void draw() {
   //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
 
   for (Projectile pro : projectiles) {
-        pro.update();
+    pro.update();
     pro.display();
   }
   for (int i=projectiles.size () -1; i>=0; i--) {
@@ -210,6 +217,7 @@ void draw() {
     px.update();
     px.display();
   }
+  if (p.usedPowerup!=null)p.usedPowerup.displayIcon();
 
   displayLife();
   calcDispScore();
@@ -249,10 +257,11 @@ void displayFloor() {
 
 void displaySign() {
   stroke(255);
-  for ( int i=0; i<500; i++) {
-    line(i*100, 0, i*100, height);
-    if (i%10==0)text(i*100+" meter", i*100, height*0.3);
-  }
+  strokeWeight(1);
+  int interval=100;
+  for (int i=0; i< width/scaleFactor; i+=interval)
+    line((i+playerOffsetX-p.x%interval)*(scaleFactor), 0, (i+playerOffsetX-p.x%interval)*(scaleFactor), height);
+
 }
 
 void gameReset() {
@@ -275,7 +284,7 @@ void gameReset() {
 }
 
 void calcDispScore() {
-  if(MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+10);
+  if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+10);
   score=int(p.x);
   fill(100, 255, 0);
   textSize(35);

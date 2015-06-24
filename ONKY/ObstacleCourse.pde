@@ -2,10 +2,10 @@ int difficulty, difficultyRange=10;
 float minDifficulty=0, maxDifficulty=difficultyRange;
 
 void loadObstacle() {
-  for (int i=1; i<90; i++) {
-    minDifficulty+=0.2;
-    maxDifficulty+=0.2;
-    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-9);
+  for (int i=1; i<110; i++) {
+    minDifficulty+=0.25;
+    maxDifficulty+=0.25;
+    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
     switch(difficulty) {
     case 0:
       spawnSingleWall(i*2200);
@@ -113,14 +113,14 @@ void spawnSingleWall(int x) {
     entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
     entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
     //   entities.add(new Box(x+200, int(floorHeight-600) ) ); // 3
-    //  entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
-    //  entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
+    //   entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    //   entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
     break;
   case 2:
     entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
     entities.add(new Box(x+200, int(floorHeight-400) ) ); // 2
     entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
-    //  entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    //   entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
     //   entities.add(new Box(x+200, int(floorHeight-400) ) ); // 2
     //   entities.add(new IronBox(x+200, int(floorHeight-200) ) ); // 1
     break;
@@ -128,7 +128,7 @@ void spawnSingleWall(int x) {
     entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
     entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
     entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
-    //    entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    //   entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
     //   entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
     //   entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
     break;
@@ -140,7 +140,8 @@ void spawnTunnel(int x) {
   int index= int(random(3));
   if (index==0) entities.add( new  Powerup(x+1000, int(floorHeight-550), 200) );
 
-  entities.add(new IronBox(x, int(floorHeight-200) ) ); 
+  if (index==1) entities.add(new Box(x, int(floorHeight-200) ) ); 
+  else entities.add(new IronBox(x, int(floorHeight-200) ) ); 
   entities.add(new IronBox(x+200, int(floorHeight-300) ) ); 
   entities.add(new IronBox(x+400, int(floorHeight-300) ) ); 
   entities.add(new IronBox(x+600, int(floorHeight-300) ) );

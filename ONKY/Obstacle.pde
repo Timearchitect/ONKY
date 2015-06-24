@@ -29,7 +29,6 @@ abstract class Obstacle extends Entity {
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5 < y +20) {
       p.checkIfObstacle(y-5);
-
       surface();
       println("onTop");
     } else {

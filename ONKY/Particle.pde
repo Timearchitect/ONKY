@@ -92,6 +92,7 @@ class slashParticle extends Particle {
     if (type==1)  curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
     if (type==2)curve(p.x-100, p.y+60, p.x+40, p.y+ 0, p.x+ 180, p.y+30, p.x- 200, p.y+180);
     if (type==3)arc(p.x+p.w*0.5+20, p.y+p.h*0.5, 190, 140, radians(p.angle*1.5-50), radians(p.angle*1.5+120));
+    if (type==4)curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
 
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
@@ -101,6 +102,7 @@ class slashParticle extends Particle {
     if (type==1) curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
     if (type==2)curve(p.x-100, p.y+60, p.x+40, p.y+ 0, p.x+ 180, p.y+30, p.x- 200, p.y+180);
     if (type==3)arc(p.x+p.w*0.5+20, p.y+p.h*0.5, 190, 140, radians(p.angle*1.5-50), radians(p.angle*1.5+120));
+    if (type==4)curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
 
     strokeWeight(1);
   }

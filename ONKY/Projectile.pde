@@ -3,37 +3,25 @@ abstract class Projectile extends Entity {
   Projectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
-    vx=_vx;
-    vy=_vy;
+    vx=_vx*speedFactor;
+    vy=_vy*speedFactor;
   }
-
-
 
   void collision() {
-  /*  for (Obstacle o : obstacles) {
-      if (o.x+o.w > x && o.x < x + w + vx && o.y+o.h > y&&  o.y < y + h) {
-        o.damage(1);
-        o.hit();
-        death();
-      }
-    }*/
   }
-
-
-
-
 }
+
 class LaserProjectile extends Projectile {
 
   LaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
     w=50;
-    fill(255, 0, 0);
-    ellipse(x+w*0.5, y, 100, 50);
+    strokeWeight(10);
+    stroke(255, 0, 0);
     fill(255);
     ellipse(x+w*0.5, y, 75, 30);
-  playSound(laserSound);
+    playSound(laserSound);
   }
 
   void display() {
@@ -41,11 +29,11 @@ class LaserProjectile extends Projectile {
 
     stroke(255, 0, 0);
     strokeWeight(10);
-    line(x, y, x+w, y);
+    line(x, y, x+w, y+h);
 
     stroke(255);
     strokeWeight(5);
-    line(x, y, x+w, y);
+    line(x, y, x+w, y+h);
   }
 
   void collision() {
@@ -68,8 +56,9 @@ class LaserProjectile extends Projectile {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
-    fill(255, 0, 0);
-    ellipse(x+w*0.5, y, 100, 100);
+
+    strokeWeight(10);
+    stroke(255, 0, 0);
     fill(255);
     ellipse(x+w*0.5, y, 75, 75);
   }

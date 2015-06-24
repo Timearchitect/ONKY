@@ -27,7 +27,6 @@ class Player {
     if (vx<1 && vx>-1) vx=1;
     if (vx<speedLevel && vx>0)vx*=1+0.08*speedFactor;
     if (vx<0)vx*= decayFactor*speedFactor;
-
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
     if (jumpCount==0)angle+=15*speedFactor;
 
@@ -49,7 +48,7 @@ class Player {
 
     if (usedPowerup!=null) {  
       usedPowerup.use();
-       usedPowerup.displayIcon();
+      usedPowerup.displayIcon();
       if (usedPowerup.dead)usedPowerup=null;
     }
   }
@@ -87,6 +86,7 @@ class Player {
     popMatrix();
     if (punching && punchCooldown==0)punch();
     // smash();
+    if (debug)text (" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
   }
   void collision() {
     if (invis==0) {
@@ -95,7 +95,6 @@ class Player {
       screenAngle=-6;
       background(255, 0, 0);
     }
-
     invis=100;
     vx= -vx*0.5;
   }
@@ -156,19 +155,18 @@ class Player {
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
       playSound(sliceSound);
-      if (ducking) { 
+      if (ducking && jumpCount<2) {      // down dash attack
+        entities.add(new slashParticle(int(p.x), int(p.y), 4));
+        punchTime=30;
+      } else if (ducking) {    // slide attack
         entities.add(new slashParticle(int(p.x), int(p.y), 2));
-              punchTime=20;
-
-      } else if( jumpCount==0 ){
-            entities.add(new slashParticle(int(p.x), int(p.y), 3));
-              punchTime=40;
-      } 
-      
-      else {
+        punchTime=20;
+      } else if ( jumpCount==0 ) {   // jump attack
+        entities.add(new slashParticle(int(p.x), int(p.y), 3));
+        punchTime=40;
+      } else {      // normal attack
         entities.add(new slashParticle(int(p.x), int(p.y), 0));
-              punchTime=30;
-
+        punchTime=30;
       }
       punching=true;
     }
