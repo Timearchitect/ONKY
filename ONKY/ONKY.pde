@@ -13,7 +13,7 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound;
 
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
 Player p = new Player();
 PImage Block;
@@ -33,7 +33,7 @@ ParalaxObject paralaxObject=new ParalaxObject();
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsety=200;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
-final int MAX_SHAKE=200, MAX_SPEED=45;
+final int MAX_SHAKE=200, MAX_SPEED=18;
 
 void setup() {
   noSmooth();
@@ -53,8 +53,8 @@ void setup() {
   ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
   ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
 
-  entities.add(new invisPowerup(1000,600,2000));
-  entities.add(new LaserPowerup(2000,600,2000));
+  //entities.add(new invisPowerup(1000, 600, 2000));
+  entities.add(new LaserPowerup(2000, 600, 2000));
 
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
@@ -82,6 +82,8 @@ void setup() {
   ughSound= minim.loadFile("ugh.wav");
   rubberSound= minim.loadFile("rubberBounce.mp3");
   collectSound= minim.loadFile("grab.wav");
+  laserSound= minim.loadFile("laser2.wav");
+  laserSound.setGain(-20);
   BGM.setGain(-10);
   BGM.play();
   BGM.loop();
@@ -100,6 +102,7 @@ void draw() {
     px.update();
     px.display();
   }
+  if(p.usedPowerup!=null)p.usedPowerup.displayIcon();
 
   pushMatrix();
   scale(scaleFactor);
@@ -111,7 +114,6 @@ void draw() {
 
   p.update();
   p.display();
-
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
   renderObject=0;
   for (Obstacle o : obstacles) {
@@ -120,9 +122,9 @@ void draw() {
     // if((o.x+shakeX)/(scaleFactor)>p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor  && o.x-o.w-shakeX<p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor+(width-100+shakeX)/scaleFactor){
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) {
       renderObject++;
-  
+
       o.update();
-     // o.gravity();
+      // o.gravity();
       o.display();
     }
   }
@@ -165,7 +167,7 @@ void draw() {
   //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
 
   for (Projectile pro : projectiles) {
-    pro.update();
+        pro.update();
     pro.display();
   }
   for (int i=projectiles.size () -1; i>=0; i--) {
@@ -222,10 +224,10 @@ void shake() {
   shakeY=random(skakeFactor)-skakeFactor*0.5;
 }
 void smoothScale() {
- // float scaleDiff=targetScaleFactor-scaleFactor;
- // scaleFactor+=scaleDiff*0.1;
-  targetScaleFactor=1;
-  scaleFactor=1;
+  float scaleDiff=targetScaleFactor-scaleFactor;
+  scaleFactor+=scaleDiff*0.1;
+  // targetScaleFactor=1;
+  // scaleFactor=1;
 }
 void smoothSlow() {
   float speedDiff=targetSpeedFactor-speedFactor;
@@ -273,7 +275,7 @@ void gameReset() {
 }
 
 void calcDispScore() {
-  speedLevel=int(score*0.0001+10);
+  if(MAX_SPEED>speedLevel)speedLevel=int(score*0.0001+10);
   score=int(p.x);
   fill(100, 255, 0);
   textSize(35);

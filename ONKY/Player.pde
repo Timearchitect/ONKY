@@ -5,7 +5,7 @@ class Player {
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
+  final int MAX_LIFE=20, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
   int cooldown, health, maxHealth=100, jumpCount=MAX_JUMP, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
@@ -49,6 +49,7 @@ class Player {
 
     if (usedPowerup!=null) {  
       usedPowerup.use();
+       usedPowerup.displayIcon();
       if (usedPowerup.dead)usedPowerup=null;
     }
   }
@@ -67,9 +68,7 @@ class Player {
 
     if (invis>1 && invis % 4 <=1) {
       cell.filter(INVERT);
-    
     }
-
 
     if (ducking && onGround) { 
       cell=Slide;
@@ -85,7 +84,6 @@ class Player {
         image(cell, -w*0.5, -h*0.5, 100, 80);
       }
     }
-
     popMatrix();
     if (punching && punchCooldown==0)punch();
     // smash();
@@ -112,8 +110,7 @@ class Player {
       if (jumpCount==1) particles.add( new SpinParticle( this));
       jumpCount--;
       vy=-20;
-    }      
-
+    }
   }
 
   void accel() {
@@ -145,7 +142,6 @@ class Player {
   void checkIfGround() {
     if (floorHeight<y+h) { 
       if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
-
       jumpCount=MAX_JUMP;
       onGround=true;
       y=floorHeight-h;
@@ -155,14 +151,26 @@ class Player {
   void recover() {
     invis-=1*speedFactor;
     if (invis<1)invis=0;
-    angle=-22;
+    //angle=-22;
   }
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
       playSound(sliceSound);
-      entities.add(new slashParticle(int(p.x), int(p.y), 0));
+      if (ducking) { 
+        entities.add(new slashParticle(int(p.x), int(p.y), 2));
+              punchTime=20;
+
+      } else if( jumpCount==0 ){
+            entities.add(new slashParticle(int(p.x), int(p.y), 3));
+              punchTime=40;
+      } 
+      
+      else {
+        entities.add(new slashParticle(int(p.x), int(p.y), 0));
+              punchTime=30;
+
+      }
       punching=true;
-      punchTime=30;
     }
   }
   void punch() {
@@ -174,9 +182,12 @@ class Player {
       punchCooldown=PUNCH_MAX_CD;
     } else {
       punchTime-= 1*speedFactor;
-      if (int(punchTime)==15) {
-        entities.add(new slashParticle(int(p.x), int(p.y), 1));
-        playSound(diceSound);
+      if (ducking) {
+      } else {
+        if (int(punchTime)==15 ) {
+          entities.add(new slashParticle(int(p.x), int(p.y), 1));
+          playSound(diceSound);
+        }
       }
     }
   }
@@ -231,6 +242,7 @@ class Player {
     lives=MAX_LIFE;
     x=0;
     vx=10;
+    usedPowerup=null;
   }
 
   void spawnSpeedEffect() {

@@ -89,13 +89,18 @@ class slashParticle extends Particle {
     stroke(255, 0, 0, int(opacity));
     strokeWeight(int(opacity*0.18));
     if (type==0)curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
-    else  curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
+    if (type==1)  curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
+    if (type==2)curve(p.x-100, p.y+60, p.x+40, p.y+ 0, p.x+ 180, p.y+30, p.x- 200, p.y+180);
+    if (type==3)arc(p.x+p.w*0.5+20, p.y+p.h*0.5, 190, 140, radians(p.angle*1.5-50), radians(p.angle*1.5+120));
 
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
     noFill();
+    
     if (type==0)curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
-    else  curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
+    if (type==1) curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
+    if (type==2)curve(p.x-100, p.y+60, p.x+40, p.y+ 0, p.x+ 180, p.y+30, p.x- 200, p.y+180);
+    if (type==3)arc(p.x+p.w*0.5+20, p.y+p.h*0.5, 190, 140, radians(p.angle*1.5-50), radians(p.angle*1.5+120));
 
     strokeWeight(1);
   }
@@ -193,7 +198,7 @@ class smokeParticle extends Particle {
   void display() {
     fill(255, int(opacity));
     noStroke();
-    ellipse(x,y,w,h);
+    ellipse(x, y, w, h);
   }
 }
 

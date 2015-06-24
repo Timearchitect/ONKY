@@ -2,7 +2,7 @@ class Box extends Obstacle {
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(120, 120, 80);
-    health=3;
+    health=2;
   }
   void death() {
     super.death();

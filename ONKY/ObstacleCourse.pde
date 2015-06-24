@@ -1,19 +1,23 @@
+int difficulty, difficultyRange=10;
+float minDifficulty=0, maxDifficulty=difficultyRange;
 
 void loadObstacle() {
-
-  for (int i=1; i<100; i++) {
-    switch(int(random(30))) {
+  for (int i=1; i<90; i++) {
+    minDifficulty+=0.3;
+    maxDifficulty+=0.3;
+    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
+    switch(difficulty) {
     case 0:
-      spawnDuck(i*2200);
+      spawnSingleWall(i*2200);
       break;
     case 1:
       spawnTires(i*2200);
       break;
     case 2:
-      spawnTunnel(i*2200);
+      spawnDuck(i*2200);
       break;
     case 3:
-      spawnBlock(i*2200);
+      spawnFloatingBlock(i*2200);
       break;
     case 4:
       spawnDoubleWall(i*2200);
@@ -28,7 +32,7 @@ void loadObstacle() {
       spawnHeap(i*2200);
       break;
     case 8:
-      spawnFloatingBlock(i*2200);
+      spawnBlock(i*2200);
       break;
     case 9:
       spawnTireTower(i*2200);
@@ -55,14 +59,18 @@ void loadObstacle() {
       spawnBlocks(i*2200);
       break;
     case 17:
-      spawnBoxBlock(i*2200);
+      spawnTunnel(i*2200);
       break;  
     case 18:
       spawnBush(i*2200);
       break;
+    case 19:
+      spawnLaserArena(i*2200);
+      break;
+    case 20:
+      spawnBoxBlock(i*2200);
+      break;
     default:
-   // spawnBush(i*2200);  
-     //  spawnBlocks(i*2200);
       spawnSingleWall(i*2200);
     }
   }
@@ -358,7 +366,7 @@ void spawnTowerFrame(int x) {
     }
   }
   if (index==0) {
-    entities.add(new PlatForm(x+1250, int(floorHeight-600), 50, 600 ) );
+    entities.add(new PlatForm(x+1250, int(floorHeight-600), 50, 400 ) );
     entities.add(new Glass(x+1250, int(floorHeight-1000), 50, 400));
   } else {
     entities.add(new PlatForm(x+1250, int(floorHeight-350), 50, 350 ) );
@@ -378,26 +386,39 @@ void spawnBlocks(int x) {
   if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
 }
 void spawnBoxBlock(int x) {
-  int index= int(random(2));
+  int index= int(random(3));
+  entities.add( new  LaserPowerup(x-400, int(floorHeight-200), 300) );
+
   entities.add(new Box(x-0, int(floorHeight-200) ) );
   entities.add(new Box(x-0, int(floorHeight-400) ) );
   entities.add(new Box(x-0, int(floorHeight-600) ) );
   entities.add(new Box(x-200, int(floorHeight-200) ) );
-  entities.add(new Box(x-200, int(floorHeight-400) ) );
+  // entities.add(new Box(x-200, int(floorHeight-400) ) );
   entities.add(new Box(x-200, int(floorHeight-600) ) );
   entities.add(new Box(x-400, int(floorHeight-200) ) );
   entities.add(new Box(x-400, int(floorHeight-400) ) );
   entities.add(new Box(x-400, int(floorHeight-600) ) );
   if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
-  if (index==1) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
+  if (index==1) entities.add( new  Powerup(x+250, int(floorHeight-350), 200) );
+  if (index==2) entities.add( new  LaserPowerup(x+250, int(floorHeight-350), 200) );
+}
+void spawnLaserArena(int x) {
+  entities.add( new  LaserPowerup(x-400, int(floorHeight-500), 200) );
+  entities.add( new  LaserPowerup(x-400, int(floorHeight-300), 200) );
+  entities.add( new  LaserPowerup(x-400, int(floorHeight-100), 200) );
+
+  for (int i=0; i<6; i++) {
+    entities.add(new Box(x+i*200+200, int(floorHeight-200) ) );
+    entities.add(new Box(x+i*200+200, int(floorHeight-400) ) );
+    entities.add(new Box(x+i*200+200, int(floorHeight-600) ) );
+  }
 }
 
 void spawnBush(int x) {
   int noBushes = int(random(6));
-  for(int i=0; i<noBushes; i++){
+  for (int i=0; i<noBushes; i++) {
     entities.add(new Bush(x-0+i*100, int(floorHeight-100) ) );
   }
-    if (noBushes==4) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
-
+  if (noBushes==4) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
 }
 
