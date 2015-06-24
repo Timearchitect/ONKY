@@ -143,7 +143,7 @@ void spawnSingleWall(int x) {
 void spawnTunnel(int x) {
   int index= int(random(4));
   if (index==0) entities.add( new  Powerup(x+1000, int(floorHeight-550), 200) );
-  if (index==2) entities.add( new  RandomPowerup(x+1400, int(floorHeight-550), 1000) );
+  if (index==2) entities.add( new  RandomPowerup(x+1500, int(floorHeight-550), 1000) );
   if (index==1) entities.add(new Box(x, int(floorHeight-200) ) ); 
 
   else entities.add(new IronBox(x, int(floorHeight-200) ) ); 
@@ -213,7 +213,6 @@ void spawnBoxDuck(int x) {
     entities.add(new Box(x+900, int(floorHeight-600) ) );
     entities.add(new Box(x+900, int(floorHeight-400) ) );
   }
-
   entities.add(new Box(x+900, int(floorHeight-200) ) );
 }
 void spawnBlock(int x) {
@@ -394,7 +393,7 @@ void spawnBlocks(int x) {
 }
 void spawnBoxBlock(int x) {
   int index= int(random(3));
-  entities.add( new  LaserPowerup(x-400, int(floorHeight-200), 300) );
+  entities.add( new  LaserPowerup(x-450, int(floorHeight-200), 300) );
 
   entities.add(new Box(x-0, int(floorHeight-200) ) );
   entities.add(new Box(x-0, int(floorHeight-400) ) );
@@ -406,8 +405,8 @@ void spawnBoxBlock(int x) {
   entities.add(new Box(x-400, int(floorHeight-400) ) );
   entities.add(new Box(x-400, int(floorHeight-600) ) );
   if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
-  if (index==1) entities.add( new  Powerup(x+250, int(floorHeight-350), 200) );
-  if (index==2) entities.add( new  LaserPowerup(x+250, int(floorHeight-350), 200) );
+  if (index==1) entities.add( new  Powerup(x+200, int(floorHeight-350), 200) );
+  if (index==2) entities.add( new  LaserPowerup(x+200, int(floorHeight-350), 200) );
 }
 void spawnLaserArena(int x) {
   entities.add( new  LaserPowerup(x-400, int(floorHeight-700), 200) );

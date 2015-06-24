@@ -40,7 +40,7 @@ class Powerup extends Entity implements Cloneable {
   void collect() {
     tokens++;
     playSound(collectSound);
-    p.usedPowerup=this;
+    //p.usedPowerup=this;
     particles.add( new SpinParticle( int(x), int(y)));
     death();
   }

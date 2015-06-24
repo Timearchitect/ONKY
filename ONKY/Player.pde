@@ -242,7 +242,7 @@ class Player {
       ducking=false;
     } else { // ducking
       h=45;
-      skakeFactor=8;
+      //skakeFactor=8;
       duckTime--;
     }
   }
