@@ -3,9 +3,9 @@ float minDifficulty=0, maxDifficulty=difficultyRange;
 
 void loadObstacle() {
   for (int i=1; i<90; i++) {
-    minDifficulty+=0.3;
-    maxDifficulty+=0.3;
-    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
+    minDifficulty+=0.2;
+    maxDifficulty+=0.2;
+    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-9);
     switch(difficulty) {
     case 0:
       spawnSingleWall(i*2200);

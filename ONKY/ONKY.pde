@@ -275,11 +275,12 @@ void gameReset() {
 }
 
 void calcDispScore() {
-  if(MAX_SPEED>speedLevel)speedLevel=int(score*0.0001+10);
+  if(MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+10);
   score=int(p.x);
   fill(100, 255, 0);
   textSize(35);
-  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-10) +" + "+ int(p.vx-speedLevel)+"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 80);
+  //+" + "+ int(p.vx-speedLevel);
+  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-10) +"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 60);
   textSize(18);
 }
 void debugScreen() {
