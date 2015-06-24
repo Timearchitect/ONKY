@@ -80,7 +80,7 @@ class invisPowerup extends Powerup {
     playSound(collectSound);
     particles.add( new SpinParticle(  int(x), int(y)));
     p.usedPowerup=this;     
-    p.vx+=5;
+    p.vx+=10;
     death();
   }
   void use() {
@@ -120,7 +120,7 @@ class LaserPowerup extends Powerup {
     //    death();
   }
   void use() {
-    if (time%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, 0));
+    if (time%6==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, random(2)-1));
     time-=1*speedFactor;
     if (time<=0)death();
   }

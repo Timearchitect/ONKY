@@ -89,9 +89,9 @@ void setup() {
   //entities.add(new invisPowerup(1000, 600, 2000));
   // entities.add(new LaserPowerup(2000, 600, 1500));
   // entities.add(new SlowPowerup(2200, 400, 1000));
-  entities.add(new RandomPowerup(2200, 400, 500)); 
-  entities.add(new RandomPowerup(2200, 600, 500)); 
-  entities.add(new RandomPowerup(2200, 200, 500));
+  entities.add(new RandomPowerup(2000, 400, 500)); 
+  entities.add(new RandomPowerup(2000, 600, 500)); 
+  entities.add(new RandomPowerup(2000, 200, 500));
 }
 
 void draw() {
@@ -244,7 +244,8 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
-  fill(0);
+   if(p.invincible)fill(255,50,0);
+   else fill(0);
   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }
 

@@ -130,6 +130,7 @@ class Player {
   void checkIfObstacle(int top) {
     if (top<y+h) { 
       jumpCount=MAX_JUMP;
+      if (punching && ! onGround) stomp();
       onGround=true;
       y=top-h;
       vy=0;
@@ -142,10 +143,16 @@ class Player {
     if (floorHeight<y+h) { 
       if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
       jumpCount=MAX_JUMP;
+      if (punching && ! onGround)stomp() ;
+
       onGround=true;
       y=floorHeight-h;
       angle=2;
     }
+  }
+  void stomp() {
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
+    skakeFactor=30;
   }
   void recover() {
     invis-=1*speedFactor;
@@ -155,6 +162,7 @@ class Player {
         p.vx=speedLevel; 
         BGM.pause();
         BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
+        BGM.loop();
         playSound(BGM);
       }
       invincible=false;
@@ -232,8 +240,9 @@ class Player {
       if (ducking)p.y-=45;
       h=90;
       ducking=false;
-    } else {
+    } else { // ducking
       h=45;
+      skakeFactor=8;
       duckTime--;
     }
   }

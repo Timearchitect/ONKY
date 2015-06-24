@@ -24,7 +24,8 @@ class Paralax extends Entity {
 
   void display() {
     noStroke();
-    fill(0, 0, 255);
+    if(!p.invincible) fill(0, 0, 255);
+    else  fill(100, 100, 255);
     rect(x, y, w, h);
   }
 }
