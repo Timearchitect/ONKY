@@ -41,7 +41,7 @@ class Tire extends Obstacle {
   Tire(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 0, 0);
-       health=3;
+    health=3;
   }
   void death() {
     super.death();
@@ -56,7 +56,7 @@ class Tire extends Obstacle {
     skakeFactor=50;
   }
   void surface() {
-    if (p.vx>9)p.vx*=0.82;
+     if(!p.invincible)if (p.vx>9)p.vx*=0.82;
     if (int(random(9/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
@@ -86,6 +86,8 @@ class IronBox extends Obstacle {
     y+=diffY*0.2*speedFactor;
   }
   void death() {
+        if(p.invincible)super.death();
+
   }
   void hit() {  // hit by punching & smashing
     super.hit();
@@ -117,23 +119,21 @@ class PlatForm extends Obstacle {
     obstacleColor = color(255, 50, 50);
   }
   PlatForm(int _x, int _y, int _w, int _h, boolean _hanging) {
-    super(_x, _y);
+    this( _x, _y, _w, _h);
     hanging=_hanging;
-    w=_w;
-    h=_h;
-    obstacleColor = color(255, 50, 50);
   }
   void display() {
     super.display();
     if (hanging) {
       stroke(200, 200, 200);
       strokeWeight(6);
-      line(x, y, x, 0);
-      line(x+w, y, x+w, 0);
+      line(x, -1000, x, y);
+      line(x+w, -1000, x+w, y);
       strokeWeight(1);
     }
   }
   void death() {
+    if(p.invincible)super.death();
   }
   void hitCollision() {  // hit by punching & smashing
   }
@@ -146,7 +146,7 @@ class Glass extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(0, 150, 255, 100);
-       health=1;
+    health=1;
   }
 
   void display() {
@@ -169,7 +169,7 @@ class Glass extends Obstacle {
     // super.knock();
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=10;
-    p.vx*=0.8;
+    if(!p.invincible)p.vx*=0.8;
     for (int i =0; i< 6; i++) {
       entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -195,7 +195,7 @@ class Block extends Obstacle {
     obstacleColor = color(100, 100, 100);
     w=200;
     h=200;
-       health=8;
+    health=8;
   }
   void death() {
     //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
@@ -236,7 +236,7 @@ class Bush extends Obstacle {
     obstacleColor = color(0, 255, 50);
     w=100;
     h=100;
-       health=1;
+    health=1;
   }
   void death() {
     super.death();
@@ -246,10 +246,10 @@ class Bush extends Obstacle {
     }
   }
   void display() {
-   fill(obstacleColor);
+    fill(obstacleColor);
     rect( x, y, w, h);
   }
-  
+
   void hit() {
     super.hit();
     vx+=(p.vx+6)*0.2;
@@ -262,7 +262,6 @@ class Bush extends Obstacle {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
     //skakeFactor=100;
-    
   }
   void knockSound() {
     playSound(boxKnockSound);
@@ -271,18 +270,16 @@ class Bush extends Obstacle {
     playSound(boxDestroySound);
   }
   void collision() {
-    
-      if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-        println("collision!!!!"); 
-        if (p.vx>5) {
-          knock();
-        }
-        impactForce=p.vx; 
-        
-        // death();
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      println("collision!!!!"); 
+      if (p.vx>5) {
+        knock();
       }
+      impactForce=p.vx; 
+      // death();
     }
   }
+}
 
 
 // kommentar

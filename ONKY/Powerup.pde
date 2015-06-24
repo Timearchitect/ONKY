@@ -23,7 +23,7 @@ class Powerup extends Entity implements Cloneable {
   void display() {
     fill(powerupColor);
     ellipse(x+offsetX, y+offsetY, w, h);
-    if (icon!=null)image(laserIcon, x+offsetX, y+offsetY, 80, 80);
+    if (icon!=null)image(laserIcon, x-w*0.5+offsetX, y-h*0.5+offsetY, 100, 100);
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -56,7 +56,7 @@ class Powerup extends Entity implements Cloneable {
   void displayIcon() {
     fill(powerupColor);
     rect(50, 100, 100, 100);
-    image(laserIcon, 50+10, 100+10, 100-20, 100-20);
+    if(icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
   }
   public Powerup clone()throws CloneNotSupportedException {  
     return (Powerup)super.clone();
@@ -75,28 +75,21 @@ class invisPowerup extends Powerup {
     y=_y;
     w=100;
     h=100;
-
   }
-  /*void update() {
-   x+=vx*speedFactor;
-   y+=vy*speedFactor;
-   collision();
-   }
-   void display() {
-   super.display();
-   }*/
-
   void collect() {
-
     playSound(collectSound);
     particles.add( new SpinParticle(  int(x), int(y)));
     p.usedPowerup=this;     
-    //    death();
+    p.vx+=5;
+    death();
   }
   void use() {
-    p.invis=4000;
+    p.invis=2000;
+    p.invincible=true;  // activates supermario starpower
+       BGM.pause();
+    BGM = minim.loadFile("Super Mario - Invincibility Star.mp3");
+    playSound(BGM);
     time--;
-    //  tokens++;
     if (time<=0)death();
   }
 }
@@ -105,6 +98,7 @@ class LaserPowerup extends Powerup {
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
+    icon=laserIcon;
     time=_time;
     spawnTime=millis();
     powerupColor=color(255, 0, 0);
@@ -129,6 +123,65 @@ class LaserPowerup extends Powerup {
     if (time%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, 0));
     time-=1*speedFactor;
     if (time<=0)death();
+  }
+}
+
+class SlowPowerup extends Powerup {
+  long  time, spawnTime;
+  SlowPowerup(int _x, int _y, int _time) {
+    super(_x, _y, _time);
+    powerups.add( this);
+    time=_time;
+    spawnTime=millis();
+    powerupColor=color(100, 100, 100);
+    x=_x;
+    y=_y;
+    w=100;
+    h=100;
+  }
+
+  void collect() {
+
+    playSound(collectSound);
+    particles.add( new SpinParticle(int(x), int(y)));
+    try {
+      p.usedPowerup=this.clone();
+    }
+    catch(CloneNotSupportedException e) {
+    }      
+    //    death();
+  }
+  void use() {
+    speedFactor=0.5;
+    time-=1*speedFactor;
+    if (time<=0)death();
+  }
+}
+class RandomPowerup extends Powerup {
+  long  time, spawnTime;
+  RandomPowerup(int _x, int _y, int _time) {
+    super(_x, _y, _time);
+    powerups.add( this);
+    time=_time;
+    spawnTime=millis();
+    powerupColor=color(100, 100, 100);
+    x=_x;
+    y=_y;
+    switch(int(random(4))) {
+    case 0:
+      entities.add( new invisPowerup( _x, _y, _time)); 
+      break;
+    case 1:
+      entities.add( new LaserPowerup( _x, _y, _time) );
+      break;
+
+    case 2:
+      entities.add( new SlowPowerup( _x, _y, _time) );
+      break;
+    default:
+      entities.add( new Powerup( _x, _y, _time));
+    }
+    super.death();
   }
 }
 

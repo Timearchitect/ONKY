@@ -33,7 +33,6 @@ void keyPressed() {
   if (keyCode == RIGHT) {
    // p.accel();
   }
-
   if (key== 'a') {
     //p.deAccel();
   }

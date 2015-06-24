@@ -11,7 +11,7 @@ class Player {
   float punchTime, invis;
   int duckTime, duckCooldown;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
-  boolean dead, onGround, punching, smashing, ducking;
+  boolean dead, onGround, punching, smashing, ducking, invincible;
   color playerColor= color(255, 0, 0);
 
   Player() {
@@ -149,7 +149,16 @@ class Player {
   }
   void recover() {
     invis-=1*speedFactor;
-    if (invis<1)invis=0;
+    if (invis<1) {
+      invis=0;
+      if (invincible) {  
+        p.vx=speedLevel; 
+        BGM.pause();
+        BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
+        playSound(BGM);
+      }
+      invincible=false;
+    }
     //angle=-22;
   }
   void startPunch() {

@@ -26,7 +26,7 @@ void loadObstacle() {
       spawnTirePool(i*2200);
       break;
     case 6:
-      spawnSteps(i*2200);
+      spawnBush(i*2200);
       break;
     case 7:
       spawnHeap(i*2200);
@@ -53,7 +53,7 @@ void loadObstacle() {
       spawnBiuldingFrame(i*2200);
       break;
     case 15:
-      spawnTowerFrame(i*2200);
+      spawnSteps(i*2200);
       break;
     case 16:
       spawnBlocks(i*2200);
@@ -62,13 +62,16 @@ void loadObstacle() {
       spawnTunnel(i*2200);
       break;  
     case 18:
-      spawnBush(i*2200);
+      spawnTowerFrame(i*2200);
       break;
     case 19:
       spawnLaserArena(i*2200);
       break;
     case 20:
       spawnBoxBlock(i*2200);
+      break;
+    case 21:
+      spawnTimeGate(i*2200);
       break;
     default:
       spawnSingleWall(i*2200);
@@ -106,7 +109,7 @@ void spawnDoubleWall(int x) {
   }
 }
 void spawnSingleWall(int x) {
-  int breakableIndex= int(random(3))+1;
+  int breakableIndex= int(random(4));
   switch(breakableIndex) {
   case 3:
     entities.add(new Box(x+200, int(floorHeight-600) ) ); // 3
@@ -133,14 +136,16 @@ void spawnSingleWall(int x) {
     //   entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
     break;
   }
-  int index= int(random(5));
+  int index= int(random(7));
   if (index==0) entities.add( new  Powerup(x+600, int(floorHeight-500), 200) );
+  if (index==2) entities.add( new  RandomPowerup(x+600, int(floorHeight-300), 1000) );
 }
 void spawnTunnel(int x) {
-  int index= int(random(3));
+  int index= int(random(4));
   if (index==0) entities.add( new  Powerup(x+1000, int(floorHeight-550), 200) );
-
+  if (index==2) entities.add( new  RandomPowerup(x+1400, int(floorHeight-550), 1000) );
   if (index==1) entities.add(new Box(x, int(floorHeight-200) ) ); 
+
   else entities.add(new IronBox(x, int(floorHeight-200) ) ); 
   entities.add(new IronBox(x+200, int(floorHeight-300) ) ); 
   entities.add(new IronBox(x+400, int(floorHeight-300) ) ); 
@@ -305,6 +310,7 @@ void spawnBoxPlatform(int x) {
   int index= int(random(5));
   if (index==0) entities.add( new  Powerup(x+700, int(floorHeight-100), 200) );
   if (index==1) entities.add( new  Powerup(x+700, int(floorHeight-600), 200) );
+  if (index==2) entities.add( new  RandomPowerup(x+700, int(floorHeight-600), 1000) );
 
   for (int i=0; i<6; i++) {
     entities.add(new Box(x+i*255, int(floorHeight-400) ) );
@@ -342,7 +348,7 @@ void spawnBiuldingFrame(int x) {
   if (index==0) entities.add( new  Powerup(x+450, int(floorHeight-65), 200) );
   if (index==1) entities.add( new  Powerup(x+450, int(floorHeight-300), 200) );
   if (index==2) entities.add( new  Powerup(x+450, int(floorHeight-550), 200) );
-  if (index==3) entities.add( new  Powerup(x+450, int(floorHeight-550), 200) );
+  if (index==3) entities.add( new  RandomPowerup(x+450, int(floorHeight-550), 1000) );
 
   entities.add(new Glass(x, int(floorHeight-150), 50, 150));
   entities.add(new PlatForm(x, int(floorHeight-200), 900, 50 ) );
@@ -404,14 +410,15 @@ void spawnBoxBlock(int x) {
   if (index==2) entities.add( new  LaserPowerup(x+250, int(floorHeight-350), 200) );
 }
 void spawnLaserArena(int x) {
+  entities.add( new  LaserPowerup(x-400, int(floorHeight-700), 200) );
   entities.add( new  LaserPowerup(x-400, int(floorHeight-500), 200) );
   entities.add( new  LaserPowerup(x-400, int(floorHeight-300), 200) );
   entities.add( new  LaserPowerup(x-400, int(floorHeight-100), 200) );
 
-  for (int i=0; i<6; i++) {
-    entities.add(new Box(x+i*200+200, int(floorHeight-200) ) );
-    entities.add(new Box(x+i*200+200, int(floorHeight-400) ) );
-    entities.add(new Box(x+i*200+200, int(floorHeight-600) ) );
+  for (int i=0; i<5; i++) {
+    entities.add(new Box(x+i*250+200, int(floorHeight-200) ) );
+    entities.add(new Box(x+i*250+200, int(floorHeight-400) ) );
+    entities.add(new Box(x+i*250+200, int(floorHeight-600) ) );
   }
 }
 
@@ -421,5 +428,17 @@ void spawnBush(int x) {
     entities.add(new Bush(x-0+i*100, int(floorHeight-100) ) );
   }
   if (noBushes==4) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
+}
+
+void spawnTimeGate(int x) {
+  entities.add( new  SlowPowerup(x-400, int(floorHeight-700), 500) );
+  entities.add( new  SlowPowerup(x-400, int(floorHeight-500), 500) );
+  entities.add( new  SlowPowerup(x-400, int(floorHeight-300), 500) );
+  entities.add( new  SlowPowerup(x-400, int(floorHeight-100), 500) );
+
+  for (int i=0; i<12; i++) {
+    int j = int(random(3));
+    entities.add(new Box(x+i*100+100, int(floorHeight-j*200)-200 ) );
+  }
 }
 

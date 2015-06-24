@@ -2,7 +2,7 @@
 abstract class Obstacle extends Entity {
   float impactForce;
   color obstacleColor;
-  int hitBrightness,health=1;
+  int hitBrightness, health=1;
   Obstacle(int _x, int _y) {
     super( _x, _y, 200, 200);
     obstacles.add( this);
@@ -34,19 +34,23 @@ abstract class Obstacle extends Entity {
     } else {
       if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
         println("collision!!!!"); 
-        if (p.vx>5) {
-          knock();
+        if (p.invincible) {
+          death();
+        } else {
+          if (p.vx>5) {
+            knock();
+          }
+          impactForce=p.vx; 
+          p.collision();
         }
-        impactForce=p.vx; 
-        p.collision();
         // death();
       }
     }
   }
-  void damage(int i){
+  void damage(int i) {
     hitBrightness=100;
     health-=i;
-    if(health<0)death();
+    if (health<0)death();
   }
   void surface() {
   }

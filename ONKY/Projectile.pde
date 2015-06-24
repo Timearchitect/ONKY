@@ -56,7 +56,6 @@ class LaserProjectile extends Projectile {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
-
     strokeWeight(10);
     stroke(255, 0, 0);
     fill(255);
