@@ -14,7 +14,7 @@ AudioPlayer rubberSound;
 
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
-PImage Block, laserIcon, Bush, Tree, Grass;
+PImage Block, laserIcon, Bush, Tree, Grass, BlockSad;
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -51,7 +51,8 @@ void setup() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   Tree =loadImage("treetile.png");
-  Block = loadImage("block200.png");
+  Block = loadImage("blockMad.png");
+  BlockSad = loadImage("blockSad.png");
   // we pass this to Minim so that it can load files from the data directory
   minim = new Minim(this);
   // loadFile will look in all the same places as loadImage does.

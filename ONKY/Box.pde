@@ -223,8 +223,9 @@ class Block extends Obstacle {
     vx*=0.95;
     if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
   }
-
+    
   void hit() {
+     
     super.hit();
     vx+=(p.vx+6)*0.2;
     //  scaleFactor+=scaleFactor*0.05;
