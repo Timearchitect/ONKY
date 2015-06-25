@@ -246,8 +246,9 @@ class Bush extends Obstacle {
     }
   }
   void display() {
-    fill(obstacleColor);
-    rect( x, y, w, h);
+    image(Bush, x, y, w, h);
+    //fill(obstacleColor);
+    //rect( x, y, w, h);
   }
 
   void hit() {

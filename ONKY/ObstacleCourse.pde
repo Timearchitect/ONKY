@@ -75,6 +75,7 @@ void loadObstacle() {
       break;
     default:
       spawnSingleWall(i*2200);
+      spawnBush(i*2200);
     }
   }
 }
