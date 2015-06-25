@@ -276,7 +276,6 @@ class Bush extends Obstacle {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
-  
   void knockSound() {
     playSound(boxKnockSound);
   }

@@ -5,7 +5,6 @@ class Particle extends Entity {
   Particle(int _x, int  _y) {
     super( _x, _y);
   }
-
   void update() {
   }
 
@@ -75,7 +74,6 @@ class slashParticle extends Particle {
     super( _x, _y);
     particles.add(this);
     type=_type;
-    // y=_y;
   }
 
   void update() {
@@ -118,10 +116,8 @@ class LineParticle extends Particle {
     angle=random(360);
   }
   LineParticle(int _x, int _y, int _size, float _angle) {
-    super( _x, _y);
-    particles.add(this);
+    this( _x,  _y,  _size);
     particleColor=color(255);
-    size=_size;
     angle=_angle;
   }
   void update() {
