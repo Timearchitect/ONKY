@@ -1,11 +1,17 @@
 class Box extends Obstacle {
+  int type;
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(120, 120, 80);
     health=2;
   }
+  Box(int _x, int _y, int _type) {
+    this(_x, _y);
+    type=_type;
+  }
   void death() {
     super.death();
+    if (type==1)  entities.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
@@ -17,6 +23,13 @@ class Box extends Obstacle {
     strokeWeight(8);
     line(x, y, x+w, y+h);
     line(x, y+h, x+w, y);
+    if (type==1) { 
+      fill(255, 255, 180);
+      textAlign(CENTER);
+      textSize(160);
+      text("?", x+w*0.5, y+h*0.8);
+      textAlign(LEFT);
+    }
     strokeWeight(1);
   }
   void hit() {
@@ -56,7 +69,7 @@ class Tire extends Obstacle {
     skakeFactor=50;
   }
   void surface() {
-     if(!p.invincible)if (p.vx>9)p.vx*=0.82;
+    if (!p.invincible)if (p.vx>9)p.vx*=0.82;
     if (int(random(9/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
@@ -86,8 +99,7 @@ class IronBox extends Obstacle {
     y+=diffY*0.2*speedFactor;
   }
   void death() {
-        if(p.invincible)super.death();
-
+    if (p.invincible)super.death();
   }
   void hit() {  // hit by punching & smashing
     super.hit();
@@ -133,7 +145,7 @@ class PlatForm extends Obstacle {
     }
   }
   void death() {
-    if(p.invincible)super.death();
+    if (p.invincible)super.death();
   }
   void hitCollision() {  // hit by punching & smashing
   }
@@ -169,7 +181,7 @@ class Glass extends Obstacle {
     // super.knock();
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=10;
-    if(!p.invincible)p.vx*=0.8;
+    if (!p.invincible)p.vx*=0.8;
     for (int i =0; i< 6; i++) {
       entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }

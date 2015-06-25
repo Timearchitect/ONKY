@@ -23,6 +23,7 @@ abstract class Obstacle extends Entity {
     }
   }
   void display() {
+    noStroke();
     fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness, alpha(obstacleColor));
     rect(x, y, w, h);
   }

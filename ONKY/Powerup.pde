@@ -21,6 +21,7 @@ class Powerup extends Entity implements Cloneable {
     collision();
   }
   void display() {
+    noStroke();
     fill(powerupColor);
     ellipse(x+offsetX, y+offsetY, w, h);
     if (icon!=null)image(laserIcon, x-w*0.5+offsetX, y-h*0.5+offsetY, 100, 100);
@@ -46,7 +47,6 @@ class Powerup extends Entity implements Cloneable {
   }
   void death() {
     super.death();
-    tokens++;
   }
   void use() {
     time--;
@@ -54,9 +54,10 @@ class Powerup extends Entity implements Cloneable {
     if (time<=0)death();
   }
   void displayIcon() {
+    noStroke();
     fill(powerupColor);
     rect(50, 100, 100, 100);
-    if(icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
+    if (icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
   }
   public Powerup clone()throws CloneNotSupportedException {  
     return (Powerup)super.clone();
@@ -77,16 +78,18 @@ class invisPowerup extends Powerup {
     h=100;
   }
   void collect() {
+    tokens++;
+
     playSound(collectSound);
     particles.add( new SpinParticle(  int(x), int(y)));
     p.usedPowerup=this;     
-    p.vx+=10;
+    p.vx=30;
     death();
   }
   void use() {
     p.invis=2000;
     p.invincible=true;  // activates supermario starpower
-       BGM.pause();
+    BGM.pause();
     BGM = minim.loadFile("Super Mario - Invincibility Star.mp3");
     playSound(BGM);
     time--;
@@ -109,18 +112,23 @@ class LaserPowerup extends Powerup {
   }
 
   void collect() {
-
-    playSound(collectSound);
-    particles.add( new SpinParticle(int(x), int(y)));
-    try {
-      p.usedPowerup=this.clone();
+    if (p.usedPowerup==null) {
+      tokens++;
+      playSound(collectSound);
+      particles.add( new SpinParticle(int(x), int(y)));
+      try {
+        p.usedPowerup=this.clone();
+      }    
+      catch(CloneNotSupportedException e) {
+      }
+    } else {   
+      tokens++;
+      p.usedPowerup.time+=this.time;
+      this.death();
     }
-    catch(CloneNotSupportedException e) {
-    }      
-    //    death();
   }
   void use() {
-    if (time%6==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, random(2)-1));
+    if (time%5==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, random(2)-1));
     time-=1*speedFactor;
     if (time<=0)death();
   }
@@ -141,19 +149,52 @@ class SlowPowerup extends Powerup {
   }
 
   void collect() {
-
-    playSound(collectSound);
-    particles.add( new SpinParticle(int(x), int(y)));
-    try {
-      p.usedPowerup=this.clone();
+    if (p.usedPowerup==null) {
+      tokens++;
+      playSound(collectSound);
+      particles.add( new SpinParticle(int(x), int(y)));
+      try {
+        p.usedPowerup=this.clone();
+      }        
+      catch(CloneNotSupportedException e) {
+      }
+    } else {
+      tokens++;
+      p.usedPowerup.time+=this.time;
+      this.death();
     }
-    catch(CloneNotSupportedException e) {
-    }      
-    //    death();
   }
   void use() {
     speedFactor=0.5;
     time-=1*speedFactor;
+    if (time<=0)death();
+  }
+}
+class LifePowerup extends Powerup {
+  int  time;
+  LifePowerup(int _x, int _y, int _time) {
+    super(_x, _y, _time);
+    powerups.add( this);
+    time=_time;
+    powerupColor=color(50, 255, 50);
+    x=_x;
+    y=_y;
+    w=100;
+    h=100;
+  }
+  void collect() {
+    tokens++;
+
+    playSound(collectSound);
+    particles.add( new SpinParticle(  int(x), int(y)));
+    p.usedPowerup=this;     
+    p.lives++;
+    death();
+  }
+  void use() {
+    p.invis=200;
+
+    time--;
     if (time<=0)death();
   }
 }
@@ -167,16 +208,18 @@ class RandomPowerup extends Powerup {
     powerupColor=color(100, 100, 100);
     x=_x;
     y=_y;
-    switch(int(random(4))) {
+    switch(int(random(5))) {
     case 0:
       entities.add( new invisPowerup( _x, _y, _time)); 
       break;
     case 1:
       entities.add( new LaserPowerup( _x, _y, _time) );
       break;
-
     case 2:
       entities.add( new SlowPowerup( _x, _y, _time) );
+      break;
+    case 3:
+      entities.add( new LifePowerup( _x, _y, _time) );
       break;
     default:
       entities.add( new Powerup( _x, _y, _time));
