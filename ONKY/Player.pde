@@ -54,7 +54,6 @@ class Player {
     for(int i=usedPowerup.size()-1; i>=0 ;i--){
       if (usedPowerup.get(i).dead)usedPowerup.remove(usedPowerup.get(i));
     }
-    println(usedPowerup.size());
   }
 
   void display() {

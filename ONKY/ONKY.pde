@@ -300,14 +300,14 @@ void loadParalax() {
 
   entities.add(new Paralax(0, 0, width*3, height, 0.01, Mountain)); // bakgrund
 
-  entities.add(new ParalaxObject(0, 300, 50, 50, 0.6)); 
-  entities.add(new ParalaxObject(255, 350, 50, 50, 0.6)); 
-  entities.add(new ParalaxObject(0, 350, 70, 70, 0.7)); 
-  entities.add(new ParalaxObject(300, 350, 70, 70, 0.7)); 
-  entities.add(new ParalaxObject(0, 400, 100, 100, 0.8)); 
-  entities.add(new ParalaxObject(0, 370, 120, 120, 0.9));
+  entities.add(new ParalaxObject(0, 300-50, 100, 100, 0.6)); 
+  entities.add(new ParalaxObject(255, 350-50, 100, 100, 0.6)); 
+  entities.add(new ParalaxObject(0, 350-75, 150, 150, 0.7)); 
+  entities.add(new ParalaxObject(300, 350-75, 150, 150, 0.7)); 
+  entities.add(new ParalaxObject(0, 400-150, 300, 300, 0.8)); 
+  entities.add(new ParalaxObject(0, 370-250, 500, 500, 0.9));
 
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 300, 300, 1.1, 10)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 600, 600, 1.2, 12));
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 800, 800, 1.2, 10,150)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 2000, 2000, 1.4, 12,150));
 }
 

@@ -80,6 +80,7 @@ class IronBox extends Obstacle {
     obstacleColor = color(150, 150, 150);
     tx=_x;
     ty=_y;
+    health=5;
   }
   void display() {
     super.display();
@@ -99,7 +100,7 @@ class IronBox extends Obstacle {
     y+=diffY*0.2*speedFactor;
   }
   void death() {
-    if (p.invincible)super.death();
+    if (p.invincible ||health<=0)super.death();
   }
   void hit() {  // hit by punching & smashing
     super.hit();
@@ -202,6 +203,7 @@ class Glass extends Obstacle {
   }
 }
 class Block extends Obstacle {
+  int invis;
   Block(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(100, 100, 100);
@@ -216,18 +218,20 @@ class Block extends Obstacle {
     }
   }
   void display() {
-    image(Block, x, y, w, h);
+    if (invis>0)image(BlockSad, x, y, w, h);
+    else image(Block, x, y, w, h);
   }
   void update() {
     super.update();
+    if (invis>=0)invis--;
     vx*=0.95;
     if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
   }
-    
+
   void hit() {
-     
     super.hit();
     vx+=(p.vx+6)*0.2;
+    invis=10;
     //  scaleFactor+=scaleFactor*0.05;
     //  skakeFactor=50;
   }
@@ -273,7 +277,7 @@ class Bush extends Obstacle {
   }
   void knock() {
     super.knock();
-         if (p.invincible) super.death();
+    if (p.invincible) super.death();
     for (int i =0; i< 1; i++) {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
