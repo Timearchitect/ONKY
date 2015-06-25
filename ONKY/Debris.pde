@@ -96,7 +96,7 @@ class GlassDebris extends Debris {
 }
   
  class BushDebris extends Debris {
-
+  float offsetX;
    BushDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _o, _x, _y, _vx, _vy);
     VAngle=random(4)-2;
@@ -104,7 +104,24 @@ class GlassDebris extends Debris {
     bounceForce=0.5;
     w = 5;
     h = 5;
-    ay=0;
+    ay=0.2;
+  }
+  
+  @Override
+  void update() {
+    
+      angle+=VAngle*speedFactor;
+      offsetX=sin(radians(angle))*50;
+      bounceOnFloor();
+      x+=vx*speedFactor;
+      y+=vy*speedFactor;
+      vx*=0.95;
+      vy*=0.95; 
+      vx+=ax*speedFactor;
+      vy+=ay*speedFactor;
+      opacity+=opacityDecay*speedFactor;
+     if (opacity<20)death();
+
   }
 
   void display() {
@@ -113,7 +130,7 @@ class GlassDebris extends Debris {
       translate(x, y);
       rotate(radians(angle));
       fill(owner.obstacleColor, int(opacity));
-      triangle(-w,0,w,0,0,-h*2);
+      triangle(-w+offsetX,0,w+offsetX,0,0+offsetX,-h*2);
       popMatrix();
     
   }
