@@ -242,7 +242,7 @@ class Bush extends Obstacle {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     for (int i =0; i< 8; i++) {
-      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
   void display() {
@@ -252,15 +252,20 @@ class Bush extends Obstacle {
   }
 
   void hit() {
+    // super.hit();
+    // vx+=(p.vx+6)*0.2;
     super.hit();
-    vx+=(p.vx+6)*0.2;
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+    for (int i =0; i< 6; i++) {
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(40)+impactForce*2, random(20)-20));
     //  scaleFactor+=scaleFactor*0.05;
     //  skakeFactor=50;
+  }
   }
   void knock() {
     super.knock();
     for (int i =0; i< 1; i++) {
-      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
     //skakeFactor=100;
   }
