@@ -74,11 +74,11 @@ abstract class Obstacle extends Entity {
   }
   void death() {
     super.death();
+    objectsDestroyed++;
     destroySound();
     background(255);
   }
   void hit() {
-    objectsDestroyed++;
     hitSound();
   }
 

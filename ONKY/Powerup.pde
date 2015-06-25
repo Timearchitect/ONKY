@@ -42,7 +42,6 @@ class Powerup extends Entity implements Cloneable {
   void collect() {
     tokens++;
     playSound(collectSound);
-    //p.usedPowerup=this;
     particles.add( new SpinParticle( int(x), int(y)));
     death();
   }
@@ -55,8 +54,8 @@ class Powerup extends Entity implements Cloneable {
     if (time<=0)death();
   }
   void displayIcon() {
-    int index=p.usedPowerup.indexOf(this),interval=120;
-    
+    int index=p.usedPowerup.indexOf(this), interval=120;
+
     noStroke();
     fill(powerupColor);
     rect(50+index*interval, 100, 100, 100);
@@ -83,6 +82,7 @@ class invisPowerup extends Powerup {
     h=100;
   }
   void collect() {
+    if (!dead) {
       tokens++;
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
@@ -99,10 +99,9 @@ class invisPowerup extends Powerup {
       }    
       catch(CloneNotSupportedException e) {
       }
-      
       //p.usedPowerup.time+=this.time;
       this.death();
-    
+    }
   }
   void use() {
     time-=1*speedFactor;
@@ -122,7 +121,8 @@ class LaserPowerup extends Powerup {
   }
 
   void collect() {
-    //if (p.usedPowerup==null) {
+    if (!dead) {
+
       tokens++;
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
@@ -131,11 +131,11 @@ class LaserPowerup extends Powerup {
       }    
       catch(CloneNotSupportedException e) {
       }
-    //} else {   
-     // tokens++;
+      //} else {   
+      // tokens++;
       //p.usedPowerup.time+=this.time;
-        this.death();
-  //  }
+      this.death();
+    }
   }
   void use() {
     if (p.angle>6) {  
@@ -160,19 +160,18 @@ class SlowPowerup extends Powerup {
   }
 
   void collect() {
-      tokens++;
-      playSound(collectSound);
-      particles.add( new SpinParticle(int(x), int(y)));
-      try {
-        p.usedPowerup.add(this.clone());
-      }        
-      catch(CloneNotSupportedException e) {
-      }
-    
-      //tokens++;
-      //p.usedPowerup.time+=this.time;
-      this.death();
-    
+    tokens++;
+    playSound(collectSound);
+    particles.add( new SpinParticle(int(x), int(y)));
+    try {
+      p.usedPowerup.add(this.clone());
+    }        
+    catch(CloneNotSupportedException e) {
+    }
+
+    //tokens++;
+    //p.usedPowerup.time+=this.time;
+    this.death();
   }
   void use() {
     speedFactor=0.5;
@@ -191,17 +190,18 @@ class LifePowerup extends Powerup {
     h=100;
   }
   void collect() {
-    tokens++;
-
-    playSound(collectSound);
-    particles.add( new SpinParticle(  int(x), int(y)));
-    try {
-      p.usedPowerup.add(this.clone());
-    }        
-    catch(CloneNotSupportedException e) {
-    }    
-    p.lives++;
-    death();
+    if (!dead) {
+      tokens++;
+      playSound(collectSound);
+      particles.add( new SpinParticle(  int(x), int(y)));
+      try {
+        p.usedPowerup.add(this.clone());
+      }        
+      catch(CloneNotSupportedException e) {
+      }    
+      p.lives++;
+      death();
+    }
   }
   void use() {
     p.invis=200;
