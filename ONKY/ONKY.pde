@@ -14,9 +14,8 @@ AudioPlayer rubberSound;
 
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
-Player p = new Player();
-PImage Block, laserIcon, Bush,Tree,Grass;
-int defaultSpeedLevel=12,speedLevel=defaultSpeedLevel; // default speed level
+PImage Block, laserIcon, Bush, Tree, Grass;
+int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
@@ -28,6 +27,7 @@ ArrayList<Particle> particles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Paralax paralax= new Paralax();
 ParalaxObject paralaxObject=new ParalaxObject();
+Player p = new Player();
 
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200;
@@ -75,19 +75,19 @@ void setup() {
   BGM.play();
   BGM.loop();
 
- loadParalax();
+  loadParalax();
 
   //entities.add(new invisPowerup(1000, 600, 2000));
-  // entities.add(new LaserPowerup(2000, 600, 1500));
+  entities.add(new LaserPowerup(2200, 600, 600));
   // entities.add(new SlowPowerup(2200, 400, 1000));
-  entities.add(new RandomPowerup(2000, 400, 500)); 
-  entities.add(new RandomPowerup(2000, 600, 500)); 
+  // entities.add(new RandomPowerup(2000, 400, 500)); 
+  //entities.add(new RandomPowerup(2000, 600, 500)); 
   entities.add(new RandomPowerup(2000, 200, 500));
 }
 
 void draw() {
-  if(!p.invincible) background(80);
-  else background(255,150,0);
+  if (!p.invincible) background(80);
+  else background(255, 150, 0);
   shake();
   smoothScale();
   smoothSlow();
@@ -110,7 +110,6 @@ void draw() {
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
   renderObject=0;
   for (Obstacle o : obstacles) {
-
     //if (o.x+shakeX*2<(p.x+width/(scaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) {
       renderObject++;
@@ -199,7 +198,7 @@ void draw() {
     px.update();
     px.display();
   }
-  if (p.usedPowerup!=null)p.usedPowerup.displayIcon();
+  for( Powerup pow: p.usedPowerup){ pow.displayIcon();}
 
   displayLife();
   calcDispScore();
@@ -234,10 +233,10 @@ void adjustZoomLevel() {
 }
 void displayFloor() {
   int offset = -200;
-   if(p.invincible)fill(255,50,0);
-   else fill(0);
+  if (p.invincible)fill(255, 50, 0);
+  else fill(0);
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
-   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
+  rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }
 
 void displaySign() {
@@ -249,6 +248,7 @@ void displaySign() {
 }
 
 void gameReset() {
+  particles.clear();
   entities.clear();
   obstacles.clear();
   powerups.clear();
@@ -285,17 +285,19 @@ void playSound(AudioPlayer sound) {
   if (!mute) {
     sound.rewind();
     sound.play();
+         
+
   }
 }
 void displayLife() {
   for (int i=0; i<p.lives; i++)
     image(p.Life, 0+50+i*50, 0+60, 40, 40);
 }
-void loadParalax(){
+void loadParalax() {
 
 
-  entities.add(new Paralax(0, 250, 5000, 2000, 1,Grass)); // bakgrund
-  
+  entities.add(new Paralax(0, 250, 5000, 2000, 1, Grass)); // bakgrund
+
   entities.add(new ParalaxObject(0, 300, 50, 50, 0.6)); 
   entities.add(new ParalaxObject(255, 350, 50, 50, 0.6)); 
   entities.add(new ParalaxObject(0, 350, 70, 70, 0.7)); 
@@ -304,5 +306,6 @@ void loadParalax(){
   entities.add(new ParalaxObject(0, 370, 120, 120, 0.9));
 
   ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 300, 300, 1.1, 10)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 600, 600, 1.2, 12)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 600, 600, 1.2, 12));
 }
+

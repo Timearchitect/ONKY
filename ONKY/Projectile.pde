@@ -1,5 +1,5 @@
 abstract class Projectile extends Entity {
-
+  int time=80;
   Projectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
@@ -29,11 +29,11 @@ class LaserProjectile extends Projectile {
 
     stroke(255, 0, 0);
     strokeWeight(10);
-    line(x, y, x+vx, y+vy);
+    line(x, y, x-vx, y-vy);
 
     stroke(255);
     strokeWeight(5);
-    line(x, y, x+vx, y+vy);
+    line(x, y, x-vx, y-vy);
   }
 
   void collision() {
@@ -43,6 +43,9 @@ class LaserProjectile extends Projectile {
         death();
       }
     }
+    if (!dead && floorHeight < y+vy ) {
+      death();
+    }
   }
 
   void update() {
@@ -51,6 +54,8 @@ class LaserProjectile extends Projectile {
     y+=vy;
     collision();
     if (x>p.x+width/scaleFactor) dead=true;
+    if (time<=0) dead=true;
+    else time--;
   }
 
   void death() {

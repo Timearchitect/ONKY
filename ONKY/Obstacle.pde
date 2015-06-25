@@ -51,7 +51,7 @@ abstract class Obstacle extends Entity {
   void damage(int i) {
     hitBrightness=100;
     health-=i;
-    if (health<0)death();
+    if (health<=0)death();
   }
   void surface() {
   }

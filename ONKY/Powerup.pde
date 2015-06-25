@@ -1,17 +1,17 @@
 class Powerup extends Entity implements Cloneable {
   PImage icon;
   float angle, offsetX, offsetY;
-  int  time, spawnTime;
+  float  time, spawnTime;
   color powerupColor= color(255);
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
-    powerups.add( this);
     time=_time;
     spawnTime=_time;
     x=_x;
     y=_y;
     w=100;
     h=100;
+    powerups.add( this);
   }
   void update() {
     angle+=8;
@@ -55,13 +55,17 @@ class Powerup extends Entity implements Cloneable {
     if (time<=0)death();
   }
   void displayIcon() {
+    int index=p.usedPowerup.indexOf(this),interval=120;
+    
     noStroke();
-    // fill(powerupColor);
-    //rect(50, 100, 100, 100);
+    fill(powerupColor);
+    rect(50+index*interval, 100, 100, 100);
     //if (icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
-    fill(0);
-    arc(50+w*0.5, 100+h*0.5, 100, 100, (PI*2)-((PI*2)/spawnTime*(time))-HALF_PI, PI+HALF_PI);
+    fill(0, 100);
+    println(spawnTime +" : "+time);
+    arc(50+w*0.5+index*interval, 100+h*0.5, 100, 100, ((PI*2)/spawnTime)*(time)-HALF_PI, PI*2-HALF_PI);
   }// +(PI*2)-((PI*2)/maxHealth)*health
+
   public Powerup clone()throws CloneNotSupportedException {  
     return (Powerup)super.clone();
   }
@@ -70,10 +74,8 @@ class Powerup extends Entity implements Cloneable {
 
 class invisPowerup extends Powerup {
   invisPowerup(int _x, int _y, int _time) {
-    super(_x, _y, _time);
+    super(_x, _y, _time*2);
     powerups.add( this);
-    time=_time;
-    spawnTime=_time;
     powerupColor=color(255, 100, 0);
     x=_x;
     y=_y;
@@ -81,20 +83,29 @@ class invisPowerup extends Powerup {
     h=100;
   }
   void collect() {
-    tokens++;
-    playSound(collectSound);
-    particles.add( new SpinParticle(  int(x), int(y)));
-    p.usedPowerup=this;     
-    p.vx=30;
-    death();
+      tokens++;
+      playSound(collectSound);
+      particles.add( new SpinParticle(int(x), int(y)));
+      p.vx=30;
+      p.invis=spawnTime;
+      p.invincible=true;  // activates supermario starpower
+      BGM.pause();
+      BGM = minim.loadFile("Super Mario - Invincibility Star.mp3");
+      playSound(BGM);
+      BGM.loop();
+
+      try {
+        p.usedPowerup.add(this.clone());
+      }    
+      catch(CloneNotSupportedException e) {
+      }
+      
+      //p.usedPowerup.time+=this.time;
+      this.death();
+    
   }
   void use() {
-    p.invis=2000;
-    p.invincible=true;  // activates supermario starpower
-    BGM.pause();
-    BGM = minim.loadFile("Super Mario - Invincibility Star.mp3");
-    playSound(BGM);
-    time--;
+    time-=1*speedFactor;
     if (time<=0)death();
   }
 }
@@ -103,10 +114,6 @@ class LaserPowerup extends Powerup {
     super(_x, _y, _time);
     powerups.add( this);
     icon=laserIcon;
-    time=_time;
-    spawnTime=_time;
-
-    spawnTime=millis();
     powerupColor=color(255, 0, 0);
     x=_x;
     y=_y;
@@ -115,24 +122,27 @@ class LaserPowerup extends Powerup {
   }
 
   void collect() {
-    if (p.usedPowerup==null) {
+    //if (p.usedPowerup==null) {
       tokens++;
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
       try {
-        p.usedPowerup=this.clone();
+        p.usedPowerup.add(this.clone());
       }    
       catch(CloneNotSupportedException e) {
       }
-    } else {   
-      tokens++;
-      p.usedPowerup.time+=this.time;
-      this.death();
-    }
+    //} else {   
+     // tokens++;
+      //p.usedPowerup.time+=this.time;
+        this.death();
+  //  }
   }
   void use() {
-    // if (time%5==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, random(2)-1));
-    if (time%4==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
+    if (p.angle>6) {  
+      if (time%2==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
+    } else {
+      if (time%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
+    }
     time-=1*speedFactor;
     if (time<=0)death();
   }
@@ -140,10 +150,8 @@ class LaserPowerup extends Powerup {
 
 class SlowPowerup extends Powerup {
   SlowPowerup(int _x, int _y, int _time) {
-    super(_x, _y, _time);
+    super(_x, _y, int(_time*0.5));
     powerups.add( this);
-    time=_time;
-    spawnTime=millis();
     powerupColor=color(100, 100, 100);
     x=_x;
     y=_y;
@@ -152,20 +160,19 @@ class SlowPowerup extends Powerup {
   }
 
   void collect() {
-    if (p.usedPowerup==null) {
       tokens++;
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
       try {
-        p.usedPowerup=this.clone();
+        p.usedPowerup.add(this.clone());
       }        
       catch(CloneNotSupportedException e) {
       }
-    } else {
-      tokens++;
-      p.usedPowerup.time+=this.time;
+    
+      //tokens++;
+      //p.usedPowerup.time+=this.time;
       this.death();
-    }
+    
   }
   void use() {
     speedFactor=0.5;
@@ -177,7 +184,6 @@ class LifePowerup extends Powerup {
   LifePowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
-    time=_time;
     powerupColor=color(50, 255, 50);
     x=_x;
     y=_y;
@@ -189,14 +195,17 @@ class LifePowerup extends Powerup {
 
     playSound(collectSound);
     particles.add( new SpinParticle(  int(x), int(y)));
-    p.usedPowerup=this;     
+    try {
+      p.usedPowerup.add(this.clone());
+    }        
+    catch(CloneNotSupportedException e) {
+    }    
     p.lives++;
     death();
   }
   void use() {
     p.invis=200;
-
-    time--;
+    time-= 1*speedFactor;
     if (time<=0)death();
   }
 }
@@ -204,8 +213,6 @@ class RandomPowerup extends Powerup {
   RandomPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
-    time=_time;
-    spawnTime=millis();
     powerupColor=color(100, 100, 100);
     x=_x;
     y=_y;

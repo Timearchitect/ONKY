@@ -1,12 +1,12 @@
 class Player {
 
   long trailspawnTimer;
-  Powerup usedPowerup  ;
+  ArrayList<Powerup> usedPowerup = new ArrayList<Powerup>() ;
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=20, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
-  int cooldown, health, maxHealth=100, jumpCount=MAX_JUMP, lives= MAX_LIFE;
+  final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
+  int cooldown, jumpCount=MAX_JUMP, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
   int duckTime, duckCooldown;
@@ -46,11 +46,15 @@ class Player {
 
     spawnSpeedEffect();
 
-    if (usedPowerup!=null) {  
-      usedPowerup.use();
-      usedPowerup.displayIcon();
-      if (usedPowerup.dead)usedPowerup=null;
+   for(Powerup p:usedPowerup){
+    //   p.update();
+     p.use();
+     // p.displayIcon();
     }
+    for(int i=usedPowerup.size()-1; i>=0 ;i--){
+      if (usedPowerup.get(i).dead)usedPowerup.remove(usedPowerup.get(i));
+    }
+    println(usedPowerup.size());
   }
 
   void display() {
@@ -144,7 +148,6 @@ class Player {
       if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
       jumpCount=MAX_JUMP;
       if (punching && ! onGround)stomp() ;
-
       onGround=true;
       y=floorHeight-h;
       angle=2;
@@ -258,7 +261,7 @@ class Player {
     lives=MAX_LIFE;
     x=0;
     vx=10;
-    usedPowerup=null;
+    usedPowerup.clear();
   }
 
   void spawnSpeedEffect() {

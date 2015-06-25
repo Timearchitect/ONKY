@@ -6,9 +6,9 @@ void loadObstacle() {
     entities.add(new Box(1500, int(floorHeight-200) ,1) );
 
   
-  for (int i=2; i<110; i++) {
-    minDifficulty+=0.25;
-    maxDifficulty+=0.25;
+  for (int i=2; i<80; i++) {
+    minDifficulty+=0.3;
+    maxDifficulty+=0.3;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
     
     switch(difficulty) {
