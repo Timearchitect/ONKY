@@ -14,7 +14,7 @@ AudioPlayer rubberSound;
 
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
-PImage Block, laserIcon, Bush, Tree, Grass, BlockSad, Mountain;
+PImage Block, laserIcon,superIcon,tokenIcon,lifeIcon, Bush, Tree, Grass, BlockSad, Mountain;
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -47,7 +47,11 @@ void setup() {
   p.Jump = loadImage("jump.png");
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
-  laserIcon = loadImage("laserIcon.jpg");
+  laserIcon = loadImage("laserpower.png");
+   tokenIcon = loadImage("token.png");
+  superIcon = loadImage("speedpower.png");
+  lifeIcon = loadImage("oneup.png");
+
   Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");

@@ -1,5 +1,5 @@
 class Powerup extends Entity implements Cloneable {
-  PImage icon;
+  PImage icon= tokenIcon;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -25,7 +25,7 @@ class Powerup extends Entity implements Cloneable {
     noStroke();
     fill(powerupColor);
     ellipse(x+offsetX, y+offsetY, w, h);
-    if (icon!=null)image(laserIcon, x-w*0.5+offsetX, y-h*0.5+offsetY, 100, 100);
+    if (icon!=null)image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, 100, 100);
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -57,9 +57,9 @@ class Powerup extends Entity implements Cloneable {
     int index=p.usedPowerup.indexOf(this), interval=120;
 
     noStroke();
-    fill(powerupColor);
-    rect(50+index*interval, 100, 100, 100);
-    //if (icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
+   // fill(powerupColor);
+   // rect(50+index*interval, 100, 100, 100);
+    if (icon!=null)image(icon, 50+10+index*interval, 100+10, 100-20, 100-20);
     fill(0, 100);
     //println(spawnTime +" : "+time);
     arc(50+w*0.5+index*interval, 100+h*0.5, 100, 100, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
@@ -76,6 +76,7 @@ class invisPowerup extends Powerup {
     super(_x, _y, _time*2);
     powerups.add( this);
     powerupColor=color(255, 100, 0);
+    icon = superIcon;
     x=_x;
     y=_y;
     w=100;
@@ -184,6 +185,7 @@ class LifePowerup extends Powerup {
     super(_x, _y, _time);
     powerups.add( this);
     powerupColor=color(50, 255, 50);
+    icon= lifeIcon;
     x=_x;
     y=_y;
     w=100;
