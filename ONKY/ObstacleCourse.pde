@@ -2,10 +2,15 @@ int difficulty, difficultyRange=10;
 float minDifficulty=0, maxDifficulty=difficultyRange;
 
 void loadObstacle() {
-  for (int i=1; i<110; i++) {
+  
+    entities.add(new Box(1500, int(floorHeight-200) ,1) );
+
+  
+  for (int i=2; i<110; i++) {
     minDifficulty+=0.25;
     maxDifficulty+=0.25;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
+    
     switch(difficulty) {
     case 0:
       spawnSingleWall(i*2200);
