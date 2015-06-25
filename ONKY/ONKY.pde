@@ -48,7 +48,7 @@ void setup() {
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
   laserIcon = loadImage("laserIcon.jpg");
-  Mountain= loadImage("background.png");
+  Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   Tree =loadImage("treetile.png");
