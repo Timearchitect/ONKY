@@ -253,7 +253,7 @@ class Bush extends Obstacle {
   }
   void death() {
     super.death();
-    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
     for (int i =0; i< 8; i++) {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -274,7 +274,6 @@ class Bush extends Obstacle {
   void knock() {
     super.knock();
          if (p.invincible) super.death();
-
     for (int i =0; i< 1; i++) {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }

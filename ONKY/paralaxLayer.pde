@@ -2,7 +2,7 @@
 
 
 class Paralax extends Entity {
-  float angle, factor;
+  float angle, factor,x,y;
   PImage bg;
   Paralax() { // DUMMY
     super( 0, 0, 0, 0);
@@ -22,10 +22,10 @@ class Paralax extends Entity {
 
 
   void update() {
-    x-=int(p.vx*factor*speedFactor);
+    x-=p.vx*factor*speedFactor;
     //x+=vx*speedFactor;
     y+=vy*speedFactor;
-    if (x+((w*0.33)*2)<width)x=0;
+    if (x+(w)<width)x=0;
     //if(x+w<0)x=0;
   }
 
@@ -49,13 +49,16 @@ class ParalaxObject extends Paralax {
   }
   ParalaxObject(int _x, int _y, int _w, int _h, float _factor) {
     super(_x, _y, _w, _h, _factor);
+    x=_x;
+    y=_y;
   }
   ParalaxObject(int _x, int _y, int _w, int _h, float _factor, int _repeatDistance) {
-    super(_x, _y, _w, _h, _factor);
+    this(_x, _y, _w, _h, _factor);
     repeatDistance=_repeatDistance;
+    
   }
   void update() {
-    x-=int(p.vx*factor*speedFactor);
+    x-=p.vx*factor*speedFactor;
     if (x+w<0)x=width*repeatDistance;
   }
 
