@@ -5,6 +5,7 @@ class Powerup extends Entity implements Cloneable {
   color powerupColor= color(255);
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
+    icon= tokenIcon;
     time=_time;
     spawnTime=_time;
     x=_x;
@@ -15,27 +16,30 @@ class Powerup extends Entity implements Cloneable {
   }
   void update() {
     angle+=8;
-    offsetX=cos(radians(angle))*14;
-    offsetY=sin(radians(angle))*14;
+    offsetX=cos(radians(angle))*12;
+    offsetY=sin(radians(angle))*12;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
     collision();
   }
   void display() {
-    noStroke();
-    fill(powerupColor);
-    ellipse(x+offsetX, y+offsetY, w, h);
+
     if (icon!=null)image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, 100, 100);
+    else {
+      noStroke();
+      fill(powerupColor);
+      ellipse(x+offsetX, y+offsetY, w, h);
+    }
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      println("killed powerup");  
+      //println("killed powerup");  
       collect();
     }
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      println("Grab!!!!"); 
+      //println("Grab!!!!"); 
       collect();
     }
   }
@@ -51,14 +55,14 @@ class Powerup extends Entity implements Cloneable {
   void use() {
     time--;
     background(powerupColor);
-    if (time<=0)death();
+    if (time<1)death();
   }
   void displayIcon() {
-    int index=p.usedPowerup.indexOf(this), interval=120;
-
+    int index=p.usedPowerup.indexOf(this), interval=110;
     noStroke();
-   // fill(powerupColor);
-   // rect(50+index*interval, 100, 100, 100);
+
+    // fill(powerupColor);
+    // rect(50+index*interval, 100, 100, 100);
     if (icon!=null)image(icon, 50+10+index*interval, 100+10, 100-20, 100-20);
     fill(0, 100);
     //println(spawnTime +" : "+time);
@@ -74,13 +78,13 @@ class Powerup extends Entity implements Cloneable {
 class invisPowerup extends Powerup {
   invisPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time*2);
-    powerups.add( this);
     powerupColor=color(255, 100, 0);
     icon = superIcon;
     x=_x;
     y=_y;
     w=100;
     h=100;
+    // powerups.add( this);
   }
   void collect() {
     if (!dead) {
@@ -112,18 +116,17 @@ class invisPowerup extends Powerup {
 class LaserPowerup extends Powerup {
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
-    powerups.add( this);
     icon=laserIcon;
     powerupColor=color(255, 0, 0);
     x=_x;
     y=_y;
     w=100;
     h=100;
+    // powerups.add( this);
   }
 
   void collect() {
     if (!dead) {
-
       tokens++;
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
@@ -132,32 +135,30 @@ class LaserPowerup extends Powerup {
       }    
       catch(CloneNotSupportedException e) {
       }
-      //} else {   
-      // tokens++;
-      //p.usedPowerup.time+=this.time;
       this.death();
     }
   }
   void use() {
     if (p.angle>6) {  
-      if (time%2==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
+      if (time%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
     } else {
       if (time%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
     }
     time-=1*speedFactor;
-    if (time<=0)death();
+    if (time<1)death();
   }
 }
 
 class SlowPowerup extends Powerup {
   SlowPowerup(int _x, int _y, int _time) {
-    super(_x, _y, int(_time*0.5));
-    powerups.add( this);
+    super(_x, _y, int(_time*0.3));
     powerupColor=color(100, 100, 100);
     x=_x;
     y=_y;
     w=100;
     h=100;
+    icon=null;
+    //powerups.add( this);
   }
 
   void collect() {
@@ -169,20 +170,17 @@ class SlowPowerup extends Powerup {
     }        
     catch(CloneNotSupportedException e) {
     }
-
-    //tokens++;
-    //p.usedPowerup.time+=this.time;
     this.death();
   }
   void use() {
-    speedFactor=0.5;
+    speedFactor=0.5; //slowrate
     time-=1*speedFactor;
-    if (time<=0)death();
+    if (time<1)death();
   }
 }
 class LifePowerup extends Powerup {
   LifePowerup(int _x, int _y, int _time) {
-    super(_x, _y, _time);
+    super(_x, _y, int(_time*0.5));
     powerups.add( this);
     powerupColor=color(50, 255, 50);
     icon= lifeIcon;
@@ -206,18 +204,19 @@ class LifePowerup extends Powerup {
     }
   }
   void use() {
-    p.invis=200;
+    p.invis=100;
     time-= 1*speedFactor;
-    if (time<=0)death();
+    if (time<1)death();
   }
 }
 class RandomPowerup extends Powerup {
   RandomPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
-    powerups.add( this);
+    icon= tokenIcon;
     powerupColor=color(100, 100, 100);
     x=_x;
     y=_y;
+
     switch(int(random(5))) {
     case 0:
       entities.add( new invisPowerup( _x, _y, _time)); 

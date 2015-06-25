@@ -2,7 +2,7 @@
 
 
 class Paralax extends Entity {
-  float angle, factor,heightLevel, opacity=255;
+  float angle, factor, heightLevel, opacity=255;
   PImage bg;
   Paralax() { // DUMMY
     super( 0, 0, 0, 0);
@@ -25,10 +25,7 @@ class Paralax extends Entity {
   void update() {
     x-=p.vx*factor*speedFactor;
     //x+=vx*speedFactor;
-    
-
-    if (x+(w)<width)x=0;
-    //if(x+w<0)x=0;
+    if (x+w<width)x=0;
   }
 
   void display() {
@@ -43,9 +40,9 @@ class Paralax extends Entity {
 
 
 class ParalaxObject extends Paralax {
-float x, y ;
+  float x, y ;
   int repeatDistance=1;
- 
+
   ParalaxObject() { // DUMMY
     super();
   }
@@ -60,8 +57,8 @@ float x, y ;
     this(_x, _y, _w, _h, _factor);
     repeatDistance=_repeatDistance;
   }
-    ParalaxObject(int _x, int _y, int _w, int _h, float _factor, int _repeatDistance, int _opacity) {
-    this(_x, _y, _w, _h, _factor,_repeatDistance);
+  ParalaxObject(int _x, int _y, int _w, int _h, float _factor, int _repeatDistance, int _opacity) {
+    this(_x, _y, _w, _h, _factor, _repeatDistance);
     opacity=_opacity;
   }
   void update() {
@@ -78,8 +75,8 @@ float x, y ;
     } else {
       tint(255, opacity);
       image(Tree, int(x), int(y), int(w), int(h));
+      noTint();
     }
-    noTint();
   }
 }
 

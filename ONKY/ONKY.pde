@@ -5,6 +5,12 @@
  *
  */
 import ddf.minim.*;
+import javax.media.opengl.*;
+import processing.opengl.*;
+
+
+
+
 int renderObject;
 Minim minim;
 AudioPlayer BGM;
@@ -14,7 +20,7 @@ AudioPlayer rubberSound;
 
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
-PImage Block, laserIcon,superIcon,tokenIcon,lifeIcon, Bush, Tree, Grass, BlockSad, Mountain;
+PImage Block, laserIcon, superIcon, tokenIcon, lifeIcon, Bush, Tree, Grass, Leaf, BlockSad, Mountain;
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -36,11 +42,13 @@ final int MAX_SHAKE=200, MAX_SPEED=20;
 
 void setup() {
   noSmooth();
-  loadObstacle();
+  noClip();
   //size(720, 1080); // vertical
-  size( 1080, 720); // horisontal
-
-
+  size( 1080, 720,OPENGL); // horisontal
+ // hint();
+ hint(DISABLE_TEXTURE_MIPMAPS);
+((PGraphicsOpenGL)g).textureSampling(2);
+  
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
   p.Life = loadImage("extraLife.png");
@@ -48,7 +56,7 @@ void setup() {
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
   laserIcon = loadImage("laserpower.png");
-   tokenIcon = loadImage("token.png");
+  tokenIcon = loadImage("token.png");
   superIcon = loadImage("speedpower.png");
   lifeIcon = loadImage("oneup.png");
 
@@ -56,6 +64,7 @@ void setup() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   Tree =loadImage("treetile.png");
+  Leaf  =loadImage("leaf.png");
   Block = loadImage("blockMad.png");
   BlockSad = loadImage("blockSad.png");
   // we pass this to Minim so that it can load files from the data directory
@@ -82,6 +91,7 @@ void setup() {
   BGM.loop();
 
   loadParalax();
+  loadObstacle();
 
   //entities.add(new invisPowerup(1000, 600, 2000));
   entities.add(new LaserPowerup(2200, 600, 600));
@@ -92,32 +102,33 @@ void setup() {
 }
 
 void draw() {
-  if (!p.invincible) background(80);
-  else background(255, 150, 0);
+
+  //if (!p.invincible) background(80);
+ // else background(255, 150, 0);
   shake();
   smoothScale();
   smoothSlow();
   smoothAngle();
   if (!debug)adjustZoomLevel();
   //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
-  for (Paralax px : paralaxLayers) {
-    px.update();
-    px.display();
+  for (Paralax plx : paralaxLayers) {
+    plx.update();
+    if ( plx.x < width) plx.display(); // onscreen
   }
   if (debug) displaySign();
   pushMatrix();
   scale(scaleFactor);
   rotate(radians(screenAngle));
   translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
+  renderObject=0;
 
   displayFloor();
   p.update();
   p.display();
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
-  renderObject=0;
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(scaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
-    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) {
+    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
       renderObject++;
       o.update();
       // o.gravity();
@@ -134,8 +145,11 @@ void draw() {
   //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
 
   for (Powerup pow : powerups) {
-    pow.update();
-    pow.display();
+    if (pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
+      renderObject++;
+      pow.update();
+      pow.display();
+    }
   }
   for (int i=powerups.size () -1; i>=0; i--) {
     if (powerups.get(i).dead)powerups.remove(powerups.get(i));
@@ -200,12 +214,12 @@ void draw() {
 
   //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
-  for (Paralax px : ForegroundParalaxLayers) {
-    px.update();
-    px.display();
+  for (Paralax plx : ForegroundParalaxLayers) {
+    plx.update();
+    if (plx.x<width)plx.display(); // onscreen
   }
   for ( Powerup pow : p.usedPowerup) { 
-    pow.displayIcon();
+     pow.displayIcon();
   }
 
   displayLife();
@@ -263,6 +277,9 @@ void gameReset() {
   debris.clear();
   background(0);
   BGM.rewind();
+ difficultyRange=10;
+ minDifficulty=0;
+ maxDifficulty=difficultyRange;
 
   loadObstacle();
   p.reset();
@@ -278,11 +295,11 @@ void gameReset() {
 void calcDispScore() {
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
-  fill(100, 255, 0);
-  textSize(35);
+  fill(0);
+  textSize(30);
   //+" + "+ int(p.vx-speedLevel);
-  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 60);
-  textSize(18);
+  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 50);
+ // textSize(18);
 }
 void debugScreen() {
   fill(100, 255, 0);
@@ -301,17 +318,15 @@ void displayLife() {
 }
 void loadParalax() {
 
+  entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
+  entities.add(new ParalaxObject(0, 400, 50, 50, 0.3)); 
+  entities.add(new ParalaxObject(255, 400, 50, 50, 0.3)); 
+  entities.add(new ParalaxObject(0, 420, 100, 100, 0.5)); 
+  entities.add(new ParalaxObject(300, 420, 100, 100, 0.5)); 
+  entities.add(new ParalaxObject(0, 290, 250, 250, 0.7)); 
+  entities.add(new ParalaxObject(0, 150, 500, 500, 0.9));
 
-  entities.add(new Paralax(0,-int(height*1.5)-300, width*3,int( height*3), 0.01, Mountain)); // bakgrund
-
-  entities.add(new ParalaxObject(0, 300-50, 100, 100, 0.6)); 
-  entities.add(new ParalaxObject(255, 350-50, 100, 100, 0.6)); 
-  entities.add(new ParalaxObject(0, 350-75, 150, 150, 0.7)); 
-  entities.add(new ParalaxObject(300, 350-75, 150, 150, 0.7)); 
-  entities.add(new ParalaxObject(0, 400-150, 300, 300, 0.8)); 
-  entities.add(new ParalaxObject(0, 370-250, 500, 500, 0.9));
-
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 800, 800, 1.2, 10,150)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 2000, 2000, 1.4, 12,150));
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 800, 800, 1.2, 18, 150)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 2000, 2000, 1.4, 20, 150));
 }
 

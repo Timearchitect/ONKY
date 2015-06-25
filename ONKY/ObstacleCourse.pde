@@ -1,4 +1,4 @@
-int difficulty, difficultyRange=10;
+int  difficulty,difficultyRange=10;
 float minDifficulty=0, maxDifficulty=difficultyRange;
 
 void loadObstacle() {

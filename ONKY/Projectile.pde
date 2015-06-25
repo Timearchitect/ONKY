@@ -15,7 +15,7 @@ class LaserProjectile extends Projectile {
 
   LaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
-    projectiles.add(this);
+    //projectiles.add(this);
     w=50;
     strokeWeight(10);
     stroke(255, 0, 0);

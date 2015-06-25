@@ -290,7 +290,7 @@ class Bush extends Obstacle {
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      println("collision!!!!"); 
+     // println("collision!!!!"); 
       if (p.vx>5) {
         knock();
       }
