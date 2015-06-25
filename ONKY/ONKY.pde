@@ -298,7 +298,7 @@ void displayLife() {
 void loadParalax() {
 
 
-  entities.add(new Paralax(0, 0, width*3, height, 0.01, Mountain)); // bakgrund
+  entities.add(new Paralax(0,-int(height*1.5)-300, width*3,int( height*3), 0.01, Mountain)); // bakgrund
 
   entities.add(new ParalaxObject(0, 300-50, 100, 100, 0.6)); 
   entities.add(new ParalaxObject(255, 350-50, 100, 100, 0.6)); 
