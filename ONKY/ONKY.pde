@@ -15,7 +15,7 @@ AudioPlayer rubberSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
 Player p = new Player();
-PImage Block, laserIcon, Bush;
+PImage Block, laserIcon, Bush,Tree,Grass;
 int defaultSpeedLevel=12,speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -48,8 +48,9 @@ void setup() {
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
   laserIcon = loadImage("laserIcon.jpg");
-
+  Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
+  Tree =loadImage("treetile.png");
   Block = loadImage("block200.png");
   // we pass this to Minim so that it can load files from the data directory
   minim = new Minim(this);
@@ -74,17 +75,7 @@ void setup() {
   BGM.play();
   BGM.loop();
 
-
-  entities.add(new Paralax(0, 250, 5000, 2000, 1)); 
-  entities.add(new ParalaxObject(0, 300, 30, 100, 0.6)); 
-  entities.add(new ParalaxObject(255, 350, 30, 100, 0.6)); 
-  entities.add(new ParalaxObject(0, 350, 50, 200, 0.7)); 
-  entities.add(new ParalaxObject(300, 350, 50, 200, 0.7)); 
-  entities.add(new ParalaxObject(0, 400, 80, 300, 0.8)); 
-  entities.add(new ParalaxObject(0, 370, 90, 450, 0.9));
-
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 100, 1000, 1.1, 10)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 300, 1000, 1.2, 12)); 
+ loadParalax();
 
   //entities.add(new invisPowerup(1000, 600, 2000));
   // entities.add(new LaserPowerup(2000, 600, 1500));
@@ -200,9 +191,7 @@ void draw() {
 
   //----------------------------¨-------------------------------------------------------------------------------------
 
-
   popMatrix();
-
 
   //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
@@ -244,9 +233,11 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
+  int offset = -200;
    if(p.invincible)fill(255,50,0);
    else fill(0);
-  rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
+  // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
+   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }
 
 void displaySign() {
@@ -300,4 +291,18 @@ void displayLife() {
   for (int i=0; i<p.lives; i++)
     image(p.Life, 0+50+i*50, 0+60, 40, 40);
 }
+void loadParalax(){
 
+
+  entities.add(new Paralax(0, 250, 5000, 2000, 1,Grass)); // bakgrund
+  
+  entities.add(new ParalaxObject(0, 300, 50, 50, 0.6)); 
+  entities.add(new ParalaxObject(255, 350, 50, 50, 0.6)); 
+  entities.add(new ParalaxObject(0, 350, 70, 70, 0.7)); 
+  entities.add(new ParalaxObject(300, 350, 70, 70, 0.7)); 
+  entities.add(new ParalaxObject(0, 400, 100, 100, 0.8)); 
+  entities.add(new ParalaxObject(0, 370, 120, 120, 0.9));
+
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 350, 300, 300, 1.1, 10)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 150, 600, 600, 1.2, 12)); 
+}

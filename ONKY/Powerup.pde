@@ -1,12 +1,13 @@
 class Powerup extends Entity implements Cloneable {
   PImage icon;
   float angle, offsetX, offsetY;
-  int  time;
+  int  time, spawnTime;
   color powerupColor= color(255);
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
     powerups.add( this);
     time=_time;
+    spawnTime=_time;
     x=_x;
     y=_y;
     w=100;
@@ -55,10 +56,12 @@ class Powerup extends Entity implements Cloneable {
   }
   void displayIcon() {
     noStroke();
-    fill(powerupColor);
-    rect(50, 100, 100, 100);
-    if (icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
-  }
+    // fill(powerupColor);
+    //rect(50, 100, 100, 100);
+    //if (icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
+    fill(0);
+    arc(50+w*0.5, 100+h*0.5, 100, 100, (PI*2)-((PI*2)/spawnTime*(time))-HALF_PI, PI+HALF_PI);
+  }// +(PI*2)-((PI*2)/maxHealth)*health
   public Powerup clone()throws CloneNotSupportedException {  
     return (Powerup)super.clone();
   }
@@ -66,11 +69,11 @@ class Powerup extends Entity implements Cloneable {
 
 
 class invisPowerup extends Powerup {
-  int  time;
   invisPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
     time=_time;
+    spawnTime=_time;
     powerupColor=color(255, 100, 0);
     x=_x;
     y=_y;
@@ -79,7 +82,6 @@ class invisPowerup extends Powerup {
   }
   void collect() {
     tokens++;
-
     playSound(collectSound);
     particles.add( new SpinParticle(  int(x), int(y)));
     p.usedPowerup=this;     
@@ -97,12 +99,13 @@ class invisPowerup extends Powerup {
   }
 }
 class LaserPowerup extends Powerup {
-  long  time, spawnTime;
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
     icon=laserIcon;
     time=_time;
+    spawnTime=_time;
+
     spawnTime=millis();
     powerupColor=color(255, 0, 0);
     x=_x;
@@ -128,14 +131,14 @@ class LaserPowerup extends Powerup {
     }
   }
   void use() {
-    if (time%5==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, random(2)-1));
+    // if (time%5==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+20, random(2)-1));
+    if (time%4==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
     time-=1*speedFactor;
     if (time<=0)death();
   }
 }
 
 class SlowPowerup extends Powerup {
-  long  time, spawnTime;
   SlowPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
@@ -171,7 +174,6 @@ class SlowPowerup extends Powerup {
   }
 }
 class LifePowerup extends Powerup {
-  int  time;
   LifePowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);
@@ -199,7 +201,6 @@ class LifePowerup extends Powerup {
   }
 }
 class RandomPowerup extends Powerup {
-  long  time, spawnTime;
   RandomPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerups.add( this);

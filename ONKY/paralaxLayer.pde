@@ -14,6 +14,12 @@ class Paralax extends Entity {
     h=_h;
     factor=_factor;
   }
+  Paralax(int _x, int _y, int _w, int _h, float _factor, PImage _bg) {
+    this( _x, _y, _w, _h, _factor);
+    //paralaxLayers.add( this);
+    bg=_bg;
+  }
+
 
   void update() {
     x+=vx*speedFactor;
@@ -24,9 +30,10 @@ class Paralax extends Entity {
 
   void display() {
     noStroke();
-    if(!p.invincible) fill(0, 0, 255);
+    if (!p.invincible) fill(0, 0, 255);
     else  fill(100, 100, 255);
-    rect(x, y, w, h);
+    if(bg!=null)image(bg,x,y,w,h);
+    else rect(x, y, w, h);
   }
 }
 
@@ -35,7 +42,7 @@ class Paralax extends Entity {
 class ParalaxObject extends Paralax {
 
   int repeatDistance=1;
-  
+
   ParalaxObject() { // DUMMY
     super();
   }
@@ -54,7 +61,8 @@ class ParalaxObject extends Paralax {
   void display() {
     noStroke();
     fill(0, 100, 100);
-    rect(x, y, w, h);
+    image(Tree, x, y, w, h);
+    //rect(x, y, w, h);
   }
 }
 

@@ -29,11 +29,11 @@ class LaserProjectile extends Projectile {
 
     stroke(255, 0, 0);
     strokeWeight(10);
-    line(x, y, x+w, y+h);
+    line(x, y, x+vx, y+vy);
 
     stroke(255);
     strokeWeight(5);
-    line(x, y, x+w, y+h);
+    line(x, y, x+vx, y+vy);
   }
 
   void collision() {
