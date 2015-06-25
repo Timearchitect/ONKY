@@ -14,7 +14,7 @@ AudioPlayer rubberSound;
 
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
 
-PImage Block, laserIcon, Bush, Tree, Grass, BlockSad;
+PImage Block, laserIcon, Bush, Tree, Grass, BlockSad,Mountain;
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -48,6 +48,7 @@ void setup() {
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
   laserIcon = loadImage("laserIcon.jpg");
+    Mountain= loadImage("background.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   Tree =loadImage("treetile.png");
@@ -297,7 +298,7 @@ void displayLife() {
 void loadParalax() {
 
 
-  entities.add(new Paralax(0, 250, 5000, 2000, 1, Grass)); // bakgrund
+  entities.add(new Paralax(0, 0, width*3, 2000, 1.1, Mountain)); // bakgrund
 
   entities.add(new ParalaxObject(0, 300, 50, 50, 0.6)); 
   entities.add(new ParalaxObject(255, 350, 50, 50, 0.6)); 

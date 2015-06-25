@@ -22,9 +22,10 @@ class Paralax extends Entity {
 
 
   void update() {
-    x+=vx*speedFactor;
+    x-=int(p.vx*factor*speedFactor);
+    //x+=vx*speedFactor;
     y+=vy*speedFactor;
-    if (x+w<width)x=0;
+    if (x+((w*0.33)*2)<width)x=0;
     //if(x+w<0)x=0;
   }
 
