@@ -62,8 +62,8 @@ class Powerup extends Entity implements Cloneable {
     //if (icon!=null)image(icon, 50+10, 100+10, 100-20, 100-20);
     fill(0, 100);
     println(spawnTime +" : "+time);
-    arc(50+w*0.5+index*interval, 100+h*0.5, 100, 100, ((PI*2)/spawnTime)*(time)-HALF_PI, PI*2-HALF_PI);
-  }// +(PI*2)-((PI*2)/maxHealth)*health
+    arc(50+w*0.5+index*interval, 100+h*0.5, 100, 100, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
+  }
 
   public Powerup clone()throws CloneNotSupportedException {  
     return (Powerup)super.clone();
