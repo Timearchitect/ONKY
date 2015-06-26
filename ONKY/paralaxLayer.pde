@@ -29,10 +29,10 @@ class Paralax extends Entity {
   }
 
   void display() {
-    noStroke();
+    //noStroke();
     if (!p.invincible) fill(0, 0, 255);
     else  fill(100, 100, 255);
-    if (bg!=null)image(bg, x, y, w, h);
+    if (bg!=null)image(bg,  int(x), int(y), int(w), int(h));
     else rect(x, y, w, h);
   }
 }
@@ -68,8 +68,8 @@ class ParalaxObject extends Paralax {
   }
 
   void display() {
-    noStroke();
     if (bg==null) {
+      noStroke();
       fill(0, 100, 100);   
       rect(x, y, w, h);
     } else {

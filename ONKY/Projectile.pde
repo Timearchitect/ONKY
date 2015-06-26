@@ -3,6 +3,7 @@ abstract class Projectile extends Entity {
   Projectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
+
     vx=_vx*speedFactor;
     vy=_vy*speedFactor;
   }
@@ -16,11 +17,11 @@ class LaserProjectile extends Projectile {
   LaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     //projectiles.add(this);
-    w=50;
+    w=25;
     strokeWeight(10);
     stroke(255, 0, 0);
     fill(255);
-    ellipse(x+w*0.5, y, 75, 30);
+    ellipse(x+w, y, 75, 30);
     playSound(laserSound);
   }
 
@@ -37,24 +38,25 @@ class LaserProjectile extends Projectile {
   }
 
   void collision() {
-    for (Obstacle o : obstacles) {
-      if (!dead && o.x+o.w > x+vx && o.x < x + w + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
-        o.damage(1);
+    if (!dead) {
+      for (Obstacle o : obstacles) {
+        if ( o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
+          o.damage(1);
+          death();
+        }
+      }
+      if ( floorHeight < y+vy ) {
         death();
       }
-    }
-    if (!dead && floorHeight < y+vy ) {
-      death();
     }
   }
 
   void update() {
-    super.update();
     x+=vx;
     y+=vy;
     collision();
-    if (x>p.x+width/scaleFactor) dead=true;
-    if (time<=0) dead=true;
+    //if ( x>p.x+width/scaleFactor) dead=true;  //off screen
+    if (time<=0) dead=true;  // timelimit
     else time--;
   }
 
@@ -64,7 +66,7 @@ class LaserProjectile extends Projectile {
     strokeWeight(10);
     stroke(255, 0, 0);
     fill(255);
-    ellipse(x+w*0.5, y, 75, 75);
+    ellipse(int(x),int(y), 75, 75);
   }
 }
 

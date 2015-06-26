@@ -1,16 +1,16 @@
-int  difficulty,difficultyRange=10;
+int  difficulty, difficultyRange=10;
 float minDifficulty=0, maxDifficulty=difficultyRange;
 
 void loadObstacle() {
-  
-    entities.add(new Box(1500, int(floorHeight-200) ,1) );
 
-  
+  entities.add(new Box(1500, int(floorHeight-200), 1) );
+
+
   for (int i=2; i<80; i++) {
     minDifficulty+=0.3;
     maxDifficulty+=0.3;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
-    
+
     switch(difficulty) {
     case 0:
       spawnSingleWall(i*2200);
@@ -79,8 +79,9 @@ void loadObstacle() {
       spawnTimeGate(i*2200);
       break;
     default:
-      spawnSingleWall(i*2200);
-      spawnBush(i*2200);
+      spawnSlashArena(i*2200);
+      //   spawnSingleWall(i*2200);
+      //   spawnBush(i*2200);
     }
   }
 }
@@ -444,6 +445,35 @@ void spawnTimeGate(int x) {
   for (int i=0; i<12; i++) {
     int j = int(random(3));
     entities.add(new Box(x+i*100+100, int(floorHeight-j*200)-200 ) );
+  }
+}
+
+void spawnSlashArena(int x) {
+  int index= int(random(3));
+
+  entities.add( new  teleportPowerup(x+0, int(floorHeight-300), 100, 400) );
+  entities.add(new Box(x+100, int(floorHeight-400) ) );
+
+  if (index==0) {
+    entities.add( new  teleportPowerup(x+400, int(floorHeight-100), 100, 400) );
+    entities.add(new Box(x+500, int(floorHeight-200) ) );
+  } else if (index==1) {
+    entities.add( new  teleportPowerup(x+400, int(floorHeight-300), 100, 400) );
+    entities.add(new Box(x+500, int(floorHeight-400) ) );
+  } else {
+    entities.add( new  teleportPowerup(x+400, int(floorHeight-500), 100, 400) );
+    entities.add(new Box(x+500, int(floorHeight-600) ) );
+  }
+    index= int(random(3));
+  if (index==0) {
+    entities.add( new  teleportPowerup(x+800, int(floorHeight-100), 100, 400) );
+    entities.add(new Box(x+900, int(floorHeight-200) ) );
+  } else if (index==1) {
+    entities.add( new  teleportPowerup(x+800, int(floorHeight-300), 100, 400) );
+    entities.add(new Box(x+900, int(floorHeight-400) ) );
+  } else {
+    entities.add( new  teleportPowerup(x+800, int(floorHeight-500), 100, 400) );
+    entities.add(new Box(x+900, int(floorHeight-600) ) );
   }
 }
 

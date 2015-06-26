@@ -6,7 +6,7 @@ class Player {
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
-  int cooldown, jumpCount=MAX_JUMP, lives= MAX_LIFE;
+  int cooldown,jumpHeight=20, jumpCount=MAX_JUMP, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
   int duckTime, duckCooldown;
@@ -30,16 +30,15 @@ class Player {
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
     if (jumpCount==0)angle+=15*speedFactor;
 
-    if (0<invis) {
-      recover();
-    }
-    cutSprite(int(x/40));
+    if (0<invis)recover();
+    
+    cutSprite(int(x*0.025));    //cutSprite(int(x/40));
 
     checkIfGround();
 
     checkDuck();
 
-    if (millis()> trailspawnTimer+80/speedFactor) {
+    if (millis() > trailspawnTimer+80/speedFactor) {
       entities.add(new TrailParticle(int(x), int(y), cell));
       trailspawnTimer=millis();
     }
@@ -58,9 +57,9 @@ class Player {
 
   void display() {
     pushMatrix();
-    translate(x+w*0.5, y+h*0.5);
+    translate(int(x+w*0.5),int(y+h*0.5));
     rotate(radians(angle));
-    fill(255);
+    //fill(255);
 
     /*stroke(0);  
      fill(playerColor);
@@ -68,7 +67,7 @@ class Player {
      fill(255); 
      rect(-w*0.5, 0, w, h*0.5);*/
 
-    if (invis>1 && invis % 4 <=1) {
+    if (invis >1 && invis % 4 <=1) {
       cell.filter(INVERT);
     }
 
@@ -99,7 +98,7 @@ class Player {
       background(255, 0, 0);
     }
     invis=100;
-    vx= -vx*0.5;
+    vx*= -0.5;
   }
   void jump() {
     if (jumpCount>0) {
@@ -111,7 +110,7 @@ class Player {
       playSound(jumpSound);
       if (jumpCount==1) particles.add( new SpinParticle( this));
       jumpCount--;
-      vy=-20;
+      vy=-jumpHeight;
     }
   }
 

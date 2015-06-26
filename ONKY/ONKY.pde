@@ -38,17 +38,19 @@ Player p = new Player();
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
-final int MAX_SHAKE=200, MAX_SPEED=20;
+final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100;
 
 void setup() {
   noSmooth();
   noClip();
   //size(720, 1080); // vertical
-  size( 1080, 720,OPENGL); // horisontal
- // hint();
- hint(DISABLE_TEXTURE_MIPMAPS);
-((PGraphicsOpenGL)g).textureSampling(2);
-  
+  size( 1080, 720); // horisontal
+  /*
+  size( 1080, 720, OPENGL); // horisontal
+   // hint();
+   hint(DISABLE_TEXTURE_MIPMAPS);
+   ((PGraphicsOpenGL)g).textureSampling(2);*/
+
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
   p.Life = loadImage("extraLife.png");
@@ -94,7 +96,17 @@ void setup() {
   loadObstacle();
 
   //entities.add(new invisPowerup(1000, 600, 2000));
-  entities.add(new LaserPowerup(2200, 600, 600));
+//  entities.add(new LaserPowerup(2200, 400, 600));
+  entities.add(new teleportPowerup(2400, 600, 600));
+  entities.add(new IronBox(2600, int(floorHeight-200) ) ); // 3
+  entities.add(new Box(2800, int(floorHeight-200) ) ); // 3
+    entities.add(new Tire(3000, int(floorHeight-200) ) ); // 3
+
+  entities.add(new teleportPowerup(2400, 400, 600));
+  entities.add(new IronBox(2600, int(floorHeight-400) ) ); // 3
+  entities.add(new Box(2800, int(floorHeight-400) ) ); // 3
+    entities.add(new Tire(3000, int(floorHeight-400) ) ); // 3
+
   // entities.add(new SlowPowerup(2200, 400, 1000));
   // entities.add(new RandomPowerup(2000, 400, 500)); 
   //entities.add(new RandomPowerup(2000, 600, 500)); 
@@ -104,9 +116,10 @@ void setup() {
 void draw() {
 
   //if (!p.invincible) background(80);
- // else background(255, 150, 0);
+  // else background(255, 150, 0);
   shake();
   smoothScale();
+  smoothOffset();
   smoothSlow();
   smoothAngle();
   if (!debug)adjustZoomLevel();
@@ -120,7 +133,7 @@ void draw() {
   scale(scaleFactor);
   rotate(radians(screenAngle));
   translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
-  renderObject=0;
+  renderObject=0; // for counting objects on screen
 
   displayFloor();
   p.update();
@@ -219,7 +232,7 @@ void draw() {
     if (plx.x<width)plx.display(); // onscreen
   }
   for ( Powerup pow : p.usedPowerup) { 
-     pow.displayIcon();
+    pow.displayIcon();
   }
 
   displayLife();
@@ -234,6 +247,10 @@ void shake() {
   shakeX=random(skakeFactor)-skakeFactor*0.5;
   shakeY=random(skakeFactor)-skakeFactor*0.5;
 }
+void smoothOffset() {
+  float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
+  playerOffsetX+=offsetDiff*0.02;
+}
 void smoothScale() {
   float scaleDiff=targetScaleFactor-scaleFactor;
   scaleFactor+=scaleDiff*0.1;
@@ -242,7 +259,7 @@ void smoothScale() {
 }
 void smoothSlow() {
   float speedDiff=targetSpeedFactor-speedFactor;
-  speedFactor+=speedDiff*0.05;
+  speedFactor+=speedDiff*0.04;
 }
 void smoothAngle() {
   if (screenAngle!=0) {
@@ -277,10 +294,10 @@ void gameReset() {
   debris.clear();
   background(0);
   BGM.rewind();
- difficultyRange=10;
- minDifficulty=0;
- maxDifficulty=difficultyRange;
-
+  difficultyRange=10;
+  minDifficulty=0;
+  maxDifficulty=difficultyRange;
+  speedLevel=0;
   loadObstacle();
   p.reset();
   p.y=floorHeight;
@@ -297,9 +314,7 @@ void calcDispScore() {
   score=int(p.x);
   fill(0);
   textSize(30);
-  //+" + "+ int(p.vx-speedLevel);
   text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 50);
- // textSize(18);
 }
 void debugScreen() {
   fill(100, 255, 0);
@@ -314,7 +329,7 @@ void playSound(AudioPlayer sound) {
 }
 void displayLife() {
   for (int i=0; i<p.lives; i++)
-    image(p.Life, 0+50+i*50, 0+60, 40, 40);
+    image(p.Life, int(50+i*50), int(60), 40, 40);
 }
 void loadParalax() {
 
@@ -324,9 +339,9 @@ void loadParalax() {
   entities.add(new ParalaxObject(0, 420, 100, 100, 0.5)); 
   entities.add(new ParalaxObject(300, 420, 100, 100, 0.5)); 
   entities.add(new ParalaxObject(0, 290, 250, 250, 0.7)); 
-  entities.add(new ParalaxObject(0, 150, 500, 500, 0.9));
+  entities.add(new ParalaxObject(0, 120, 500, 500, 0.9));
 
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 800, 800, 1.2, 18, 150)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 2000, 2000, 1.4, 20, 150));
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
 

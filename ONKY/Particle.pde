@@ -69,11 +69,16 @@ class speedParticle extends Particle {
 }
 
 class slashParticle extends Particle {
-  int type;
+  int type,distance;
+  
   slashParticle(int _x, int  _y, int _type) {
     super( _x, _y);
     particles.add(this);
     type=_type;
+  }
+    slashParticle(int _x, int  _y, int _type,int _distance) {
+    this( _x, _y,_type);
+    distance=_distance;
   }
 
   void update() {
@@ -100,7 +105,10 @@ class slashParticle extends Particle {
     if (type==4) {
       curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
     }
-
+    if (type==5) {  // special
+      stroke(0, 50, 255);
+      line(x-distance,y,x+100,y);
+    }
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
     noFill();
@@ -121,7 +129,9 @@ class slashParticle extends Particle {
     if (type==4) {
       curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
     }
-
+    if (type==5) {
+      line(x-distance,y,x+100,y);
+    }
     strokeWeight(1);
   }
 }

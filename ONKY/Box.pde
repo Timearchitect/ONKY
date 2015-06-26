@@ -129,6 +129,7 @@ class PlatForm extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
+    health=5;
     obstacleColor = color(255, 50, 50);
   }
   PlatForm(int _x, int _y, int _w, int _h, boolean _hanging) {
@@ -146,7 +147,7 @@ class PlatForm extends Obstacle {
     }
   }
   void death() {
-    if (p.invincible)super.death();
+    if (p.invincible ||health<=0)super.death();
   }
   void hitCollision() {  // hit by punching & smashing
   }

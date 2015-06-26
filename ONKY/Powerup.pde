@@ -69,7 +69,6 @@ class Powerup extends Entity implements Cloneable {
     //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
     //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, (((PI*2)/spawnTime)*(time)-HALF_PI), PI*2-HALF_PI);
     arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
-
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
@@ -212,6 +211,58 @@ class LifePowerup extends Powerup {
     if (time<1)death();
   }
 }
+class teleportPowerup extends Powerup {
+  int distance=900;
+  teleportPowerup(int _x, int _y, int _time) {
+    super(_x, _y, 1);
+    powerups.add( this);
+    powerupColor=color(0, 50, 255);
+    icon= null;
+    x=_x;
+    y=_y;
+    w=100;
+    h=100;
+  }
+  teleportPowerup(int _x, int _y, int _time, int _distance) {
+    this(_x, _y, 1);
+    distance=_distance;
+  }
+  void collect() {
+    if (!dead) {
+      tokens++;
+      playSound(collectSound);
+      playSound(sliceSound);
+      particles.add( new SpinParticle(  int(x), int(y)));
+      try {
+        p.usedPowerup.add(this.clone());
+      }        
+      catch(CloneNotSupportedException e) {
+      }    
+      p.x+=distance;
+      p.vx=0;
+      //p.invincible=true;
+      playerOffsetX=distance+200;
+      background(255);
+      entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
+          skakeFactor=40;
+    speedFactor=0.05;
+      for (Obstacle o : obstacles) {
+        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
+          o.impactForce=60;  
+          o.death();
+        }
+      }
+      death();
+    }
+  }
+  void use() {
+
+
+    p.invis=100;
+    time-= 1*speedFactor;
+    if (time<1)death();
+  }
+}
 class RandomPowerup extends Powerup {
   RandomPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
@@ -233,10 +284,14 @@ class RandomPowerup extends Powerup {
     case 3:
       entities.add( new LifePowerup( _x, _y, _time) );
       break;
+    case 4:
+      entities.add( new  teleportPowerup( _x, _y, _time) );
+      break;
+
     default:
       entities.add( new Powerup( _x, _y, _time));
     }
-    super.death();
+    death();
   }
 }
 
