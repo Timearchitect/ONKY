@@ -6,7 +6,7 @@ class Player {
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
-  int cooldown,collectCooldown,jumpHeight=20, jumpCount=MAX_JUMP, lives= MAX_LIFE;
+  int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
   int duckTime, duckCooldown;
@@ -31,8 +31,8 @@ class Player {
     if (jumpCount==0)angle+=15*speedFactor;
 
     if (0<invis)recover();
-    if(0<collectCooldown)collectCooldown--; // cant collect
-    
+    if (0<collectCooldown)collectCooldown--; // cant collect
+
     cutSprite(int(x*0.025));    //cutSprite(int(x/40));
 
     checkIfGround();
@@ -46,19 +46,19 @@ class Player {
 
     spawnSpeedEffect();
 
-   for(Powerup p:usedPowerup){
-    //   p.update();
-     p.use();
-     // p.displayIcon();
+    for (Powerup p : usedPowerup) {
+      //   p.update();
+      p.use();
+      // p.displayIcon();
     }
-    for(int i=usedPowerup.size()-1; i>=0 ;i--){
+    for (int i=usedPowerup.size ()-1; i>=0; i--) {
       if (usedPowerup.get(i).dead)usedPowerup.remove(usedPowerup.get(i));
     }
   }
 
   void display() {
     pushMatrix();
-    translate(int(x+w*0.5),int(y+h*0.5));
+    translate(int(x+w*0.5), int(y+h*0.5));
     rotate(radians(angle));
     //fill(255);
 
@@ -164,8 +164,8 @@ class Player {
         p.vx=speedLevel; 
         BGM.pause();
         BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
-        BGM.loop();
         playSound(BGM);
+        BGM.loop();
       }
       invincible=false;
     }
@@ -260,6 +260,11 @@ class Player {
     lives=MAX_LIFE;
     x=0;
     vx=10;
+    invis=0;
+
+    punching=false; 
+    ducking=false;
+    invincible=false;
     usedPowerup.clear();
   }
 

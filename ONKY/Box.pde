@@ -159,7 +159,7 @@ class PlatForm extends Obstacle {
   void death() {
     if (p.invincible ||health<=0) {
       super.death();
-      for (int i= 0 ; i<w; i+=100) {
+      for (int i= 0; i<w; i+=100) {
         entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
       }
     }
@@ -227,6 +227,7 @@ class Block extends Obstacle {
     h=200;
     health=8;
   }
+
   void death() {
     //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     invis=10;
@@ -249,7 +250,6 @@ class Block extends Obstacle {
     super.hit();
     vx+=(p.vx+6)*0.2;
     invis=10;
-
   }
   void knock() {
     super.knock();
@@ -264,6 +264,7 @@ class Block extends Obstacle {
 }
 
 class Bush extends Obstacle {
+  int debrisCooldown;
   Bush(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
@@ -278,6 +279,10 @@ class Bush extends Obstacle {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
+  void update() {
+    super.update();
+    if (debrisCooldown>0)debrisCooldown--;
+  }
   void display() {
     image(Bush, x, y, w, h);
     //fill(obstacleColor);
@@ -285,17 +290,18 @@ class Bush extends Obstacle {
   }
 
   void hit() {
-    // vx+=(p.vx+6)*0.2;
     super.hit();
     for (int i =0; i< 6; i++) {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(40)+impactForce*2, random(20)-20));
     }
   }
   void knock() {
-    super.knock();
-    if (p.invincible) super.death();
-    for (int i =0; i< 1; i++) {
+    if (p.invincible) death();
+
+    if (debrisCooldown==0) { 
+      super.knock();
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      debrisCooldown=4;
     }
   }
   void knockSound() {

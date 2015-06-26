@@ -2,7 +2,7 @@
 
 
 class Paralax extends Entity {
-  float angle, factor, heightLevel, opacity=255;
+  float angle,x, factor, heightLevel, opacity=255;
   PImage bg;
   Paralax() { // DUMMY
     super( 0, 0, 0, 0);

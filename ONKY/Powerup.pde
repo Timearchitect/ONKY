@@ -77,8 +77,8 @@ class Powerup extends Entity implements Cloneable {
 }
 
 
-class invisPowerup extends Powerup {
-  invisPowerup(int _x, int _y, int _time) {
+class InvisPowerup extends Powerup {
+  InvisPowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*1.5));
     powerupColor=color(255, 100, 0);
     icon = superIcon;
@@ -217,15 +217,15 @@ class LifePowerup extends Powerup {
     if (time<1)death();
   }
 }
-class teleportPowerup extends Powerup {
+class TeleportPowerup extends Powerup {
   int distance=900;
-  teleportPowerup(int _x, int _y, int _time) {
+  TeleportPowerup(int _x, int _y, int _time) {
     super(_x, _y, 1);
     powerups.add( this);
     powerupColor=color(0, 50, 255);
     icon= null;
   }
-  teleportPowerup(int _x, int _y, int _time, int _distance) {
+  TeleportPowerup(int _x, int _y, int _time, int _distance) {
     this(_x, _y, 1);
     distance=_distance;
   }
@@ -252,7 +252,7 @@ class teleportPowerup extends Powerup {
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       for (Obstacle o : obstacles) {
         //if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
-        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
+        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w +distance) {
           o.impactForce=60;  
           o.health=0;
           o.death();
@@ -277,7 +277,7 @@ class RandomPowerup extends Powerup {
 
     switch(int(random(5))) {
     case 0:
-      entities.add( new invisPowerup( _x, _y, _time)); 
+      entities.add( new InvisPowerup( _x, _y, _time)); 
       break;
     case 1:
       entities.add( new LaserPowerup( _x, _y, _time) );
@@ -289,7 +289,7 @@ class RandomPowerup extends Powerup {
       entities.add( new LifePowerup( _x, _y, _time) );
       break;
     case 4:
-      entities.add( new  teleportPowerup( _x, _y, _time) );
+      entities.add( new  TeleportPowerup( _x, _y, _time) );
       break;
     default:
       entities.add( new Powerup( _x, _y, _time));

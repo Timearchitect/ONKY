@@ -6,7 +6,7 @@ void loadObstacle() {
   entities.add(new Box(1500, int(floorHeight-200), 1) );
 
 
-  for (int i=2; i<90; i++) {
+  for (int i=2; i<100; i++) {
     minDifficulty+=0.3;
     maxDifficulty+=0.3;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
@@ -84,7 +84,11 @@ void loadObstacle() {
     case 22:
       spawnSlashArena(i*interval);
       break;
+    case 23:
+      spawnShell(i*interval);
+      break;
     default:
+
       spawnSingleWall(i*interval);
       spawnBush(i*interval);
     }
@@ -207,7 +211,7 @@ void spawnDuck(int x) {
   int index= int(random(3));
   if (index==0) entities.add(new IronBox(x, int(floorHeight-660) ) );
   else  entities.add(new Box(x, int(floorHeight-660) ) );
-  if (index==1) entities.add( new  teleportPowerup(x-150, int(floorHeight-350), 200, 500) );
+  if (index==1) entities.add( new  TeleportPowerup(x-150, int(floorHeight-350), 200, 500) );
   entities.add(new IronBox(x, int(floorHeight-860) ) ); 
   entities.add(new IronBox(x, int(floorHeight-460) ) );
   entities.add(new IronBox(x, int(floorHeight-260) ) );
@@ -263,7 +267,7 @@ void spawnFloatingBlock(int x) {
 }
 void spawnSteps(int x) {
   int index= int(random(4));
-  if (index==1) entities.add( new  teleportPowerup(x+300, int(floorHeight-350), 200, 1000) );
+  if (index==1) entities.add( new  TeleportPowerup(x+300, int(floorHeight-350), 200, 1000) );
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
   entities.add(new IronBox(x, int(floorHeight-200) ) );
@@ -460,43 +464,63 @@ void spawnTimeGate(int x) {
 void spawnSlashArena(int x) {
   int index= int(random(3));
 
-  entities.add( new  teleportPowerup(x+0, int(floorHeight-300), 100, 400) );
+  entities.add( new  TeleportPowerup(x+0, int(floorHeight-300), 100, 400) );
   entities.add(new Box(x+100, int(floorHeight-400) ) );
 
   if (index==0) {
-    entities.add( new  teleportPowerup(x+400, int(floorHeight-100), 100, 400) );
+    entities.add( new  TeleportPowerup(x+400, int(floorHeight-100), 100, 400) );
     entities.add(new Box(x+500, int(floorHeight-200) ) );
   } else if (index==1) {
-    entities.add( new  teleportPowerup(x+400, int(floorHeight-300), 100, 400) );
+    entities.add( new  TeleportPowerup(x+400, int(floorHeight-300), 100, 400) );
     entities.add(new Box(x+500, int(floorHeight-400) ) );
   } else {
-    entities.add( new  teleportPowerup(x+400, int(floorHeight-500), 100, 400) );
+    entities.add( new  TeleportPowerup(x+400, int(floorHeight-500), 100, 400) );
     entities.add(new Box(x+500, int(floorHeight-600) ) );
   }
   index= int(random(3));
   if (index==0) {
-    entities.add( new  teleportPowerup(x+800, int(floorHeight-100), 100, 400) );
+    entities.add( new  TeleportPowerup(x+800, int(floorHeight-100), 100, 400) );
     entities.add(new Box(x+900, int(floorHeight-200) ) );
   } else if (index==1) {
-    entities.add( new  teleportPowerup(x+800, int(floorHeight-300), 100, 400) );
+    entities.add( new  TeleportPowerup(x+800, int(floorHeight-300), 100, 400) );
     entities.add(new Box(x+900, int(floorHeight-400) ) );
   } else {
-    entities.add( new  teleportPowerup(x+800, int(floorHeight-500), 100, 400) );
+    entities.add( new  TeleportPowerup(x+800, int(floorHeight-500), 100, 400) );
     entities.add(new Box(x+900, int(floorHeight-600) ) );
   }
 }
 
-
 void spawnMetalWall(int x) {
+  int index= int(random(3));
 
-  entities.add(new teleportPowerup(x+400, 600, 600));
+  entities.add(new Box(x+0, int(floorHeight-200) ) );
+  entities.add(new Box(x+0, int(floorHeight-400) ) );
+  entities.add(new Box(x+0, int(floorHeight-600) ) );
+  entities.add(new Box(x+0, int(floorHeight-800) ) );
+
+  if (index==0)  entities.add(new TeleportPowerup(x+400, 600, 600));
   entities.add(new IronBox(x+600, int(floorHeight-200) ) ); // 3
   entities.add(new IronBox(x+800, int(floorHeight-200) ) ); // 3
   entities.add(new Tire(x+1000, int(floorHeight-200) ) ); // 3
 
-  entities.add(new teleportPowerup(x+400, 400, 600));
+  if (index==1) entities.add(new TeleportPowerup(x+400, 400, 600));
   entities.add(new IronBox(x+600, int(floorHeight-400) ) ); // 3
   entities.add(new IronBox(x+800, int(floorHeight-400) ) ); // 3
   entities.add(new Tire(x+1000, int(floorHeight-400) ) ); // 3
+}
+
+void spawnShell(int x) {
+  int index= int(random(3));
+
+  entities.add(new IronBox(x-200, int(floorHeight-300) ) );
+  entities.add(new IronBox(x+0, int(floorHeight-400) ) );
+  entities.add(new IronBox(x+200, int(floorHeight-400) ) );
+  entities.add(new Box(x+200, int(floorHeight-600) ) );
+
+  if (index==0) entities.add( new  TeleportPowerup(x+100, int(floorHeight-100), 100, 500) );
+  if (index==1) entities.add( new  RandomPowerup(x+100, int(floorHeight-100), 100) );
+
+  entities.add(new IronBox(x+200, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-200) ) );
 }
 

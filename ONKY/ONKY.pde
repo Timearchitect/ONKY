@@ -95,9 +95,9 @@ void setup() {
   loadParalax();
   loadObstacle();
 
-  entities.add(new invisPowerup(1000, 600, 2000));
-//  entities.add(new LaserPowerup(2200, 400, 600));
-  entities.add(new teleportPowerup(2400, 600, 600));
+  entities.add(new InvisPowerup(1000, 600, 2000));
+  //  entities.add(new LaserPowerup(2200, 400, 600));
+  entities.add(new TeleportPowerup(2400, 600, 600));
   entities.add(new IronBox(2600, int(floorHeight-200) ) ); // 3
   entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
@@ -287,7 +287,10 @@ void gameReset() {
   powerups.clear();
   debris.clear();
   background(0);
-  BGM.rewind();
+  BGM.pause();
+  BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
+  playSound(BGM);
+  BGM.loop();
   difficultyRange=10;
   minDifficulty=0;
   maxDifficulty=difficultyRange;
@@ -335,7 +338,7 @@ void loadParalax() {
   entities.add(new ParalaxObject(0, 290, 250, 250, 0.7)); 
   entities.add(new ParalaxObject(0, 120, 500, 500, 0.9));
 
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
+  //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
+ // ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
 
