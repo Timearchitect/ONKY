@@ -15,7 +15,7 @@ class Powerup extends Entity implements Cloneable {
     powerups.add( this);
   }
   void update() {
-    angle+=8;
+    angle+=4;
     offsetX=cos(radians(angle))*12;
     offsetY=sin(radians(angle))*12;
     x+=vx*speedFactor;
@@ -64,9 +64,12 @@ class Powerup extends Entity implements Cloneable {
     // fill(powerupColor);
     // rect(50+index*interval, 100, 100, 100);
     if (icon!=null)image(icon, 50+10+index*interval, 100+10, 100-20, 100-20);
-    fill(0, 100);
+    fill(0, 150);
     //println(spawnTime +" : "+time);
-    arc(50+w*0.5+index*interval, 100+h*0.5, 100, 100, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
+    //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
+    //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, (((PI*2)/spawnTime)*(time)-HALF_PI), PI*2-HALF_PI);
+    arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
+
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
@@ -174,7 +177,7 @@ class SlowPowerup extends Powerup {
   }
   void use() {
     speedFactor=0.5; //slowrate
-    time-=1*speedFactor;
+    time--;
     if (time<1)death();
   }
 }

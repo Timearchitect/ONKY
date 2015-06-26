@@ -5,8 +5,8 @@
  *
  */
 import ddf.minim.*;
-import javax.media.opengl.*;
-import processing.opengl.*;
+//import javax.media.opengl.*;
+//import processing.opengl.*;
 
 
 
