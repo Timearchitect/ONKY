@@ -74,7 +74,7 @@ class Tire extends Obstacle {
   }
 }
 class IronBox extends Obstacle {
-  float tx, ty;
+  int tx, ty;
   IronBox(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(150, 150, 150);
@@ -95,12 +95,22 @@ class IronBox extends Obstacle {
   }
   void update() {
     super.update();
-    float diffX=tx-x, diffY=ty-y;
-    x+=diffX*0.2*speedFactor;
-    y+=diffY*0.2*speedFactor;
+    if (x!=tx &&  y!=ty) {
+      float diffX=tx-x, diffY=ty-y;
+      x+=diffX*0.2*speedFactor;
+      y+=diffY*0.2*speedFactor;
+      if (round(x)==tx)x=tx;
+      if (round(y)==ty)y=ty;
+    }
   }
   void death() {
-    if (p.invincible ||health<=0)super.death();
+    if (p.invincible || health<=0) {
+      super.death();
+      for (int i =0; i< 4; i++) {
+        entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(30)-20));
+      }
+    }
+    playSound(ironBoxDestroySound);
   }
   void hit() {  // hit by punching & smashing
     super.hit();
@@ -129,7 +139,7 @@ class PlatForm extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    health=5;
+    health=4;
     obstacleColor = color(255, 50, 50);
   }
   PlatForm(int _x, int _y, int _w, int _h, boolean _hanging) {
@@ -147,7 +157,12 @@ class PlatForm extends Obstacle {
     }
   }
   void death() {
-    if (p.invincible ||health<=0)super.death();
+    if (p.invincible ||health<=0) {
+      super.death();
+      for (int i= 0 ; i<w; i+=100) {
+        entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+      }
+    }
   }
   void hitCollision() {  // hit by punching & smashing
   }
@@ -214,6 +229,7 @@ class Block extends Obstacle {
   }
   void death() {
     //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+    invis=10;
     for (int i =0; i< 1; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -233,8 +249,7 @@ class Block extends Obstacle {
     super.hit();
     vx+=(p.vx+6)*0.2;
     invis=10;
-    //  scaleFactor+=scaleFactor*0.05;
-    //  skakeFactor=50;
+
   }
   void knock() {
     super.knock();
@@ -291,7 +306,7 @@ class Bush extends Obstacle {
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-     // println("collision!!!!"); 
+      // println("collision!!!!"); 
       if (p.vx>5) {
         knock();
       }

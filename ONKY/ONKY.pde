@@ -95,17 +95,12 @@ void setup() {
   loadParalax();
   loadObstacle();
 
-  //entities.add(new invisPowerup(1000, 600, 2000));
+  entities.add(new invisPowerup(1000, 600, 2000));
 //  entities.add(new LaserPowerup(2200, 400, 600));
   entities.add(new teleportPowerup(2400, 600, 600));
   entities.add(new IronBox(2600, int(floorHeight-200) ) ); // 3
-  entities.add(new Box(2800, int(floorHeight-200) ) ); // 3
-    entities.add(new Tire(3000, int(floorHeight-200) ) ); // 3
-
-  entities.add(new teleportPowerup(2400, 400, 600));
-  entities.add(new IronBox(2600, int(floorHeight-400) ) ); // 3
-  entities.add(new Box(2800, int(floorHeight-400) ) ); // 3
-    entities.add(new Tire(3000, int(floorHeight-400) ) ); // 3
+  entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
+  entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
   // entities.add(new SlowPowerup(2200, 400, 1000));
   // entities.add(new RandomPowerup(2000, 400, 500)); 
@@ -209,7 +204,6 @@ void draw() {
 
   /* if( !paralaxLayers.contains( e)){   // works
    }*/
-
 
 
   /*  if (! e.getClass().isInstance(paralax) && ! e.getClass().isInstance(paralaxObject)) {   // works

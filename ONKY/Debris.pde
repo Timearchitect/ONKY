@@ -51,6 +51,37 @@ class BoxDebris extends Debris {
     popMatrix();
   }
 }
+class IronBoxDebris extends Debris {
+
+
+  IronBoxDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
+    super( _o, _x, _y, _vx, _vy);
+    VAngle=random(6)-3;
+    bounceFriction=0.7;
+    bounceForce=0.5;
+    w=30;
+    h=60;
+  }
+
+  void display() {
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(angle));
+    fill(owner.obstacleColor, int(opacity));
+    noStroke();
+    
+    beginShape();
+    vertex(-w, -h+25);
+    vertex(w, -h);
+    vertex(w, h);
+    vertex(-w, h+25);
+  
+    endShape(CLOSE);
+
+   // rect(-25, -25, 50, 50);
+    popMatrix();
+  }
+}
 
 class TireDebris extends Debris {
 
@@ -93,7 +124,26 @@ class GlassDebris extends Debris {
     popMatrix();
   }
 }
+class PlatFormDebris extends Debris {
 
+
+  PlatFormDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
+    super( _o, _x, _y, _vx, _vy);
+    VAngle=random(6)-3;
+    bounceFriction=0;
+    bounceForce=0;
+  }
+
+  void display() {
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(angle));
+    fill(owner.obstacleColor, int(opacity));
+    noStroke();
+    rect(-25, -25, 100, 25);
+    popMatrix();
+  }
+}
 class BushDebris extends Debris {
   float offsetX;
   BushDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {

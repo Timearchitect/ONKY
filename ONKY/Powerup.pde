@@ -34,13 +34,13 @@ class Powerup extends Entity implements Cloneable {
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
       //println("killed powerup");  
-      collect();
+      if (p.collectCooldown<1)collect();
     }
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       //println("Grab!!!!"); 
-      collect();
+      if (p.collectCooldown<1)collect();
     }
   }
   void collect() {
@@ -79,13 +79,13 @@ class Powerup extends Entity implements Cloneable {
 
 class invisPowerup extends Powerup {
   invisPowerup(int _x, int _y, int _time) {
-    super(_x, _y, _time*2);
+    super(_x, _y, int(_time*1.5));
     powerupColor=color(255, 100, 0);
     icon = superIcon;
-    x=_x;
-    y=_y;
-    w=100;
-    h=100;
+   // x=_x;
+   // y=_y;
+   // w=100;
+  //  h=100;
     // powerups.add( this);
   }
   void collect() {
@@ -94,7 +94,7 @@ class invisPowerup extends Powerup {
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
       p.vx=30;
-      p.invis=spawnTime;
+      if(p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
       p.invincible=true;  // activates supermario starpower
       BGM.pause();
       BGM = minim.loadFile("Super Mario - Invincibility Star.mp3");
@@ -111,19 +111,26 @@ class invisPowerup extends Powerup {
     }
   }
   void use() {
-    time-=1*speedFactor;
-    if (time<=0)death();
+    if (!dead) {
+      p.invincible=true;
+      p.vx=30;
+      time-=1*speedFactor;
+      if (time<=0) {
+        death();
+      }
+    }
   }
 }
 class LaserPowerup extends Powerup {
+  boolean shoot;
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     icon=laserIcon;
     powerupColor=color(255, 0, 0);
-    x=_x;
-    y=_y;
-    w=100;
-    h=100;
+   // x=_x;
+   // y=_y;
+   // w=100;
+   // h=100;
     // powerups.add( this);
   }
 
@@ -141,11 +148,14 @@ class LaserPowerup extends Powerup {
     }
   }
   void use() {
-    if (p.angle>6) {  
-      if (time%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
-    } else {
-      if (time%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
-    }
+
+      if (p.angle>6) {  
+        if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
+      } else {
+        if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, -1+sin(radians(p.angle))*30));
+      }
+
+     
     time-=1*speedFactor;
     if (time<1)death();
   }
@@ -155,10 +165,10 @@ class SlowPowerup extends Powerup {
   SlowPowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*0.3));
     powerupColor=color(100, 100, 100);
-    x=_x;
-    y=_y;
-    w=100;
-    h=100;
+   // x=_x;
+  //  y=_y;
+  //  w=100;
+   // h=100;
     icon=null;
     //powerups.add( this);
   }
@@ -182,14 +192,10 @@ class SlowPowerup extends Powerup {
 }
 class LifePowerup extends Powerup {
   LifePowerup(int _x, int _y, int _time) {
-    super(_x, _y, int(_time*0.5));
+    super(_x, _y, int(_time*0.1));
     powerups.add( this);
     powerupColor=color(50, 255, 50);
     icon= lifeIcon;
-    x=_x;
-    y=_y;
-    w=100;
-    h=100;
   }
   void collect() {
     if (!dead) {
@@ -201,12 +207,12 @@ class LifePowerup extends Powerup {
       }        
       catch(CloneNotSupportedException e) {
       }    
+      p.invis+=spawnTime;
       p.lives++;
       death();
     }
   }
   void use() {
-    p.invis=100;
     time-= 1*speedFactor;
     if (time<1)death();
   }
@@ -218,10 +224,6 @@ class teleportPowerup extends Powerup {
     powerups.add( this);
     powerupColor=color(0, 50, 255);
     icon= null;
-    x=_x;
-    y=_y;
-    w=100;
-    h=100;
   }
   teleportPowerup(int _x, int _y, int _time, int _distance) {
     this(_x, _y, 1);
@@ -238,27 +240,31 @@ class teleportPowerup extends Powerup {
       }        
       catch(CloneNotSupportedException e) {
       }    
+
+      p.x=x-w;
+      p.y=y;
       p.x+=distance;
-      p.vx=0;
-      //p.invincible=true;
-      playerOffsetX=distance+200;
-      background(255);
+      p.vx=-4;
+      p.vy=-4;
+      p.collectCooldown=20;
+      playerOffsetX=distance+100;
+     // background(255);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
-          skakeFactor=40;
-    speedFactor=0.05;
       for (Obstacle o : obstacles) {
-        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
+        //if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
+        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
           o.impactForce=60;  
+          o.health=0;
           o.death();
         }
       }
+      skakeFactor=40;
+      speedFactor=0.02;
       death();
     }
   }
   void use() {
-
-
-    p.invis=100;
+    p.invis+=50;
     time-= 1*speedFactor;
     if (time<1)death();
   }
@@ -268,8 +274,6 @@ class RandomPowerup extends Powerup {
     super(_x, _y, _time);
     icon= tokenIcon;
     powerupColor=color(100, 100, 100);
-    x=_x;
-    y=_y;
 
     switch(int(random(5))) {
     case 0:
@@ -287,7 +291,6 @@ class RandomPowerup extends Powerup {
     case 4:
       entities.add( new  teleportPowerup( _x, _y, _time) );
       break;
-
     default:
       entities.add( new Powerup( _x, _y, _time));
     }
