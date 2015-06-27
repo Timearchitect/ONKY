@@ -240,20 +240,32 @@ class Glass extends Obstacle {
 }
 class Block extends Obstacle {
   int invis;
+  float ay=2;
   Block(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(100, 100, 100);
     w=200;
     h=200;
-    health=8;
+    health=20;
   }
-
+  void damage(int i) {
+    hitBrightness=100;
+    health-=i;
+    //if (health<=0)death();
+    invis=4;
+  }
   void death() {
     //entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
-    invis=10;
-    for (int i =0; i< 1; i++) {
-      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+
+    if (p.invincible && invis>0) {
+      vy=-100;
+      skakeFactor=300;
+      scaleFactor=0.8;
+      vx=-p.vx;
+      playSound(smackSound);
+      for (int i =0; i< 5; i++)  entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(50)+impactForce*0.5, random(30)-50));
     }
+    invis=20;
   }
   void display() {
     if (invis>0)image(BlockSad, x, y, w, h);
@@ -261,18 +273,26 @@ class Block extends Obstacle {
   }
   void update() {
     super.update();
-    if (invis>=0)invis--;
+    if (invis>0)invis--;
     vx*=0.95;
+    vy*=0.95;
+    gravity();
     if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
   }
-
+  void gravity() {
+    if (y+h<floorHeight)vy+=ay;
+    else {
+      y=floorHeight-h;
+    }
+  }
   void hit() {
     super.hit();
     vx+=(p.vx+6)*0.2;
-    invis=10;
+    invis=20;
   }
   void knock() {
     super.knock();
+
     skakeFactor=100;
   }
   void knockSound() {

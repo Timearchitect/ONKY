@@ -46,7 +46,6 @@ class Player {
 
     spawnSpeedEffect();
 
-
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
       usedPowerup.get(i).use();
       if (usedPowerup.get(i).dead)usedPowerup.remove(usedPowerup.get(i));
@@ -163,11 +162,7 @@ class Player {
       invis=0;
       if (invincible) {  
         p.vx=speedLevel; 
-        BGM.pause();
-        BGM = regularSong;
-        BGM.setGain(-15);
-        playSound(BGM);
-        BGM.loop();
+        changeMusic(regularSong);
       }
       invincible=false;
     }

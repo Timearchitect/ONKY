@@ -21,7 +21,7 @@ class LaserProjectile extends Projectile {
     strokeWeight(10);
     stroke(255, 0, 0);
     fill(255);
-    ellipse(x+w, y, 75, 30);
+    ellipse(x+w, y, 75, 40);
     playSound(laserSound);
   }
 
@@ -29,8 +29,8 @@ class LaserProjectile extends Projectile {
     super.display();
 
     stroke(255, 0, 0);
-    strokeWeight(10);
-    line(x, y, x-vx, y-vy);
+    strokeWeight(12);
+    line(x, y, x-vx*1.5, y-vy*1.5);
 
     stroke(255);
     strokeWeight(5);
@@ -38,15 +38,15 @@ class LaserProjectile extends Projectile {
   }
 
   void collision() {
+    if ( floorHeight < y+vy ) {
+      death();
+    }
     if (!dead) {
       for (Obstacle o : obstacles) {
         if ( o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
           o.damage(1);
           death();
         }
-      }
-      if ( floorHeight < y+vy ) {
-        death();
       }
     }
   }
@@ -66,7 +66,7 @@ class LaserProjectile extends Projectile {
     strokeWeight(10);
     stroke(255, 0, 0);
     fill(255);
-    ellipse(int(x),int(y), 75, 75);
+    ellipse(int(x), int(y), 75, 75);
   }
 }
 

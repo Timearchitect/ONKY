@@ -18,12 +18,12 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound;
-AudioPlayer blockDestroySound;
+AudioPlayer blockDestroySound,  smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
 PImage Bush, Box, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree,Tree2, Mountain, Grass;
+PImage Tree, Tree2, Mountain, Grass;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
@@ -241,7 +241,7 @@ void smoothSlow() {
   // if (targetSpeedFactor!=speedFactor) {
   float speedDiff=targetSpeedFactor-speedFactor;
   flashOpacity=int(255-255*speedFactor);
-  speedFactor+=speedDiff*0.04;
+  speedFactor+=speedDiff*0.05;
   // }
 }
 void smoothAngle() {
@@ -282,7 +282,6 @@ void gameReset() {
 
   BGM.pause();
   BGM = regularSong;
-  BGM.setGain(-15);
   playSound(BGM);
   BGM.loop();
 
@@ -320,6 +319,12 @@ void playSound(AudioPlayer sound) {
     sound.play();
   }
 }
+void changeMusic(AudioPlayer song) {
+  BGM.pause();
+  BGM = song;
+  playSound(BGM);
+  BGM.loop();
+}
 void UpdateGUILife() {
   GUI.clear();
   GUI.beginDraw();
@@ -354,7 +359,7 @@ void loadImages() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   Tree =loadImage("treetile.png");
-    Tree2 =loadImage("treetile2.png");
+  Tree2 =loadImage("treetile2.png");
 
   Leaf  =loadImage("leaf.png");
   Block = loadImage("blockMad.png");
@@ -363,8 +368,10 @@ void loadImages() {
 void loadSound() {
   minim = new Minim(this);
   regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
+
   superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
   BGM = regularSong;
+  smackSound= minim.loadFile("sound/smack.wav");
   blockDestroySound= minim.loadFile("sound/blockDestroy.wav");
   boxDestroySound = minim.loadFile("sound/boxSmash.wav");
   boxKnockSound = minim.loadFile("sound/boxKnock.wav");
@@ -381,9 +388,10 @@ void loadSound() {
   laserSound= minim.loadFile("sound/laser2.wav");
   leafSound =  minim.loadFile("sound/rustle.wav");
   teleportSound =minim.loadFile("sound/teleport.wav");
+  regularSong.setGain(-10);
   laserSound.setGain(-20);
 
-  BGM.setGain(-15);
+
   BGM.play();
   BGM.loop();
 }
@@ -396,12 +404,12 @@ void loadGUILayer() {
 void loadParalax() {
 
   entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
-  entities.add(new ParalaxObject(Tree,0, 400, 50, 50, 0.02)); 
-  entities.add(new ParalaxObject(Tree2,255, 400, 50, 50, 0.02)); 
-  entities.add(new ParalaxObject(Tree,0, 420, 100, 100, 0.1)); 
-  entities.add(new ParalaxObject(Tree2,300, 420, 100, 100, 0.1)); 
-  entities.add(new ParalaxObject(Tree,0, 290, 250, 250, 0.2)); 
-  entities.add(new ParalaxObject(Tree,0, 120, 500, 500, 0.3));
+  entities.add(new ParalaxObject(Tree, 0, 400, 50, 50, 0.02)); 
+  entities.add(new ParalaxObject(Tree2, 255, 400, 50, 50, 0.02)); 
+  entities.add(new ParalaxObject(Tree, 0, 420, 100, 100, 0.1)); 
+  entities.add(new ParalaxObject(Tree2, 300, 420, 100, 100, 0.1)); 
+  entities.add(new ParalaxObject(Tree, 0, 290, 250, 250, 0.2)); 
+  entities.add(new ParalaxObject(Tree, 0, 120, 500, 500, 0.3));
 
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
