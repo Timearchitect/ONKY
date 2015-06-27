@@ -46,12 +46,9 @@ class Player {
 
     spawnSpeedEffect();
 
-    for (Powerup p : usedPowerup) {
-      //   p.update();
-      p.use();
-      // p.displayIcon();
-    }
-    for (int i=usedPowerup.size ()-1; i>=0; i--) {
+
+    for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
+      usedPowerup.get(i).use();
       if (usedPowerup.get(i).dead)usedPowerup.remove(usedPowerup.get(i));
     }
   }

@@ -38,7 +38,7 @@ Player p = new Player();
 
 boolean debug, mute;
 int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200;
-float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.8;
+float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
 final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100;
 
 void setup() {
@@ -99,27 +99,30 @@ void draw() {
   renderObject=0; // for counting objects on screen
 
   displayFloor();
+
   p.update();
   p.display();
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
+  for (int i=obstacles.size () -1; i>=0; i--) {
+    if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
+  }
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(scaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
       renderObject++;
       o.update();
-      // o.gravity();
       o.display();
     }
   }
-  for (int i=obstacles.size () -1; i>=0; i--) {
-    if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
-  }
+
   if (debug) {
     fill(0, 255, 0, 100);
     rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
   }
   //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
-
+  for (int i=powerups.size () -1; i>=0; i--) {
+    if (powerups.get(i).dead)powerups.remove(powerups.get(i));
+  }
   for (Powerup pow : powerups) {
     if (pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
       renderObject++;
@@ -127,38 +130,34 @@ void draw() {
       pow.display();
     }
   }
-  for (int i=powerups.size () -1; i>=0; i--) {
-    if (powerups.get(i).dead)powerups.remove(powerups.get(i));
-  }
+
 
   //-----------------------------         Debris    / Entity       -----------------------------------------------------------
 
-  for (Debris d : debris) {
-    d.update();
-    d.display();
-  }
+
   for (int i=debris.size () -1; i>=0; i--) {
+    debris.get(i).update();
     if (debris.get(i).dead)debris.remove(debris.get(i));
   }
+  for (Debris d : debris)d.display();
 
   //-----------------------------         Particle     / Entity       -----------------------------------------------------------
 
-  for (Particle par : particles) {
-    par.update();
-    par.display();
-  }
+
   for (int i=particles.size () -1; i>=0; i--) {
+    particles.get(i).update();
     if (particles.get(i).dead)particles.remove(particles.get(i));
   }
+  for (Particle par : particles)par.display();
+
   //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
 
-  for (Projectile pro : projectiles) {
-    pro.update();
-    pro.display();
-  }
+
   for (int i=projectiles.size () -1; i>=0; i--) {
+    projectiles.get(i).update();
     if (projectiles.get(i).dead)projectiles.remove(projectiles.get(i));
   }
+  for (Projectile pro : projectiles)pro.display();
 
   //-----------------------------         Entities           -----------------------------------------------------------
 
@@ -198,27 +197,33 @@ void draw() {
   }
 
 
-  image(GUI, 0, 0); 
+  image(GUI, 0, 0); // add GUIlayer
   calcDispScore();
   if (debug)debugScreen();
   if (p.lives<0)gameReset();
 }
 
 void shake() {
-  if (MAX_SHAKE<skakeFactor) skakeFactor=MAX_SHAKE;
-  skakeFactor*=shakeDecay;
-  shakeX=random(skakeFactor)-skakeFactor*0.5;
-  shakeY=random(skakeFactor)-skakeFactor*0.5;
+  if (skakeFactor>0.5) {
+    if (MAX_SHAKE<skakeFactor) skakeFactor=MAX_SHAKE;
+    skakeFactor*=shakeDecay;
+    shakeX=random(skakeFactor)-skakeFactor*0.5;
+    shakeY=random(skakeFactor)-skakeFactor*0.5;
+  }
 }
 void smoothOffset() {
-  float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
-  playerOffsetX+=offsetDiff*0.02;
+  if (defaultPlayerOffsetX != round(playerOffsetX)) {
+    float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
+    playerOffsetX+=offsetDiff*0.02;
+  }
 }
 void smoothScale() {
-  float scaleDiff=targetScaleFactor-scaleFactor;
-  scaleFactor+=scaleDiff*0.1;
-  // targetScaleFactor=1;
-  // scaleFactor=1;
+  //if (round(targetScaleFactor)!=round(scaleFactor)) {
+    float scaleDiff=targetScaleFactor-scaleFactor;
+    scaleFactor+=scaleDiff*0.1;
+    // targetScaleFactor=1;
+    // scaleFactor=1;
+ // }
 }
 void smoothSlow() {
   float speedDiff=targetSpeedFactor-speedFactor;

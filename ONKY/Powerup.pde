@@ -253,7 +253,7 @@ class TeleportPowerup extends Powerup {
           o.death();
         }
       }
-      skakeFactor=50;
+      skakeFactor=200;
       speedFactor=0.02;
       death();
     }
