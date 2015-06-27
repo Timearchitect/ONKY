@@ -327,8 +327,3 @@ class Bush extends Obstacle {
   }
 }
 
-
-// kommentar
-
-// hejasn
-

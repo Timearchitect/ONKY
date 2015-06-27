@@ -94,6 +94,7 @@ class Player {
   void collision() {
     if (invis==0) {
       lives--;
+      UpdateGUILife(); // updateGUI
       playSound(ughSound);
       screenAngle=-6;
       background(255, 0, 0);
@@ -163,7 +164,7 @@ class Player {
       if (invincible) {  
         p.vx=speedLevel; 
         BGM.pause();
-        BGM = minim.loadFile("music/KillerBlood-The Black(Paroto).mp3");
+        BGM = regularSong;
         BGM.setGain(-15);
         playSound(BGM);
         BGM.loop();
@@ -256,7 +257,7 @@ class Player {
     cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
   }
   void reset() {
-     y=floorHeight;
+    y=floorHeight;
     vy=0;
     lives=MAX_LIFE;
     x=0;

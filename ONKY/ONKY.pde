@@ -13,7 +13,7 @@ PGraphics GUI;
 
 int renderObject;
 Minim minim;
-AudioPlayer BGM,regularSong,superSong;
+AudioPlayer BGM, regularSong, superSong;
 AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
@@ -54,6 +54,11 @@ void setup() {
 
   loadImages();
   loadSound();
+  loadGUILayer();
+
+
+  //UpdateGUILife();
+
 
   loadParalax();
   loadObstacle();
@@ -192,7 +197,8 @@ void draw() {
     pow.displayIcon();
   }
 
-  displayLife();
+
+  image(GUI, 0, 0); 
   calcDispScore();
   if (debug)debugScreen();
   if (p.lives<0)gameReset();
@@ -265,6 +271,9 @@ void gameReset() {
   speedLevel=0;
   loadObstacle();
   p.reset();
+  UpdateGUILife();
+
+
   speedFactor=1;
   targetSpeedFactor=1;
   score=0;
@@ -290,9 +299,11 @@ void playSound(AudioPlayer sound) {
     sound.play();
   }
 }
-void displayLife() {
-  for (int i=0; i<p.lives; i++)
-    image(p.Life, int(50+i*50), int(60), 40, 40);
+void UpdateGUILife() {
+  GUI.clear();
+  GUI.beginDraw();
+  for (int i=0; i<p.lives; i++) GUI.image(p.Life, int(50+i*50), int(60), 40, 40);
+  GUI.endDraw();
 }
 
 void loadImages() {
@@ -321,8 +332,8 @@ void loadImages() {
 }
 void loadSound() {
   minim = new Minim(this);
-  regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).mp3");
-  superSong = minim.loadFile("music/Super Mario - Invincibility Star.mp3");
+  regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
+  superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
   BGM = regularSong;
   boxDestroySound = minim.loadFile("sound/boxSmash.wav");
   boxKnockSound = minim.loadFile("sound/boxKnock.wav");
@@ -345,6 +356,12 @@ void loadSound() {
   BGM.play();
   BGM.loop();
 }
+void loadGUILayer() {
+  GUI=createGraphics(width, height);
+  GUI.beginDraw();
+  GUI.endDraw();
+  UpdateGUILife();
+}
 void loadParalax() {
 
   entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
@@ -355,7 +372,7 @@ void loadParalax() {
   entities.add(new ParalaxObject(0, 290, 250, 250, 0.6)); 
   entities.add(new ParalaxObject(0, 120, 500, 500, 0.8));
 
-  //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
-  // ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
+  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
+  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
 
