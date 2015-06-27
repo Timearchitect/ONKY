@@ -136,7 +136,7 @@ class Player {
       onGround=true;
       y=top-h;
       vy=0;
-      angle=5;
+      angle=0;
     } else {
       onGround=false;
     }
