@@ -22,7 +22,7 @@ AudioPlayer leafSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  laserIcon, superIcon, tokenIcon, lifeIcon ;
-PImage Bush, Box, Leaf, Block, BlockSad ;
+PImage Bush, Box, Leaf, Block, BlockSad ,ironBox ,ironBox2,ironBox3;
 PImage Tree, Mountain, Grass;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -332,6 +332,9 @@ void loadImages() {
   lifeIcon = loadImage("oneup.png");
 
   //Obstacle graphics
+  ironBox = loadImage("metalBox1.png");
+  ironBox2= loadImage("metalBox2.png");
+  ironBox3= loadImage("metalBox3.png");
   Box= loadImage("woodenBox.png");
   Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");

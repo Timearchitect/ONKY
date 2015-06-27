@@ -92,14 +92,23 @@ class IronBox extends Obstacle {
   }
   void display() {
     super.display();
-    stroke(250, 250, 250);
-    strokeWeight(8);
-    point(x+10, y+10);
-    point(x+w-10, y+10);
-    point(x+w-10, y+h-10);
-    point(x+10, y+h-10);
+    /* stroke(250, 250, 250);
+     strokeWeight(8);
+     point(x+10, y+10);
+     point(x+w-10, y+10);
+     point(x+w-10, y+h-10);
+     point(x+10, y+h-10);
+     
+     strokeWeight(1);
+     */
 
-    strokeWeight(1);
+    if (health==5) {
+      image(ironBox, x, y, w, h);
+    } else if (health>2) {
+      image(ironBox2, x, y, w, h);
+    } else {
+      image(ironBox3, x, y, w, h);
+    }
   }
   void update() {
     super.update();
