@@ -240,8 +240,9 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
-  if (p.invincible)fill(255, 50, 0);
-  else fill(0);
+  //if (p.invincible)fill(255, 50, 0);
+ // else fill(128,181,113);
+  fill(128,181,113);
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }

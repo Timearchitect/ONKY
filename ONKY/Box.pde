@@ -320,8 +320,52 @@ class Bush extends Obstacle {
       if (p.vx>5) {
         knock();
       }
-      impactForce=p.vx; 
+      impactForce=p.vx;
     }
+  }
+}
+class Grass extends Obstacle {
+  int margin=25;
+  Grass(int _x, int _y, int _w, int _h) {
+    super(_x, _y);
+    w=_w;
+    h=_h;
+    obstacleColor = color(100, 255, 100);
+  }
+
+  void display() {
+  //  super.display();
+    image(Grass,x,y-margin,w,h);
+  }
+
+  void hitCollision() {  // hit by punching & smashing
+  }
+}
+class Water extends Obstacle {
+  int debrisCooldown;
+  Water(int _x, int _y, int _w, int _h) {
+    super(_x, _y);
+    w=_w;
+    h=_h;
+    obstacleColor = color(0, 0, 255);
+  }
+
+  void display() {
+    super.display();
+
+
+    
+  }
+  void death() {
+    if (p.invincible ||health<=0) {
+      super.death();
+      playSound(ironBoxDestroySound);
+      for (int i= 0; i<w; i+=100) {
+        entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+      }
+    }
+  }
+  void hitCollision() {  // hit by punching & smashing
   }
 }
 

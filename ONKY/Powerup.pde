@@ -82,11 +82,7 @@ class InvisPowerup extends Powerup {
     super(_x, _y, int(_time*1.5));
     powerupColor=color(255, 100, 0);
     icon = superIcon;
-   // x=_x;
-   // y=_y;
-   // w=100;
-  //  h=100;
-    // powerups.add( this);
+
   }
   void collect() {
     if (!dead) {
@@ -127,11 +123,6 @@ class LaserPowerup extends Powerup {
     super(_x, _y, _time);
     icon=laserIcon;
     powerupColor=color(255, 0, 0);
-   // x=_x;
-   // y=_y;
-   // w=100;
-   // h=100;
-    // powerups.add( this);
   }
 
   void collect() {
@@ -204,6 +195,7 @@ class LifePowerup extends Powerup {
       }    
       p.invis+=spawnTime;
       p.lives++;
+      UpdateGUILife();
       death();
     }
   }

@@ -6,10 +6,10 @@ void loadObstacle() {
   entities.add(new Box(1500, int(floorHeight-200), 1) );
 
 
-  for (int i=2; i<100; i++) {
+  for (int i=0; i<100; i++) {
     minDifficulty+=0.3;
     maxDifficulty+=0.3;
-    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-8);
+    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-10);
 
     switch(difficulty) {
     case -1:
@@ -88,13 +88,17 @@ void loadObstacle() {
       spawnShell(i*interval);
       break;
     default:
-
       spawnSingleWall(i*interval);
       spawnBush(i*interval);
     }
+    spawnFloor(i*interval);
   }
 }
-
+void spawnFloor(int x) {
+  for (int i=0; i<interval; i+=200) {
+    entities.add(new Grass(x+i, int(floorHeight), 200, 200 ) );
+  }
+}
 void spawnDoubleWall(int x) {
   int breakableIndex= int(random(3))+1;
   switch(breakableIndex) {
@@ -473,9 +477,11 @@ void spawnSlashArena(int x) {
   } else if (index==1) {
     entities.add( new  TeleportPowerup(x+400, int(floorHeight-300), 100, 400) );
     entities.add(new Box(x+500, int(floorHeight-400) ) );
+    entities.add(new PlatForm(x+500, int(floorHeight-200), 200, 25, true) );
   } else {
     entities.add( new  TeleportPowerup(x+400, int(floorHeight-500), 100, 400) );
     entities.add(new Box(x+500, int(floorHeight-600) ) );
+    entities.add(new PlatForm(x+500, int(floorHeight-400), 200, 25, true) );
   }
   index= int(random(3));
   if (index==0) {
@@ -484,9 +490,11 @@ void spawnSlashArena(int x) {
   } else if (index==1) {
     entities.add( new  TeleportPowerup(x+800, int(floorHeight-300), 100, 400) );
     entities.add(new Box(x+900, int(floorHeight-400) ) );
+    entities.add(new PlatForm(x+900, int(floorHeight-200), 200, 25, true) );
   } else {
     entities.add( new  TeleportPowerup(x+800, int(floorHeight-500), 100, 400) );
     entities.add(new Box(x+900, int(floorHeight-600) ) );
+    entities.add(new PlatForm(x+900, int(floorHeight-400), 200, 25, true) );
   }
 }
 
