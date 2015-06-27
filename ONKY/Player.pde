@@ -141,14 +141,14 @@ class Player {
     }
   }
   void checkIfGround() {
-    if (floorHeight<y+h) { 
+    /*if (floorHeight<y+h) { 
       if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
       jumpCount=MAX_JUMP;
       if (punching && ! onGround)stomp() ;
       onGround=true;
       y=floorHeight-h;
       angle=2;
-    }
+    }*/
   }
   void stomp() {
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
@@ -254,7 +254,7 @@ class Player {
     cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
   }
   void reset() {
-    y=floorHeight;
+    y=floorHeight-h;
     vy=0;
     lives=MAX_LIFE;
     x=0;

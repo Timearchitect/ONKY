@@ -22,8 +22,8 @@ AudioPlayer leafSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  laserIcon, superIcon, tokenIcon, lifeIcon ;
-PImage Bush,Box,Leaf, Block,BlockSad ;
-PImage Tree,Mountain,Grass
+PImage Bush, Box, Leaf, Block, BlockSad ;
+PImage Tree, Mountain, Grass;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
@@ -65,6 +65,7 @@ void setup() {
 
   loadParalax();
   loadObstacle();
+  p.y=floorHeight-p.h;
 
   entities.add(new InvisPowerup(1000, 600, 1500));
   //  entities.add(new LaserPowerup(2200, 400, 600));
@@ -218,16 +219,15 @@ void smoothOffset() {
   if (defaultPlayerOffsetX != round(playerOffsetX)) {
     float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
     playerOffsetX+=offsetDiff*0.02;
-    
   }
 }
 void smoothScale() {
   //if (round(targetScaleFactor)!=round(scaleFactor)) {
-    float scaleDiff=targetScaleFactor-scaleFactor;
-    scaleFactor+=scaleDiff*0.1;
-    // targetScaleFactor=1;
-    // scaleFactor=1;
- // }
+  float scaleDiff=targetScaleFactor-scaleFactor;
+  scaleFactor+=scaleDiff*0.1;
+  // targetScaleFactor=1;
+  // scaleFactor=1;
+  // }
 }
 void smoothSlow() {
   float speedDiff=targetSpeedFactor-speedFactor;
@@ -244,8 +244,8 @@ void adjustZoomLevel() {
 }
 void displayFloor() {
   //if (p.invincible)fill(255, 50, 0);
- // else fill(128,181,113);
-  fill(128,181,113);
+  // else fill(128,181,113);
+  fill(128, 181, 113);
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }

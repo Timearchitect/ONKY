@@ -21,19 +21,19 @@ class Box extends Obstacle {
     super.display();
     /*
     stroke(155, 155, 100);
-    strokeWeight(8);
-    line(x, y, x+w, y+h);
-    line(x, y+h, x+w, y);
-    if (type==1) { 
-      fill(255, 255, 180);
-      textAlign(CENTER);
-      textSize(160);
-      text("?", x+w*0.5, y+h*0.8);
-      textAlign(LEFT);
-    }
-    strokeWeight(1);
-    */
-    image(Boxd,y,w,h);
+     strokeWeight(8);
+     line(x, y, x+w, y+h);
+     line(x, y+h, x+w, y);
+     if (type==1) { 
+     fill(255, 255, 180);
+     textAlign(CENTER);
+     textSize(160);
+     text("?", x+w*0.5, y+h*0.8);
+     textAlign(LEFT);
+     }
+     strokeWeight(1);
+     */
+    image(Box, x, y, w, h);
   }
   void hit() {
     super.hit();
@@ -335,10 +335,11 @@ class Grass extends Obstacle {
     h=_h;
     obstacleColor = color(100, 255, 100);
   }
-
+  void death() {
+  }
   void display() {
-  //  super.display();
-    image(Grass,x,y-margin,w,h);
+    //  super.display();
+    image(Grass, x, y-margin, w, h);
   }
 
   void hitCollision() {  // hit by punching & smashing
@@ -355,20 +356,20 @@ class Water extends Obstacle {
 
   void display() {
     super.display();
-
-
-    
+    fill(150, 150, 255);
+    rect(x, y, w, 25);
   }
-  void death() {
-    if (p.invincible ||health<=0) {
-      super.death();
-      playSound(ironBoxDestroySound);
-      for (int i= 0; i<w; i+=100) {
-        entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+  void collision() {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      if (p.invincible) {
+        //if (p.vy<0)p.vy=0;
+        p.y=y-p.h;
       }
+      impactForce=p.vx;
     }
   }
-  void hitCollision() {  // hit by punching & smashing
+
+  void death() {
   }
 }
 

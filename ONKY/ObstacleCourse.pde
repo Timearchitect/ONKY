@@ -4,99 +4,130 @@ float minDifficulty=0, maxDifficulty=difficultyRange;
 void loadObstacle() {
 
   entities.add(new Box(1500, int(floorHeight-200), 1) );
+      spawnFloor(-interval);   // behind floor
+      spawnFloor(0);  // first floor
 
 
-  for (int i=0; i<100; i++) {
+  for (int i=1; i<100; i++) {
     minDifficulty+=0.3;
     maxDifficulty+=0.3;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-10);
 
     switch(difficulty) {
-    case -1:
+    case -2:
+      spawnFloor(i*interval);
       spawnBush(i*interval);
       break;
-    case 0:
+    case -1:
+      spawnFloor(i*interval);
       spawnSingleWall(i*interval);
       break;
-    case 1:
+    case 0:
+      spawnFloor(i*interval);
       spawnTires(i*interval);
       break;
+    case 1:
+      spawnWater(i*interval);
+      break;
     case 2:
+      spawnFloor(i*interval);
       spawnDuck(i*interval);
       break;
     case 3:
+      spawnFloor(i*interval);
       spawnFloatingBlock(i*interval);
       break;
     case 4:
+      spawnFloor(i*interval);
       spawnDoubleWall(i*interval);
       break;
     case 5:
+      spawnFloor(i*interval);
       spawnTirePool(i*interval);
       break;
     case 6:
+      spawnFloor(i*interval);
       spawnMetalWall(i*interval);
       break;
     case 7:
+      spawnFloor(i*interval);
       spawnHeap(i*interval);
       break;
     case 8:
+      spawnFloor(i*interval);
       spawnBlock(i*interval);
       break;
     case 9:
+      spawnFloor(i*interval);
       spawnTireTower(i*interval);
       break;
     case 10:
+      spawnFloor(i*interval);
       spawnBoxDuck(i*interval);
       break;
     case 11:
+      spawnFloor(i*interval);
       spawnPlatform(i*interval);
       break;
     case 12:
+      spawnFloor(i*interval);
       spawnBoxPlatform(i*interval);
       break;
     case 13:
+      spawnFloor(i*interval);
       spawnBarrier(i*interval);
       break;
     case 14:
+      spawnFloor(i*interval);
       spawnBiuldingFrame(i*interval);
       break;
     case 15:
+      spawnFloor(i*interval);
       spawnSteps(i*interval);
       break;
     case 16:
+      spawnFloor(i*interval);
       spawnBlocks(i*interval);
       break;
     case 17:
+      spawnFloor(i*interval);
       spawnTunnel(i*interval);
       break;  
     case 18:
+      spawnFloor(i*interval);
       spawnTowerFrame(i*interval);
       break;
     case 19:
+      spawnFloor(i*interval);
       spawnLaserArena(i*interval);
       break;
     case 20:
+      spawnFloor(i*interval);
       spawnBoxBlock(i*interval);
       break;
     case 21:
+      spawnFloor(i*interval);
       spawnTimeGate(i*interval);
       break;
     case 22:
+      spawnFloor(i*interval);
       spawnSlashArena(i*interval);
       break;
     case 23:
+      spawnFloor(i*interval);
       spawnShell(i*interval);
       break;
     default:
-      spawnSingleWall(i*interval);
-      spawnBush(i*interval);
+          //spawnWater(i*interval);
+      spawnFloor(i*interval);
+       spawnSingleWall(i*interval);
+       spawnBush(i*interval);
     }
-    spawnFloor(i*interval);
   }
 }
 void spawnFloor(int x) {
-  for (int i=0; i<interval; i+=400) {
-    entities.add(new Grass(x+i, int(floorHeight), 400, 400 ) );
+  for (int i=0; i<interval; i+=200) {
+    entities.add(new Grass(x+i, int(floorHeight), 200, 200 ) );
   }
 }
 void spawnDoubleWall(int x) {
@@ -530,5 +561,20 @@ void spawnShell(int x) {
 
   entities.add(new IronBox(x+200, int(floorHeight-200) ) );
   entities.add(new IronBox(x+400, int(floorHeight-200) ) );
+}
+void spawnWater(int x) {
+  entities.add(new Box(x+400, int(floorHeight-100) ) );
+  entities.add(new Box(x+600, int(floorHeight-100) ) );
+  entities.add(new Box(x+800, int(floorHeight-100) ) );
+
+  entities.add(new Box(x+600, int(floorHeight-300) ) );
+  entities.add(new Box(x+600, int(floorHeight-500) ) );
+
+  entities.add(new Box(x+1400, int(floorHeight-100) ) );
+  entities.add(new Box(x+1600, int(floorHeight-100) ) );
+
+  for (int i=0; i<interval; i+=200) {
+    entities.add(new Water(x+i, int(floorHeight), 200, 200 ) );
+  }
 }
 
