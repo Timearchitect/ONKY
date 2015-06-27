@@ -267,7 +267,7 @@ void spawnFloatingBlock(int x) {
 }
 void spawnSteps(int x) {
   int index= int(random(4));
-  if (index==1) entities.add( new  TeleportPowerup(x+300, int(floorHeight-350), 200, 1000) );
+  if (index==1) entities.add( new  TeleportPowerup(x+300, int(floorHeight-300), 200, 1000) );
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
   entities.add(new IronBox(x, int(floorHeight-200) ) );

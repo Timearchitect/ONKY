@@ -97,7 +97,7 @@ class InvisPowerup extends Powerup {
       if(p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
       p.invincible=true;  // activates supermario starpower
       BGM.pause();
-      BGM = minim.loadFile("Super Mario - Invincibility Star.mp3");
+      BGM = superSong;
       playSound(BGM);
       BGM.loop();
 
@@ -165,12 +165,7 @@ class SlowPowerup extends Powerup {
   SlowPowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*0.3));
     powerupColor=color(100, 100, 100);
-   // x=_x;
-  //  y=_y;
-  //  w=100;
-   // h=100;
     icon=null;
-    //powerups.add( this);
   }
 
   void collect() {
@@ -233,7 +228,7 @@ class TeleportPowerup extends Powerup {
     if (!dead) {
       tokens++;
       playSound(collectSound);
-      playSound(sliceSound);
+      playSound(teleportSound);
       particles.add( new SpinParticle(  int(x), int(y)));
       try {
         p.usedPowerup.add(this.clone());
@@ -258,7 +253,7 @@ class TeleportPowerup extends Powerup {
           o.death();
         }
       }
-      skakeFactor=40;
+      skakeFactor=50;
       speedFactor=0.02;
       death();
     }

@@ -69,15 +69,15 @@ class speedParticle extends Particle {
 }
 
 class slashParticle extends Particle {
-  int type,distance;
-  
+  int type, distance;
+
   slashParticle(int _x, int  _y, int _type) {
     super( _x, _y);
     particles.add(this);
     type=_type;
   }
-    slashParticle(int _x, int  _y, int _type,int _distance) {
-    this( _x, _y,_type);
+  slashParticle(int _x, int  _y, int _type, int _distance) {
+    this( _x, _y, _type);
     distance=_distance;
   }
 
@@ -107,7 +107,7 @@ class slashParticle extends Particle {
     }
     if (type==5) {  // special
       stroke(0, 50, 255);
-      line(x-distance,y,x+100,y);
+      line(x-distance, y, x, y);
     }
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
@@ -130,7 +130,7 @@ class slashParticle extends Particle {
       curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
     }
     if (type==5) {
-      line(x-distance,y,x+100,y);
+      line(x-distance, y, x, y);
     }
     strokeWeight(1);
   }
@@ -174,17 +174,16 @@ class LineParticle extends Particle {
 class SpinParticle extends Particle {
   float size=100, angle;
   Player player;
-  SpinParticle( Player _player) {
-    super( 0, 0);
-    particles.add(this);
-    player=_player;
-    angle=random(0, 360);
-  }
+
   SpinParticle( int _x, int _y) {
     super( _x, _y);
     particles.add(this);
     size=150;
     angle=random(0, 360);
+  }
+    SpinParticle( Player _player) {
+    this( 0, 0);
+    player=_player;
   }
   void update() {
 
@@ -226,6 +225,26 @@ class smokeParticle extends Particle {
     fill(255, int(opacity));
     noStroke();
     ellipse(x, y, w, h);
+  }
+}
+
+class sparkParticle extends Particle {
+  float  size;
+  color particleColor;
+  sparkParticle(int _x, int _y, int _size, color _particleColor) {
+    super( _x, _y);
+    particles.add(this);
+    particleColor=_particleColor;
+    size=_size;
+  }
+
+  void update() {
+    size*=1+0.1*speedFactor;
+    if (opacity>0)opacity*=1-0.3*speedFactor;
+    if (opacity<=1)death();
+  }
+
+  void display() {
   }
 }
 

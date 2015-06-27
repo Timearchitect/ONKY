@@ -1,5 +1,5 @@
 abstract class Debris extends Entity {
-  float opacityDecay=-2, angle, VAngle=1, ax, ay=0.9, opacity=255, bounceFriction, bounceForce;
+  float opacityDecay=-3, angle, VAngle=1, ax, ay=0.9, opacity=255, bounceFriction, bounceForce;
   Obstacle owner; 
 
   Debris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
@@ -57,8 +57,9 @@ class IronBoxDebris extends Debris {
   IronBoxDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _o, _x, _y, _vx, _vy);
     VAngle=random(6)-3;
-    bounceFriction=0.7;
-    bounceForce=0.5;
+    bounceFriction=0;
+    bounceForce=0;
+    opacityDecay=-5;
     w=30;
     h=60;
   }
@@ -69,32 +70,36 @@ class IronBoxDebris extends Debris {
     rotate(radians(angle));
     fill(owner.obstacleColor, int(opacity));
     noStroke();
-    
+
     beginShape();
     vertex(-w, -h+25);
     vertex(w, -h);
     vertex(w, h);
     vertex(-w, h+25);
-  
+
     endShape(CLOSE);
 
-   // rect(-25, -25, 50, 50);
+    // rect(-25, -25, 50, 50);
     popMatrix();
   }
 }
 
 class TireDebris extends Debris {
 
-
+  int cooldown;
   TireDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _o, _x, _y, _vx, _vy);
     bounceFriction=1;
     bounceForce=0.8;
   }
-
+  void update() {
+    super.update();
+    if (cooldown>0)cooldown--;
+  }
   void hitFloor() {
     super.hitFloor();
-    if (opacity>50)playSound(rubberSound);
+    if (cooldown<1 &&opacity>50)playSound(rubberSound);
+    cooldown=10;
   }
   void display() {
     stroke(0, int(opacity));

@@ -9,16 +9,17 @@ import ddf.minim.*;
 //import processing.opengl.*;
 
 
-
+PGraphics GUI;
 
 int renderObject;
 Minim minim;
-AudioPlayer BGM;
+AudioPlayer BGM,regularSong,superSong;
 AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
-AudioPlayer rubberSound;
+AudioPlayer rubberSound, rubberKnockSound;
+AudioPlayer leafSound;
 
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage Block, laserIcon, superIcon, tokenIcon, lifeIcon, Bush, Tree, Grass, Leaf, BlockSad, Mountain;
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -31,8 +32,8 @@ ArrayList<Debris> debris = new ArrayList<Debris>();
 ArrayList<Projectile> projectiles= new ArrayList<Projectile>();
 ArrayList<Particle> particles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
-Paralax paralax= new Paralax();
-ParalaxObject paralaxObject=new ParalaxObject();
+//Paralax paralax= new Paralax();
+//ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
 
 boolean debug, mute;
@@ -51,51 +52,13 @@ void setup() {
    hint(DISABLE_TEXTURE_MIPMAPS);
    ((PGraphicsOpenGL)g).textureSampling(2);*/
 
-  p.SpriteSheetRunning = loadImage("onky_running3.png");
-  p.FrontFlip = loadImage("frontFlip.png");
-  p.Life = loadImage("extraLife.png");
-  p.Jump = loadImage("jump.png");
-  p.DownDash = loadImage("downDash.png");
-  p.Slide = loadImage("slide.png");
-  laserIcon = loadImage("laserpower.png");
-  tokenIcon = loadImage("token.png");
-  superIcon = loadImage("speedpower.png");
-  lifeIcon = loadImage("oneup.png");
-
-  Mountain= loadImage("backgroundfull.png");
-  Grass= loadImage("grasstile.png");
-  Bush = loadImage("bush.png");
-  Tree =loadImage("treetile.png");
-  Leaf  =loadImage("leaf.png");
-  Block = loadImage("blockMad.png");
-  BlockSad = loadImage("blockSad.png");
-  // we pass this to Minim so that it can load files from the data directory
-  minim = new Minim(this);
-  // loadFile will look in all the same places as loadImage does.
-  // this means you can find files that are in the data folder and the 
-  // sketch folder. you can also pass an absolute path, or a URL.
-  BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
-  boxDestroySound = minim.loadFile("boxSmash.wav");
-  boxKnockSound = minim.loadFile("boxKnock.wav");
-  ironBoxDestroySound = minim.loadFile("ironBoxSmash.wav");
-  ironBoxKnockSound = minim.loadFile("ironBoxKnock.wav");
-  shatterSound = minim.loadFile("shatter.wav");
-  jumpSound = minim.loadFile("jump.wav");
-  sliceSound = minim.loadFile("slice.wav");
-  diceSound= minim.loadFile("dice.wav");
-  ughSound= minim.loadFile("ugh.wav");
-  rubberSound= minim.loadFile("rubberBounce.mp3");
-  collectSound= minim.loadFile("grab.wav");
-  laserSound= minim.loadFile("laser2.wav");
-  laserSound.setGain(-20);
-  BGM.setGain(-10);
-  BGM.play();
-  BGM.loop();
+  loadImages();
+  loadSound();
 
   loadParalax();
   loadObstacle();
 
-  entities.add(new InvisPowerup(1000, 600, 2000));
+  entities.add(new InvisPowerup(1000, 600, 1500));
   //  entities.add(new LaserPowerup(2200, 400, 600));
   entities.add(new TeleportPowerup(2400, 600, 600));
   entities.add(new IronBox(2600, int(floorHeight-200) ) ); // 3
@@ -265,9 +228,12 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
-  int offset = -200;
   if (p.invincible)fill(255, 50, 0);
   else fill(0);
+  // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
+  rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
+}
+void displayTiledFloor() {
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }
@@ -286,19 +252,19 @@ void gameReset() {
   obstacles.clear();
   powerups.clear();
   debris.clear();
-  background(0);
+
   BGM.pause();
-  BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
+  BGM = regularSong;
+  BGM.setGain(-15);
   playSound(BGM);
   BGM.loop();
+
   difficultyRange=10;
   minDifficulty=0;
   maxDifficulty=difficultyRange;
   speedLevel=0;
   loadObstacle();
   p.reset();
-  p.y=floorHeight;
-  p.invis=0;
   speedFactor=1;
   targetSpeedFactor=1;
   score=0;
@@ -328,6 +294,57 @@ void displayLife() {
   for (int i=0; i<p.lives; i++)
     image(p.Life, int(50+i*50), int(60), 40, 40);
 }
+
+void loadImages() {
+  //ONKY player sprites
+  p.SpriteSheetRunning = loadImage("onky_running3.png");
+  p.FrontFlip = loadImage("frontFlip.png");
+  p.Life = loadImage("extraLife.png");
+  p.Jump = loadImage("jump.png");
+  p.DownDash = loadImage("downDash.png");
+  p.Slide = loadImage("slide.png");
+
+  //icons
+  laserIcon = loadImage("laserpower.png");
+  tokenIcon = loadImage("token.png");
+  superIcon = loadImage("speedpower.png");
+  lifeIcon = loadImage("oneup.png");
+
+  //Obstacle graphics
+  Mountain= loadImage("backgroundfull.png");
+  Grass= loadImage("grasstile.png");
+  Bush = loadImage("bush.png");
+  Tree =loadImage("treetile.png");
+  Leaf  =loadImage("leaf.png");
+  Block = loadImage("blockMad.png");
+  BlockSad = loadImage("blockSad.png");
+}
+void loadSound() {
+  minim = new Minim(this);
+  regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).mp3");
+  superSong = minim.loadFile("music/Super Mario - Invincibility Star.mp3");
+  BGM = regularSong;
+  boxDestroySound = minim.loadFile("sound/boxSmash.wav");
+  boxKnockSound = minim.loadFile("sound/boxKnock.wav");
+  ironBoxDestroySound = minim.loadFile("sound/ironBoxSmash.wav");
+  ironBoxKnockSound = minim.loadFile("sound/ironBoxKnock.wav");
+  shatterSound = minim.loadFile("sound/shatter.wav");
+  jumpSound = minim.loadFile("sound/jump.wav");
+  sliceSound = minim.loadFile("sound/slice.wav");
+  diceSound= minim.loadFile("sound/dice.wav");
+  ughSound= minim.loadFile("sound/ugh.wav");
+  rubberSound= minim.loadFile("sound/rubberBounce.wav");
+  rubberKnockSound=minim.loadFile("sound/rubberKnock.wav");
+  collectSound= minim.loadFile("sound/grab.wav");
+  laserSound= minim.loadFile("sound/laser2.wav");
+  leafSound =  minim.loadFile("sound/rustle.wav");
+  teleportSound =minim.loadFile("sound/teleport.wav");
+  laserSound.setGain(-20);
+
+  BGM.setGain(-15);
+  BGM.play();
+  BGM.loop();
+}
 void loadParalax() {
 
   entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
@@ -335,10 +352,10 @@ void loadParalax() {
   entities.add(new ParalaxObject(255, 400, 50, 50, 0.3)); 
   entities.add(new ParalaxObject(0, 420, 100, 100, 0.5)); 
   entities.add(new ParalaxObject(300, 420, 100, 100, 0.5)); 
-  entities.add(new ParalaxObject(0, 290, 250, 250, 0.7)); 
-  entities.add(new ParalaxObject(0, 120, 500, 500, 0.9));
+  entities.add(new ParalaxObject(0, 290, 250, 250, 0.6)); 
+  entities.add(new ParalaxObject(0, 120, 500, 500, 0.8));
 
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
- // ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
+  // ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
 

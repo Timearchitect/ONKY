@@ -59,18 +59,22 @@ class Tire extends Obstacle {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
-    playSound(rubberSound);
+    playSound(rubberKnockSound);
     for (int i =0; i< 5; i++) {
-      entities.add( new TireDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      entities.add( new TireDebris(this, int(x+random(w)-w*0.5+50), int(y+random(h)-h*0.5+50), random(15)+impactForce*0.5, random(30)-20));
     }
   }
   void hit() {
     super.hit();
     skakeFactor=50;
   }
+
+  void knockSound() {
+    playSound(rubberKnockSound);
+  }
   void surface() {
     if (!p.invincible)if (p.vx>9)p.vx*=0.82;
-    if (int(random(9/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
+    if (int(random(12/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
 class IronBox extends Obstacle {
@@ -106,8 +110,8 @@ class IronBox extends Obstacle {
   void death() {
     if (p.invincible || health<=0) {
       super.death();
-      for (int i =0; i< 4; i++) {
-        entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(30)-20));
+      for (int i =0; i< 3; i++) {
+        entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
     }
     playSound(ironBoxDestroySound);
@@ -159,6 +163,7 @@ class PlatForm extends Obstacle {
   void death() {
     if (p.invincible ||health<=0) {
       super.death();
+      playSound(ironBoxDestroySound);
       for (int i= 0; i<w; i+=100) {
         entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
       }
@@ -305,10 +310,10 @@ class Bush extends Obstacle {
     }
   }
   void knockSound() {
-    playSound(boxKnockSound);
+    playSound(leafSound);
   }
   void destroySound() {
-    playSound(boxDestroySound);
+    playSound(leafSound);
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {

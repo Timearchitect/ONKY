@@ -163,7 +163,8 @@ class Player {
       if (invincible) {  
         p.vx=speedLevel; 
         BGM.pause();
-        BGM = minim.loadFile("KillerBlood-The Black(Paroto).mp3");
+        BGM = minim.loadFile("music/KillerBlood-The Black(Paroto).mp3");
+        BGM.setGain(-15);
         playSound(BGM);
         BGM.loop();
       }
@@ -255,13 +256,12 @@ class Player {
     cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
   }
   void reset() {
-    y=0;
+     y=floorHeight;
     vy=0;
     lives=MAX_LIFE;
     x=0;
     vx=10;
     invis=0;
-
     punching=false; 
     ducking=false;
     invincible=false;
