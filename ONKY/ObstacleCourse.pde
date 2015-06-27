@@ -95,8 +95,8 @@ void loadObstacle() {
   }
 }
 void spawnFloor(int x) {
-  for (int i=0; i<interval; i+=200) {
-    entities.add(new Grass(x+i, int(floorHeight), 200, 200 ) );
+  for (int i=0; i<interval; i+=400) {
+    entities.add(new Grass(x+i, int(floorHeight), 400, 400 ) );
   }
 }
 void spawnDoubleWall(int x) {

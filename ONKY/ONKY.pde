@@ -21,7 +21,10 @@ AudioPlayer leafSound;
 
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
-PImage Block, laserIcon, superIcon, tokenIcon, lifeIcon, Bush, Tree, Grass, Leaf, BlockSad, Mountain;
+PImage  laserIcon, superIcon, tokenIcon, lifeIcon ;
+PImage Bush,Box,Leaf, Block,BlockSad ;
+PImage Tree,Mountain,Grass
+
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
@@ -329,6 +332,7 @@ void loadImages() {
   lifeIcon = loadImage("oneup.png");
 
   //Obstacle graphics
+  Box= loadImage("woodenBox.png");
   Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");

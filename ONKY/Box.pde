@@ -19,6 +19,7 @@ class Box extends Obstacle {
   }
   void display() {
     super.display();
+    /*
     stroke(155, 155, 100);
     strokeWeight(8);
     line(x, y, x+w, y+h);
@@ -31,6 +32,8 @@ class Box extends Obstacle {
       textAlign(LEFT);
     }
     strokeWeight(1);
+    */
+    image(Boxd,y,w,h);
   }
   void hit() {
     super.hit();
