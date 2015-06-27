@@ -215,6 +215,7 @@ void smoothOffset() {
   if (defaultPlayerOffsetX != round(playerOffsetX)) {
     float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
     playerOffsetX+=offsetDiff*0.02;
+    
   }
 }
 void smoothScale() {

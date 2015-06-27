@@ -66,6 +66,7 @@ class Tire extends Obstacle {
   }
   void hit() {
     super.hit();
+    scaleFactor+=scaleFactor*0.05;
     skakeFactor=50;
   }
 
@@ -73,7 +74,7 @@ class Tire extends Obstacle {
     playSound(rubberKnockSound);
   }
   void surface() {
-    if (!p.invincible)if (p.vx>9)p.vx*=0.82;
+    if (p.vx>9)p.vx*=0.82;
     if (int(random(12/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
@@ -103,8 +104,8 @@ class IronBox extends Obstacle {
       float diffX=tx-x, diffY=ty-y;
       x+=diffX*0.2*speedFactor;
       y+=diffY*0.2*speedFactor;
-      if (round(x)==tx)x=tx;
-      if (round(y)==ty)y=ty;
+      if (x==tx)x=tx;
+      if (y==ty)y=ty;
     }
   }
   void death() {
@@ -203,7 +204,7 @@ class Glass extends Obstacle {
     // super.knock();
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=10;
-    if (!p.invincible)p.vx*=0.8;
+    p.vx*=0.8;
     for (int i =0; i< 6; i++) {
       entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -302,7 +303,6 @@ class Bush extends Obstacle {
   }
   void knock() {
     if (p.invincible) death();
-
     if (debrisCooldown==0) { 
       super.knock();
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
@@ -317,12 +317,10 @@ class Bush extends Obstacle {
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      // println("collision!!!!"); 
       if (p.vx>5) {
         knock();
       }
       impactForce=p.vx; 
-      // death();
     }
   }
 }
