@@ -123,6 +123,7 @@ class IronBox extends Obstacle {
   void death() {
     if (p.invincible || health<=0) {
       super.death();
+      entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
       for (int i =0; i< 3; i++) {
         entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
@@ -371,7 +372,7 @@ class Water extends Obstacle {
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       if (p.invincible) {
-        //if (p.vy<0)p.vy=0;
+        if (p.vy>0)p.vy=0;
         p.y=y-p.h;
       }
       impactForce=p.vx;

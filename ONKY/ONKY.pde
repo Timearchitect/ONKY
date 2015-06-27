@@ -22,7 +22,7 @@ AudioPlayer leafSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  laserIcon, superIcon, tokenIcon, lifeIcon ;
-PImage Bush, Box, Leaf, Block, BlockSad ,ironBox ,ironBox2,ironBox3;
+PImage Bush, Box, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Mountain, Grass;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -69,8 +69,11 @@ void setup() {
 
   entities.add(new InvisPowerup(1000, 600, 1500));
   //  entities.add(new LaserPowerup(2200, 400, 600));
-  entities.add(new TeleportPowerup(2400, 600, 600));
-  entities.add(new IronBox(2600, int(floorHeight-200) ) ); // 3
+  entities.add(new LaserPowerup(2100, 600, 600));
+  entities.add(new IronBox(2800, int(floorHeight-200) ) ); // 3
+  entities.add(new IronBox(2800, int(floorHeight-400) ) ); // 3
+  entities.add(new IronBox(2600, int(floorHeight-600) ) ); // 3
+
   entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
