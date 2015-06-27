@@ -6,7 +6,7 @@ class Player {
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
-  int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, lives= MAX_LIFE;
+  int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP,downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
   int duckTime, duckCooldown;
@@ -73,11 +73,11 @@ class Player {
       cell=Slide;
       image(cell, -100*0.3, -80*0.5, 100, 80);
     } else {
-      if (jumpCount==2) { 
-        image(cell, -w*0.5, -h*0.5, w, h);
-      } else if (jumpCount==1) {
+      if (jumpCount==1) {
         cell=Jump;
         image(Jump, -w*0.5, -h*0.5, 100, 80);
+      } else   if (jumpCount==MAX_JUMP) { 
+        image(cell, -w*0.5, -h*0.5, w, h);
       } else {
         cell=FrontFlip;
         image(cell, -w*0.5, -h*0.5, 100, 80);
@@ -121,17 +121,18 @@ class Player {
   }
   void duck() {
     if (!onGround) { 
-      vy=24;
+      vy=downDashSpeed;
       entities.add(new LineParticle(int(x+w*0.5), int(y+h), 10, 0));
     }
-    if (jumpCount<2 && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
+    if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
     ducking=true;
     duckTime=50;
   }
   void checkIfObstacle(int top) {
     if (top<y+h) { 
+      if (punching && ducking&& !onGround && jumpCount<MAX_JUMP) stomp();
       jumpCount=MAX_JUMP;
-      if (punching && ! onGround) stomp();
+
       onGround=true;
       y=top-h;
       vy=0;
@@ -142,17 +143,18 @@ class Player {
   }
   void checkIfGround() {
     /*if (floorHeight<y+h) { 
-      if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
-      jumpCount=MAX_JUMP;
-      if (punching && ! onGround)stomp() ;
-      onGround=true;
-      y=floorHeight-h;
-      angle=2;
-    }*/
+     if (!onGround)   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.8), 30, 0));
+     jumpCount=MAX_JUMP;
+     if (punching && ! onGround)stomp() ;
+     onGround=true;
+     y=floorHeight-h;
+     angle=2;
+     }*/
   }
   void stomp() {
-    entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
-    skakeFactor=30;
+    playSound(blockDestroySound);
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
+    skakeFactor=50;
   }
   void recover() {
     invis-=1*speedFactor;
@@ -173,7 +175,7 @@ class Player {
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
       playSound(sliceSound);
-      if (ducking && jumpCount<2) {      // down dash attack
+      if (ducking && jumpCount<MAX_JUMP) {      // down dash attack
         entities.add(new slashParticle(int(p.x), int(p.y), 4));
         punchTime=30;
       } else if (ducking) {    // slide attack
@@ -238,12 +240,11 @@ class Player {
   }
   void checkDuck() {
     if (duckTime<0) {
-      if (ducking)p.y-=45;
+      if (ducking)p.y-=55;
       h=90;
       ducking=false;
     } else { // ducking
       h=45;
-      //skakeFactor=8;
       duckTime--;
     }
   }

@@ -108,6 +108,7 @@ class slashParticle extends Particle {
     if (type==5) {  // special
       stroke(0, 50, 255);
       line(x-distance, y, x, y);
+      line(x-distance, y+50, x, y+50);
     }
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
@@ -131,6 +132,7 @@ class slashParticle extends Particle {
     }
     if (type==5) {
       line(x-distance, y, x, y);
+      line(x-distance, y+50, x, y+50);
     }
     strokeWeight(1);
   }
@@ -181,7 +183,7 @@ class SpinParticle extends Particle {
     size=150;
     angle=random(0, 360);
   }
-    SpinParticle( Player _player) {
+  SpinParticle( Player _player) {
     this( 0, 0);
     player=_player;
   }

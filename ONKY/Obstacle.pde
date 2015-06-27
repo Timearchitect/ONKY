@@ -28,12 +28,12 @@ abstract class Obstacle extends Entity {
     rect(x, y, w, h);
   }
   void collision() {
-    if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5 < y +20) {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5-p.vy < y +20) {
       p.checkIfObstacle(y-5);
       surface();
       //println("onTop");
     } else {
-      if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y&&  p.y-p.vy < y + h) {
        // println("collision!!!!"); 
         if (p.invincible) {
           death();

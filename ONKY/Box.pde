@@ -33,7 +33,8 @@ class Box extends Obstacle {
      }
      strokeWeight(1);
      */
-    image(Box, x, y, w, h);
+    if (type==1) image(Box, x, y, w, h);
+    else image(Box, x, y, w, h);
   }
   void hit() {
     super.hit();

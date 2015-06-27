@@ -244,12 +244,12 @@ void spawnTireTower(int x) {
 
 void spawnDuck(int x) {
   int index= int(random(3));
-  if (index==0) entities.add(new IronBox(x, int(floorHeight-660) ) );
-  else  entities.add(new Box(x, int(floorHeight-660) ) );
+  if (index==0) entities.add(new IronBox(x+400, int(floorHeight-660) ) );
+  else  entities.add(new Box(x+400, int(floorHeight-660) ) );
   if (index==1) entities.add( new  TeleportPowerup(x-150, int(floorHeight-350), 200, 500) );
-  entities.add(new IronBox(x, int(floorHeight-860) ) ); 
-  entities.add(new IronBox(x, int(floorHeight-460) ) );
-  entities.add(new IronBox(x, int(floorHeight-260) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-860) ) ); 
+  entities.add(new IronBox(x+400, int(floorHeight-460) ) );
+  entities.add(new IronBox(x+400, int(floorHeight-260) ) );
 }
 void spawnBoxDuck(int x) {
   int index= int(random(2));

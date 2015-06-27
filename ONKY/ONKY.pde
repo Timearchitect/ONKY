@@ -18,7 +18,7 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound;
-
+AudioPlayer blockDestroySound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  laserIcon, superIcon, tokenIcon, lifeIcon ;
@@ -73,7 +73,6 @@ void setup() {
   entities.add(new IronBox(2800, int(floorHeight-200) ) ); // 3
   entities.add(new IronBox(2800, int(floorHeight-400) ) ); // 3
   entities.add(new IronBox(2600, int(floorHeight-600) ) ); // 3
-
   entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
@@ -352,6 +351,7 @@ void loadSound() {
   regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
   superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
   BGM = regularSong;
+  blockDestroySound= minim.loadFile("sound/blockDestroy.wav");
   boxDestroySound = minim.loadFile("sound/boxSmash.wav");
   boxKnockSound = minim.loadFile("sound/boxKnock.wav");
   ironBoxDestroySound = minim.loadFile("sound/ironBoxSmash.wav");
@@ -389,7 +389,7 @@ void loadParalax() {
   entities.add(new ParalaxObject(0, 290, 250, 250, 0.6)); 
   entities.add(new ParalaxObject(0, 120, 500, 500, 0.8));
 
-  ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
-  ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
+  //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
+  //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
 
