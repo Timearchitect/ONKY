@@ -2,7 +2,7 @@ class Box extends Obstacle {
   int type;
   Box(int _x, int _y) {
     super(_x, _y);
-    obstacleColor = color(120, 120, 80);
+    obstacleColor = color(180, 140, 50);
     health=2;
   }
   Box(int _x, int _y, int _type) {
@@ -86,7 +86,7 @@ class IronBox extends Obstacle {
   int tx, ty;
   IronBox(int _x, int _y) {
     super(_x, _y);
-    obstacleColor = color(150, 150, 150);
+    obstacleColor = color(200);
     tx=_x;
     ty=_y;
     health=5;

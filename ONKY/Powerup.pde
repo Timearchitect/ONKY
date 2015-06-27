@@ -15,6 +15,7 @@ class Powerup extends Entity implements Cloneable {
     powerups.add( this);
   }
   void update() {
+  if(angle%100==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5),20, powerupColor));
     angle+=4;
     offsetX=cos(radians(angle))*12;
     offsetY=sin(radians(angle))*12;
@@ -38,7 +39,7 @@ class Powerup extends Entity implements Cloneable {
     }
   }
   void collision() {
-    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+    if (p.x+p.w > x- w*0.5 && p.x < x + w*0.5  && p.y+p.h > y - h*0.5 &&  p.y < y + h*0.5) {
       //println("Grab!!!!"); 
       if (p.collectCooldown<1)collect();
     }
@@ -80,9 +81,8 @@ class Powerup extends Entity implements Cloneable {
 class InvisPowerup extends Powerup {
   InvisPowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*1.5));
-    powerupColor=color(255, 100, 0);
+    powerupColor=color(255, 200, 0);
     icon = superIcon;
-
   }
   void collect() {
     if (!dead) {
@@ -90,7 +90,7 @@ class InvisPowerup extends Powerup {
       playSound(collectSound);
       particles.add( new SpinParticle(int(x), int(y)));
       p.vx=30;
-      if(p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
+      if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
       p.invincible=true;  // activates supermario starpower
       BGM.pause();
       BGM = superSong;
@@ -140,13 +140,13 @@ class LaserPowerup extends Powerup {
   }
   void use() {
 
-      if (p.angle>6) {  
-        if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, sin(radians(p.angle))*30));
-      } else {
-        if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, sin(radians(p.angle))*30));
-      }
+    if (p.angle>6) {  
+      if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, sin(radians(p.angle))*30));
+    } else {
+      if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, p.vx+cos(radians(p.angle))*30, sin(radians(p.angle))*30));
+    }
 
-     
+
     time-=1*speedFactor;
     if (time<1)death();
   }
@@ -156,7 +156,7 @@ class SlowPowerup extends Powerup {
   SlowPowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*0.3));
     powerupColor=color(100, 100, 100);
-    icon=null;
+    icon=slowIcon;
   }
 
   void collect() {
@@ -207,13 +207,13 @@ class LifePowerup extends Powerup {
 class TeleportPowerup extends Powerup {
   int distance=900;
   TeleportPowerup(int _x, int _y, int _time) {
-    super(_x, _y, 1);
+    super(_x, _y, 25);
     powerups.add( this);
     powerupColor=color(0, 50, 255);
-    icon= null;
+    icon= slashIcon;
   }
   TeleportPowerup(int _x, int _y, int _time, int _distance) {
-    this(_x, _y, 1);
+    this(_x, _y, 25);
     distance=_distance;
   }
   void collect() {
@@ -227,7 +227,7 @@ class TeleportPowerup extends Powerup {
       }        
       catch(CloneNotSupportedException e) {
       }    
-
+      p.invis+=time;
       p.x=x-w;
       p.y=y;
       p.x+=distance;
@@ -235,11 +235,11 @@ class TeleportPowerup extends Powerup {
       p.vy=-4;
       p.collectCooldown=20;
       playerOffsetX=distance+100;
-     // background(255);
+      // background(255);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       for (Obstacle o : obstacles) {
         //if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
-        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w +distance) {
+        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
           o.impactForce=60;  
           o.health=0;
           o.death();
@@ -251,7 +251,7 @@ class TeleportPowerup extends Powerup {
     }
   }
   void use() {
-    p.invis+=50;
+
     time-= 1*speedFactor;
     if (time<1)death();
   }

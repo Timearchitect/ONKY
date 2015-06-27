@@ -108,7 +108,6 @@ class slashParticle extends Particle {
     if (type==5) {  // special
       stroke(0, 50, 255);
       line(x-distance, y, x, y);
-      line(x-distance, y+50, x, y+50);
     }
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
@@ -132,7 +131,6 @@ class slashParticle extends Particle {
     }
     if (type==5) {
       line(x-distance, y, x, y);
-      line(x-distance, y+50, x, y+50);
     }
     strokeWeight(1);
   }
@@ -192,10 +190,10 @@ class SpinParticle extends Particle {
     angle+=16*speedFactor;
     opacity-=8*speedFactor;
     if (opacity<0)opacity=0;
-    if (player!=null) {
+    //if (player!=null) {
       x=int(p.x+p.w*0.5);
       y=int(p.y+p.h*0.5);
-    } 
+   // } 
     if (opacity<=1)death();
   }
 
@@ -241,12 +239,23 @@ class sparkParticle extends Particle {
   }
 
   void update() {
-    size*=1+0.1*speedFactor;
-    if (opacity>0)opacity*=1-0.3*speedFactor;
-    if (opacity<=1)death();
+    if (size>0)size*=1-0.1*speedFactor;
+    if (size<=1)death();
   }
 
   void display() {
+    stroke(particleColor);
+      strokeWeight(random(size*2)+size*0.1); 
+      beginShape();
+      vertex(this.x+0, this.y-size );
+      vertex(this.x+size*0.5 -size*0.25, this.y- size*0.5+size*0.25);
+      vertex(this.x+size, this.y+0);
+      vertex(this.x+size*0.5-size*0.25, this.y+ size*0.5-size*0.25);
+      vertex(this.x+0, this.y+ size);
+      vertex(this.x-size*0.5+size*0.25, this.y+size*0.5-size*0.25);
+      vertex(this.x-size, this.y-0);
+      vertex(this.x-size*0.5+size*0.25, this.y-size*0.5+size*0.25);
+      endShape(CLOSE);
   }
 }
 

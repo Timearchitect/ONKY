@@ -21,9 +21,9 @@ AudioPlayer leafSound;
 AudioPlayer blockDestroySound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
-PImage  laserIcon, superIcon, tokenIcon, lifeIcon ;
-PImage Bush, Box,mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Mountain, Grass;
+PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
+PImage Bush, Box, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tree,Tree2, Mountain, Grass;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokens, objectsDestroyed;
@@ -38,9 +38,9 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //Paralax paralax= new Paralax();
 //ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
-
+color FlashColor;
 boolean debug, mute;
-int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200;
+int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200, flashOpacity  ;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
 final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100;
 
@@ -59,9 +59,7 @@ void setup() {
   loadSound();
   loadGUILayer();
 
-
   //UpdateGUILife();
-
 
   loadParalax();
   loadObstacle();
@@ -98,6 +96,7 @@ void draw() {
     if ( plx.x < width) plx.display(); // onscreen
   }
   if (debug) displaySign();
+  displayFlash();
   pushMatrix();
   scale(scaleFactor);
   rotate(radians(screenAngle));
@@ -217,6 +216,13 @@ void shake() {
     shakeY=random(skakeFactor)-skakeFactor*0.5;
   }
 }
+void displayFlash() {
+  if (flashOpacity!=0) {
+    fill(0, flashOpacity);
+    noStroke();
+    rect(0, 0, width, height);
+  }
+}
 void smoothOffset() {
   if (defaultPlayerOffsetX != round(playerOffsetX)) {
     float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
@@ -232,8 +238,11 @@ void smoothScale() {
   // }
 }
 void smoothSlow() {
+  // if (targetSpeedFactor!=speedFactor) {
   float speedDiff=targetSpeedFactor-speedFactor;
+  flashOpacity=int(255-255*speedFactor);
   speedFactor+=speedDiff*0.04;
+  // }
 }
 void smoothAngle() {
   if (screenAngle!=0) {
@@ -328,7 +337,9 @@ void loadImages() {
   p.Slide = loadImage("slide.png");
 
   //icons
-  laserIcon = loadImage("laserpower.png");
+  slowIcon = loadImage("slowpower.png");
+  slashIcon = loadImage("slashpower.png");
+  laserIcon = loadImage("laserpower2.png");
   tokenIcon = loadImage("token.png");
   superIcon = loadImage("speedpower.png");
   lifeIcon = loadImage("oneup.png");
@@ -343,6 +354,8 @@ void loadImages() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   Tree =loadImage("treetile.png");
+    Tree2 =loadImage("treetile2.png");
+
   Leaf  =loadImage("leaf.png");
   Block = loadImage("blockMad.png");
   BlockSad = loadImage("blockSad.png");
@@ -383,12 +396,12 @@ void loadGUILayer() {
 void loadParalax() {
 
   entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
-  entities.add(new ParalaxObject(0, 400, 50, 50, 0.3)); 
-  entities.add(new ParalaxObject(255, 400, 50, 50, 0.3)); 
-  entities.add(new ParalaxObject(0, 420, 100, 100, 0.5)); 
-  entities.add(new ParalaxObject(300, 420, 100, 100, 0.5)); 
-  entities.add(new ParalaxObject(0, 290, 250, 250, 0.6)); 
-  entities.add(new ParalaxObject(0, 120, 500, 500, 0.8));
+  entities.add(new ParalaxObject(Tree,0, 400, 50, 50, 0.3)); 
+  entities.add(new ParalaxObject(Tree2,255, 400, 50, 50, 0.3)); 
+  entities.add(new ParalaxObject(Tree,0, 420, 100, 100, 0.5)); 
+  entities.add(new ParalaxObject(Tree2,300, 420, 100, 100, 0.5)); 
+  entities.add(new ParalaxObject(Tree,0, 290, 250, 250, 0.6)); 
+  entities.add(new ParalaxObject(Tree,0, 120, 500, 500, 0.8));
 
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));

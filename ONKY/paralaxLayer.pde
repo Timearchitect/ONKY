@@ -30,10 +30,11 @@ class Paralax extends Entity {
 
   void display() {
     //noStroke();
-    if (!p.invincible) fill(0, 0, 255);
+   /* if (!p.invincible) fill(0, 0, 255);
     else  fill(100, 100, 255);
     if (bg!=null)image(bg,  int(x), int(y), int(w), int(h));
-    else rect(x, y, w, h);
+    else rect(x, y, w, h);*/
+    image(bg,  int(x), int(y), int(w), int(h));
   }
 }
 
@@ -46,19 +47,19 @@ class ParalaxObject extends Paralax {
   ParalaxObject() { // DUMMY
     super();
   }
-  ParalaxObject(int _x, int _y, int _w, int _h, float _factor) {
+  ParalaxObject(PImage _image,int _x, int _y, int _w, int _h, float _factor) {
     super(_x, _y, _w, _h, _factor);
     x=_x;
     y=_y;
     heightLevel=_y;
-    bg=Tree;
+    bg=_image;
   }
-  ParalaxObject(int _x, int _y, int _w, int _h, float _factor, int _repeatDistance) {
-    this(_x, _y, _w, _h, _factor);
+  ParalaxObject(PImage _image,int _x, int _y, int _w, int _h, float _factor, int _repeatDistance) {
+    this(_image,_x, _y, _w, _h, _factor);
     repeatDistance=_repeatDistance;
   }
-  ParalaxObject(int _x, int _y, int _w, int _h, float _factor, int _repeatDistance, int _opacity) {
-    this(_x, _y, _w, _h, _factor, _repeatDistance);
+  ParalaxObject(PImage _image,int _x, int _y, int _w, int _h, float _factor, int _repeatDistance, int _opacity) {
+    this(_image,_x, _y, _w, _h, _factor, _repeatDistance);
     opacity=_opacity;
   }
   void update() {
@@ -68,15 +69,15 @@ class ParalaxObject extends Paralax {
   }
 
   void display() {
-    if (bg==null) {
+    /*if (bg==null) {
       noStroke();
       fill(0, 100, 100);   
       rect(x, y, w, h);
-    } else {
+    } else {*/
       tint(255, opacity);
-      image(Tree, int(x), int(y), int(w), int(h));
+      image(bg, int(x), int(y), int(w), int(h));
       noTint();
-    }
+    //}
   }
 }
 

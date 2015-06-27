@@ -6,13 +6,13 @@ class Player {
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
-  int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP,downDashSpeed=35, lives= MAX_LIFE;
+  int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
   int duckTime, duckCooldown;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
   boolean dead, onGround, punching, smashing, ducking, invincible;
-  color playerColor= color(255, 0, 0);
+
 
   Player() {
     trailspawnTimer=millis();
@@ -154,7 +154,8 @@ class Player {
   void stomp() {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
-    skakeFactor=50;
+   // particles.add(new sparkParticle(int(x+w), int(y+h),20, color(255, 0, 0)));
+    skakeFactor=60;
   }
   void recover() {
     invis-=1*speedFactor;
@@ -240,7 +241,7 @@ class Player {
   }
   void checkDuck() {
     if (duckTime<0) {
-      if (ducking)p.y-=55;
+      if (ducking)p.y-=75;
       h=90;
       ducking=false;
     } else { // ducking
@@ -268,7 +269,10 @@ class Player {
   }
 
   void spawnSpeedEffect() {
-    if (int(random(60/speedFactor))<vx)particles.add(new speedParticle(int(x+w), int(random(90)+p.y)));
+    if (int(random(60/speedFactor))<vx) {
+      particles.add(new speedParticle(int(x+w), int(random(90)+p.y)));
+     if(invincible) particles.add(new sparkParticle(int(x+w), int(random(h)+y),10, color(255, 220, 20)));
+    }
   }
 }
 

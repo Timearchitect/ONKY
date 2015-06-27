@@ -69,7 +69,8 @@ class IronBoxDebris extends Debris {
     translate(x, y);
     rotate(radians(angle));
     fill(owner.obstacleColor, int(opacity));
-    noStroke();
+    stroke(0);
+    strokeWeight(2);
 
     beginShape();
     vertex(-w, -h+25);
