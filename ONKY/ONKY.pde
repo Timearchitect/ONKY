@@ -396,12 +396,12 @@ void loadGUILayer() {
 void loadParalax() {
 
   entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
-  entities.add(new ParalaxObject(Tree,0, 400, 50, 50, 0.3)); 
-  entities.add(new ParalaxObject(Tree2,255, 400, 50, 50, 0.3)); 
-  entities.add(new ParalaxObject(Tree,0, 420, 100, 100, 0.5)); 
-  entities.add(new ParalaxObject(Tree2,300, 420, 100, 100, 0.5)); 
-  entities.add(new ParalaxObject(Tree,0, 290, 250, 250, 0.6)); 
-  entities.add(new ParalaxObject(Tree,0, 120, 500, 500, 0.8));
+  entities.add(new ParalaxObject(Tree,0, 400, 50, 50, 0.02)); 
+  entities.add(new ParalaxObject(Tree2,255, 400, 50, 50, 0.02)); 
+  entities.add(new ParalaxObject(Tree,0, 420, 100, 100, 0.1)); 
+  entities.add(new ParalaxObject(Tree2,300, 420, 100, 100, 0.1)); 
+  entities.add(new ParalaxObject(Tree,0, 290, 250, 250, 0.2)); 
+  entities.add(new ParalaxObject(Tree,0, 120, 500, 500, 0.3));
 
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));

@@ -30,7 +30,7 @@ class Player {
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
     if (jumpCount==0)angle+=15*speedFactor;
 
-    if (0<invis)recover();
+    if (invincible|| 0<invis)recover();
     if (0<collectCooldown)collectCooldown--; // cant collect
 
     cutSprite(int(x*0.025));    //cutSprite(int(x/40));
@@ -86,7 +86,7 @@ class Player {
     popMatrix();
     if (punching && punchCooldown==0)punch();
     // smash();
-    if (debug)text (" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
+    if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
   }
   void collision() {
     if (invis==0) {

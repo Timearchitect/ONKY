@@ -64,8 +64,8 @@ class Tire extends Obstacle {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     playSound(rubberKnockSound);
-    for (int i =0; i< 5; i++) {
-      entities.add( new TireDebris(this, int(x+random(w)-w*0.5+50), int(y+random(h)-h*0.5+50), random(15)+impactForce*0.5, random(30)-20));
+    for (int i =0; i< 4; i++) {
+      entities.add( new TireDebris(this, int(x+random(w)-w*0.5+50), int(y+random(h)-h*0.5+50), random(15)+impactForce*0.4, random(30)-20));
     }
   }
   void hit() {
@@ -79,7 +79,7 @@ class Tire extends Obstacle {
   }
   void surface() {
     if (p.vx>9)p.vx*=0.82;
-    if (int(random(12/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
+    if (int(random(20/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
 class IronBox extends Obstacle {

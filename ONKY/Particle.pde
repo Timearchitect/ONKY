@@ -174,15 +174,17 @@ class LineParticle extends Particle {
 class SpinParticle extends Particle {
   float size=100, angle;
   Player player;
-
-  SpinParticle( int _x, int _y) {
+  color particleColor=color(255);
+  SpinParticle( int _x, int _y, color _particleColor) {
     super( _x, _y);
+   particleColor=_particleColor;
     particles.add(this);
     size=150;
     angle=random(0, 360);
   }
   SpinParticle( Player _player) {
-    this( 0, 0);
+   super( 0, 0);
+        particles.add(this);
     player=_player;
   }
   void update() {
@@ -190,17 +192,17 @@ class SpinParticle extends Particle {
     angle+=16*speedFactor;
     opacity-=8*speedFactor;
     if (opacity<0)opacity=0;
-    //if (player!=null) {
+    if (player!=null) {
       x=int(p.x+p.w*0.5);
       y=int(p.y+p.h*0.5);
-   // } 
+    } 
     if (opacity<=1)death();
   }
 
   void display() {
 
     noFill();
-    stroke(255, int(opacity));
+    stroke(particleColor, int(opacity));
     strokeWeight(int(opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
     strokeWeight(1);

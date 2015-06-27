@@ -47,7 +47,7 @@ class Powerup extends Entity implements Cloneable {
   void collect() {
     tokens++;
     playSound(collectSound);
-    particles.add( new SpinParticle( int(x), int(y)));
+    particles.add( new SpinParticle( int(x), int(y),powerupColor));
     death();
   }
   void death() {
@@ -88,7 +88,7 @@ class InvisPowerup extends Powerup {
     if (!dead) {
       tokens++;
       playSound(collectSound);
-      particles.add( new SpinParticle(int(x), int(y)));
+      particles.add( new SpinParticle(int(x), int(y),powerupColor));
       p.vx=30;
       if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
       p.invincible=true;  // activates supermario starpower
@@ -129,7 +129,7 @@ class LaserPowerup extends Powerup {
     if (!dead) {
       tokens++;
       playSound(collectSound);
-      particles.add( new SpinParticle(int(x), int(y)));
+      particles.add( new SpinParticle(int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }    
@@ -162,7 +162,7 @@ class SlowPowerup extends Powerup {
   void collect() {
     tokens++;
     playSound(collectSound);
-    particles.add( new SpinParticle(int(x), int(y)));
+    particles.add( new SpinParticle(int(x), int(y),powerupColor));
     try {
       p.usedPowerup.add(this.clone());
     }        
@@ -187,7 +187,7 @@ class LifePowerup extends Powerup {
     if (!dead) {
       tokens++;
       playSound(collectSound);
-      particles.add( new SpinParticle(  int(x), int(y)));
+      particles.add( new SpinParticle(  int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }        
@@ -221,7 +221,7 @@ class TeleportPowerup extends Powerup {
       tokens++;
       playSound(collectSound);
       playSound(teleportSound);
-      particles.add( new SpinParticle(  int(x), int(y)));
+      particles.add( new SpinParticle(  int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }        
@@ -256,11 +256,11 @@ class TeleportPowerup extends Powerup {
     if (time<1)death();
   }
 }
-class RandomPowerup extends Powerup {
+class RandomPowerup extends Entity {
   RandomPowerup(int _x, int _y, int _time) {
-    super(_x, _y, _time);
-    icon= tokenIcon;
-    powerupColor=color(100, 100, 100);
+    super(_x, _y);
+    //icon= tokenIcon;
+    //powerupColor=color(100, 100, 100);
 
     switch(int(random(5))) {
     case 0:

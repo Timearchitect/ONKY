@@ -110,7 +110,7 @@ void loadObstacle() {
       spawnTimeGate(i*interval);
       break;
     case 22:
-      spawnFloor(i*interval);
+
       spawnSlashArena(i*interval);
       break;
     case 23:
@@ -526,6 +526,9 @@ void spawnSlashArena(int x) {
     entities.add( new  TeleportPowerup(x+800, int(floorHeight-500), 100, 400) );
     entities.add(new IronBox(x+900, int(floorHeight-600) ) );
     entities.add(new PlatForm(x+900, int(floorHeight-400), 200, 25, true) );
+  }
+  for (int i=0; i<interval; i+=200) {
+    entities.add(new Water(x+i, int(floorHeight), 200, 200 ) );
   }
 }
 

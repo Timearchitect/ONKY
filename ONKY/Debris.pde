@@ -92,6 +92,7 @@ class TireDebris extends Debris {
     super( _o, _x, _y, _vx, _vy);
     bounceFriction=1;
     bounceForce=0.8;
+    opacityDecay=-4;
   }
   void update() {
     super.update();
