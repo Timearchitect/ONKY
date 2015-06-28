@@ -425,13 +425,12 @@ class Water extends Obstacle {
      else if (count%60<50)image(water3, x, y, w, h);
      
      else image(water2, x, y, w, h);*/
-    if (count%60<10)image( cutSprite (0), x, y, w, h);
-    else if (count%60<20)image(cutSprite (1), x, y, w, h);
-    else if (count%60<30)image(cutSprite (2), x, y, w, h);
-    else if (count%60<40)image(cutSprite (3), x, y, w, h);
-    else if (count%60<50)image(cutSprite (2), x, y, w, h);
-
-    else image(cutSprite (1), x, y, w, h);
+    if (count%60<10)image( cutSprite (0), x, y-50, w, h);
+    else if (count%60<20)image(cutSprite (1), x, y-50, w, h);
+    else if (count%60<30)image(cutSprite (2), x, y-50, w, h);
+    else if (count%60<40)image(cutSprite (3), x, y-50, w, h);
+    else if (count%60<50)image(cutSprite (2), x, y-50, w, h);
+    else image(cutSprite (1), x, y-50, w, h);
   }
 
   PImage cutSprite (int index) {

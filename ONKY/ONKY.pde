@@ -23,7 +23,7 @@ AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
 PImage Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain, Grass, water1, water2, water3,water4,waterSpriteSheet;
+PImage Tree, Tree2, Mountain, Grass,waterSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -370,10 +370,10 @@ void loadImages() {
   Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
-  water1= loadImage("water1.png");
-  water2= loadImage("water2.png");
-  water3= loadImage("water3.png");
-  water4= loadImage("water4.png");
+ // water1= loadImage("water1.png");
+ // water2= loadImage("water2.png");
+//  water3= loadImage("water3.png");
+ // water4= loadImage("water4.png");
   waterSpriteSheet= loadImage("watertile.png");
 
   Block = loadImage("blockMad.png");

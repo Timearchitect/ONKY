@@ -46,7 +46,7 @@ class Player {
     }
 
     spawnSpeedEffect();
-    
+    if (y>1200)respawn() ;
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
       usedPowerup.get(i).use();
@@ -89,7 +89,7 @@ class Player {
     // smash();
     fill(0);    
     if (debug)text ("averageSpeed:"+averageSpeed +" totalJump:"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
-  //  if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
+    //  if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
   }
   void collision() {
     if (invis==0) {
@@ -282,6 +282,15 @@ class Player {
   void respawn() {
     lives--;
     UpdateGUILife(); // updateGUI
+    playSound(ughSound);
+    screenAngle=-10;
+    background(255, 0, 0);
+    invis=100;
+    vx*= -0.5;
+    scaleFactor=0.1;
+    entities.add(new PlatForm(int(p.x-500), int(floorHeight-700), 400, 25, true) );
+    x-=400;
+    y=-50-h;
   }
 
   void spawnSpeedEffect() {
