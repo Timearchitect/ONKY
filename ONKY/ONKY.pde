@@ -202,7 +202,7 @@ void draw() {
     pow.displayIcon();
   }
 
-
+  if(!preloadObstacles) deletePastObstacles();
   image(GUI, 0, 0); // add GUIlayer
   calcDispScore();
   if (debug)debugScreen();
@@ -311,10 +311,14 @@ void resetScore() {
 void calcDispScore() {
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
-  fill(0);
-  textSize(30);
-  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
-  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
+  fill(255);
+  textSize(40);
+  textAlign(RIGHT);
+   text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.001)  +" meter", width-50, 100);
+ // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
+ // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
+  textAlign(LEFT);
+
 }
 void debugScreen() {
   fill(100, 255, 0);
@@ -353,7 +357,7 @@ void loadImages() {
   slowIcon = loadImage("slowpower.png");
   slashIcon = loadImage("slashpower.png");
   laserIcon = loadImage("laserpower2.png");
-  tokenIcon = loadImage("token.png");
+  tokenIcon = loadImage("token2.png");
   superIcon = loadImage("speedpower.png");
   lifeIcon = loadImage("oneup.png");
 

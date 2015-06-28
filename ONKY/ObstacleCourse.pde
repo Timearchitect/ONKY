@@ -9,6 +9,18 @@ void generateObstacle() {
     distGenerated+=loadObstacleDist;
   }
 }
+void deletePastObstacles() {
+
+
+  for (int i=powerups.size () -1; i>=0; i--) {
+    if (powerups.get(i).x+powerups.get(i).w<p.x)
+    powerups.remove(powerups.get(i));
+  }
+  for (int i=obstacles.size () -1; i>=0; i--) {
+      if (obstacles.get(i).x+obstacles.get(i).w<p.x)
+    obstacles.remove(obstacles.get(i));
+  }
+}
 
 void loadObstacle() {
 
@@ -20,6 +32,7 @@ void loadObstacle() {
     loadRandomObstacleCourse(i*interval);
   }
 }
+
 void loadRandomObstacleCourse(int x) {
   if (firstCourse) {  // first is always grass
     spawnFloor(x);
@@ -32,9 +45,9 @@ void loadRandomObstacleCourse(int x) {
     minDifficulty+=difficultScale;
     maxDifficulty+=difficultScale;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-difficultyRange);
-    
-    if(difficulty<0)difficulty=0;  
-    
+
+    if (difficulty<0)difficulty=0;  
+
     switch(difficulty) {
     case 0:
       spawnFloor(x);

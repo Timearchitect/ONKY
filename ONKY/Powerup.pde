@@ -1,6 +1,6 @@
 class Powerup extends Entity implements Cloneable {
   PImage icon= tokenIcon;
-  boolean instant;
+  boolean instant,toggle;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -36,13 +36,11 @@ class Powerup extends Entity implements Cloneable {
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      //println("killed powerup");  
       if (p.collectCooldown<1)collect();
     }
   }
   void collision() {
     if (p.x+p.w > x- w*0.5 && p.x < x + w*0.5  && p.y+p.h > y - h*0.5 &&  p.y < y + h*0.5) {
-      //println("Grab!!!!"); 
       if (p.collectCooldown<1)collect();
     }
   }
@@ -63,17 +61,16 @@ class Powerup extends Entity implements Cloneable {
     if (time<1)death();
   }
   void displayIcon() {
-    int index=p.usedPowerup.indexOf(this), interval=110;
+    int index=p.usedPowerup.indexOf(this), interval=110, GUIoffsetX=50,GUIoffsetY=height-150;
     noStroke();
-
     // fill(powerupColor);
     // rect(50+index*interval, 100, 100, 100);
-    if (icon!=null)image(icon, 50+10+index*interval, 100+10, 100-20, 100-20);
+    if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20);
     fill(0, 150);
     //println(spawnTime +" : "+time);
     //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
     //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, (((PI*2)/spawnTime)*(time)-HALF_PI), PI*2-HALF_PI);
-    arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
+    arc(GUIoffsetX+w*0.5+index*interval, GUIoffsetY+h*0.5, 75, 75, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
