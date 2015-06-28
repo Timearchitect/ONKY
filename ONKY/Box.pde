@@ -370,7 +370,7 @@ class Grass extends Obstacle {
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5-p.vy < y +20) {
-      p.checkIfObstacle(y-5);
+      p.checkIfObstacle(y);
       surface();
       //println("onTop");
     } else {
@@ -379,7 +379,7 @@ class Grass extends Obstacle {
         //  if (!p.invincible)  //knock();
         //}
         //if (!p.invincible)p.collision();
-        p.checkIfObstacle(y-5);
+        p.checkIfObstacle(y);
       }
     }
   }

@@ -70,7 +70,7 @@ void setup() {
   entities.add(new LaserPowerup(2100, 600, 600));
   entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
   entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
-  entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
+  //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
   entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
@@ -256,14 +256,12 @@ void adjustZoomLevel() {
 void displayFloor() {
   //if (p.invincible)fill(255, 50, 0);
   // else fill(128,181,113);
+  noStroke();
   fill(128, 181, 113);
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
   rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
 }
-void displayTiledFloor() {
-  // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
-  rect(p.x-playerOffsetX-MAX_SHAKE, floorHeight, width/(scaleFactor)+playerOffsetX+MAX_SHAKE*2, 1000);
-}
+
 
 void displaySign() {
   stroke(255);

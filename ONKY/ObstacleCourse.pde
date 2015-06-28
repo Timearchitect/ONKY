@@ -1,6 +1,14 @@
 int  difficulty, difficultyRange=10, interval=2200;
 float minDifficulty=0, maxDifficulty=difficultyRange;
 
+void generateObstacle(){
+
+
+
+
+
+}
+
 void loadObstacle() {
 
   entities.add(new Box(1500, int(floorHeight-200), 1) );
@@ -491,7 +499,7 @@ void spawnBush(int x) {
   for (int i=0; i<noBushes; i++) {
     entities.add(new Bush(x-0+i*100, int(floorHeight-100) ) );
   }
-  if (noBushes==4) entities.add( new  Powerup(x+300, int(floorHeight-150), 200) );
+  if (noBushes==4) entities.add( new  Powerup(x+300, int(floorHeight-100), 200) );
 }
 
 void spawnTimeGate(int x) {
