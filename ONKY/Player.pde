@@ -9,7 +9,7 @@ class Player {
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
-  int duckTime, duckCooldown;
+  int duckTime, duckCooldown,duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
   boolean dead, onGround, punching, smashing, ducking, invincible;
 
@@ -125,6 +125,7 @@ class Player {
     }
     if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
     ducking=true;
+    y+=duckHeight;
     duckTime=50;
   }
   void checkIfObstacle(int top) {
@@ -236,11 +237,11 @@ class Player {
   }
   void checkDuck() {
     if (duckTime<0) {
-      if (ducking)p.y-=75;
+      if (ducking)p.y-=duckHeight;
       h=90;
       ducking=false;
     } else { // ducking
-      h=45;
+      h=duckHeight;
       duckTime--;
     }
   }

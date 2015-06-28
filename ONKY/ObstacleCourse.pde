@@ -1,12 +1,7 @@
 int  difficulty, difficultyRange=10, interval=2200;
 float minDifficulty=0, maxDifficulty=difficultyRange;
 
-void generateObstacle(){
-
-
-
-
-
+void generateObstacle() {
 }
 
 void loadObstacle() {
@@ -637,7 +632,14 @@ void spawnUnderGround(int x) {
 }
 
 void spawnHill(int x) {
-  int index= int(random(3));
+  int index= int(random(4));
+
+  if (index==1) {
+    entities.add(new Box(x+800, int(floorHeight-400) ));
+    entities.add(new Box(x+1000, int(floorHeight-400) ));
+    entities.add(new Box(x+1200, int(floorHeight-400) ));
+  }
+
   entities.add(new Grass(x+0, int(floorHeight+0), 200, 200) );
   entities.add(new Grass(x+200, int(floorHeight-50), 200, 200) );
   entities.add(new Grass(x+400, int(floorHeight-100), 200, 200)  );
