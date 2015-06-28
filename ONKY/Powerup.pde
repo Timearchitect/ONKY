@@ -1,5 +1,6 @@
 class Powerup extends Entity implements Cloneable {
   PImage icon= tokenIcon;
+  boolean instant;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);

@@ -125,6 +125,7 @@ void draw() {
     fill(0, 255, 0, 100);
     rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
   }
+  
   //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
   for (int i=powerups.size () -1; i>=0; i--) {
     if (powerups.get(i).dead)powerups.remove(powerups.get(i));
@@ -136,7 +137,6 @@ void draw() {
       pow.display();
     }
   }
-
 
   //-----------------------------         Debris    / Entity       -----------------------------------------------------------
 
@@ -398,7 +398,6 @@ void loadSound() {
   teleportSound =minim.loadFile("sound/teleport.wav");
   regularSong.setGain(-10);
   laserSound.setGain(-20);
-
 
   BGM.play();
   BGM.loop();

@@ -1,6 +1,6 @@
-int  difficulty, difficultyRange=10, interval=2200;
-float minDifficulty=0, maxDifficulty=difficultyRange;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=1000;
+int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=28;
+float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2000;
 boolean firstCourse=true;
 
 void generateObstacle() {
@@ -25,116 +25,127 @@ void loadRandomObstacleCourse(int x) {
     spawnFloor(x);
     firstCourse=false;
   } else {
-    minDifficulty+=0.3;
-    maxDifficulty+=0.3;
+    if (totalAmountOfCourses+difficultyRange<minDifficulty) { // check if loop
+      minDifficulty=0;
+      maxDifficulty=difficultyRange; // resets
+    }
+    minDifficulty+=difficultScale;
+    maxDifficulty+=difficultScale;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-difficultyRange);
-
+    
+    if(difficulty<0)difficulty=0;  
+    
     switch(difficulty) {
-    case -4:
-      spawnHill(x); 
-      break;
-    case -3:
-      spawnUnderGround(x); 
-      break;
-    case -2:
-      spawnFloor(x);
-      spawnBush(x);
-      break;
-    case -1:
-      spawnFloor(x);
-      spawnSingleWall(x);
-      break;
     case 0:
       spawnFloor(x);
-      spawnTires(x);
+      spawnSingleWall(x);
+      spawnBush(x);
       break;
     case 1:
-      spawnWater(x);
+      spawnHill(x); 
       break;
     case 2:
-      spawnFloor(x);
-      spawnDuck(x);
+      spawnUnderGround(x); 
       break;
     case 3:
       spawnFloor(x);
-      spawnFloatingBlock(x);
+      spawnBush(x);
       break;
     case 4:
       spawnFloor(x);
-      spawnDoubleWall(x);
+      spawnSingleWall(x);
       break;
     case 5:
       spawnFloor(x);
-      spawnTirePool(x);
+      spawnTires(x);
       break;
     case 6:
-      spawnFloor(x);
-      spawnMetalWall(x);
+      spawnWater(x);
       break;
     case 7:
       spawnFloor(x);
-      spawnHeap(x);
+      spawnDuck(x);
       break;
     case 8:
       spawnFloor(x);
-      spawnTiltedBoxes(x);
+      spawnFloatingBlock(x);
       break;
     case 9:
       spawnFloor(x);
-      spawnTireTower(x);
+      spawnDoubleWall(x);
       break;
     case 10:
       spawnFloor(x);
-      spawnBoxDuck(x);
+      spawnTirePool(x);
       break;
     case 11:
       spawnFloor(x);
-      spawnPlatform(x);
+      spawnMetalWall(x);
       break;
     case 12:
       spawnFloor(x);
-      spawnBoxPlatform(x);
+      spawnHeap(x);
       break;
     case 13:
       spawnFloor(x);
-      spawnBarrier(x);
+      spawnTiltedBoxes(x);
       break;
     case 14:
       spawnFloor(x);
-      spawnBiuldingFrame(x);
+      spawnTireTower(x);
       break;
     case 15:
       spawnFloor(x);
-      spawnSteps(x);
+      spawnBoxDuck(x);
       break;
     case 16:
       spawnFloor(x);
-      spawnBlocks(x);
+      spawnPlatform(x);
       break;
     case 17:
       spawnFloor(x);
-      spawnTunnel(x);
-      break;  
+      spawnBoxPlatform(x);
+      break;
     case 18:
       spawnFloor(x);
-      spawnTowerFrame(x);
+      spawnBarrier(x);
       break;
     case 19:
       spawnFloor(x);
-      spawnLaserArena(x);
+      spawnBiuldingFrame(x);
       break;
     case 20:
       spawnFloor(x);
-      spawnDounut(x);
+      spawnSteps(x);
       break;
     case 21:
       spawnFloor(x);
-      spawnTimeGate(x);
+      spawnBlocks(x);
       break;
     case 22:
+      spawnFloor(x);
+      spawnTunnel(x);
+      break;  
+    case 23:
+      spawnFloor(x);
+      spawnTowerFrame(x);
+      break;
+    case 24:
+      spawnFloor(x);
+      spawnLaserArena(x);
+      break;
+    case 25:
+      spawnFloor(x);
+      spawnDounut(x);
+      break;
+    case 26:
+      spawnFloor(x);
+      spawnTimeGate(x);
+      break;
+    case 27:
       spawnSlashArena(x);
       break;
-    case 23:
+    case 28:
       spawnFloor(x);
       spawnShell(x);
       break;
