@@ -1,6 +1,6 @@
-int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=28;
+int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=29;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2000;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2000,deleteMargin=2000;
 boolean firstCourse=true;
 
 void generateObstacle() {
@@ -13,12 +13,12 @@ void deletePastObstacles() {
 
 
   for (int i=powerups.size () -1; i>=0; i--) {
-    if (powerups.get(i).x+powerups.get(i).w<p.x)
-    powerups.remove(powerups.get(i));
+    if (powerups.get(i).x+powerups.get(i).w+deleteMargin<p.x)
+      powerups.remove(powerups.get(i));
   }
   for (int i=obstacles.size () -1; i>=0; i--) {
-      if (obstacles.get(i).x+obstacles.get(i).w<p.x)
-    obstacles.remove(obstacles.get(i));
+    if (obstacles.get(i).x+obstacles.get(i).w+deleteMargin<p.x)
+      obstacles.remove(obstacles.get(i));
   }
 }
 
@@ -137,36 +137,42 @@ void loadRandomObstacleCourse(int x) {
       break;
     case 22:
       spawnFloor(x);
+      spawnIronPath(x);
+      break;
+    case 23:
+      spawnFloor(x);
       spawnTunnel(x);
       break;  
-    case 23:
+    case 24:
       spawnFloor(x);
       spawnTowerFrame(x);
       break;
-    case 24:
+    case 25:
       spawnFloor(x);
       spawnLaserArena(x);
       break;
-    case 25:
+    case 26:
       spawnFloor(x);
       spawnDounut(x);
       break;
-    case 26:
+    case 27:
       spawnFloor(x);
       spawnTimeGate(x);
       break;
-    case 27:
+    case 28:
       spawnSlashArena(x);
       break;
-    case 28:
+    case 29:
       spawnFloor(x);
       spawnShell(x);
       break;
     default:
       //spawnWater(x);
       //spawnUnderGround(x); 
+            spawnIronPath(x);
+
       spawnFloor(x);
-      spawnSingleWall(x);
+    //  spawnSingleWall(x);
       spawnBush(x);
     }
   }
@@ -690,5 +696,42 @@ void spawnHill(int x) {
   entities.add(new Grass(x+1600, int(floorHeight-100), 200, 200 ) );
   entities.add(new Grass(x+1800, int(floorHeight-50), 200, 200 ) );
   entities.add(new Grass(x+2000, int(floorHeight-0), 200, 200) );
+}
+
+
+void spawnIronPath(int x) {
+  int index= int(random(4));
+entities.add( new  Powerup(x+100, int(floorHeight-100), 100) );
+
+  //entities.add(new IronBox(x+200, int(floorHeight-200) ));
+  entities.add(new IronBox(x+200, int(floorHeight-400) ));
+  entities.add(new IronBox(x+200, int(floorHeight-600) ));
+entities.add( new  Powerup(x+300, int(floorHeight-100), 100) );
+
+  // entities.add(new IronBox(x+400, int(floorHeight-200) ));
+  // entities.add(new IronBox(x+400, int(floorHeight-400) ));
+  entities.add(new IronBox(x+400, int(floorHeight-600) ));
+entities.add( new  Powerup(x+500, int(floorHeight-100), 100) );
+entities.add( new  Powerup(x+500, int(floorHeight-300), 100) );
+
+  entities.add(new IronBox(x+600, int(floorHeight-200) ));
+  //entities.add(new IronBox(x+600, int(floorHeight-400) ));
+  entities.add(new IronBox(x+600, int(floorHeight-600) ));
+entities.add( new  Powerup(x+700, int(floorHeight-300), 100) );
+
+  //entities.add(new IronBox(x+800, int(floorHeight-200) ));
+  //entities.add(new IronBox(x+800, int(floorHeight-400) ));
+  entities.add(new IronBox(x+800, int(floorHeight-600) ));
+entities.add( new  Powerup(x+900, int(floorHeight-100), 100) );
+entities.add( new  Powerup(x+900, int(floorHeight-300), 100) );
+
+  //entities.add(new IronBox(x+1000, int(floorHeight-200) ));
+  entities.add(new IronBox(x+1000, int(floorHeight-400) ));
+  entities.add(new IronBox(x+1000, int(floorHeight-600) ));
+entities.add( new  Powerup(x+1100, int(floorHeight-100), 100) );
+
+entities.add( new  Powerup(x+1300, int(floorHeight-100), 100) );
+
+  entities.add(new Box(x+600, int(floorHeight-800), 1 ));
 }
 
