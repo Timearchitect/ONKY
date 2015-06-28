@@ -1,6 +1,6 @@
 int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=29;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2000,deleteMargin=2000;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2000, deleteMargin=2000;
 boolean firstCourse=true;
 
 void generateObstacle() {
@@ -35,6 +35,7 @@ void loadObstacle() {
 
 void loadRandomObstacleCourse(int x) {
   if (firstCourse) {  // first is always grass
+    spawnFloor(-interval);
     spawnFloor(x);
     firstCourse=false;
   } else {
@@ -169,10 +170,10 @@ void loadRandomObstacleCourse(int x) {
     default:
       //spawnWater(x);
       //spawnUnderGround(x); 
-            spawnIronPath(x);
+
 
       spawnFloor(x);
-    //  spawnSingleWall(x);
+      spawnSingleWall(x);
       spawnBush(x);
     }
   }
@@ -663,7 +664,7 @@ void spawnUnderGround(int x) {
   entities.add(new Grass(x+1000, int(floorHeight+200), 200, 200 ) );
 
   entities.add(new Box(x+800, int(floorHeight-200)) );
-  if (index==0)entities.add(new Box(x+1000, int(floorHeight-200), 1) );
+  if (index==0)entities.add(new Box(x+1000, int(floorHeight-200), -1) );
   entities.add(new Box(x+1000, int(floorHeight-400)) );
   entities.add(new Box(x+1200, int(floorHeight-200)) );
 
@@ -689,7 +690,7 @@ void spawnHill(int x) {
   entities.add(new Grass(x+800, int(floorHeight-150), 200, 200 ) );
   entities.add(new Grass(x+1000, int(floorHeight-150), 200, 200 ) );
 
-  if (index==0)entities.add(new Box(x+1000, int(floorHeight-350), 1) );
+  if (index==0)entities.add(new Box(x+1000, int(floorHeight-350), -1) );
 
   entities.add(new Grass(x+1200, int(floorHeight-150), 200, 200 ) );
   entities.add(new Grass(x+1400, int(floorHeight-150), 200, 200 ) );
@@ -701,37 +702,37 @@ void spawnHill(int x) {
 
 void spawnIronPath(int x) {
   int index= int(random(4));
-entities.add( new  Powerup(x+100, int(floorHeight-100), 100) );
+  entities.add( new  Powerup(x+100, int(floorHeight-100), 100) );
 
   //entities.add(new IronBox(x+200, int(floorHeight-200) ));
-  entities.add(new IronBox(x+200, int(floorHeight-400) ));
+  entities.add(new IronBox(x+00, int(floorHeight-400) ));
   entities.add(new IronBox(x+200, int(floorHeight-600) ));
-entities.add( new  Powerup(x+300, int(floorHeight-100), 100) );
+  entities.add( new  Powerup(x+300, int(floorHeight-100), 100) );
 
   // entities.add(new IronBox(x+400, int(floorHeight-200) ));
   // entities.add(new IronBox(x+400, int(floorHeight-400) ));
   entities.add(new IronBox(x+400, int(floorHeight-600) ));
-entities.add( new  Powerup(x+500, int(floorHeight-100), 100) );
-entities.add( new  Powerup(x+500, int(floorHeight-300), 100) );
+  entities.add( new  Powerup(x+500, int(floorHeight-100), 100) );
+  entities.add( new  Powerup(x+500, int(floorHeight-300), 100) );
 
   entities.add(new IronBox(x+600, int(floorHeight-200) ));
   //entities.add(new IronBox(x+600, int(floorHeight-400) ));
   entities.add(new IronBox(x+600, int(floorHeight-600) ));
-entities.add( new  Powerup(x+700, int(floorHeight-300), 100) );
+  entities.add( new  Powerup(x+700, int(floorHeight-300), 100) );
 
   //entities.add(new IronBox(x+800, int(floorHeight-200) ));
   //entities.add(new IronBox(x+800, int(floorHeight-400) ));
   entities.add(new IronBox(x+800, int(floorHeight-600) ));
-entities.add( new  Powerup(x+900, int(floorHeight-100), 100) );
-entities.add( new  Powerup(x+900, int(floorHeight-300), 100) );
+  entities.add( new  Powerup(x+900, int(floorHeight-100), 100) );
+  entities.add( new  Powerup(x+900, int(floorHeight-300), 100) );
 
   //entities.add(new IronBox(x+1000, int(floorHeight-200) ));
-  entities.add(new IronBox(x+1000, int(floorHeight-400) ));
+  entities.add(new IronBox(x+1200, int(floorHeight-400) ));
   entities.add(new IronBox(x+1000, int(floorHeight-600) ));
-entities.add( new  Powerup(x+1100, int(floorHeight-100), 100) );
+  entities.add( new  Powerup(x+1100, int(floorHeight-100), 100) );
 
-entities.add( new  Powerup(x+1300, int(floorHeight-100), 100) );
+  entities.add( new  Powerup(x+1300, int(floorHeight-100), 100) );
 
-  entities.add(new Box(x+600, int(floorHeight-800), 1 ));
+  entities.add(new Box(x+600, int(floorHeight-800), -1 ));
 }
 

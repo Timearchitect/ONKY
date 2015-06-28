@@ -1,5 +1,5 @@
 
- abstract class Obstacle extends Entity {  
+abstract class Obstacle extends Entity {  
   float impactForce;
   color obstacleColor;
   int hitBrightness, health=1;

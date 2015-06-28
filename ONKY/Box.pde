@@ -5,14 +5,16 @@ class Box extends Obstacle {
     super(_x, _y);
     obstacleColor = color(180, 140, 50);
     health=2;
+    type=int(random(2));
   }
   Box(int _x, int _y, int _type) {
     this(_x, _y);
+
     type=_type;
   }
   void death() {
     super.death();
-    if (type==1)  entities.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
+    if (type==-1)  entities.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
@@ -35,6 +37,7 @@ class Box extends Obstacle {
      strokeWeight(1);
      */
     if (type==0) image(Box, x, y, w, h);
+    else if (type==1) image(brokenBox, x, y, w, h);
     else image(mysteryBox, x, y, w, h);
   }
   void hit() {
@@ -394,20 +397,31 @@ class Grass extends Obstacle {
 }
 class Water extends Obstacle {
   int debrisCooldown;
+  int count;
   Water(int _x, int _y, int _w, int _h) {
     super(_x, _y);
     w=_w;
     h=_h;
-    obstacleColor = color(0, 0, 255);
+    obstacleColor = color(81,104,151);
   }
-
+  void update() {
+    super.update();
+    count++;
+  }
   void display() {
     //   super.display();
+    /* noStroke();
+     
+     fill(150, 150, 255);
+     rect(x, y, w, 25);*/
     noStroke();
     fill(obstacleColor);
-    rect(x, y, w, 2000);
-    fill(150, 150, 255);
-    rect(x, y, w, 25);
+    rect(x, y+50, w, 2000);
+    if (count%40<10)image(water1, x, y, w, h);
+    else if (count%40<20)image(water2, x, y, w, h);
+    else if (count%40<30)image(water3, x, y, w, h);
+    else image(water2, x, y, w, h);
+
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {

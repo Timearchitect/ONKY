@@ -46,6 +46,7 @@ class Player {
     }
 
     spawnSpeedEffect();
+    
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
       usedPowerup.get(i).use();

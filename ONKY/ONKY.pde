@@ -22,8 +22,8 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
-PImage Bush, Box, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain, Grass;
+PImage Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tree, Tree2, Mountain, Grass, water1, water2, water3;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -69,11 +69,11 @@ void setup() {
   entities.add(new InvisPowerup(1000, 600, 1500));
   //  entities.add(new LaserPowerup(2200, 400, 600));
   entities.add(new LaserPowerup(2100, 600, 600));
- // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
- // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
+  // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
+  // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
- // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
- // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
+  // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
+  // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
   // entities.add(new SlowPowerup(2200, 400, 1000));
   // entities.add(new RandomPowerup(2000, 400, 500)); 
@@ -82,7 +82,7 @@ void setup() {
 }
 
 void draw() {
- if(!preloadObstacles)  generateObstacle();
+  if (!preloadObstacles)  generateObstacle();
   //if (!p.invincible) background(80);
   // else background(255, 150, 0);
   shake();
@@ -125,7 +125,7 @@ void draw() {
     fill(0, 255, 0, 100);
     rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
   }
-  
+
   //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
   for (int i=powerups.size () -1; i>=0; i--) {
     if (powerups.get(i).dead)powerups.remove(powerups.get(i));
@@ -202,7 +202,7 @@ void draw() {
     pow.displayIcon();
   }
 
-  if(!preloadObstacles) deletePastObstacles();
+  if (!preloadObstacles) deletePastObstacles();
   image(GUI, 0, 0); // add GUIlayer
   calcDispScore();
   if (debug)debugScreen();
@@ -314,11 +314,10 @@ void calcDispScore() {
   fill(255);
   textSize(40);
   textAlign(RIGHT);
-   text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.001)  +" meter", width-50, 100);
- // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
- // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
+  text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.001)  +" meter", width-50, 100);
+  // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
+  // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
   textAlign(LEFT);
-
 }
 void debugScreen() {
   fill(100, 255, 0);
@@ -366,16 +365,23 @@ void loadImages() {
   ironBox2= loadImage("metalBox2.png");
   ironBox3= loadImage("metalBox3.png");
   Box= loadImage("woodenBox.png");
+  brokenBox= loadImage("woodenBoxBroken.png");
   mysteryBox= loadImage("mysteryWoodenBox.png");
   Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
+  water1= loadImage("water1.png");
+  water2= loadImage("water2.png");
+  water3= loadImage("water3.png");
+  Block = loadImage("blockMad.png");
+  BlockSad = loadImage("blockSad.png");
+
+  //paralax
   Tree =loadImage("treetile.png");
   Tree2 =loadImage("treetile2.png");
 
+  //debris
   Leaf  =loadImage("leaf.png");
-  Block = loadImage("blockMad.png");
-  BlockSad = loadImage("blockSad.png");
 }
 void loadSound() {
   minim = new Minim(this);
