@@ -1,136 +1,149 @@
 int  difficulty, difficultyRange=10, interval=2200;
 float minDifficulty=0, maxDifficulty=difficultyRange;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=1000;
+boolean firstCourse=true;
 
 void generateObstacle() {
+  if (p.x+p.w+loadMargin > distGenerated ) {
+    loadRandomObstacleCourse(distGenerated);
+    distGenerated+=loadObstacleDist;
+  }
 }
 
 void loadObstacle() {
 
-  entities.add(new Box(1500, int(floorHeight-200), 1) );
+  entities.add(new Box(1500, int(floorHeight-200), 1) ); // ? box
   spawnFloor(-interval);   // behind floor
   spawnFloor(0);  // first floor
 
-
-  for (int i=1; i<110; i++) {
+  for (int i=1; i<amountOfCourses; i++) {
+    loadRandomObstacleCourse(i*interval);
+  }
+}
+void loadRandomObstacleCourse(int x) {
+  if (firstCourse) {  // first is always grass
+    spawnFloor(x);
+    firstCourse=false;
+  } else {
     minDifficulty+=0.3;
     maxDifficulty+=0.3;
     difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-difficultyRange);
 
     switch(difficulty) {
     case -4:
-      spawnHill(i*interval); 
+      spawnHill(x); 
       break;
     case -3:
-      spawnUnderGround(i*interval); 
+      spawnUnderGround(x); 
       break;
     case -2:
-      spawnFloor(i*interval);
-      spawnBush(i*interval);
+      spawnFloor(x);
+      spawnBush(x);
       break;
     case -1:
-      spawnFloor(i*interval);
-      spawnSingleWall(i*interval);
+      spawnFloor(x);
+      spawnSingleWall(x);
       break;
     case 0:
-      spawnFloor(i*interval);
-      spawnTires(i*interval);
+      spawnFloor(x);
+      spawnTires(x);
       break;
     case 1:
-      spawnWater(i*interval);
+      spawnWater(x);
       break;
     case 2:
-      spawnFloor(i*interval);
-      spawnDuck(i*interval);
+      spawnFloor(x);
+      spawnDuck(x);
       break;
     case 3:
-      spawnFloor(i*interval);
-      spawnFloatingBlock(i*interval);
+      spawnFloor(x);
+      spawnFloatingBlock(x);
       break;
     case 4:
-      spawnFloor(i*interval);
-      spawnDoubleWall(i*interval);
+      spawnFloor(x);
+      spawnDoubleWall(x);
       break;
     case 5:
-      spawnFloor(i*interval);
-      spawnTirePool(i*interval);
+      spawnFloor(x);
+      spawnTirePool(x);
       break;
     case 6:
-      spawnFloor(i*interval);
-      spawnMetalWall(i*interval);
+      spawnFloor(x);
+      spawnMetalWall(x);
       break;
     case 7:
-      spawnFloor(i*interval);
-      spawnHeap(i*interval);
+      spawnFloor(x);
+      spawnHeap(x);
       break;
     case 8:
-      spawnFloor(i*interval);
-      spawnTiltedBoxes(i*interval);
+      spawnFloor(x);
+      spawnTiltedBoxes(x);
       break;
     case 9:
-      spawnFloor(i*interval);
-      spawnTireTower(i*interval);
+      spawnFloor(x);
+      spawnTireTower(x);
       break;
     case 10:
-      spawnFloor(i*interval);
-      spawnBoxDuck(i*interval);
+      spawnFloor(x);
+      spawnBoxDuck(x);
       break;
     case 11:
-      spawnFloor(i*interval);
-      spawnPlatform(i*interval);
+      spawnFloor(x);
+      spawnPlatform(x);
       break;
     case 12:
-      spawnFloor(i*interval);
-      spawnBoxPlatform(i*interval);
+      spawnFloor(x);
+      spawnBoxPlatform(x);
       break;
     case 13:
-      spawnFloor(i*interval);
-      spawnBarrier(i*interval);
+      spawnFloor(x);
+      spawnBarrier(x);
       break;
     case 14:
-      spawnFloor(i*interval);
-      spawnBiuldingFrame(i*interval);
+      spawnFloor(x);
+      spawnBiuldingFrame(x);
       break;
     case 15:
-      spawnFloor(i*interval);
-      spawnSteps(i*interval);
+      spawnFloor(x);
+      spawnSteps(x);
       break;
     case 16:
-      spawnFloor(i*interval);
-      spawnBlocks(i*interval);
+      spawnFloor(x);
+      spawnBlocks(x);
       break;
     case 17:
-      spawnFloor(i*interval);
-      spawnTunnel(i*interval);
+      spawnFloor(x);
+      spawnTunnel(x);
       break;  
     case 18:
-      spawnFloor(i*interval);
-      spawnTowerFrame(i*interval);
+      spawnFloor(x);
+      spawnTowerFrame(x);
       break;
     case 19:
-      spawnFloor(i*interval);
-      spawnLaserArena(i*interval);
+      spawnFloor(x);
+      spawnLaserArena(x);
       break;
     case 20:
-      spawnFloor(i*interval);
-      spawnDounut(i*interval);
+      spawnFloor(x);
+      spawnDounut(x);
       break;
     case 21:
-      spawnFloor(i*interval);
-      spawnTimeGate(i*interval);
+      spawnFloor(x);
+      spawnTimeGate(x);
       break;
     case 22:
-      spawnSlashArena(i*interval);
+      spawnSlashArena(x);
       break;
     case 23:
-      spawnFloor(i*interval);
-      spawnShell(i*interval);
+      spawnFloor(x);
+      spawnShell(x);
       break;
     default:
-      //spawnWater(i*interval);
-      //  spawnUnderGround(i*interval); 
-      spawnFloor(i*interval);
-      spawnSingleWall(i*interval);
-      spawnBush(i*interval);
+      //spawnWater(x);
+      //spawnUnderGround(x); 
+      spawnFloor(x);
+      spawnSingleWall(x);
+      spawnBush(x);
     }
   }
 }
@@ -227,22 +240,22 @@ void spawnTires(int x) {
 }
 void spawnTirePool(int x) {
   int index= int(random(3));
-  entities.add(new IronBox(x-200, int(floorHeight-200) ) ); 
-  entities.add(new Tire(x, int(floorHeight-200) ) ); 
-  entities.add(new Tire(x+200, int(floorHeight-200) ) );
-  if (index==0) entities.add(new Tire(x+400, int(floorHeight-200) ) );
-  entities.add(new Tire(x+600, int(floorHeight-200) ) );
+  entities.add(new IronBox(x, int(floorHeight-200) ) ); 
+  entities.add(new Tire(x+200, int(floorHeight-200) ) ); 
+  entities.add(new Tire(x+400, int(floorHeight-200) ) );
+  if (index==0) entities.add(new Tire(x+600, int(floorHeight-200) ) );
   entities.add(new Tire(x+800, int(floorHeight-200) ) );
+  entities.add(new Tire(x+1000, int(floorHeight-200) ) );
 
-  entities.add(new Tire(x, int(floorHeight-400) ) ); 
-  entities.add(new Tire(x+200, int(floorHeight-400) ) );
-  if (index==0) entities.add(new Tire(x+400, int(floorHeight-400) ) );
-  entities.add(new Tire(x+600, int(floorHeight-400) ) );
+  entities.add(new Tire(x+200, int(floorHeight-400) ) ); 
+  entities.add(new Tire(x+400, int(floorHeight-400) ) );
+  if (index==0) entities.add(new Tire(x+600, int(floorHeight-400) ) );
   entities.add(new Tire(x+800, int(floorHeight-400) ) );
+  entities.add(new Tire(x+1000, int(floorHeight-400) ) );
 
-  entities.add(new IronBox(x+1000, int(floorHeight-200) ) );
+  entities.add(new IronBox(x+1200, int(floorHeight-200) ) );
 
-  if (index==1) entities.add( new  Powerup(x+500, int(floorHeight-350), 200) );
+  if (index==1) entities.add( new  Powerup(x+700, int(floorHeight-350), 200) );
 }
 void spawnTireTower(int x) {
   entities.add(new Tire(x, int(floorHeight-200) ) ); 
@@ -635,11 +648,10 @@ void spawnHill(int x) {
   int index= int(random(4));
 
   if (index==1) {
-    entities.add(new Box(x+800, int(floorHeight-400) ));
-    entities.add(new Box(x+1000, int(floorHeight-400) ));
-    entities.add(new Box(x+1200, int(floorHeight-400) ));
+    entities.add(new Box(x+800, int(floorHeight-350) ));
+    entities.add(new Box(x+1000, int(floorHeight-350) ));
+    entities.add(new Box(x+1200, int(floorHeight-350) ));
   }
-
   entities.add(new Grass(x+0, int(floorHeight+0), 200, 200) );
   entities.add(new Grass(x+200, int(floorHeight-50), 200, 200) );
   entities.add(new Grass(x+400, int(floorHeight-100), 200, 200)  );

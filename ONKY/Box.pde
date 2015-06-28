@@ -1,5 +1,6 @@
 class Box extends Obstacle {
   int type;
+
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(180, 140, 50);

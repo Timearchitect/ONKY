@@ -9,10 +9,11 @@ class Player {
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
-  int duckTime, duckCooldown,duckHeight=45;
+  int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
   boolean dead, onGround, punching, smashing, ducking, invincible;
-
+  int totalJumps, totalAttacks, totalDucks;
+  float averageSpeed;
 
   Player() {
     trailspawnTimer=millis();
@@ -85,7 +86,9 @@ class Player {
     popMatrix();
     if (punching && punchCooldown==0)punch();
     // smash();
-    if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
+    fill(0);    
+    if (debug)text ("averageSpeed:"+averageSpeed +" totalJump:"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
+  //  if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
   }
   void collision() {
     if (invis==0) {
@@ -100,6 +103,7 @@ class Player {
   }
   void jump() {
     if (jumpCount>0) {
+      totalJumps++;
       onGround=false;
       ducking=false;
       if (jumpCount==2) {
@@ -124,9 +128,12 @@ class Player {
       entities.add(new LineParticle(int(x+w*0.5), int(y+h), 10, 0));
     }
     if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
-    ducking=true;
-    y+=duckHeight;
     duckTime=50;
+    if (!ducking) {
+      totalDucks++;
+      ducking=true;
+      y+=duckHeight;
+    }
   }
   void checkIfObstacle(int top) {
     if (top<y+h) { 
@@ -138,7 +145,7 @@ class Player {
       vy=0;
       angle=0;
     } else {
-    //  onGround=false;
+      //  onGround=false;
     }
   }
   void checkIfGround() {
@@ -154,7 +161,7 @@ class Player {
   void stomp() {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
-   // particles.add(new sparkParticle(int(x+w), int(y+h),20, color(255, 0, 0)));
+    // particles.add(new sparkParticle(int(x+w), int(y+h),20, color(255, 0, 0)));
     skakeFactor=60;
   }
   void recover() {
@@ -171,6 +178,7 @@ class Player {
   }
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
+      totalAttacks++;
       playSound(sliceSound);
       if (ducking && jumpCount<MAX_JUMP) {      // down dash attack
         entities.add(new slashParticle(int(p.x), int(p.y), 4));
@@ -258,21 +266,27 @@ class Player {
     x=0;
     vx=10;
     invis=0;
+
+    totalDucks=0;
+    totalJumps=0;
+    totalAttacks=0;
+    averageSpeed=0;
+
     punching=false; 
     ducking=false;
     invincible=false;
     usedPowerup.clear();
   }
-  
-  void respawn(){
+
+  void respawn() {
     lives--;
     UpdateGUILife(); // updateGUI
   }
-  
+
   void spawnSpeedEffect() {
     if (int(random(60/speedFactor))<vx) {
       particles.add(new speedParticle(int(x+w), int(random(90)+p.y)));
-     if(invincible) particles.add(new sparkParticle(int(x+w), int(random(h)+y),10, color(255, 220, 20)));
+      if (invincible) particles.add(new sparkParticle(int(x+w), int(random(h)+y), 10, color(255, 220, 20)));
     }
   }
 }

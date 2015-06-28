@@ -13,6 +13,7 @@ class Powerup extends Entity implements Cloneable {
     w=100;
     h=100;
     powerups.add( this);
+    totalTokens++;
   }
   void update() {
     if (angle%100==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5), 20, powerupColor));
@@ -45,7 +46,7 @@ class Powerup extends Entity implements Cloneable {
     }
   }
   void collect() {
-    tokens++;
+    tokensTaken++;
     playSound(collectSound);
     particles.add( new SpinParticle( int(x), int(y), powerupColor));
     particles.add( new sparkParticle(int(x), int(y), 30, powerupColor));

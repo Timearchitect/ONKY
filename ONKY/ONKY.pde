@@ -18,7 +18,7 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound;
-AudioPlayer blockDestroySound,  smackSound;
+AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
@@ -26,7 +26,8 @@ PImage Bush, Box, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3
 PImage Tree, Tree2, Mountain, Grass;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
-int score, tokens, objectsDestroyed;
+int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
+
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
 ArrayList<Paralax> ForegroundParalaxLayers = new ArrayList<Paralax>();
@@ -39,8 +40,8 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
 color FlashColor;
-boolean debug, mute;
-int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200, flashOpacity  ;
+boolean debug, mute, preloadObstacles=false;
+int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200, flashOpacity;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
 final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100;
 
@@ -62,26 +63,26 @@ void setup() {
   //UpdateGUILife();
 
   loadParalax();
-  loadObstacle();
+  if (preloadObstacles)loadObstacle();
   p.y=floorHeight-p.h;
 
   entities.add(new InvisPowerup(1000, 600, 1500));
   //  entities.add(new LaserPowerup(2200, 400, 600));
   entities.add(new LaserPowerup(2100, 600, 600));
-  entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
-  entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
+ // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
+ // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
-  entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
-  entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
+ // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
+ // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
   // entities.add(new SlowPowerup(2200, 400, 1000));
   // entities.add(new RandomPowerup(2000, 400, 500)); 
-  //entities.add(new RandomPowerup(2000, 600, 500)); 
+  entities.add(new RandomPowerup(2000, 600, 500)); 
   entities.add(new RandomPowerup(2000, 200, 500));
 }
 
 void draw() {
-
+ if(!preloadObstacles)  generateObstacle();
   //if (!p.invincible) background(80);
   // else background(255, 150, 0);
   shake();
@@ -287,24 +288,33 @@ void gameReset() {
   minDifficulty=0;
   maxDifficulty=difficultyRange;
   speedLevel=0;
-  loadObstacle();
+  if (preloadObstacles)loadObstacle();
+  else  distGenerated=0;
+  firstCourse=true;
   p.reset();
   UpdateGUILife();
 
 
   speedFactor=1;
   targetSpeedFactor=1;
-  score=0;
-  tokens=0;
-  objectsDestroyed=0;
+  resetScore();
 }
+void resetScore() {
+  score=0;
+  tokensTaken=0;
+  obstacleDestroyed=0;
 
+  score=0;
+  totalTokens=0;
+  totalObstacle=0;
+}
 void calcDispScore() {
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
   fill(0);
   textSize(30);
-  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+objectsDestroyed +"  tokens: "+tokens, width-850, 50);
+  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
+  text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
 }
 void debugScreen() {
   fill(100, 255, 0);

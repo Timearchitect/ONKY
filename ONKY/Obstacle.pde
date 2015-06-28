@@ -1,11 +1,12 @@
 
-abstract class Obstacle extends Entity {
+ abstract class Obstacle extends Entity {  
   float impactForce;
   color obstacleColor;
   int hitBrightness, health=1;
   Obstacle(int _x, int _y) {
     super( _x, _y, 200, 200);
     obstacles.add( this);
+    totalObstacle++;
   }
   void update() {
     x+=vx*speedFactor;
@@ -74,7 +75,7 @@ abstract class Obstacle extends Entity {
   }
   void death() {
     super.death();
-    objectsDestroyed++;
+    obstacleDestroyed++;
     destroySound();
     background(255);
   }
