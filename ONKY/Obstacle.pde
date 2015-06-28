@@ -34,7 +34,7 @@ abstract class Obstacle extends Entity {
       //println("onTop");
     } else {
       if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y&&  p.y-p.vy < y + h) {
-       // println("collision!!!!"); 
+        // println("collision!!!!"); 
         if (p.invincible) {
           death();
         } else {

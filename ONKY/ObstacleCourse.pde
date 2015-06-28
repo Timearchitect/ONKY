@@ -4,16 +4,22 @@ float minDifficulty=0, maxDifficulty=difficultyRange;
 void loadObstacle() {
 
   entities.add(new Box(1500, int(floorHeight-200), 1) );
-      spawnFloor(-interval);   // behind floor
-      spawnFloor(0);  // first floor
+  spawnFloor(-interval);   // behind floor
+  spawnFloor(0);  // first floor
 
 
   for (int i=1; i<110; i++) {
     minDifficulty+=0.3;
     maxDifficulty+=0.3;
-    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-10);
+    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-difficultyRange);
 
     switch(difficulty) {
+    case -4:
+      spawnHill(i*interval); 
+      break;
+    case -3:
+      spawnUnderGround(i*interval); 
+      break;
     case -2:
       spawnFloor(i*interval);
       spawnBush(i*interval);
@@ -117,12 +123,11 @@ void loadObstacle() {
       spawnShell(i*interval);
       break;
     default:
-          //spawnWater(i*interval);
+      //spawnWater(i*interval);
+      //  spawnUnderGround(i*interval); 
       spawnFloor(i*interval);
-spawnBlocks(i*interval);
-
-     //  spawnSingleWall(i*interval);
-     //  spawnBush(i*interval);
+      spawnSingleWall(i*interval);
+      spawnBush(i*interval);
     }
   }
 }
@@ -449,7 +454,7 @@ void spawnBlocks(int x) {
 }
 void spawnDounut(int x) {
   int index= int(random(3));
-  entities.add( new  LaserPowerup(x-200, int(floorHeight-300), 300) );
+  entities.add( new  LaserPowerup(x-150, int(floorHeight-300), 300) );
 
   entities.add(new Box(x-0, int(floorHeight-200) ) );
   entities.add(new Box(x-0, int(floorHeight-400) ) );
@@ -463,6 +468,10 @@ void spawnDounut(int x) {
   if (index==0) entities.add( new  Powerup(x+1200, int(floorHeight-800), 200) );
   if (index==1) entities.add( new  Powerup(x+400, int(floorHeight-350), 200) );
   if (index==2) entities.add( new  LaserPowerup(x+400, int(floorHeight-350), 200) );
+
+
+  entities.add(new Box(x+400, int(floorHeight-600) ) );
+  entities.add(new Box(x+400, int(floorHeight-200) ) );
 }
 void spawnLaserArena(int x) {
   entities.add( new  LaserPowerup(x-400, int(floorHeight-700), 200) );
@@ -499,13 +508,25 @@ void spawnTimeGate(int x) {
 
 void spawnSlashArena(int x) {
   int index= int(random(3));
+  if (index==0) {
+    entities.add( new  TeleportPowerup(x+0, int(floorHeight-100), 100, 400) );
+    entities.add(new IronBox(x+100, int(floorHeight-200) ) );
+    entities.add(new PlatForm(x+100, int(floorHeight-0), 200, 25, true) );
+  } else if (index==1) {
+    entities.add( new  TeleportPowerup(x+0, int(floorHeight-300), 100, 400) );
+    entities.add(new IronBox(x+100, int(floorHeight-400) ) );
+    entities.add(new PlatForm(x+100, int(floorHeight-200), 200, 25, true) );
+  } else {
+    entities.add( new  TeleportPowerup(x+0, int(floorHeight-500), 100, 400) );
+    entities.add(new IronBox(x+100, int(floorHeight-600) ) );
+    entities.add(new PlatForm(x+100, int(floorHeight-400), 200, 25, true) );
+  }
 
-  entities.add( new  TeleportPowerup(x+0, int(floorHeight-300), 100, 400) );
-  entities.add(new Box(x+100, int(floorHeight-400) ) );
-
+  index= int(random(3));
   if (index==0) {
     entities.add( new  TeleportPowerup(x+400, int(floorHeight-100), 100, 400) );
     entities.add(new IronBox(x+500, int(floorHeight-200) ) );
+    entities.add(new PlatForm(x+500, int(floorHeight-0), 200, 25, true) );
   } else if (index==1) {
     entities.add( new  TeleportPowerup(x+400, int(floorHeight-300), 100, 400) );
     entities.add(new IronBox(x+500, int(floorHeight-400) ) );
@@ -519,6 +540,7 @@ void spawnSlashArena(int x) {
   if (index==0) {
     entities.add( new  TeleportPowerup(x+800, int(floorHeight-100), 100, 400) );
     entities.add(new IronBox(x+900, int(floorHeight-200) ) );
+    entities.add(new PlatForm(x+900, int(floorHeight-0), 200, 25, true) );
   } else if (index==1) {
     entities.add( new  TeleportPowerup(x+800, int(floorHeight-300), 100, 400) );
     entities.add(new IronBox(x+900, int(floorHeight-400) ) );
@@ -528,8 +550,11 @@ void spawnSlashArena(int x) {
     entities.add(new IronBox(x+900, int(floorHeight-600) ) );
     entities.add(new PlatForm(x+900, int(floorHeight-400), 200, 25, true) );
   }
+  entities.add(new PlatForm(x+1100, int(floorHeight-25), 500, 25, true) );
+
   for (int i=0; i<interval; i+=200) {
-    entities.add(new Water(x+i, int(floorHeight), 200, 200 ) );
+    if (i<interval-600)entities.add(new Water(x+i, int(floorHeight), 200, 200 ) );
+    else entities.add(new Grass(x+i, int(floorHeight), 200, 200 ) );
   }
 }
 
@@ -580,5 +605,44 @@ void spawnWater(int x) {
   for (int i=0; i<interval; i+=200) {
     entities.add(new Water(x+i, int(floorHeight), 200, 200 ) );
   }
+}
+
+void spawnUnderGround(int x) {
+  int index= int(random(3));
+  entities.add(new Grass(x+0, int(floorHeight+0), 200, 200) );
+  entities.add(new Grass(x+200, int(floorHeight+50), 200, 200) );
+  entities.add(new Grass(x+400, int(floorHeight+100), 200, 200)  );
+  entities.add(new Grass(x+600, int(floorHeight+150), 200, 200 ) );
+  entities.add(new Grass(x+800, int(floorHeight+200), 200, 200 ) );
+  entities.add(new Grass(x+1000, int(floorHeight+200), 200, 200 ) );
+
+  entities.add(new Box(x+800, int(floorHeight-200)) );
+  if (index==0)entities.add(new Box(x+1000, int(floorHeight-200), 1) );
+  entities.add(new Box(x+1000, int(floorHeight-400)) );
+  entities.add(new Box(x+1200, int(floorHeight-200)) );
+
+  entities.add(new Grass(x+1200, int(floorHeight+200), 200, 200 ) );
+  entities.add(new Grass(x+1400, int(floorHeight+150), 200, 200 ) );
+  entities.add(new Grass(x+1600, int(floorHeight+100), 200, 200 ) );
+  entities.add(new Grass(x+1800, int(floorHeight+50), 200, 200 ) );
+  entities.add(new Grass(x+2000, int(floorHeight+0), 200, 200) );
+}
+
+void spawnHill(int x) {
+  int index= int(random(3));
+  entities.add(new Grass(x+0, int(floorHeight+0), 200, 200) );
+  entities.add(new Grass(x+200, int(floorHeight-50), 200, 200) );
+  entities.add(new Grass(x+400, int(floorHeight-100), 200, 200)  );
+  entities.add(new Grass(x+600, int(floorHeight-150), 200, 200 ) );
+  entities.add(new Grass(x+800, int(floorHeight-150), 200, 200 ) );
+  entities.add(new Grass(x+1000, int(floorHeight-150), 200, 200 ) );
+
+  if (index==0)entities.add(new Box(x+1000, int(floorHeight-350), 1) );
+
+  entities.add(new Grass(x+1200, int(floorHeight-150), 200, 200 ) );
+  entities.add(new Grass(x+1400, int(floorHeight-150), 200, 200 ) );
+  entities.add(new Grass(x+1600, int(floorHeight-100), 200, 200 ) );
+  entities.add(new Grass(x+1800, int(floorHeight-50), 200, 200 ) );
+  entities.add(new Grass(x+2000, int(floorHeight-0), 200, 200) );
 }
 

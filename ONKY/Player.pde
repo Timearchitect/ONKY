@@ -262,7 +262,12 @@ class Player {
     invincible=false;
     usedPowerup.clear();
   }
-
+  
+  void respawn(){
+    lives--;
+    UpdateGUILife(); // updateGUI
+  }
+  
   void spawnSpeedEffect() {
     if (int(random(60/speedFactor))<vx) {
       particles.add(new speedParticle(int(x+w), int(random(90)+p.y)));

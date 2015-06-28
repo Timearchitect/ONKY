@@ -38,9 +38,9 @@ class LaserProjectile extends Projectile {
   }
 
   void collision() {
-    if ( floorHeight < y+vy ) {
+   /* if ( floorHeight < y+vy ) {
       death();
-    }
+    }*/
     if (!dead) {
       for (Obstacle o : obstacles) {
         if ( o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {

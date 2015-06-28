@@ -368,6 +368,21 @@ class Grass extends Obstacle {
   }
   void death() {
   }
+  void collision() {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y-5 &&  p.y+p.h-5-p.vy < y +20) {
+      p.checkIfObstacle(y-5);
+      surface();
+      //println("onTop");
+    } else {
+      if (p.x+p.w > x && p.x < x + w  && p.y+p.h+p.vy > y&&  p.y-p.vy < y + h) {
+        // if (p.vx>5) {
+        //  if (!p.invincible)  //knock();
+        //}
+        //if (!p.invincible)p.collision();
+        p.checkIfObstacle(y-5);
+      }
+    }
+  }
   void display() {
     //  super.display();
     image(Grass, x, y-margin, w, h);
@@ -386,7 +401,10 @@ class Water extends Obstacle {
   }
 
   void display() {
-    super.display();
+    //   super.display();
+    noStroke();
+    fill(obstacleColor);
+    rect(x, y, w, 2000);
     fill(150, 150, 255);
     rect(x, y, w, 25);
   }
