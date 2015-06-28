@@ -15,7 +15,7 @@ class Powerup extends Entity implements Cloneable {
     powerups.add( this);
   }
   void update() {
-  if(angle%100==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5),20, powerupColor));
+    if (angle%100==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5), 20, powerupColor));
     angle+=4;
     offsetX=cos(radians(angle))*12;
     offsetY=sin(radians(angle))*12;
@@ -47,9 +47,9 @@ class Powerup extends Entity implements Cloneable {
   void collect() {
     tokens++;
     playSound(collectSound);
-    particles.add( new SpinParticle( int(x), int(y),powerupColor));
-    particles.add( new sparkParticle(int(x), int(y),30, powerupColor));
-    particles.add( new sparkParticle(int(x), int(y),15, 255));
+    particles.add( new SpinParticle( int(x), int(y), powerupColor));
+    particles.add( new sparkParticle(int(x), int(y), 30, powerupColor));
+    particles.add( new sparkParticle(int(x), int(y), 15, 255));
     death();
   }
   void death() {
@@ -89,8 +89,8 @@ class InvisPowerup extends Powerup {
   void collect() {
     if (!dead) {
       //tokens++;
-     // playSound(collectSound);
-     // particles.add( new SpinParticle(int(x), int(y),powerupColor));
+      // playSound(collectSound);
+      // particles.add( new SpinParticle(int(x), int(y),powerupColor));
       p.vx=30;
       if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
       p.invincible=true;  // activates supermario starpower
@@ -102,8 +102,7 @@ class InvisPowerup extends Powerup {
       }
       //p.usedPowerup.time+=this.time;
       //this.death();
-              super.collect();
-
+      super.collect();
     }
   }
   void use() {
@@ -127,16 +126,15 @@ class LaserPowerup extends Powerup {
 
   void collect() {
     if (!dead) {
-     // tokens++;
-     // playSound(collectSound);
-     // particles.add( new SpinParticle(int(x), int(y),powerupColor));
+      // tokens++;
+      // playSound(collectSound);
+      // particles.add( new SpinParticle(int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }    
       catch(CloneNotSupportedException e) {
       }
-       super.collect();
-
+      super.collect();
     }
   }
   void use() {
@@ -161,17 +159,17 @@ class SlowPowerup extends Powerup {
   }
 
   void collect() {
-           
-   // tokens++;
-   // playSound(collectSound);
-   // particles.add( new SpinParticle(int(x), int(y),powerupColor));
+
+    // tokens++;
+    // playSound(collectSound);
+    // particles.add( new SpinParticle(int(x), int(y),powerupColor));
     try {
       p.usedPowerup.add(this.clone());
     }        
     catch(CloneNotSupportedException e) {
     }
-     super.collect();
-   // this.death();
+    super.collect();
+    // this.death();
   }
   void use() {
     speedFactor=0.5; //slowrate
@@ -188,9 +186,9 @@ class LifePowerup extends Powerup {
   }
   void collect() {
     if (!dead) {
-    //  tokens++;
-    //  playSound(collectSound);
-     // particles.add( new SpinParticle(  int(x), int(y),powerupColor));
+      //  tokens++;
+      //  playSound(collectSound);
+      // particles.add( new SpinParticle(  int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }        
@@ -249,6 +247,7 @@ class TeleportPowerup extends Powerup {
           o.death();
         }
       }
+      screenAngle=12;
       skakeFactor=200;
       speedFactor=0.02;
       super.collect();
@@ -256,7 +255,7 @@ class TeleportPowerup extends Powerup {
     }
   }
   void use() {
-
+    screenAngle=10;
     time-= 1*speedFactor;
     if (time<1)death();
   }

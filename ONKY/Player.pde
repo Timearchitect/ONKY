@@ -92,7 +92,7 @@ class Player {
       lives--;
       UpdateGUILife(); // updateGUI
       playSound(ughSound);
-      screenAngle=-6;
+      screenAngle=-16;
       background(255, 0, 0);
     }
     invis=100;
@@ -129,7 +129,7 @@ class Player {
   }
   void checkIfObstacle(int top) {
     if (top<y+h) { 
-      if (punching && ducking&& !onGround && jumpCount<MAX_JUMP) stomp();
+      if (punching && ducking&& !onGround && jumpCount<MAX_JUMP) stomp(); // stomp attack
       jumpCount=MAX_JUMP;
 
       onGround=true;
@@ -137,7 +137,7 @@ class Player {
       vy=0;
       angle=0;
     } else {
-      onGround=false;
+    //  onGround=false;
     }
   }
   void checkIfGround() {
