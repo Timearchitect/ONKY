@@ -398,11 +398,12 @@ class Grass extends Obstacle {
 class Water extends Obstacle {
   int debrisCooldown;
   int count;
+  //PImage cell;
   Water(int _x, int _y, int _w, int _h) {
     super(_x, _y);
     w=_w;
     h=_h;
-    obstacleColor = color(81,104,151);
+    obstacleColor = color(81, 104, 151);
   }
   void update() {
     super.update();
@@ -417,11 +418,25 @@ class Water extends Obstacle {
     noStroke();
     fill(obstacleColor);
     rect(x, y+50, w, 2000);
-    if (count%40<10)image(water1, x, y, w, h);
-    else if (count%40<20)image(water2, x, y, w, h);
-    else if (count%40<30)image(water3, x, y, w, h);
-    else image(water2, x, y, w, h);
+    /* if (count%60<10)image(water1, x, y, w, h);
+     else if (count%60<20)image(water2, x, y, w, h);
+     else if (count%60<30)image(water3, x, y, w, h);
+     else if (count%60<40)image(water4, x, y, w, h);
+     else if (count%60<50)image(water3, x, y, w, h);
+     
+     else image(water2, x, y, w, h);*/
+    if (count%60<10)image( cutSprite (0), x, y, w, h);
+    else if (count%60<20)image(cutSprite (1), x, y, w, h);
+    else if (count%60<30)image(cutSprite (2), x, y, w, h);
+    else if (count%60<40)image(cutSprite (3), x, y, w, h);
+    else if (count%60<50)image(cutSprite (2), x, y, w, h);
 
+    else image(cutSprite (1), x, y, w, h);
+  }
+
+  PImage cutSprite (int index) {
+    final int interval= 50, imageWidth=50, imageheight=50;
+    return waterSpriteSheet.get(index*(interval+1), 0, imageWidth, imageheight);
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {

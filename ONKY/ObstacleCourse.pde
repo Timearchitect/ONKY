@@ -703,9 +703,10 @@ void spawnHill(int x) {
 void spawnIronPath(int x) {
   int index= int(random(4));
   entities.add( new  Powerup(x+100, int(floorHeight-100), 100) );
+  entities.add(new IronBox(x+00, int(floorHeight-400) ));
+  entities.add(new IronBox(x+00, int(floorHeight-600) ));
 
   //entities.add(new IronBox(x+200, int(floorHeight-200) ));
-  entities.add(new IronBox(x+00, int(floorHeight-400) ));
   entities.add(new IronBox(x+200, int(floorHeight-600) ));
   entities.add( new  Powerup(x+300, int(floorHeight-100), 100) );
 
@@ -727,9 +728,11 @@ void spawnIronPath(int x) {
   entities.add( new  Powerup(x+900, int(floorHeight-300), 100) );
 
   //entities.add(new IronBox(x+1000, int(floorHeight-200) ));
-  entities.add(new IronBox(x+1200, int(floorHeight-400) ));
   entities.add(new IronBox(x+1000, int(floorHeight-600) ));
   entities.add( new  Powerup(x+1100, int(floorHeight-100), 100) );
+
+  entities.add(new IronBox(x+1200, int(floorHeight-400) ));
+  entities.add(new IronBox(x+1200, int(floorHeight-600) ));
 
   entities.add( new  Powerup(x+1300, int(floorHeight-100), 100) );
 
