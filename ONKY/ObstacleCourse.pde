@@ -1,6 +1,6 @@
-int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=29;
+int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=30;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2000, deleteMargin=2000;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2200, deleteMargin=1000;
 boolean firstCourse=true;
 
 void generateObstacle() {
@@ -10,7 +10,6 @@ void generateObstacle() {
   }
 }
 void deletePastObstacles() {
-
 
   for (int i=powerups.size () -1; i>=0; i--) {
     if (powerups.get(i).x+powerups.get(i).w+deleteMargin<p.x)
@@ -36,6 +35,7 @@ void loadObstacle() {
 void loadRandomObstacleCourse(int x) {
   if (firstCourse) {  // first is always grass
     spawnFloor(-interval);
+    entities.add(new Sign(x+800, int(floorHeight-200), "ONKY GO!!!"));
     spawnFloor(x);
     firstCourse=false;
   } else {
@@ -45,7 +45,9 @@ void loadRandomObstacleCourse(int x) {
     }
     minDifficulty+=difficultScale;
     maxDifficulty+=difficultScale;
-    difficulty=int(random(maxDifficulty-minDifficulty)+minDifficulty-difficultyRange);
+    difficulty=floor(random(maxDifficulty-minDifficulty))+int(minDifficulty-difficultyRange);
+   // println(difficulty);
+  //  println("min: "+minDifficulty+" max: "+maxDifficulty);
 
     if (difficulty<0)difficulty=0;  
 
@@ -53,125 +55,154 @@ void loadRandomObstacleCourse(int x) {
     case 0:
       spawnFloor(x);
       spawnSingleWall(x);
+      entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
       break;
     case 1:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Hill"));
       spawnHill(x); 
       break;
     case 2:
+      entities.add(new Sign(x-200, int(floorHeight-200), "UnderGround"));
       spawnUnderGround(x); 
       break;
     case 3:
+      entities.add(new Sign(x-200, int(floorHeight-200), "bush"));
       spawnFloor(x);
       spawnBush(x);
       break;
     case 4:
+      entities.add(new Sign(x-200, int(floorHeight-200), "1 wall"));
       spawnFloor(x);
       spawnSingleWall(x);
       break;
     case 5:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Tires"));
       spawnFloor(x);
       spawnTires(x);
       break;
     case 6:
+      entities.add(new Sign(x-200, int(floorHeight-200), "water"));
       spawnWater(x);
       break;
     case 7:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Duck"));
       spawnFloor(x);
       spawnDuck(x);
       break;
     case 8:
+      entities.add(new Sign(x-200, int(floorHeight-200), "FloatingBlock"));
       spawnFloor(x);
       spawnFloatingBlock(x);
       break;
     case 9:
+      entities.add(new Sign(x-200, int(floorHeight-200), "2 wall"));
       spawnFloor(x);
       spawnDoubleWall(x);
       break;
     case 10:
+      entities.add(new Sign(x-200, int(floorHeight-200), "tirePool"));
       spawnFloor(x);
       spawnTirePool(x);
       break;
     case 11:
+      entities.add(new Sign(x-200, int(floorHeight-200), "metal wall"));
       spawnFloor(x);
       spawnMetalWall(x);
       break;
     case 12:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Heap"));
       spawnFloor(x);
       spawnHeap(x);
       break;
     case 13:
+      entities.add(new Sign(x-200, int(floorHeight-200), "TiltedBoxes"));
       spawnFloor(x);
       spawnTiltedBoxes(x);
       break;
     case 14:
+      entities.add(new Sign(x-200, int(floorHeight-200), "TireTower"));
       spawnFloor(x);
       spawnTireTower(x);
       break;
     case 15:
+      entities.add(new Sign(x-200, int(floorHeight-200), "BoxDuck"));
       spawnFloor(x);
       spawnBoxDuck(x);
       break;
     case 16:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Platform"));
       spawnFloor(x);
       spawnPlatform(x);
       break;
     case 17:
+      entities.add(new Sign(x-200, int(floorHeight-200), "boxplatform"));
       spawnFloor(x);
       spawnBoxPlatform(x);
       break;
     case 18:
+      entities.add(new Sign(x-200, int(floorHeight-200), "barrier"));
       spawnFloor(x);
       spawnBarrier(x);
       break;
     case 19:
+      entities.add(new Sign(x-200, int(floorHeight-200), "biuldingFrame"));
       spawnFloor(x);
       spawnBiuldingFrame(x);
       break;
     case 20:
+      entities.add(new Sign(x-200, int(floorHeight-200), "steps"));
       spawnFloor(x);
       spawnSteps(x);
       break;
     case 21:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Blocks"));
       spawnFloor(x);
       spawnBlocks(x);
       break;
     case 22:
+      entities.add(new Sign(x-200, int(floorHeight-200), "IronPath"));
       spawnFloor(x);
       spawnIronPath(x);
       break;
     case 23:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Tunnel"));
       spawnFloor(x);
       spawnTunnel(x);
       break;  
     case 24:
+      entities.add(new Sign(x-200, int(floorHeight-200), "TowerFrame"));
       spawnFloor(x);
       spawnTowerFrame(x);
       break;
     case 25:
+      entities.add(new Sign(x-200, int(floorHeight-200), "LaserArea"));
       spawnFloor(x);
       spawnLaserArena(x);
       break;
     case 26:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Dounut"));
       spawnFloor(x);
       spawnDounut(x);
       break;
     case 27:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Timegate"));
       spawnFloor(x);
       spawnTimeGate(x);
       break;
     case 28:
+      entities.add(new Sign(x-200, int(floorHeight-200), "slashArena"));
       spawnSlashArena(x);
       break;
     case 29:
+      entities.add(new Sign(x-200, int(floorHeight-200), "shell"));
       spawnFloor(x);
       spawnShell(x);
       break;
     default:
       //spawnWater(x);
       //spawnUnderGround(x); 
-
-
+      entities.add(new Sign(x-200, int(floorHeight-200), "default"));
       spawnFloor(x);
       spawnSingleWall(x);
       spawnBush(x);
@@ -378,7 +409,7 @@ void spawnSteps(int x) {
   entities.add(new IronBox(x+1200, int(floorHeight-200) ) );
   entities.add(new IronBox(x+1400, int(floorHeight-600) ) );
   //entities.add(new Box(x+1400, int(floorHeight-400) ) );
-  entities.add(new IronBox(x+1400, int(floorHeight-200) ) );
+  //entities.add(new IronBox(x+1400, int(floorHeight-200) ) );
   if (index==0) entities.add( new  Powerup(x+1700, int(floorHeight-150), 200) );
 }
 void spawnHeap(int x) {

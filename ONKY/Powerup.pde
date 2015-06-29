@@ -1,6 +1,6 @@
 class Powerup extends Entity implements Cloneable {
   PImage icon= tokenIcon;
-  boolean instant,toggle;
+  boolean instant, toggle;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -61,7 +61,7 @@ class Powerup extends Entity implements Cloneable {
     if (time<1)death();
   }
   void displayIcon() {
-    int index=p.usedPowerup.indexOf(this), interval=110, GUIoffsetX=50,GUIoffsetY=height-150;
+    int index=p.usedPowerup.indexOf(this), interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
     noStroke();
     // fill(powerupColor);
     // rect(50+index*interval, 100, 100, 100);
@@ -91,6 +91,7 @@ class InvisPowerup extends Powerup {
       // playSound(collectSound);
       // particles.add( new SpinParticle(int(x), int(y),powerupColor));
       p.vx=30;
+      p.weaponColor=powerupColor;
       if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
       p.invincible=true;  // activates supermario starpower
       changeMusic(superSong);
@@ -108,9 +109,11 @@ class InvisPowerup extends Powerup {
     if (!dead) {
       p.invincible=true;
       p.vx=30;
+          if(p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       time-=1*speedFactor;
-      if (time<=0) {
+      if (time<1) {
         death();
+        p.weaponColor=p.defaultWeaponColor;
       }
     }
   }
@@ -228,6 +231,7 @@ class TeleportPowerup extends Powerup {
       }        
       catch(CloneNotSupportedException e) {
       }    
+      p.weaponColor=powerupColor;
       p.invis+=time;
       p.x=x-w;
       p.y=y;
@@ -256,7 +260,12 @@ class TeleportPowerup extends Powerup {
   void use() {
     screenAngle=10;
     time-= 1*speedFactor;
-    if (time<1)death();
+    if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
+
+    if (time<1) {
+      death();
+      p.weaponColor=p.defaultWeaponColor;
+    }
   }
 }
 class RandomPowerup extends Entity {

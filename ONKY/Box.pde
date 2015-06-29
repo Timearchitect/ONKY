@@ -450,4 +450,51 @@ class Water extends Obstacle {
   void death() {
   }
 }
+class Sign extends Obstacle {
+  int debrisCooldown;
+  String text;
+  
+  Sign(int _x, int _y,String _text) {
+    super(_x, _y);
+    obstacleColor = color(220, 180, 90);
+    w=200;
+    h=200;
+    health=1;
+    text=_text;
+  }
+  void death() {
+    super.death();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+      for (int i= 0; i<3; i++) {
+        entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+      }
+  }
+  void update() {
+    super.update();
+    if (debrisCooldown>0)debrisCooldown--;
+  }
+  void display() {
+    image(sign, x, y, w, h);
+    fill(0);
+    textSize(30);
+    textAlign(CENTER);
+    text(text,x+w*0.5,y+h*0.5);
+  }
 
+  void hit() {
+    super.hit();
+  }
+  void knock() {
+    if (p.invincible) death();
+
+  }
+  void knockSound() {
+    playSound(boxKnockSound);
+  }
+  void destroySound() {
+    playSound(boxDestroySound);
+  }
+  void collision() {
+
+  }
+}

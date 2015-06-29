@@ -8,9 +8,8 @@ import ddf.minim.*;
 //import javax.media.opengl.*;
 //import processing.opengl.*;
 
-
 PGraphics GUI;
-
+PFont font; 
 int renderObject;
 Minim minim;
 AudioPlayer BGM, regularSong, superSong;
@@ -23,7 +22,7 @@ AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
 PImage Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain, Grass,waterSpriteSheet;
+PImage Tree, Tree2, Mountain,sign, Grass,waterSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -55,7 +54,8 @@ void setup() {
    // hint();
    hint(DISABLE_TEXTURE_MIPMAPS);
    ((PGraphicsOpenGL)g).textureSampling(2);*/
-
+ font=loadFont("Roboto-Bold-48.vlw");
+ textFont(font);
   loadImages();
   loadSound();
   loadGUILayer();
@@ -284,13 +284,17 @@ void gameReset() {
   playSound(BGM);
   BGM.loop();
 
-  difficultyRange=10;
-  minDifficulty=0;
-  maxDifficulty=difficultyRange;
   speedLevel=0;
+  
   if (preloadObstacles)loadObstacle();
-  else  distGenerated=0;
+  else {
+  distGenerated=0;
   firstCourse=true;
+  difficulty=0;
+  minDifficulty=0; 
+  maxDifficulty=difficultyRange;
+  }
+  
   p.reset();
   UpdateGUILife();
 
@@ -370,6 +374,7 @@ void loadImages() {
   Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
+  sign= loadImage("sign.png");
  // water1= loadImage("water1.png");
  // water2= loadImage("water2.png");
 //  water3= loadImage("water3.png");

@@ -88,7 +88,7 @@ class slashParticle extends Particle {
 
   void display() {
     noFill();
-    stroke(255, 0, 0, int(opacity));
+    stroke(p.weaponColor, int(opacity));
     strokeWeight(int(opacity*0.18));
     if (type==0) {
       curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
@@ -106,7 +106,7 @@ class slashParticle extends Particle {
       curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
     }
     if (type==5) {  // special
-      stroke(0, 50, 255);
+
       line(x-distance, y, x, y);
     }
     stroke(255, int(opacity+50));
@@ -142,7 +142,7 @@ class LineParticle extends Particle {
   LineParticle(int _x, int _y, int _size) {
     super( _x, _y);
     particles.add(this);
-    particleColor=color(255, 0, 0);
+    particleColor=p.weaponColor;
     size=_size;
     angle=random(360);
   }

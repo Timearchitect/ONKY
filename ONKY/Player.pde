@@ -5,7 +5,7 @@ class Player {
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50;
+  final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50,defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis;
@@ -14,7 +14,7 @@ class Player {
   boolean dead, onGround, punching, smashing, ducking, invincible;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
-
+  color defaultWeaponColor= color(255,0,0),weaponColor= defaultWeaponColor;
   Player() {
     trailspawnTimer=millis();
   }
@@ -106,6 +106,8 @@ class Player {
     if (jumpCount>0) {
       totalJumps++;
       onGround=false;
+      if (ducking)p.y-=duckHeight;
+      h=90;
       ducking=false;
       if (jumpCount==2) {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
@@ -264,8 +266,9 @@ class Player {
     y=floorHeight-h;
     vy=0;
     lives=MAX_LIFE;
+    vx=defaultSpeed;
     x=0;
-    vx=10;
+    
     invis=0;
 
     totalDucks=0;
