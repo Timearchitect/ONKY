@@ -199,6 +199,10 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       spawnShell(x);
       break;
+      case 30:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Islands"));
+      spawnIslands(x);
+      break;
     default:
       //spawnWater(x);
       //spawnUnderGround(x); 
@@ -777,4 +781,14 @@ void spawnIronPath(int x) {
 
   entities.add(new Box(x+600, int(floorHeight-800), -1 ));
 }
+void spawnIslands(int x) {
+for(int i=0; i<3; i++){
+  entities.add(new Water(x+i*200, int(floorHeight), 200, 200 ) );
+  entities.add(new Water(x+i*400, int(floorHeight), 200, 200 ) );
+  entities.add(new Water(x+i*600, int(floorHeight), 200, 200 ) );
+  entities.add(new Water(x+i*800, int(floorHeight), 200, 200 ) );
+  entities.add(new Water(x+i*1000, int(floorHeight), 200, 200 ) );
+  entities.add(new Grass(x+i*1200, int(floorHeight), 200, 200));
 
+}
+}
