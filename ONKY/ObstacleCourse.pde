@@ -53,7 +53,8 @@ void loadRandomObstacleCourse(int x) {
 
     switch(difficulty) {
     case 0:
-      spawnFloor(x);
+      spawnPool(x);
+      
       spawnSingleWall(x);
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
@@ -202,6 +203,10 @@ void loadRandomObstacleCourse(int x) {
       case 30:
       entities.add(new Sign(x-200, int(floorHeight-200), "Islands"));
       spawnIslands(x);
+      break;
+      case 31:
+      entities.add(new Sign(x-200, int(floorHeight-200), "Good luck!"));
+      spawnPool(x);
       break;
     default:
       //spawnWater(x);
@@ -791,4 +796,36 @@ for(int i=1; i<4; i++){
   entities.add(new Grass(x+i*1200, int(floorHeight), 200, 200));
 
 }
+}
+void spawnPool(int x) {
+entities.add(new Water(x, int(floorHeight), 200, 200));
+entities.add(new Water(x+200, int(floorHeight), 200, 200));
+
+entities.add(new IronBox(x+400, int(floorHeight-200)));
+entities.add(new IronBox(x+400, int(floorHeight-400)));
+
+entities.add(new IronBox(x+600, int(floorHeight-200)));
+entities.add(new IronBox(x+600, int(floorHeight-400)));
+entities.add(new IronBox(x+400, int(floorHeight-800)));
+entities.add(new IronBox(x+400, int(floorHeight-1000)));
+
+entities.add(new Water(x+800, int(floorHeight-400), 200, 200));
+
+entities.add(new Water(x+1000, int(floorHeight-400), 200, 200));
+
+entities.add(new IronBox(x+1000, int(floorHeight-800)));
+
+entities.add(new IronBox(x+1600, int(floorHeight-1000)));
+entities.add(new IronBox(x+1600, int(floorHeight-800)));
+entities.add(new IronBox(x+1600, int(floorHeight-600)));
+entities.add(new IronBox(x+1600, int(floorHeight-400)));
+
+
+entities.add(new Grass(x+1000, int(floorHeight), 200, 200));
+entities.add(new Grass(x+1200, int(floorHeight), 200, 200));
+entities.add(new Grass(x+1400, int(floorHeight), 200, 200));
+entities.add(new Grass(x+1600, int(floorHeight), 200, 200));
+entities.add(new Grass(x+1800, int(floorHeight), 200, 200));
+entities.add(new Grass(x+2000, int(floorHeight), 200, 200));
+entities.add(new Grass(x+2200, int(floorHeight), 200, 200));
 }

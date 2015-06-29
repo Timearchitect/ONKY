@@ -66,9 +66,9 @@ void setup() {
   if (preloadObstacles)loadObstacle();
   p.y=floorHeight-p.h;
 
-  entities.add(new InvisPowerup(1000, 600, 1500));
+  // entities.add(new InvisPowerup(1000, 600, 1500));
   //  entities.add(new LaserPowerup(2200, 400, 600));
-  entities.add(new LaserPowerup(2100, 600, 600));
+  // entities.add(new LaserPowerup(2100, 600, 600));
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
   // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
@@ -77,8 +77,8 @@ void setup() {
 
   // entities.add(new SlowPowerup(2200, 400, 1000));
   // entities.add(new RandomPowerup(2000, 400, 500)); 
-  entities.add(new RandomPowerup(2000, 600, 500)); 
-  entities.add(new RandomPowerup(2000, 200, 500));
+  // entities.add(new RandomPowerup(2000, 600, 500)); 
+  // entities.add(new RandomPowerup(2000, 200, 500));
 }
 
 void draw() {
