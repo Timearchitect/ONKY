@@ -478,13 +478,16 @@ class Water extends Obstacle {
     return waterSpriteSheet.get(index*(interval+1), 0, imageWidth, imageheight);
   }
   void collision() {
+                
+
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      //if (p.y>y)p.respawn();
       if (p.y>y+h*0.5) {
         particles.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
         particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
         particles.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
       }
-
+      
       if (p.invincible) {
         if (p.vy>0)p.vy=0;
         p.y=y-p.h;

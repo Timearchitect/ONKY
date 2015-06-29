@@ -1,0 +1,14 @@
+TOKEN Upgrades
+
+
+Laser:
+
+Teleport:
+
+Invincible:
+
+SlowMotion:
+
+LifeUp:
+
+Magnet:

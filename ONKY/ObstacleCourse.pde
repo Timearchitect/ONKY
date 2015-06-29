@@ -1,4 +1,4 @@
-int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=31;
+int  difficulty, difficultyRange=1, interval=2200, totalAmountOfCourses=32;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1;
 int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2200, deleteMargin=1000;
 boolean firstCourse=true;
@@ -53,20 +53,10 @@ void loadRandomObstacleCourse(int x) {
 
     switch(difficulty) {
     case 0:
-<<<<<<< HEAD
-      //  spawnFloor(x);
-      // spawnSingleWall(x);
-      // entities.add(new Sign(x-200, int(floorHeight-200), "First"));
-      // spawnBush(x);
-      spawnIslands(x);
-
-=======
       spawnPool(x);
-      
-      spawnSingleWall(x);
+      //spawnSingleWall(x);
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
->>>>>>> origin/master
       break;
     case 1:
       entities.add(new Sign(x-200, int(floorHeight-200), "Hill"));
@@ -217,7 +207,7 @@ void loadRandomObstacleCourse(int x) {
       entities.add(new Sign(x-200, int(floorHeight-200), "Islands"));
       spawnIslands(x);
       break;
-      case 31:
+    case 32:
       entities.add(new Sign(x-200, int(floorHeight-200), "Good luck!"));
       spawnPool(x);
       break;
@@ -555,7 +545,7 @@ void spawnBlocks(int x) {
   int index= int(random(2));
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
-  entities.add(new Block(x+2000, int(floorHeight-200), -105,-40 ) );
+  entities.add(new Block(x+2000, int(floorHeight-200), -105, -40 ) );
   //  entities.add(new Block(x+200, int(floorHeight-200) ) );
   // entities.add(new Block(x+400, int(floorHeight-200) ) );
 
@@ -802,7 +792,6 @@ void spawnIronPath(int x) {
   entities.add(new Box(x+600, int(floorHeight-800), -1 ));
 }
 void spawnIslands(int x) {
-<<<<<<< HEAD
   //  for (int i=0; i<2; i++) {
   entities.add(new Water(x+0, int(floorHeight), 200, 200 ) );
   entities.add(new Water(x+200, int(floorHeight), 200, 200 ) );
@@ -818,47 +807,38 @@ void spawnIslands(int x) {
   // }
 }
 
-=======
-for(int i=1; i<4; i++){
-  entities.add(new Water(x+i*200, int(floorHeight), 200, 200 ) );
-  entities.add(new Water(x+i*400, int(floorHeight), 200, 200 ) );
-  entities.add(new Water(x+i*600, int(floorHeight), 200, 200 ) );
-  entities.add(new Water(x+i*800, int(floorHeight), 200, 200 ) );
-  entities.add(new Water(x+i*1000, int(floorHeight), 200, 200 ) );
-  entities.add(new Grass(x+i*1200, int(floorHeight), 200, 200));
 
-}
-}
+
 void spawnPool(int x) {
-entities.add(new Water(x, int(floorHeight), 200, 200));
-entities.add(new Water(x+200, int(floorHeight), 200, 200));
+  entities.add(new Water(x, int(floorHeight), 200, 200));
+  entities.add(new Water(x+200, int(floorHeight), 200, 200));
 
-entities.add(new IronBox(x+400, int(floorHeight-200)));
-entities.add(new IronBox(x+400, int(floorHeight-400)));
+  entities.add(new IronBox(x+400, int(floorHeight-200)));
+  entities.add(new IronBox(x+400, int(floorHeight-400)));
 
-entities.add(new IronBox(x+600, int(floorHeight-200)));
-entities.add(new IronBox(x+600, int(floorHeight-400)));
-entities.add(new IronBox(x+400, int(floorHeight-800)));
-entities.add(new IronBox(x+400, int(floorHeight-1000)));
+  entities.add(new IronBox(x+600, int(floorHeight-200)));
+  entities.add(new IronBox(x+600, int(floorHeight-400)));
+  entities.add(new IronBox(x+400, int(floorHeight-800)));
+  entities.add(new IronBox(x+400, int(floorHeight-1000)));
 
-entities.add(new Water(x+800, int(floorHeight-400), 200, 200));
+  entities.add(new Water(x+800, int(floorHeight-400), 200, 200));
 
-entities.add(new Water(x+1000, int(floorHeight-400), 200, 200));
+  entities.add(new Water(x+1000, int(floorHeight-400), 200, 200));
 
-entities.add(new IronBox(x+1000, int(floorHeight-800)));
+  entities.add(new IronBox(x+1000, int(floorHeight-800)));
 
-entities.add(new IronBox(x+1600, int(floorHeight-1000)));
-entities.add(new IronBox(x+1600, int(floorHeight-800)));
-entities.add(new IronBox(x+1600, int(floorHeight-600)));
-entities.add(new IronBox(x+1600, int(floorHeight-400)));
+  entities.add(new IronBox(x+1600, int(floorHeight-1000)));
+  entities.add(new IronBox(x+1600, int(floorHeight-800)));
+  entities.add(new IronBox(x+1600, int(floorHeight-600)));
+  entities.add(new IronBox(x+1600, int(floorHeight-400)));
 
 
-entities.add(new Grass(x+1000, int(floorHeight), 200, 200));
-entities.add(new Grass(x+1200, int(floorHeight), 200, 200));
-entities.add(new Grass(x+1400, int(floorHeight), 200, 200));
-entities.add(new Grass(x+1600, int(floorHeight), 200, 200));
-entities.add(new Grass(x+1800, int(floorHeight), 200, 200));
-entities.add(new Grass(x+2000, int(floorHeight), 200, 200));
-entities.add(new Grass(x+2200, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+1000, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+1200, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+1400, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+1600, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+1800, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+2000, int(floorHeight), 200, 200));
+  entities.add(new Grass(x+2200, int(floorHeight), 200, 200));
 }
->>>>>>> origin/master
+

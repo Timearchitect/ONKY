@@ -44,6 +44,7 @@ abstract class Obstacle extends Entity {
           }
           impactForce=p.vx; 
           p.collision();
+          
         }
         // death();
       }

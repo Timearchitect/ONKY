@@ -108,7 +108,7 @@ class InvisPowerup extends Powerup {
   void use() {
     if (!dead) {
       p.invincible=true;
-      p.vx=30;
+      p.vx=30; // speed
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       time-=1*speedFactor;
       if (time<1) {
