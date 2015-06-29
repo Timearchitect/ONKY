@@ -21,8 +21,8 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
-PImage Tire,glass,Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain,sign, Grass,waterSpriteSheet;
+PImage Tire, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -40,7 +40,7 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Player p = new Player();
 color FlashColor;
 boolean debug, mute, preloadObstacles=false;
-final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100,defaultPlayerOffsetY=200;
+final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
@@ -54,8 +54,8 @@ void setup() {
    // hint();
    hint(DISABLE_TEXTURE_MIPMAPS);
    ((PGraphicsOpenGL)g).textureSampling(2);*/
- font=loadFont("Roboto-Bold-48.vlw");
- textFont(font);
+  font=loadFont("Roboto-Bold-48.vlw");
+  textFont(font);
   loadImages();
   loadSound();
   loadGUILayer();
@@ -67,7 +67,10 @@ void setup() {
   p.y=floorHeight-p.h;
 
   entities.add(new InvisPowerup(1000, 600, 1500));
-  //  entities.add(new LaserPowerup(2200, 400, 600));
+  
+  entities.add(new SlowPowerup(2200, 400, 600));
+  entities.add(new SlowPowerup(2200, 400, 600));
+
   entities.add(new LaserPowerup(2100, 600, 600));
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
   // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
@@ -104,7 +107,7 @@ void draw() {
   translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
   renderObject=0; // for counting objects on screen
 
-  displayFloor();
+  //displayFloor(); legecy
 
   p.update();
   p.display();
@@ -114,7 +117,7 @@ void draw() {
   }
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
-    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
+    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
       renderObject++;
       o.update();
       o.display();
@@ -288,16 +291,16 @@ void gameReset() {
   BGM.loop();
 
   speedLevel=0;
-  
+
   if (preloadObstacles)loadObstacle();
   else {
-  distGenerated=0;
-  firstCourse=true;
-  difficulty=0;
-  minDifficulty=0; 
-  maxDifficulty=difficultyRange;
+    distGenerated=0;
+    firstCourse=true;
+    difficulty=0;
+    minDifficulty=0; 
+    maxDifficulty=difficultyRange;
   }
-  
+
   p.reset();
   UpdateGUILife();
 
@@ -380,10 +383,10 @@ void loadImages() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   sign= loadImage("sign.png");
- // water1= loadImage("water1.png");
- // water2= loadImage("water2.png");
-//  water3= loadImage("water3.png");
- // water4= loadImage("water4.png");
+  // water1= loadImage("water1.png");
+  // water2= loadImage("water2.png");
+  //  water3= loadImage("water3.png");
+  // water4= loadImage("water4.png");
   waterSpriteSheet= loadImage("watertile.png");
 
   Block = loadImage("blockMad.png");

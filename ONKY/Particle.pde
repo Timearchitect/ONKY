@@ -52,7 +52,6 @@ class speedParticle extends Particle {
   }
 
   void update() {
-
     w+=1*speedFactor;
     if (opacity>10)opacity-=4*speedFactor;
     else death();
@@ -63,7 +62,6 @@ class speedParticle extends Particle {
     strokeWeight(3);
     noFill();
     line(x+p.vx-w, y, x-w, y);
-
     strokeWeight(1);
   }
 }
@@ -275,7 +273,6 @@ class splashParticle extends Particle {
 
   void update() {
     super.update();
-    
     x+=vx;
     y+=vy;
     if (size>0)size*=1-0.1*speedFactor;

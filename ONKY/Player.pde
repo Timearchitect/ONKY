@@ -5,7 +5,7 @@ class Player {
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
+  final int MAX_LIFE=5, MAX_JUMP=3, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis, toSlow;
@@ -29,7 +29,7 @@ class Player {
     if (vx<speedLevel && vx>0)vx*=1+0.08*speedFactor;
     if (vx<0)vx*= decayFactor*speedFactor;
     if (punchTime<=0 && punchCooldown>0)punchCooldown--;
-    if (jumpCount==0)angle+=15*speedFactor;
+    if (jumpCount<MAX_JUMP-1)angle+=15*speedFactor;
 
     if (invincible|| 0<invis)recover();
     if (0<collectCooldown)collectCooldown--; // cant collect
@@ -76,10 +76,10 @@ class Player {
       cell=Slide;
       image(cell, -100*0.3, -80*0.5, 100, 80);
     } else {
-      if (jumpCount==1) {
+      if (jumpCount==MAX_JUMP-1) {
         cell=Jump;
         image(Jump, -w*0.5, -h*0.5, 100, 80);
-      } else   if (jumpCount==MAX_JUMP) { 
+      } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
         image(cell, -w*0.5, -h*0.5, w, h);
       } else {
         cell=FrontFlip;
@@ -138,9 +138,8 @@ class Player {
   }
   void checkIfObstacle(int top) {
     if (top<y+h) { 
-      if (punching && ducking&& !onGround && jumpCount<MAX_JUMP) stomp(); // stomp attack
+      if (punching && ducking && !onGround && jumpCount<MAX_JUMP) stomp(); // stomp attack
       jumpCount=MAX_JUMP;
-
       onGround=true;
       y=top-h;
       vy=0;

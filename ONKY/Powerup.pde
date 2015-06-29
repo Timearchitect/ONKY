@@ -109,7 +109,7 @@ class InvisPowerup extends Powerup {
     if (!dead) {
       p.invincible=true;
       p.vx=30;
-          if(p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
+      if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       time-=1*speedFactor;
       if (time<1) {
         death();
@@ -159,24 +159,26 @@ class SlowPowerup extends Powerup {
     powerupColor=color(100, 100, 100);
     icon=slowIcon;
   }
+  SlowPowerup(int _x, int _y, int _time, boolean _instant) {
+    this(_x, _y, int(_time*0.3));
+    instant=_instant;
+  }
+
 
   void collect() {
-
-    // tokens++;
-    // playSound(collectSound);
-    // particles.add( new SpinParticle(int(x), int(y),powerupColor));
     try {
       p.usedPowerup.add(this.clone());
     }        
     catch(CloneNotSupportedException e) {
     }
     super.collect();
-    // this.death();
   }
   void use() {
-    speedFactor=0.5; //slowrate
-    time--;
-    if (time<1)death();
+    if ( toggle || instant ) {
+      speedFactor=0.5; //slowrate
+      time--;
+      if (time<1)death();
+    }
   }
 }
 class LifePowerup extends Powerup {
@@ -216,6 +218,10 @@ class TeleportPowerup extends Powerup {
     powerupColor=color(0, 50, 255);
     icon= slashIcon;
   }
+  TeleportPowerup(int _x, int _y, int _time, boolean _instant) {
+    this(_x, _y, 25);
+    this.instant=_instant;
+  }
   TeleportPowerup(int _x, int _y, int _time, int _distance) {
     this(_x, _y, 25);
     distance=_distance;
@@ -231,15 +237,15 @@ class TeleportPowerup extends Powerup {
       }        
       catch(CloneNotSupportedException e) {
       }    
-      p.weaponColor=powerupColor;
-      p.invis+=time;
-      p.x=x-w;
+      p.weaponColor=powerupColor; // weapon color to blue
+      p.invis+=time;  
+      p.x=x-w;  // telepot to powerup
       p.y=y;
-      p.x+=distance;
+      p.x+=distance; // forward tele
       p.vx=-4;
       p.vy=-4;
-      p.jumpCount++;
-      p.collectCooldown=20;
+      p.jumpCount++; 
+      p.collectCooldown=20;  
       playerOffsetX=distance+100;
       playerOffsetY=0;
       // background(255);
@@ -260,13 +266,14 @@ class TeleportPowerup extends Powerup {
     }
   }
   void use() {
-    screenAngle=10;
-    time-= 1*speedFactor;
-    if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
-
-    if (time<1) {
-      death();
-      p.weaponColor=p.defaultWeaponColor;
+    if ( toggle || instant ) {
+      screenAngle=10;
+      time-= 1*speedFactor;
+      if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
+      if (time<1) {
+        death();
+        p.weaponColor=p.defaultWeaponColor;
+      }
     }
   }
 }
@@ -275,7 +282,6 @@ class RandomPowerup extends Entity {
     super(_x, _y);
     //icon= tokenIcon;
     //powerupColor=color(100, 100, 100);
-
     switch(int(random(5))) {
     case 0:
       entities.add( new InvisPowerup( _x, _y, _time)); 
@@ -284,13 +290,13 @@ class RandomPowerup extends Entity {
       entities.add( new LaserPowerup( _x, _y, _time) );
       break;
     case 2:
-      entities.add( new SlowPowerup( _x, _y, _time) );
+      entities.add( new SlowPowerup( _x, _y, _time, false) );
       break;
     case 3:
       entities.add( new LifePowerup( _x, _y, _time) );
       break;
     case 4:
-      entities.add( new  TeleportPowerup( _x, _y, _time) );
+      entities.add( new  TeleportPowerup( _x, _y, _time, false) );
       break;
     default:
       entities.add( new Powerup( _x, _y, _time));

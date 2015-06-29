@@ -72,6 +72,7 @@ abstract class Obstacle extends Entity {
       impactForce=p.vx+5;
       death();
     }
+    
   }
   void death() {
     super.death();

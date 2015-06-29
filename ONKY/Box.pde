@@ -233,8 +233,8 @@ class Glass extends Obstacle {
 
   void display() {
     super.display();
-    image(glass,x,y,w,h);
-   // rect(x, y, w, h);
+    image(glass, x, y, w, h);
+    // rect(x, y, w, h);
   }
 
   void destroySound() {
@@ -275,11 +275,18 @@ class Glass extends Obstacle {
 class Block extends Obstacle {
   int invis;
   float ay=2;
+  boolean scale;
   Block(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(100, 100, 100);
     w=200;
     h=200;
+    health=20;
+  }
+  Block(int _x, int _y, int _vx, int _vy) {
+    this(_x, _y);
+    vx=_vx;
+    vy=_vy;
     health=20;
   }
   void damage(int i) {
@@ -398,7 +405,7 @@ class Grass extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    obstacleColor = color(100, 255, 100);
+    obstacleColor = color(128, 181, 113);
   }
   void death() {
   }
@@ -419,6 +426,9 @@ class Grass extends Obstacle {
   }
   void display() {
     //  super.display();
+    fill(obstacleColor);
+    noStroke();
+    rect(x, y, w, 2000);
     image(Grass, x, y-margin, w, h);
   }
 
@@ -471,7 +481,7 @@ class Water extends Obstacle {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       if (p.y>y+h*0.5) {
         particles.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
-                particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
+        particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
         particles.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
       }
 
