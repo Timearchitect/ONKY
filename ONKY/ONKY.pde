@@ -17,6 +17,7 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound;
+AudioPlayer splash,waterFall;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
@@ -66,13 +67,12 @@ void setup() {
   if (preloadObstacles)loadObstacle();
   p.y=floorHeight-p.h;
 
-
   // entities.add(new InvisPowerup(1000, 600, 1500));
-    //entities.add(new LaserPowerup(2200, 400, 600));
+  //entities.add(new LaserPowerup(2200, 400, 600));
   // entities.add(new LaserPowerup(2100, 600, 600));
-     entities.add(new TeleportPowerup(2100, 600, 600));
-     entities.add(new TeleportPowerup(2100, 600, 600));
-     entities.add(new TeleportPowerup(2100, 600, 600,false));
+  //  entities.add(new TeleportPowerup(2100, 600, 600));
+  // entities.add(new TeleportPowerup(2100, 600, 600));
+  //  entities.add(new TeleportPowerup(2100, 600, 600,false));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
   // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
@@ -80,10 +80,10 @@ void setup() {
   // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
-   entities.add(new SlowPowerup(2200, 400, 1000));
-   entities.add(new RandomPowerup(2000, 400, 500)); 
-   entities.add(new RandomPowerup(2000, 600, 500)); 
-   entities.add(new RandomPowerup(2000, 200, 500));
+  // entities.add(new SlowPowerup(2200, 400, 1000));
+  // entities.add(new RandomPowerup(2000, 400, 500)); 
+  // entities.add(new RandomPowerup(2000, 600, 500)); 
+  // entities.add(new RandomPowerup(2000, 200, 500));
 }
 
 void draw() {
@@ -144,7 +144,6 @@ void draw() {
   }
 
   //-----------------------------         Debris    / Entity       -----------------------------------------------------------
-
 
   for (int i=debris.size () -1; i>=0; i--) {
     debris.get(i).update();
@@ -424,6 +423,8 @@ void loadSound() {
   laserSound= minim.loadFile("sound/laser2.wav");
   leafSound =  minim.loadFile("sound/rustle.wav");
   teleportSound =minim.loadFile("sound/teleport.wav");
+   splash=minim.loadFile("sound/splash.wav");
+   waterFall=minim.loadFile("sound/waterfall.wav");
   regularSong.setGain(-10);
   laserSound.setGain(-20);
 

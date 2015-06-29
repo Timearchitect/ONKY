@@ -5,13 +5,13 @@ class Player {
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=5, MAX_JUMP=5, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
+  final int MAX_LIFE=5, MAX_JUMP=3, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
-  boolean dead, onGround, punching, smashing, ducking, invincible;
+  boolean dead, onGround, punching, smashing, ducking, invincible,respawning;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
   color defaultWeaponColor= color(255, 0, 0), weaponColor= defaultWeaponColor;
@@ -48,7 +48,7 @@ class Player {
     }
 
     spawnSpeedEffect();
-    //if (y>1200)respawn() ;
+    if (respawning)respawn() ;
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
       usedPowerup.get(i).use();
@@ -300,6 +300,7 @@ class Player {
     entities.add(new PlatForm(int(p.x-500), int(floorHeight-700), 400, 25, true) );
     x-=400;
     y=-50-h;
+    respawning=false;
   }
 
   void spawnSpeedEffect() {

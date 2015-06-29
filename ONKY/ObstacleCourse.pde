@@ -53,8 +53,10 @@ void loadRandomObstacleCourse(int x) {
 
     switch(difficulty) {
     case 0:
-      spawnPool(x);
-      //spawnSingleWall(x);
+      //spawnPool(x);
+            spawnFloor(x);
+
+      spawnSingleWall(x);
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
       break;

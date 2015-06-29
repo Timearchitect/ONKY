@@ -81,7 +81,7 @@ class Powerup extends Entity implements Cloneable {
 
 class InvisPowerup extends Powerup {
   InvisPowerup(int _x, int _y, int _time) {
-    super(_x, _y, int(_time*1.5));
+    super(_x, _y, _time);
     powerupColor=color(255, 200, 0);
     icon = superIcon;
   }
@@ -223,13 +223,13 @@ class TeleportPowerup extends Powerup {
     powerups.add( this);
     powerupColor=color(0, 50, 255);
     icon= slashIcon;
-    instant=true;
+    //instant=true;
   }
   TeleportPowerup(int _x, int _y, int _time, boolean _instant) {
-    super(_x, _y, 25);
-    powerups.add( this);
-    powerupColor=color(0, 50, 255);
-    icon= slashIcon;
+    this(_x, _y, 25);
+    //powerups.add( this);
+    //powerupColor=color(0, 50, 255);
+    //icon= slashIcon;
     this.instant=_instant;
   }
   TeleportPowerup(int _x, int _y, int _time, int _distance) {

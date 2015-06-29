@@ -448,6 +448,7 @@ class Water extends Obstacle {
   void update() {
     super.update();
     count++;
+    if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
     //   super.display();
@@ -478,20 +479,31 @@ class Water extends Obstacle {
     return waterSpriteSheet.get(index*(interval+1), 0, imageWidth, imageheight);
   }
   void collision() {
-                
+
 
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      //if (p.y>y)p.respawn();
+      if (p.y>y+150)p.respawning=true;
       if (p.y>y+h*0.5) {
-        particles.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
-        particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
-        particles.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
+        p.vx*=0.8;
+        if (debrisCooldown==0) {
+          particles.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
+          particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
+          particles.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
+          playSound(splash);
+          debrisCooldown=10;
+        }
       }
-      
-      if (p.invincible) {
+
+      if (p.invincible) { // onGround
         if (p.vy>0)p.vy=0;
         p.y=y-p.h;
-        particles.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));
+         p.onGround=true;
+         p.jumpCount=p.MAX_JUMP;
+        if (debrisCooldown==0) {
+          playSound(waterFall);
+          particles.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));
+          debrisCooldown=3;
+        }
       }
       impactForce=p.vx;
     }
