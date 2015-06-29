@@ -782,7 +782,7 @@ void spawnIronPath(int x) {
   entities.add(new Box(x+600, int(floorHeight-800), -1 ));
 }
 void spawnIslands(int x) {
-for(int i=0; i<3; i++){
+for(int i=1; i<4; i++){
   entities.add(new Water(x+i*200, int(floorHeight), 200, 200 ) );
   entities.add(new Water(x+i*400, int(floorHeight), 200, 200 ) );
   entities.add(new Water(x+i*600, int(floorHeight), 200, 200 ) );
