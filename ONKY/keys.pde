@@ -1,12 +1,16 @@
 void keyPressed() {
   if (key== '1') {
-    p.usedPowerup.add( new LaserPowerup(0,0,500));
+    p.usedPowerup.add( new LaserPowerup(0,0,300));
   }
   if (key== '2') {
-    p.usedPowerup.add( new InvisPowerup(0,0,500));
+    p.usedPowerup.add( new InvisPowerup(0,0,300));
   }
     if (key== '3') {
     p.usedPowerup.add( new TeleportPowerup(int(p.x),int(p.y),200,true));
+  }
+  
+      if (key== '4') {
+    p.usedPowerup.add( new SlowPowerup(int(p.x),int(p.y),300,true));
   }
   if (key== '#') {
     debug=!debug;
