@@ -68,8 +68,12 @@ void setup() {
 
 
   // entities.add(new InvisPowerup(1000, 600, 1500));
-    entities.add(new LaserPowerup(2200, 400, 600));
-   entities.add(new LaserPowerup(2100, 600, 600));
+    //entities.add(new LaserPowerup(2200, 400, 600));
+  // entities.add(new LaserPowerup(2100, 600, 600));
+     entities.add(new TeleportPowerup(2100, 600, 600));
+     entities.add(new TeleportPowerup(2100, 600, 600));
+     entities.add(new TeleportPowerup(2100, 600, 600,false));
+
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
   // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
@@ -432,6 +436,7 @@ void loadGUILayer() {
   GUI.endDraw();
   UpdateGUILife();
 }
+
 void loadParalax() {
 
   entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund

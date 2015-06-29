@@ -1,6 +1,6 @@
 class Powerup extends Entity implements Cloneable {
   PImage icon= tokenIcon;
-  boolean instant, toggle;
+  boolean instant=true, toggle;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -118,12 +118,17 @@ class InvisPowerup extends Powerup {
     }
   }
 }
+
 class LaserPowerup extends Powerup {
   boolean shoot;
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     icon=laserIcon;
     powerupColor=color(255, 0, 0);
+  }
+  LaserPowerup(int _x, int _y, int _time, boolean _instant) {
+    this(_x, _y, _time);
+    this.instant=_instant;
   }
 
   void collect() {
@@ -140,16 +145,16 @@ class LaserPowerup extends Powerup {
     }
   }
   void use() {
+    if ( toggle || instant ) {
+      if (p.angle>6) {  
+        if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+      } else {
+        if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+      }
 
-    if (p.angle>6) {  
-      if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
-    } else {
-      if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+      time-=1*speedFactor;
+      if (time<1)death();
     }
-
-
-    time-=1*speedFactor;
-    if (time<1)death();
   }
 }
 
@@ -212,61 +217,74 @@ class LifePowerup extends Powerup {
 }
 class TeleportPowerup extends Powerup {
   int distance=900;
+  boolean first=true;
   TeleportPowerup(int _x, int _y, int _time) {
     super(_x, _y, 25);
     powerups.add( this);
     powerupColor=color(0, 50, 255);
     icon= slashIcon;
+    instant=true;
   }
   TeleportPowerup(int _x, int _y, int _time, boolean _instant) {
-    this(_x, _y, 25);
+    super(_x, _y, 25);
+    powerups.add( this);
+    powerupColor=color(0, 50, 255);
+    icon= slashIcon;
     this.instant=_instant;
   }
   TeleportPowerup(int _x, int _y, int _time, int _distance) {
     this(_x, _y, 25);
     distance=_distance;
+    instant=true;
   }
   void collect() {
     if (!dead) {
       //tokens++;
       //playSound(collectSound);
-      playSound(teleportSound);
+
       //particles.add( new SpinParticle(  int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }        
       catch(CloneNotSupportedException e) {
       }    
-      p.weaponColor=powerupColor; // weapon color to blue
-      p.invis+=time;  
-      p.x=x-w;  // telepot to powerup
-      p.y=y;
-      p.x+=distance; // forward tele
-      p.vx=-4;
-      p.vy=-4;
-      p.jumpCount++; 
-      p.collectCooldown=20;  
-      playerOffsetX=distance+100;
-      playerOffsetY=0;
-      // background(255);
-      entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
-      for (Obstacle o : obstacles) {
-        //if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
-        if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
-          o.impactForce=60;  
-          o.health=0;
-          o.death();
-        }
-      }
-      screenAngle=12;
-      skakeFactor=200;
-      speedFactor=0.02;
+
       super.collect();
       //death();
     }
   }
+  void ones() {
+    playSound(teleportSound);
+    p.weaponColor=powerupColor; // weapon color to blue
+    p.invis+=time;  
+    if (instant)p.x=x-w;  // telepot to powerup
+    if (instant)p.y=y;
+    p.x+=distance; // forward tele
+    p.vx=-4;
+    p.vy=-4;
+    p.jumpCount++; 
+    p.collectCooldown=20;  
+    playerOffsetX=distance+100;
+    playerOffsetY=0;
+    // background(255);
+    entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
+    for (Obstacle o : obstacles) {
+      //if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
+      if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
+        o.impactForce=60;  
+        o.health=0;
+        o.death();
+      }
+    }
+    screenAngle=12;
+    skakeFactor=200;
+    speedFactor=0.02;
+
+    first=false;
+  }
   void use() {
     if ( toggle || instant ) {
+      if (first )ones();
       screenAngle=10;
       time-= 1*speedFactor;
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
