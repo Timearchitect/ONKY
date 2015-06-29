@@ -87,12 +87,13 @@ class IronBoxDebris extends Debris {
 
 class TireDebris extends Debris {
 
-  int cooldown;
+  int cooldown,size;
   TireDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _o, _x, _y, _vx, _vy);
     bounceFriction=1;
     bounceForce=0.8;
     opacityDecay=-4;
+    size=int(random(50,80));
   }
   void update() {
     super.update();
@@ -105,9 +106,9 @@ class TireDebris extends Debris {
   }
   void display() {
     stroke(0, int(opacity));
-    strokeWeight(20);
+    strokeWeight(int(size*0.4));
     noFill();
-    ellipse(x, y, 60, 60);
+    ellipse(x, y, size, size);
     strokeWeight(1);
   }
 }

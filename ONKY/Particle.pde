@@ -177,14 +177,14 @@ class SpinParticle extends Particle {
   color particleColor=color(255);
   SpinParticle( int _x, int _y, color _particleColor) {
     super( _x, _y);
-   particleColor=_particleColor;
+    particleColor=_particleColor;
     particles.add(this);
     size=150;
     angle=random(0, 360);
   }
   SpinParticle( Player _player) {
-   super( 0, 0);
-        particles.add(this);
+    super( 0, 0);
+    particles.add(this);
     player=_player;
   }
   void update() {
@@ -247,17 +247,50 @@ class sparkParticle extends Particle {
 
   void display() {
     stroke(particleColor);
-      strokeWeight(random(size*2)+size*0.1); 
-      beginShape();
-      vertex(this.x+0, this.y-size );
-      vertex(this.x+size*0.5 -size*0.25, this.y- size*0.5+size*0.25);
-      vertex(this.x+size, this.y+0);
-      vertex(this.x+size*0.5-size*0.25, this.y+ size*0.5-size*0.25);
-      vertex(this.x+0, this.y+ size);
-      vertex(this.x-size*0.5+size*0.25, this.y+size*0.5-size*0.25);
-      vertex(this.x-size, this.y-0);
-      vertex(this.x-size*0.5+size*0.25, this.y-size*0.5+size*0.25);
-      endShape(CLOSE);
+    strokeWeight(random(size*2)+size*0.1); 
+    beginShape();
+    vertex(this.x+0, this.y-size );
+    vertex(this.x+size*0.5 -size*0.25, this.y- size*0.5+size*0.25);
+    vertex(this.x+size, this.y+0);
+    vertex(this.x+size*0.5-size*0.25, this.y+ size*0.5-size*0.25);
+    vertex(this.x+0, this.y+ size);
+    vertex(this.x-size*0.5+size*0.25, this.y+size*0.5-size*0.25);
+    vertex(this.x-size, this.y-0);
+    vertex(this.x-size*0.5+size*0.25, this.y-size*0.5+size*0.25);
+    endShape(CLOSE);
+  }
+}
+
+class splashParticle extends Particle {
+  float  size;
+  color particleColor;
+  splashParticle(int _x, int _y,float _vx,float _vy, int _size, color _particleColor) {
+    super( _x, _y);
+    vx=_vx;
+    vy=_vy;
+    particles.add(this);
+    particleColor=_particleColor;
+    size=_size;
+  }
+
+  void update() {
+    super.update();
+    
+    x+=vx;
+    y+=vy;
+    if (size>0)size*=1-0.1*speedFactor;
+    if (size<5)death();
+  }
+
+  void display() {
+    fill(255);
+    stroke(particleColor);
+    strokeWeight(size*0.4); 
+    beginShape();
+    vertex(x+0, y+0 );
+    vertex(x+size, y-size*3 );
+    vertex(x+size*1.5, y+0 );
+    endShape(CLOSE);
   }
 }
 

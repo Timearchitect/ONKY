@@ -11,3 +11,10 @@ void mouseWheel(MouseEvent event) {  // krympa och förstora
     }
 
 }
+
+void mousePressed(MouseEvent event) {  // krympa och förstora
+
+if(mouseButton==LEFT)    p.startPunch();
+
+
+}

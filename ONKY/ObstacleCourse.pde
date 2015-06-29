@@ -270,6 +270,14 @@ void spawnSingleWall(int x) {
     //   entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
     //   entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
     break;
+      case 0:
+    entities.add(new Box(x+200, int(floorHeight-600) ) ); // 3
+    entities.add(new Box(x+200, int(floorHeight-400) ) ); // 2
+    entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
+    //   entities.add(new IronBox(x+200, int(floorHeight-600) ) ); // 3
+    //   entities.add(new IronBox(x+200, int(floorHeight-400) ) ); // 2
+    //   entities.add(new Box(x+200, int(floorHeight-200) ) ); // 1
+    break;
   }
   int index= int(random(7));
   if (index==0) entities.add( new  Powerup(x+600, int(floorHeight-500), 200) );

@@ -238,8 +238,10 @@ class TeleportPowerup extends Powerup {
       p.x+=distance;
       p.vx=-4;
       p.vy=-4;
+      p.jumpCount++;
       p.collectCooldown=20;
       playerOffsetX=distance+100;
+      playerOffsetY=0;
       // background(255);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       for (Obstacle o : obstacles) {

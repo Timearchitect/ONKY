@@ -58,11 +58,25 @@ class Box extends Obstacle {
 }
 
 class Tire extends Obstacle {
-
+  float radianer, offset;
   Tire(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 0, 0);
     health=3;
+    switch(int(random(4))) {
+    case 0:
+      radianer = HALF_PI;
+      break;
+    case 1:
+      radianer = PI;
+      break;
+    case 2:
+      radianer = PI+HALF_PI;
+      break;
+    case 3:
+      radianer = PI*2;
+      break;
+    }
   }
   void death() {
     super.death();
@@ -72,18 +86,33 @@ class Tire extends Obstacle {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5+50), int(y+random(h)-h*0.5+50), random(15)+impactForce*0.4, random(30)-20));
     }
   }
+  void update() {
+    super.update();
+    if (offset>0) offset--;
+  }
   void hit() {
     super.hit();
     scaleFactor+=scaleFactor*0.05;
     skakeFactor=50;
   }
-
+  void display() {
+    pushMatrix();
+    translate(x+w*0.5+random(-offset, offset), y+h*0.5+random(-offset, offset));
+    rotate(radianer);
+    image(Tire, -w*0.5-10, -h*0.5-10, w+20, h+20);
+    popMatrix();
+  }
+  void knock() {
+    super.knock();
+    offset=6;
+  }
   void knockSound() {
     playSound(rubberKnockSound);
   }
   void surface() {
+    offset=6;
     if (p.vx>9)p.vx*=0.82;
-    if (int(random(20/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
+    if (int(random(15/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
 class IronBox extends Obstacle {
@@ -204,7 +233,8 @@ class Glass extends Obstacle {
 
   void display() {
     super.display();
-    rect(x, y, w, h);
+    image(glass,x,y,w,h);
+   // rect(x, y, w, h);
   }
 
   void destroySound() {
@@ -439,9 +469,16 @@ class Water extends Obstacle {
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      if (p.y>y+h*0.5) {
+        particles.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
+                particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
+        particles.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
+      }
+
       if (p.invincible) {
         if (p.vy>0)p.vy=0;
         p.y=y-p.h;
+        particles.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));
       }
       impactForce=p.vx;
     }
@@ -453,8 +490,8 @@ class Water extends Obstacle {
 class Sign extends Obstacle {
   int debrisCooldown;
   String text;
-  
-  Sign(int _x, int _y,String _text) {
+
+  Sign(int _x, int _y, String _text) {
     super(_x, _y);
     obstacleColor = color(220, 180, 90);
     w=200;
@@ -465,9 +502,9 @@ class Sign extends Obstacle {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
-      for (int i= 0; i<3; i++) {
-        entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
-      }
+    for (int i= 0; i<3; i++) {
+      entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+    }
   }
   void update() {
     super.update();
@@ -478,7 +515,7 @@ class Sign extends Obstacle {
     fill(0);
     textSize(30);
     textAlign(CENTER);
-    text(text,x+w*0.5,y+h*0.5);
+    text(text, x+w*0.5, y+h*0.5);
   }
 
   void hit() {
@@ -486,7 +523,6 @@ class Sign extends Obstacle {
   }
   void knock() {
     if (p.invincible) death();
-
   }
   void knockSound() {
     playSound(boxKnockSound);
@@ -495,6 +531,6 @@ class Sign extends Obstacle {
     playSound(boxDestroySound);
   }
   void collision() {
-
   }
 }
+

@@ -21,7 +21,7 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
-PImage Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire,glass,Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain,sign, Grass,waterSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -40,9 +40,9 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Player p = new Player();
 color FlashColor;
 boolean debug, mute, preloadObstacles=false;
-int floorHeight=700, spawnHeight=250, playerOffsetX=100, playerOffsetY=200, flashOpacity;
+final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100,defaultPlayerOffsetY=200;
+int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
-final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100;
 
 void setup() {
   noSmooth();
@@ -226,8 +226,11 @@ void displayFlash() {
 }
 void smoothOffset() {
   if (defaultPlayerOffsetX != round(playerOffsetX)) {
-    float offsetDiff=defaultPlayerOffsetX-playerOffsetX;
-    playerOffsetX+=offsetDiff*0.02;
+    float offsetXDiff=defaultPlayerOffsetX-playerOffsetX;
+    float offsetYDiff=defaultPlayerOffsetY-playerOffsetY;
+
+    playerOffsetX+=offsetXDiff*0.02;
+    playerOffsetY+=offsetYDiff*0.02;
   }
 }
 void smoothScale() {
@@ -365,10 +368,12 @@ void loadImages() {
   lifeIcon = loadImage("oneup.png");
 
   //Obstacle graphics
+  Tire= loadImage("tire.png");
   ironBox = loadImage("metalBox1.png");
   ironBox2= loadImage("metalBox2.png");
   ironBox3= loadImage("metalBox3.png");
   Box= loadImage("woodenBox.png");
+  glass = loadImage("glass.png");
   brokenBox= loadImage("woodenBoxBroken.png");
   mysteryBox= loadImage("mysteryWoodenBox.png");
   Mountain= loadImage("backgroundfull.png");

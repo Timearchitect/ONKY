@@ -5,16 +5,16 @@ class Player {
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide; //setup
   PImage cell;
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50,defaultSpeed=10;
+  final int MAX_LIFE=5, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
-  float punchTime, invis;
+  float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
   boolean dead, onGround, punching, smashing, ducking, invincible;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
-  color defaultWeaponColor= color(255,0,0),weaponColor= defaultWeaponColor;
+  color defaultWeaponColor= color(255, 0, 0), weaponColor= defaultWeaponColor;
   Player() {
     trailspawnTimer=millis();
   }
@@ -39,7 +39,9 @@ class Player {
     checkIfGround();
 
     checkDuck();
-
+    
+    checkIfStuck();
+    
     if (millis() > trailspawnTimer+80/speedFactor) {
       entities.add(new TrailParticle(int(x), int(y), cell));
       trailspawnTimer=millis();
@@ -93,11 +95,7 @@ class Player {
   }
   void collision() {
     if (invis==0) {
-      lives--;
-      UpdateGUILife(); // updateGUI
-      playSound(ughSound);
-      screenAngle=-16;
-      background(255, 0, 0);
+      reduceLife();
     }
     invis=100;
     vx*= -0.5;
@@ -164,7 +162,7 @@ class Player {
   void stomp() {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
-    // particles.add(new sparkParticle(int(x+w), int(y+h),20, color(255, 0, 0)));
+    particles.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
     skakeFactor=60;
   }
   void recover() {
@@ -256,7 +254,14 @@ class Player {
       duckTime--;
     }
   }
-
+  void checkIfStuck() {
+    if (vx<3)toSlow+=1 *speedFactor ;
+    else toSlow=0;
+    if (toSlow>100) {
+      respawn();
+      toSlow=0;
+    }
+  }
   void cutSprite (int index) {
     final int interval= 160, imageWidth=160, imageheight=130;
     index= int(index%16);
@@ -268,7 +273,7 @@ class Player {
     lives=MAX_LIFE;
     vx=defaultSpeed;
     x=0;
-    
+
     invis=0;
 
     totalDucks=0;
@@ -281,13 +286,15 @@ class Player {
     invincible=false;
     usedPowerup.clear();
   }
-
-  void respawn() {
+  void reduceLife() {
     lives--;
     UpdateGUILife(); // updateGUI
     playSound(ughSound);
     screenAngle=-10;
     background(255, 0, 0);
+  }
+  void respawn() {
+
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
