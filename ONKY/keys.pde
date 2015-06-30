@@ -14,14 +14,18 @@ void keyPressed() {
   if (key== '5') {
     p.usedPowerup.add( new MagnetPowerup(int(p.x), int(p.y), 300, true));
   }
-  if (key== '0') {
+  if (key== '6') {
     p.usedPowerup.add( new LaserPowerup(int(p.x), int(p.y), 300, false));
-    p.usedPowerup.add( new InvisPowerup(int(p.x),int(p.y),300));
+    p.usedPowerup.add( new InvisPowerup(int(p.x),int(p.y),300,false));
     p.usedPowerup.add( new TeleportPowerup(int(p.x),int(p.y),300,false));
     p.usedPowerup.add( new SlowPowerup(int(p.x),int(p.y),300,false));
     p.usedPowerup.add( new MagnetPowerup(int(p.x),int(p.y),300,false));
-
   }
+  if(keyCode== DELETE ){
+  
+  p.usedPowerup.clear();
+  }
+  
   if (key== '#') {
     debug=!debug;
   }

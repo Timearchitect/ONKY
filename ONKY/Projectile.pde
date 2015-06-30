@@ -45,7 +45,7 @@ class LaserProjectile extends Projectile {
     }*/
     if (!dead) {
       for (Obstacle o : obstacles) {
-        if ( o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
+        if (!o.dead && o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
           o.damage(1);
           death();
         }

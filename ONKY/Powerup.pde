@@ -106,6 +106,10 @@ class InvisPowerup extends Powerup {
     powerupColor=color(255, 200, 0);
     icon = superIcon;
   }
+  InvisPowerup(int _x, int _y, int _time, boolean _instant) {
+    this(_x, _y, _time);
+    instant=_instant;
+  }
   void collect() {
     if (!dead) {
       //tokens++;
@@ -130,7 +134,7 @@ class InvisPowerup extends Powerup {
     first=false;
   }
   void use() {
-    if (!dead) {
+    if (!dead &&( instant|| toggle)) {
       if (first )ones();
       p.invincible=true;
       p.vx=30; // speed
@@ -177,7 +181,7 @@ class LaserPowerup extends Powerup {
       } else {
         if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
       }
-
+       if(scaleFactor>0.25)scaleFactor-=0.01;
       time-=1*speedFactor;
       if (time<1)death();
     }
