@@ -2,15 +2,15 @@ class Player {
 
   long trailspawnTimer;
   ArrayList<Powerup> usedPowerup = new ArrayList<Powerup>() ;
-  PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide,cell; //setup
+  PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide, cell; //setup
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=3w, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
+  final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
-  int  punchCooldown=PUNCH_MAX_CD, punchRange=100,attractRange;
+  int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange;
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
-  boolean dead, onGround, punching, smashing, ducking, invincible,respawning;
+  boolean dead, onGround, punching, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
   color defaultWeaponColor= color(255, 0, 0), weaponColor= defaultWeaponColor;
@@ -38,9 +38,9 @@ class Player {
     checkIfGround();
 
     checkDuck();
-    
+
     checkIfStuck();
-    
+
     if (millis() > trailspawnTimer+80/speedFactor) {
       entities.add(new TrailParticle(int(x), int(y), cell));
       trailspawnTimer=millis();
@@ -162,7 +162,18 @@ class Player {
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     particles.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
     skakeFactor=60;
-    for(:obstacles)
+
+
+    int range=200;
+    //fill(255, 0, 0);
+    // rect( p.x,p.y-50,range,300);
+    //rect( p.x-100,p.y+p.h-50  ,(p.x-100)-(p.x+p.w+100), 500);
+    for (Obstacle o : obstacles) {
+      if (o.x+o.w  > p.x && o.x < p.x+range &&   o.y > p.y-50 &&   o.y+o.h < p.y+250) {
+        o.hit();
+        o.death();
+      }
+    }
   }
   void recover() {
     invis-=1*speedFactor;
@@ -274,6 +285,7 @@ class Player {
     x=0;
 
     invis=0;
+    attractRange=0;
 
     totalDucks=0;
     totalJumps=0;
@@ -293,7 +305,6 @@ class Player {
     background(255, 0, 0);
   }
   void respawn() {
-
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;

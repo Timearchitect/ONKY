@@ -111,7 +111,6 @@ class InvisPowerup extends Powerup {
       //tokens++;
       // playSound(collectSound);
       // particles.add( new SpinParticle(int(x), int(y),powerupColor));
-
       try {
         p.usedPowerup.add(this.clone());
       }    
@@ -347,6 +346,7 @@ class MagnetPowerup extends Powerup {
     if ( toggle || instant ) {
       //speedFactor=0.5; //slowrate
       p.attractRange=600;
+      if(time%20==0)entities.add(new RShockWave(int(p.x),int( p.y), 600, 200,  powerupColor) );
       stroke(powerupColor);
       noFill();
       ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);

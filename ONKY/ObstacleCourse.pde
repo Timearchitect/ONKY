@@ -37,6 +37,8 @@ void loadRandomObstacleCourse(int x) {
     spawnFloor(-interval);
     entities.add(new Sign(x+800, int(floorHeight-200), "ONKY GO!!!"));
     spawnFloor(x);
+     spawnFlak( x);
+
     firstCourse=false;
   } else {
     if (totalAmountOfCourses+difficultyRange<minDifficulty) { // check if loop
@@ -873,4 +875,7 @@ void spawnSnake(int x) {
   entities.add(new Snake(x+400, int(floorHeight)));
   entities.add(new Snake(x+600, int(floorHeight)));
 }
-
+void spawnFlak(int x) {
+ for(int i=0 ; i < 2200; i+=200) entities.add(new Box(x+i, int(floorHeight-200)));
+ 
+}

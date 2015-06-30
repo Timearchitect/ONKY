@@ -289,4 +289,29 @@ class splashParticle extends Particle {
     endShape(CLOSE);
   }
 }
+class RShockWave extends Particle {
+    float  size;
+  color particleColor;
+  RShockWave(int _x, int _y, int _size, int _time, color _particleColor) {
+    super( _x, _y );
+    opacity=0;
+    particleColor=_particleColor;
+  }
+  void update() {
+    if (!dead ) { 
+        size-=16;
+        opacity+=8;
+        if (size<=0)dead=true;
+      
+    }
+  }
+  void display() {
+    if (!dead ) {  
+      noFill();
+      stroke(particleColor, opacity);
+      strokeWeight(int(0.1*opacity));
+      ellipse(x, y, size, size);
+    }
+  }
+}
 
