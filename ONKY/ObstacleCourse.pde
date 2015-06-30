@@ -1,5 +1,5 @@
-int  difficulty, difficultyRange=6, interval=2200, totalAmountOfCourses=33;
-float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.5;
+int  difficulty, difficultyRange=7, interval=2200, totalAmountOfCourses=34;
+float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.2;
 int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2200, deleteMargin=1000;
 boolean firstCourse=true;
 
@@ -37,7 +37,7 @@ void loadRandomObstacleCourse(int x) {
     spawnFloor(-interval);
     entities.add(new Sign(x+800, int(floorHeight-200), "ONKY GO!!!"));
     spawnFloor(x);
-     spawnFlak( x);
+    spawnFlak( x);
 
     firstCourse=false;
   } else {
@@ -159,31 +159,31 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       spawnSteps(x);
       break;
-    case 21:
+    case 21:  
+      spawnFloor(x);
+      spawnBlock(x);
+      break;
+    case 22:
       entities.add(new Sign(x-200, int(floorHeight-200), "Blocks"));
       spawnFloor(x);
       spawnBlocks(x);
       break;
-    case 22:
+    case 23:
       entities.add(new Sign(x-200, int(floorHeight-200), "IronPath"));
       spawnFloor(x);
       spawnIronPath(x);
       break;
-    case 23:
+    case 24:
       entities.add(new Sign(x-200, int(floorHeight-200), "Tunnel"));
       spawnFloor(x);
       spawnTunnel(x);
       break;  
-    case 24:
+    case 25:
       entities.add(new Sign(x-200, int(floorHeight-200), "TowerFrame"));
       spawnFloor(x);
       spawnTowerFrame(x);
       break;
-    case 25:
-      entities.add(new Sign(x-200, int(floorHeight-200), "LaserArea"));
-      spawnFloor(x);
-      spawnLaserArena(x);
-      break;
+
     case 26:
       entities.add(new Sign(x-200, int(floorHeight-200), "Dounut"));
       spawnFloor(x);
@@ -219,6 +219,11 @@ void loadRandomObstacleCourse(int x) {
       entities.add(new Sign(x-200, int(floorHeight-200), "happy!"));
       spawnFloor(x);
       spawnTokenParadise(x);
+      break;
+    case 34:
+      entities.add(new Sign(x-200, int(floorHeight-200), "LaserArea"));
+      spawnFloor(x);
+      spawnLaserArena(x);
       break;
     default:
 
@@ -877,8 +882,14 @@ void spawnSnake(int x) {
   entities.add(new Snake(x+600, int(floorHeight)));
 }
 void spawnFlak(int x) { 
- for(int i=600 ; i < 2200; i+=200) entities.add(new Box(x+i, int(floorHeight-200)));
+  for (int i=600; i < 2200; i+=200) entities.add(new Box(x+i, int(floorHeight-200)));
   entities.add(new Lumber(x+250, int(floorHeight-500), 300, 25, true) );
 }
 
+void spawnBlock(int x) { 
+  entities.add(new Block(x+800, int(floorHeight-500)) );
+  entities.add(new IronBox(x+2000, int(floorHeight-200)) );
+  entities.add(new IronBox(x+2000, int(floorHeight-400)) );
+  entities.add(new IronBox(x+2000, int(floorHeight-600)) );
+}
 

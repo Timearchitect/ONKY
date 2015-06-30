@@ -47,6 +47,7 @@ class Player {
     }
 
     spawnSpeedEffect();
+    
     if (respawning)respawn() ;
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling

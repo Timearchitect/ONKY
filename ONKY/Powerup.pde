@@ -24,7 +24,7 @@ abstract class Powerup extends Entity implements Cloneable {
     offsetY=sin(radians(angle))*12;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
-    if (homing && dist(x,y,p.x+p.w*0.5,p.y+p.h*0.5)<p.attractRange) {
+    if (homing && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
       float xDiff=((p.x+p.w*0.5)-x), yDiff=((p.y+p.h*0.5)-y);
       vx=xDiff*0.15;
       vy=yDiff*0.15;
@@ -346,12 +346,12 @@ class MagnetPowerup extends Powerup {
     if ( toggle || instant ) {
       //speedFactor=0.5; //slowrate
       p.attractRange=500;
-      if(time%20==0)entities.add(new RShockWave(int(p.x),int( p.y), 600, 200,  powerupColor) );
+      if (time%int(10/speedFactor)==0)particles.add(new RShockWave(int(p.x), int(p.y), 1000, powerupColor) );
       stroke(powerupColor);
       noFill();
-      ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);
+      // ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);
       time--;
-      if (time<1){
+      if (time<1) {
         death();
         p.attractRange=0;
       }
