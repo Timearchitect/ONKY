@@ -574,8 +574,8 @@ class Snake extends Obstacle {
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
-    w=81*2;
-    h=33*2;
+    w=82*2;
+    h=35*2;
     health=1;
   }
   void death() {
@@ -586,7 +586,8 @@ class Snake extends Obstacle {
     }
   }
   void update() {
-    count++;
+        count++;
+        
     super.update();
     this.x--;
     if (debrisCooldown>0)debrisCooldown--;
@@ -595,15 +596,16 @@ class Snake extends Obstacle {
     // image(Snake, x, y, w, h);
     //fill(obstacleColor);
     //rect( x, y, w, h);
-    if (count%30<10)image( cutSprite (0), x, y-80, w, h);
+     if (count%30<10)image( cutSprite (0), x, y-80, w, h);
     else if (count%30<20)image(cutSprite (2), x, y-80, w, h);
-    else image(cutSprite (1), x, y-80, w, h);
+        else image(cutSprite (1), x, y-80, w, h);
   }
 
   PImage cutSprite (int index) {
-    final int interval= 81, imageWidth=81, imageheight=33;
+    final int interval= 82, imageWidth=82, imageheight=35;
     return Snake.get(index*(interval+1), 0, imageWidth, imageheight);
   }
+  
 
   void hit() {
     super.hit();
