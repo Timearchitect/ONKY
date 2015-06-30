@@ -1,20 +1,20 @@
 class Box extends Obstacle {
-  int type;
+  int type, count;
 
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(180, 140, 50);
     health=2;
-    type=int(random(2));
+    type=int(random(3));
   }
   Box(int _x, int _y, int _type) {
     this(_x, _y);
-
     type=_type;
   }
   void death() {
     super.death();
     if (type==-1)  entities.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
+    if (type==2)  for (int i=0; i <3; i++)  entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
@@ -38,7 +38,14 @@ class Box extends Obstacle {
      */
     if (type==0) image(Box, x, y, w, h);
     else if (type==1) image(brokenBox, x, y, w, h);
-    else image(mysteryBox, x, y, w, h);
+    else if (type==2) {
+      image(brokenBox, x, y, w, h);
+      if (count%20==0)particles.add(new sparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+    } else image(mysteryBox, x, y, w, h);
+  }
+  void update() {
+    super.update();
+    count++;
   }
   void hit() {
     super.hit();
@@ -287,7 +294,6 @@ class Block extends Obstacle {
     this(_x, _y);
     vx=_vx;
     vy=_vy;
-    health=20;
   }
   void damage(int i) {
     hitBrightness=100;
@@ -333,7 +339,11 @@ class Block extends Obstacle {
   }
   void knock() {
     super.knock();
-
+    if (abs(vx)>10) { 
+      playSound(smackSound);
+      speedFactor=0.5;
+      background(255);
+    }
     skakeFactor=100;
   }
   void knockSound() {
@@ -497,8 +507,8 @@ class Water extends Obstacle {
       if (p.invincible) { // onGround
         if (p.vy>0)p.vy=0;
         p.y=y-p.h;
-         p.onGround=true;
-         p.jumpCount=p.MAX_JUMP;
+        p.onGround=true;
+        p.jumpCount=p.MAX_JUMP;
         if (debrisCooldown==0) {
           playSound(waterFall);
           particles.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));

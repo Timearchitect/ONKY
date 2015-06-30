@@ -1,9 +1,10 @@
-class Powerup extends Entity implements Cloneable {
+abstract class Powerup extends Entity implements Cloneable {
   PImage icon= tokenIcon;
   boolean instant=true, toggle;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
+  int upgradeLevel;
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
     icon= tokenIcon;
@@ -27,7 +28,7 @@ class Powerup extends Entity implements Cloneable {
   }
   void display() {
 
-    if (icon!=null)image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, 100, 100);
+    if (icon!=null)image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, w, h);
     else {
       noStroke();
       fill(powerupColor);
@@ -77,9 +78,24 @@ class Powerup extends Entity implements Cloneable {
     return (Powerup)super.clone();
   }
 }
-
+class TokenPowerup extends Powerup {
+  TokenPowerup(int _x, int _y, int _time) {
+    super(_x, _y, _time);
+    powerups.add( this);
+    powerupColor=color(255);
+    icon= tokenIcon;
+    w=75;
+    h=75;
+  }
+  void collect() {
+    if (!dead) {
+      super.collect();
+    }
+  }
+}
 
 class InvisPowerup extends Powerup {
+  boolean first=true;
   InvisPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerupColor=color(255, 200, 0);
@@ -90,11 +106,7 @@ class InvisPowerup extends Powerup {
       //tokens++;
       // playSound(collectSound);
       // particles.add( new SpinParticle(int(x), int(y),powerupColor));
-      p.vx=30;
-      p.weaponColor=powerupColor;
-      if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
-      p.invincible=true;  // activates supermario starpower
-      changeMusic(superSong);
+
       try {
         p.usedPowerup.add(this.clone());
       }    
@@ -105,8 +117,17 @@ class InvisPowerup extends Powerup {
       super.collect();
     }
   }
+  void ones() {
+      p.vx=30;
+      p.weaponColor=powerupColor;
+      if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
+      p.invincible=true;  // activates supermario starpower
+      changeMusic(superSong);
+    first=false;
+  }
   void use() {
     if (!dead) {
+     if (first )ones();
       p.invincible=true;
       p.vx=30; // speed
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
@@ -210,6 +231,7 @@ class LifePowerup extends Powerup {
       //death();
     }
   }
+
   void use() {
     time-= 1*speedFactor;
     if (time<1)death();
@@ -295,6 +317,35 @@ class TeleportPowerup extends Powerup {
     }
   }
 }
+
+class MagnetPowerup extends Powerup {
+  MagnetPowerup(int _x, int _y, int _time) {
+    super(_x, _y, int(_time*0.3));
+    powerupColor=color(255, 0, 255);
+    icon=null;
+  }
+  MagnetPowerup(int _x, int _y, int _time, boolean _instant) {
+    this(_x, _y, int(_time*0.3));
+    instant=_instant;
+  }
+
+  void collect() {
+    try {
+      p.usedPowerup.add(this.clone());
+    }        
+    catch(CloneNotSupportedException e) {
+    }
+    super.collect();
+  }
+  void use() {
+    if ( toggle || instant ) {
+      //speedFactor=0.5; //slowrate
+      time--;
+      if (time<1)death();
+    }
+  }
+}
+
 class RandomPowerup extends Entity {
   RandomPowerup(int _x, int _y, int _time) {
     super(_x, _y);
@@ -317,7 +368,7 @@ class RandomPowerup extends Entity {
       entities.add( new  TeleportPowerup( _x, _y, _time, false) );
       break;
     default:
-      entities.add( new Powerup( _x, _y, _time));
+      entities.add( new TokenPowerup( _x, _y, _time));
     }
     death();
   }

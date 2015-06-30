@@ -41,7 +41,7 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 Player p = new Player();
 color FlashColor;
 boolean debug, mute, preloadObstacles=false;
-final int MAX_SHAKE=200, MAX_SPEED=20, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
+final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
@@ -119,7 +119,7 @@ void draw() {
   }
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
-    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
+    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
       renderObject++;
       o.update();
       o.display();

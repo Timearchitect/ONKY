@@ -1,5 +1,6 @@
 abstract class Projectile extends Entity {
   int time=80;
+  color projectileColor;
   Projectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
@@ -18,8 +19,9 @@ class LaserProjectile extends Projectile {
     super( _x, _y, _vx, _vy);
     //projectiles.add(this);
     w=25;
+    projectileColor= color(255, 0, 0);
     strokeWeight(10);
-    stroke(255, 0, 0);
+    stroke(projectileColor);
     fill(255);
     ellipse(x+w, y, 75, 40);
     playSound(laserSound);
@@ -28,7 +30,7 @@ class LaserProjectile extends Projectile {
   void display() {
     super.display();
 
-    stroke(255, 0, 0);
+    stroke(projectileColor);
     strokeWeight(12);
     line(x, y, x-vx*1.5, y-vy*1.5);
 
@@ -64,7 +66,7 @@ class LaserProjectile extends Projectile {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
     strokeWeight(10);
-    stroke(255, 0, 0);
+    stroke(projectileColor);
     fill(255);
     ellipse(int(x), int(y), 75, 75);
   }
