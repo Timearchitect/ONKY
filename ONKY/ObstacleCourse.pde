@@ -54,6 +54,7 @@ void loadRandomObstacleCourse(int x) {
     switch(difficulty) {
     case 0:
       //spawnPool(x);
+spawnSnake(x);
             spawnFloor(x);
 
       spawnSingleWall(x);
@@ -854,5 +855,11 @@ void spawnPool(int x) {
   entities.add(new Grass(x+1800, int(floorHeight), 200, 200));
   entities.add(new Grass(x+2000, int(floorHeight), 200, 200));
   //entities.add(new Grass(x+2200, int(floorHeight), 200, 200));
+}
+void spawnSnake(int x){
+  entities.add(new Snake(x, int(floorHeight)));
+  entities.add(new Snake(x+200, int(floorHeight)));
+  entities.add(new Snake(x+400, int(floorHeight)));
+  entities.add(new Snake(x+600, int(floorHeight)));
 }
 
