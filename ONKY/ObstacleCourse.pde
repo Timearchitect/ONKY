@@ -56,7 +56,7 @@ void loadRandomObstacleCourse(int x) {
       //spawnPool(x);
       spawnSnake(x);
       spawnFloor(x);
-    //  spawnSingleWall(x);
+      //  spawnSingleWall(x);
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
       break;
@@ -215,6 +215,7 @@ void loadRandomObstacleCourse(int x) {
       break;
     case 33:
       entities.add(new Sign(x-200, int(floorHeight-200), "happy!"));
+      spawnFloor(x);
       spawnTokenParadise(x);
       break;
     default:
