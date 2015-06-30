@@ -571,12 +571,14 @@ class Sign extends Obstacle {
 class Snake extends Obstacle {
   int debrisCooldown;
   int count;
+  int snakeSpeed = int(random(16));
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
     w=82*2;
     h=35*2;
     health=1;
+    
   }
   void death() {
     super.death();
@@ -586,9 +588,13 @@ class Snake extends Obstacle {
     }
   }
   void update() {
-        count++;
+         
+    count++;
         
     super.update();
+    if(count%30<10)this.x--;
+    else if(count%30<20)this.x = this.x-(this.snakeSpeed+1);
+    else this.x--;
     this.x--;
     if (debrisCooldown>0)debrisCooldown--;
   }
