@@ -22,7 +22,7 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
   }
 
   if (!powerupTap && mouseButton==LEFT) {  
-    if (width*0.5 < mouseX && height*0.5 < mouseY) {
+    if (width*0.5 < mouseX ) {
       p.startPunch();
       noStroke();
       // fill(powerupColor);

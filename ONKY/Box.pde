@@ -683,37 +683,45 @@ else if(count%30<20)this.x = this.x-(this.snakeSpeed+1);
 }
 
 class Barrel extends Obstacle {
-  int debrisCooldown;
-  int count;
+ // int debrisCooldown;
+  int angle;
   Barrel(int _x, int _y) {
-    super(_x, _y);
-    obstacleColor = color(0, 255, 50);
+    super(_x, _y+67);
+    obstacleColor = color(180, 120, 50);
     w=67*2;
     h=67*2;
     health=1;
+    vx=-2;
   }
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
     for (int i =0; i< 8; i++) {
-      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
   void update() {
-    count++;
 
     super.update();
-    this.x--;
-    if (debrisCooldown>0)debrisCooldown--;
+    angle+=vx*2;
+    //this.x--;
+    //if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
     // image(Snake, x, y, w, h);
     //fill(obstacleColor);
     //rect( x, y, w, h);
-    if (count%40<10)image( cutSprite (0), x, y-135, w, h);
+    pushMatrix();
+    translate(x+w*0.5,y+h*0.5);
+    rotate(radians(angle));
+    image( cutSprite(0), -w*0.5, -w*0.5, w, h);
+    popMatrix();
+    
+    
+   /* if (count%40<10)image( cutSprite (0), x, y-135, w, h);
     else if (count%40<20)image(cutSprite (1), x, y-140, w, h);
     else if (count%40<30)image(cutSprite (2), x, y-145, w, h);
-    else image(cutSprite (3), x, y-140, w, h);
+    else image(cutSprite (3), x, y-140, w, h);*/
   }
 
   PImage cutSprite (int index) {
@@ -722,33 +730,24 @@ class Barrel extends Obstacle {
   }
 
 
+
   void hit() {
     super.hit();
-    for (int i =0; i< 6; i++) {
-      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(40)+impactForce*2, random(20)-20));
-    }
+    scaleFactor+=scaleFactor*0.05;
+    skakeFactor=50;
   }
   void knock() {
-    if (p.invincible) death();
-    if (debrisCooldown==0) { 
-      super.knock();
-      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
-      debrisCooldown=4;
-    }
+    super.knock();
+    impactForce=p.vx;
+    death();
+    skakeFactor=100;
   }
   void knockSound() {
-    playSound(leafSound);
+    playSound(boxKnockSound);
   }
   void destroySound() {
-    playSound(leafSound);
+    playSound(boxDestroySound);
   }
-  void collision() {
-    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      if (p.vx>5) {
-        knock();
-      }
-      impactForce=p.vx;
-    }
-  }
+
 }
 

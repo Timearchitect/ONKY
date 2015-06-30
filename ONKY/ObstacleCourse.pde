@@ -895,6 +895,6 @@ void spawnBlock(int x) {
 }
 
 void spawnBarrel(int x) {
-  entities.add(new Barrel(x+900, int(floorHeight)));
+  entities.add(new Barrel(x+900, int(floorHeight-200)));
   
 }

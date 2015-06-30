@@ -244,7 +244,8 @@ class sparkParticle extends Particle {
 
   void display() {
     stroke(particleColor);
-    strokeWeight(random(size*2)+size*0.1); 
+   // strokeWeight(random(size*2)+size*0.1); 
+   strokeWeight(size); 
     beginShape();
     vertex(this.x+0, this.y-size );
     vertex(this.x+size*0.5 -size*0.25, this.y- size*0.5+size*0.25);
@@ -261,7 +262,7 @@ class sparkParticle extends Particle {
 class splashParticle extends Particle {
   float  size;
   color particleColor;
-  splashParticle(int _x, int _y,float _vx,float _vy, int _size, color _particleColor) {
+  splashParticle(int _x, int _y, float _vx, float _vy, int _size, color _particleColor) {
     super( _x, _y);
     vx=_vx;
     vy=_vy;
@@ -290,26 +291,26 @@ class splashParticle extends Particle {
   }
 }
 class RShockWave extends Particle {
-    float  size;
+  float  size;
   color particleColor;
   RShockWave(int _x, int _y, int _size, color _particleColor) {
     super( _x, _y );
-    
+
     opacity=0;
     size=_size;
     particleColor=_particleColor;
   }
   void update() {
-        super.update();
-        size-=30*speedFactor;
-        opacity+=6*speedFactor;
-        if (size<1)death();
+    super.update();
+    size-=25*speedFactor;
+    opacity+=3*speedFactor;
+    if (size<5)death();
   }
   void display() {
-      noFill();
-      stroke(particleColor, opacity);
-      strokeWeight(int(0.1*opacity));
-      ellipse(p.x+p.w*0.5, p.y+p.h*0.5, size, size);
+    noFill();
+    stroke(particleColor, opacity);
+    strokeWeight(int(0.3*opacity));
+    ellipse(int(p.x+p.w*0.5), int(p.y+p.h*0.5), size, size);
   }
 }
 

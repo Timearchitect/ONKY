@@ -350,9 +350,9 @@ class MagnetPowerup extends Powerup {
     if ( toggle || instant ) {
       //speedFactor=0.5; //slowrate
       p.attractRange=500;
-      if (time%int(10/speedFactor)==0)particles.add(new RShockWave(int(p.x), int(p.y), 1000, powerupColor) );
-      stroke(powerupColor);
-      noFill();
+      if (time%int(16/speedFactor)==0)particles.add(new RShockWave(int(p.x), int(p.y), 1000, powerupColor) );
+      //stroke(powerupColor);
+      //noFill();
       // ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);
       time--;
       if (time<1) {
