@@ -349,7 +349,7 @@ class MagnetPowerup extends Powerup {
       p.attractRange=600;
       stroke(powerupColor);
       noFill();
-      ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange,p.attractRange);
+      ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);
       time--;
       if (time<1){
         death();
