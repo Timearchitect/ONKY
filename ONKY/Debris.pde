@@ -157,6 +157,7 @@ class BushDebris extends Debris {
   BushDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _o, _x, _y, _vx, _vy);
     bounceForce=0;
+    angle=90;
     VAngle=random(4)-2;
     bounceFriction=0;
     w = 5;

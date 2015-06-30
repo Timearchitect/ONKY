@@ -876,10 +876,9 @@ void spawnSnake(int x) {
   entities.add(new Snake(x+400, int(floorHeight)));
   entities.add(new Snake(x+600, int(floorHeight)));
 }
-void spawnFlak(int x) {
- for(int i=400 ; i < 2200; i+=200) entities.add(new Box(x+i, int(floorHeight-200)));
+void spawnFlak(int x) { 
+ for(int i=600 ; i < 2200; i+=200) entities.add(new Box(x+i, int(floorHeight-200)));
   entities.add(new Lumber(x+250, int(floorHeight-500), 300, 25, true) );
- 
 }
 
 

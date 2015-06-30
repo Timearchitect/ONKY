@@ -308,7 +308,7 @@ class Player {
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
-    entities.add(new PlatForm(int(p.x-500), int(floorHeight-700), 400, 25, true) );
+    entities.add(new Lumber(int(p.x-500), int(floorHeight-700), 400, 25, true) );
     x-=400;
     y=-50-h;
     respawning=false;

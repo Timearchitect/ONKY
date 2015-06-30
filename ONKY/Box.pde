@@ -46,6 +46,10 @@ class Box extends Obstacle {
   void update() {
     super.update();
     count++;
+    if (p.attractRange > 0 && type==2 && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
+      type=1;
+      for(int i=0 ; i<3 ;i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
+    }
   }
   void hit() {
     super.hit();
@@ -230,13 +234,13 @@ class PlatForm extends Obstacle {
 
 class Lumber extends Obstacle {
   boolean hanging;
-  
+
   Lumber(int _x, int _y, int _w, int _h) {
     super(_x, _y);
     w=_w;
     h=_h;
     health=4;
-    obstacleColor = color(182,69,0);
+    obstacleColor = color(182, 69, 0);
   }
   Lumber(int _x, int _y, int _w, int _h, boolean _hanging) {
     this( _x, _y, _w, _h);
@@ -244,7 +248,7 @@ class Lumber extends Obstacle {
   }
   void display() {
     //super.display();
-    image(lumber,x,y,w,h);
+    image(lumber, x, y, w, h);
     if (hanging) {
       stroke(0, 180, 0);
       strokeWeight(6);
@@ -609,14 +613,12 @@ class Sign extends Obstacle {
 class Snake extends Obstacle {
   int debrisCooldown;
   int count;
-  int snakeSpeed = int(random(16));
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
     w=82*2;
     h=35*2;
     health=1;
-    
   }
   void death() {
     super.death();
@@ -626,13 +628,9 @@ class Snake extends Obstacle {
     }
   }
   void update() {
-         
     count++;
-        
+
     super.update();
-    if(count%30<10)this.x--;
-    else if(count%30<20)this.x = this.x-(this.snakeSpeed+1);
-    else this.x--;
     this.x--;
     if (debrisCooldown>0)debrisCooldown--;
   }
@@ -640,16 +638,16 @@ class Snake extends Obstacle {
     // image(Snake, x, y, w, h);
     //fill(obstacleColor);
     //rect( x, y, w, h);
-     if (count%30<10)image( cutSprite (0), x, y-80, w, h);
+    if (count%30<10)image( cutSprite (0), x, y-80, w, h);
     else if (count%30<20)image(cutSprite (2), x, y-80, w, h);
-        else image(cutSprite (1), x, y-80, w, h);
+    else image(cutSprite (1), x, y-80, w, h);
   }
 
   PImage cutSprite (int index) {
     final int interval= 82, imageWidth=82, imageheight=35;
     return Snake.get(index*(interval+1), 0, imageWidth, imageheight);
   }
-  
+
 
   void hit() {
     super.hit();

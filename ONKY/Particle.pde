@@ -294,7 +294,9 @@ class RShockWave extends Particle {
   color particleColor;
   RShockWave(int _x, int _y, int _size, int _time, color _particleColor) {
     super( _x, _y );
-    opacity=0;
+    opacity=255;
+    size=_size;
+    
     particleColor=_particleColor;
   }
   void update() {
@@ -306,12 +308,12 @@ class RShockWave extends Particle {
     }
   }
   void display() {
-    if (!dead ) {  
+    //if (!dead ) {  
       noFill();
       stroke(particleColor, opacity);
       strokeWeight(int(0.1*opacity));
-      ellipse(x, y, size, size);
-    }
+      ellipse(p.x, p.y, size, size);
+    //}
   }
 }
 
