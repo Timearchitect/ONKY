@@ -1,4 +1,4 @@
-int  difficulty, difficultyRange=6, interval=2200, totalAmountOfCourses=32;
+int  difficulty, difficultyRange=6, interval=2200, totalAmountOfCourses=33;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.5;
 int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2200, deleteMargin=1000;
 boolean firstCourse=true;
@@ -54,9 +54,9 @@ void loadRandomObstacleCourse(int x) {
     switch(difficulty) {
     case 0:
       //spawnPool(x);
-            spawnFloor(x);
-
-      spawnSingleWall(x);
+      spawnFloor(x);
+      spawnTokenParadise(x);
+      // spawnSingleWall(x);
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
       break;
@@ -212,6 +212,10 @@ void loadRandomObstacleCourse(int x) {
     case 32:
       entities.add(new Sign(x-200, int(floorHeight-200), "Good luck!"));
       spawnPool(x);
+      break;
+    case 33:
+      entities.add(new Sign(x-200, int(floorHeight-200), "happy!"));
+      spawnTokenParadise(x);
       break;
     default:
 
@@ -550,7 +554,7 @@ void spawnBlocks(int x) {
   entities.add(new Block(x+2000, int(floorHeight-200), -105, -40 ) );
   // entities.add(new Block(x+200, int(floorHeight-200) ) );
   // entities.add(new Block(x+400, int(floorHeight-200) ) );
-    entities.add(new Block(x+1000, int(floorHeight-1200), -35, 50 ) );
+  entities.add(new Block(x+1000, int(floorHeight-1200), -35, 50 ) );
 
   if (index==0) entities.add( new  TokenPowerup(x+1200, int(floorHeight-750), 200) );
   if (index==1) entities.add( new  TokenPowerup(x+300, int(floorHeight-150), 200) );
@@ -805,8 +809,8 @@ void spawnIslands(int x) {
   entities.add(new Water(x+1200, int(floorHeight), 200, 200 ) );
   entities.add(new Water(x+1400, int(floorHeight), 200, 200 ) );
   entities.add(new Water(x+1600, int(floorHeight), 200, 200 ) );
-    entities.add(new Box(x+2000, int(floorHeight-100) ) );
-    entities.add(new Box(x+1800, int(floorHeight-100) ) );
+  entities.add(new Box(x+2000, int(floorHeight-100) ) );
+  entities.add(new Box(x+1800, int(floorHeight-100) ) );
   entities.add(new Water(x+1800, int(floorHeight), 200, 200 ) );
   entities.add(new Water(x+2000, int(floorHeight), 200, 200 ) );
 
@@ -817,7 +821,6 @@ void spawnIslands(int x) {
   entities.add( new  TokenPowerup(x+600, int(floorHeight-200), 100) );
   entities.add( new  TokenPowerup(x+800, int(floorHeight-400), 100) );
   entities.add( new  TokenPowerup(x+1000, int(floorHeight-150), 100) );
-
 }
 
 
@@ -854,5 +857,13 @@ void spawnPool(int x) {
   entities.add(new Grass(x+1800, int(floorHeight), 200, 200));
   entities.add(new Grass(x+2000, int(floorHeight), 200, 200));
   //entities.add(new Grass(x+2200, int(floorHeight), 200, 200));
+}
+void spawnTokenParadise(int x) {
+  for (int i=0; i< 2200; i+=200) {
+    for (int j= 0; j<4; j++) {
+
+      entities.add( new  TokenPowerup(x+i, int(floorHeight-j*100), 100) );
+    }
+  }
 }
 

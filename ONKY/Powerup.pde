@@ -1,6 +1,6 @@
 abstract class Powerup extends Entity implements Cloneable {
   PImage icon= tokenIcon;
-  boolean instant=true, toggle;
+  boolean instant=true, toggle, homing;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -24,6 +24,13 @@ abstract class Powerup extends Entity implements Cloneable {
     offsetY=sin(radians(angle))*12;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
+    
+    if (homing) {
+      float xDiff=(p.x-x),yDiff=(p.y-y);
+      vx=xDiff*0.02;
+      vy=yDiff*0.02;
+    }
+    
     collision();
   }
   void display() {
@@ -86,6 +93,7 @@ class TokenPowerup extends Powerup {
     icon= tokenIcon;
     w=75;
     h=75;
+    homing=true;
   }
   void collect() {
     if (!dead) {
@@ -118,16 +126,16 @@ class InvisPowerup extends Powerup {
     }
   }
   void ones() {
-      p.vx=30;
-      p.weaponColor=powerupColor;
-      if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
-      p.invincible=true;  // activates supermario starpower
-      changeMusic(superSong);
+    p.vx=30;
+    p.weaponColor=powerupColor;
+    if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
+    p.invincible=true;  // activates supermario starpower
+    changeMusic(superSong);
     first=false;
   }
   void use() {
     if (!dead) {
-     if (first )ones();
+      if (first )ones();
       p.invincible=true;
       p.vx=30; // speed
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
