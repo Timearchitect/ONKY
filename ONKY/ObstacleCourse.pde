@@ -56,6 +56,7 @@ void loadRandomObstacleCourse(int x) {
     switch(difficulty) {
     case 0:
       //spawnPool(x);
+      spawnBarrel(x);
       spawnSnake(x);
       spawnFloor(x);
       //  spawnSingleWall(x);
@@ -893,3 +894,7 @@ void spawnBlock(int x) {
   entities.add(new IronBox(x+2000, int(floorHeight-600)) );
 }
 
+void spawnBarrel(int x) {
+  entities.add(new Barrel(x+900, int(floorHeight)));
+  
+}

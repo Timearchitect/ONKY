@@ -613,11 +613,83 @@ class Sign extends Obstacle {
 class Snake extends Obstacle {
   int debrisCooldown;
   int count;
+  int snakeSpeed = int(random(16));
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
     w=82*2;
     h=35*2;
+    health=1;
+  }
+  void death() {
+    super.death();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+    for (int i =0; i< 8; i++) {
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+    }
+  }
+  void update() {
+    count++;
+if(count%30<10)this.x--;
+else if(count%30<20)this.x = this.x-(this.snakeSpeed+1);
+    else this.x--;
+    super.update();
+    this.x--;
+    if (debrisCooldown>0)debrisCooldown--;
+  }
+  void display() {
+    // image(Snake, x, y, w, h);
+    //fill(obstacleColor);
+    //rect( x, y, w, h);
+    if (count%30<10)image( cutSprite (0), x, y-80, w, h);
+    else if (count%30<20)image(cutSprite (2), x, y-90, w, h);
+    else image(cutSprite (1), x, y-70, w, h);
+  }
+
+  PImage cutSprite (int index) {
+    final int interval= 82, imageWidth=82, imageheight=35;
+    return Snake.get(index*(interval+1), 0, imageWidth, imageheight);
+  }
+
+
+  void hit() {
+    super.hit();
+    for (int i =0; i< 6; i++) {
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(40)+impactForce*2, random(20)-20));
+    }
+  }
+  void knock() {
+    if (p.invincible) death();
+    if (debrisCooldown==0) { 
+      super.knock();
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      debrisCooldown=4;
+    }
+  }
+  void knockSound() {
+    playSound(leafSound);
+  }
+  void destroySound() {
+    playSound(leafSound);
+  }
+  void collision() {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      if (p.vx>5) {
+        knock();
+      }
+      impactForce=p.vx;
+    }
+  }
+}
+
+class Barrel extends Obstacle {
+  int debrisCooldown;
+  int count;
+  Barrel(int _x, int _y) {
+    super(_x, _y);
+    obstacleColor = color(0, 255, 50);
+    w=67*2;
+    h=67*2;
     health=1;
   }
   void death() {
@@ -638,14 +710,15 @@ class Snake extends Obstacle {
     // image(Snake, x, y, w, h);
     //fill(obstacleColor);
     //rect( x, y, w, h);
-    if (count%30<10)image( cutSprite (0), x, y-80, w, h);
-    else if (count%30<20)image(cutSprite (2), x, y-80, w, h);
-    else image(cutSprite (1), x, y-80, w, h);
+    if (count%40<10)image( cutSprite (0), x, y-135, w, h);
+    else if (count%40<20)image(cutSprite (1), x, y-140, w, h);
+    else if (count%40<30)image(cutSprite (2), x, y-145, w, h);
+    else image(cutSprite (3), x, y-140, w, h);
   }
 
   PImage cutSprite (int index) {
-    final int interval= 82, imageWidth=82, imageheight=35;
-    return Snake.get(index*(interval+1), 0, imageWidth, imageheight);
+    final int interval= 67, imageWidth=67, imageheight=67;
+    return Barrel.get(index*(interval+1), 0, imageWidth, imageheight);
   }
 
 

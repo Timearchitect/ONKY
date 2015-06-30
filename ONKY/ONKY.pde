@@ -23,7 +23,7 @@ AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake;
+PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -375,6 +375,7 @@ void loadImages() {
 
   //Obstacle graphics
   Snake=loadImage("snake.png");
+  Barrel=loadImage("barrel.png");
   Tire= loadImage("tire.png");
   ironBox = loadImage("metalBox1.png");
   ironBox2= loadImage("metalBox2.png");
