@@ -54,9 +54,9 @@ void loadRandomObstacleCourse(int x) {
     switch(difficulty) {
     case 0:
       //spawnPool(x);
-spawnSnake(x);
-            spawnFloor(x);
-      spawnSingleWall(x);
+      spawnSnake(x);
+      spawnFloor(x);
+    //  spawnSingleWall(x);
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
       break;
@@ -866,7 +866,7 @@ void spawnTokenParadise(int x) {
     }
   }
 }
-void spawnSnake(int x){
+void spawnSnake(int x) {
   entities.add(new Snake(x, int(floorHeight)));
   entities.add(new Snake(x+200, int(floorHeight)));
   entities.add(new Snake(x+400, int(floorHeight)));
