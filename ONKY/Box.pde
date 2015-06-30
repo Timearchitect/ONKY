@@ -568,4 +568,72 @@ class Sign extends Obstacle {
   void collision() {
   }
 }
+class Snake extends Obstacle {
+  int debrisCooldown;
+  int count;
+  Snake(int _x, int _y) {
+    super(_x, _y);
+    obstacleColor = color(0, 255, 50);
+    w=81*2;
+    h=33*2;
+    health=1;
+  }
+  void death() {
+    super.death();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+    for (int i =0; i< 8; i++) {
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+    }
+  }
+  void update() {
+        count++;
+        
+    super.update();
+    this.x--;
+    if (debrisCooldown>0)debrisCooldown--;
+  }
+  void display() {
+    // image(Snake, x, y, w, h);
+    //fill(obstacleColor);
+    //rect( x, y, w, h);
+     if (count%30<10)image( cutSprite (0), x, y-80, w, h);
+    else if (count%30<20)image(cutSprite (2), x, y-80, w, h);
+        else image(cutSprite (1), x, y-80, w, h);
+  }
+
+  PImage cutSprite (int index) {
+    final int interval= 81, imageWidth=81, imageheight=33;
+    return Snake.get(index*(interval+1), 0, imageWidth, imageheight);
+  }
+  
+
+  void hit() {
+    super.hit();
+    for (int i =0; i< 6; i++) {
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(40)+impactForce*2, random(20)-20));
+    }
+  }
+  void knock() {
+    if (p.invincible) death();
+    if (debrisCooldown==0) { 
+      super.knock();
+      entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      debrisCooldown=4;
+    }
+  }
+  void knockSound() {
+    playSound(leafSound);
+  }
+  void destroySound() {
+    playSound(leafSound);
+  }
+  void collision() {
+    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      if (p.vx>5) {
+        knock();
+      }
+      impactForce=p.vx;
+    }
+  }
+}
 
