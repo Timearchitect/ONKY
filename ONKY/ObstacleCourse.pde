@@ -54,16 +54,9 @@ void loadRandomObstacleCourse(int x) {
     switch(difficulty) {
     case 0:
       //spawnPool(x);
-<<<<<<< HEAD
-      spawnFloor(x);
-      spawnTokenParadise(x);
-      // spawnSingleWall(x);
-=======
 spawnSnake(x);
             spawnFloor(x);
-
       spawnSingleWall(x);
->>>>>>> origin/master
       entities.add(new Sign(x-200, int(floorHeight-200), "First"));
       spawnBush(x);
       break;
@@ -865,7 +858,6 @@ void spawnPool(int x) {
   entities.add(new Grass(x+2000, int(floorHeight), 200, 200));
   //entities.add(new Grass(x+2200, int(floorHeight), 200, 200));
 }
-<<<<<<< HEAD
 void spawnTokenParadise(int x) {
   for (int i=0; i< 2200; i+=200) {
     for (int j= 0; j<4; j++) {
@@ -873,12 +865,11 @@ void spawnTokenParadise(int x) {
       entities.add( new  TokenPowerup(x+i, int(floorHeight-j*100), 100) );
     }
   }
-=======
+}
 void spawnSnake(int x){
   entities.add(new Snake(x, int(floorHeight)));
   entities.add(new Snake(x+200, int(floorHeight)));
   entities.add(new Snake(x+400, int(floorHeight)));
   entities.add(new Snake(x+600, int(floorHeight)));
->>>>>>> origin/master
 }
 
