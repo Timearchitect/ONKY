@@ -228,6 +228,44 @@ class PlatForm extends Obstacle {
   }
 }
 
+class Lumber extends Obstacle {
+  boolean hanging;
+  
+  Lumber(int _x, int _y, int _w, int _h) {
+    super(_x, _y);
+    w=_w;
+    h=_h;
+    health=4;
+    obstacleColor = color(182,69,0);
+  }
+  Lumber(int _x, int _y, int _w, int _h, boolean _hanging) {
+    this( _x, _y, _w, _h);
+    hanging=_hanging;
+  }
+  void display() {
+    //super.display();
+    image(lumber,x,y,w,h);
+    if (hanging) {
+      stroke(0, 180, 0);
+      strokeWeight(6);
+      line(x, -1000, x, y);
+      line(x+w, -1000, x+w, y);
+      strokeWeight(1);
+    }
+  }
+  void death() {
+    if (p.invincible ||health<=0) {
+      super.death();
+      playSound(ironBoxDestroySound);
+      for (int i= 0; i<w; i+=100) {
+        entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+      }
+    }
+  }
+  void hitCollision() {  // hit by punching & smashing
+  }
+}
+
 class Glass extends Obstacle {
 
   Glass(int _x, int _y, int _w, int _h) {

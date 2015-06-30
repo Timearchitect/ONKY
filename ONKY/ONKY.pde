@@ -17,12 +17,12 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound;
-AudioPlayer splash,waterFall;
+AudioPlayer splash, waterFall;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
-PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon,magnetIcon;
-PImage Tire, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
+PImage Tire, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -387,10 +387,10 @@ void loadImages() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   sign= loadImage("sign.png");
-  // water1= loadImage("water1.png");
-  // water2= loadImage("water2.png");
-  //  water3= loadImage("water3.png");
-  // water4= loadImage("water4.png");
+  lumber= loadImage("lumber22.png");
+  lumberR= loadImage("lumber33.png");
+  lumberL= loadImage("lumber11.png");
+
   waterSpriteSheet= loadImage("watertile.png");
 
   Block = loadImage("blockMad.png");
@@ -426,8 +426,8 @@ void loadSound() {
   laserSound= minim.loadFile("sound/laser2.wav");
   leafSound =  minim.loadFile("sound/rustle.wav");
   teleportSound =minim.loadFile("sound/teleport.wav");
-   splash=minim.loadFile("sound/splash.wav");
-   waterFall=minim.loadFile("sound/waterfall.wav");
+  splash=minim.loadFile("sound/splash.wav");
+  waterFall=minim.loadFile("sound/waterfall.wav");
   regularSong.setGain(-10);
   laserSound.setGain(-20);
 
