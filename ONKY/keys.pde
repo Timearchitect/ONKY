@@ -8,9 +8,11 @@ void keyPressed() {
     if (key== '3') {
     p.usedPowerup.add( new TeleportPowerup(int(p.x),int(p.y),200,true));
   }
-  
       if (key== '4') {
     p.usedPowerup.add( new SlowPowerup(int(p.x),int(p.y),300,true));
+  }
+        if (key== '5') {
+    p.usedPowerup.add( new MagnetPowerup(int(p.x),int(p.y),300,true));
   }
   if (key== '#') {
     debug=!debug;

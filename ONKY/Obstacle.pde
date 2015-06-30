@@ -43,8 +43,7 @@ abstract class Obstacle extends Entity {
             knock();
           }
           impactForce=p.vx; 
-          p.collision();
-          
+          p.collision();          
         }
         // death();
       }
@@ -61,7 +60,6 @@ abstract class Obstacle extends Entity {
     knockSound();
   }
   void hitCollision() {  // hit by punching & smashing
-
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
       hit();
       impactForce=p.vx+5;
@@ -73,7 +71,6 @@ abstract class Obstacle extends Entity {
       impactForce=p.vx+5;
       death();
     }
-    
   }
   void death() {
     super.death();
@@ -84,7 +81,6 @@ abstract class Obstacle extends Entity {
   void hit() {
     hitSound();
   }
-
   void hitSound() {
   }
   void knockSound() {

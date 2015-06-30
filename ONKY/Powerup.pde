@@ -24,17 +24,14 @@ abstract class Powerup extends Entity implements Cloneable {
     offsetY=sin(radians(angle))*12;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
-    
-    if (homing) {
-      float xDiff=((p.x+p.w*0.5)-x),yDiff=((p.y+p.h*0.5)-y);
+    if (homing && dist(x,y,p.x,p.y)<p.attractRange) {
+      float xDiff=((p.x+p.w*0.5)-x), yDiff=((p.y+p.h*0.5)-y);
       vx=xDiff*0.15;
       vy=yDiff*0.15;
     }
-    
     collision();
   }
   void display() {
-
     if (icon!=null)image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, w, h);
     else {
       noStroke();
@@ -154,6 +151,7 @@ class LaserPowerup extends Powerup {
     super(_x, _y, _time);
     icon=laserIcon;
     powerupColor=color(255, 0, 0);
+    upgradeLevel=int(random(2));
   }
   LaserPowerup(int _x, int _y, int _time, boolean _instant) {
     this(_x, _y, _time);
@@ -198,7 +196,6 @@ class SlowPowerup extends Powerup {
     instant=_instant;
   }
 
-
   void collect() {
     try {
       p.usedPowerup.add(this.clone());
@@ -222,6 +219,7 @@ class LifePowerup extends Powerup {
     powerupColor=color(50, 255, 50);
     icon= lifeIcon;
   }
+
   void collect() {
     if (!dead) {
       //  tokens++;
@@ -328,12 +326,12 @@ class TeleportPowerup extends Powerup {
 
 class MagnetPowerup extends Powerup {
   MagnetPowerup(int _x, int _y, int _time) {
-    super(_x, _y, int(_time*0.3));
-    powerupColor=color(255, 0, 255);
-    icon=null;
+    super(_x, _y, int(_time*2));
+    powerupColor=color(220, 0, 220);
+    icon=magnetIcon;
   }
   MagnetPowerup(int _x, int _y, int _time, boolean _instant) {
-    this(_x, _y, int(_time*0.3));
+    this(_x, _y, int(_time*2));
     instant=_instant;
   }
 
@@ -348,8 +346,15 @@ class MagnetPowerup extends Powerup {
   void use() {
     if ( toggle || instant ) {
       //speedFactor=0.5; //slowrate
+      p.attractRange=600;
+      stroke(powerupColor);
+      noFill();
+      ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange,p.attractRange);
       time--;
-      if (time<1)death();
+      if (time<1){
+        death();
+        p.attractRange=0;
+      }
     }
   }
 }
@@ -359,7 +364,7 @@ class RandomPowerup extends Entity {
     super(_x, _y);
     //icon= tokenIcon;
     //powerupColor=color(100, 100, 100);
-    switch(int(random(5))) {
+    switch(int(random(6))) {
     case 0:
       entities.add( new InvisPowerup( _x, _y, _time)); 
       break;
@@ -374,6 +379,9 @@ class RandomPowerup extends Entity {
       break;
     case 4:
       entities.add( new  TeleportPowerup( _x, _y, _time, false) );
+      break;
+    case 5:
+      entities.add( new  MagnetPowerup( _x, _y, _time, false) );
       break;
     default:
       entities.add( new TokenPowerup( _x, _y, _time));

@@ -158,7 +158,6 @@ class LineParticle extends Particle {
   void display() {
 
     noFill();
-
     stroke(particleColor, int(opacity));
     strokeWeight(int(0.2*opacity));
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);

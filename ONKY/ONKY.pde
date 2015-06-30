@@ -21,7 +21,7 @@ AudioPlayer splash,waterFall;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
-PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon;
+PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon,magnetIcon;
 PImage Tire, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake;
 
@@ -370,6 +370,8 @@ void loadImages() {
   tokenIcon = loadImage("token2.png");
   superIcon = loadImage("speedpower.png");
   lifeIcon = loadImage("oneup.png");
+  magnetIcon = loadImage("magnet.png");
+
 
   //Obstacle graphics
   Snake=loadImage("snake.png");

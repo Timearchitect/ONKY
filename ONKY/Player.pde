@@ -7,7 +7,7 @@ class Player {
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=5, MAX_JUMP=3, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
-  int  punchCooldown=PUNCH_MAX_CD, punchRange=100;
+  int  punchCooldown=PUNCH_MAX_CD, punchRange=100,attractRange;
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
