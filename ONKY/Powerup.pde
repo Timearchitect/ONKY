@@ -156,7 +156,7 @@ class InvisPowerup extends Powerup {
 }
 
 class LaserPowerup extends Powerup {
-  boolean shoot;
+  
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     icon=laserIcon;
@@ -192,9 +192,8 @@ class LaserPowerup extends Powerup {
           if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           break;
         case 2:
-          if (int(time)%2==0) {
-            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
-          }
+          if (int(time)%2==0) projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          
           break;
         default:
 
@@ -208,21 +207,21 @@ class LaserPowerup extends Powerup {
       } else {
         switch(upgradeLevel) {  
         case 0:
-          if (int(time)%9==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          if (int(time)%9==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*50, sin(radians(p.angle))*20));
           break;
         case 1:
           if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           break;
         case 2:
           if (int(time)%13==0) {
-            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle-2))*30));
+            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle-2))*60, sin(radians(p.angle-2))*30));
             projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*40, sin(radians(p.angle))*30));
-            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle+2))*30));
+            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle+2))*60, sin(radians(p.angle+2))*30));
           }
           break;
         default:
           //if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
-          if (int(time)%20==0) {
+          if (int(time)%18==0) {
             for (int i=2; i<3; i++)  projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*i*10, sin(radians(p.angle))*i*5));
             projectiles.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+100, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
           }

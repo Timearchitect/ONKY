@@ -18,12 +18,11 @@ class Particle extends Entity {
 
 class TrailParticle extends Particle {
   PImage cell;
-
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     particles.add(this);
     cell=_cell;
-    opacity=100;
+    opacity=200-(100*speedFactor);
     w=100;
     h=80;
   }

@@ -1,6 +1,5 @@
 class Box extends Obstacle {
   int type, count;
-
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(180, 140, 50);
@@ -250,7 +249,7 @@ class Lumber extends Obstacle {
     //super.display();
     image(lumber, x, y, w, h);
     if (hanging) {
-      for (int i= 0; i > -1000 ; i-=40) {
+      for (int i= 0; i > -1000; i-=40) {
         image(Vines, x, y-40+i );
         image(Vines, x+w-20, y-40+i);
       }
@@ -621,8 +620,8 @@ class Sign extends Obstacle {
 }
 class Snake extends Obstacle {
   int debrisCooldown;
-  int count;
-  int snakeSpeed = int(random(16));
+  float count;
+  int snakeSpeed = int(random(16)+1);
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
@@ -638,12 +637,16 @@ class Snake extends Obstacle {
     }
   }
   void update() {
-    count++;
-    if (count%30<10)this.x--;
-    else if (count%30<20)this.x = this.x-(this.snakeSpeed+1);
-    else this.x--;
     super.update();
-    this.x--;
+    count+=1*speedFactor;
+    /*
+    if (count%30<10) x-=1*speedFactor;
+    else if (count%30<20) x -= snakeSpeed+1;
+    else x-=1*speedFactor;
+    
+    x-=1*speedFactor;
+    */
+    if (count%30<20  && count%30>10) x -= snakeSpeed*speedFactor;
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
@@ -660,7 +663,6 @@ class Snake extends Obstacle {
     return Snake.get(index*(interval+1), 0, imageWidth, imageheight);
   }
 
-
   void hit() {
     super.hit();
     for (int i =0; i< 6; i++) {
@@ -672,7 +674,7 @@ class Snake extends Obstacle {
     if (debrisCooldown==0) { 
       super.knock();
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
-      debrisCooldown=4;
+      debrisCooldown=10;
     }
   }
   void knockSound() {
@@ -693,7 +695,7 @@ class Snake extends Obstacle {
 
 class Barrel extends Obstacle {
   // int debrisCooldown;
-  int angle;
+  float angle;
   Barrel(int _x, int _y) {
     super(_x, _y+67);
     obstacleColor = color(180, 120, 50);
@@ -710,11 +712,8 @@ class Barrel extends Obstacle {
     }
   }
   void update() {
-
     super.update();
-    angle+=vx*2;
-    //this.x--;
-    //if (debrisCooldown>0)debrisCooldown--;
+    angle+=vx*2*speedFactor;
   }
   void display() {
     // image(Snake, x, y, w, h);
@@ -725,7 +724,6 @@ class Barrel extends Obstacle {
     rotate(radians(angle));
     image( cutSprite(0), -w*0.5, -w*0.5, w, h);
     popMatrix();
-
 
     /* if (count%40<10)image( cutSprite (0), x, y-135, w, h);
      else if (count%40<20)image(cutSprite (1), x, y-140, w, h);
