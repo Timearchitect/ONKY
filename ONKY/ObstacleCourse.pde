@@ -321,11 +321,11 @@ void spawnTunnel(int x) {
   else entities.add(new IronBox(x, int(floorHeight-200) ) ); 
   entities.add(new IronBox(x+200, int(floorHeight-300) ) ); 
   entities.add(new IronBox(x+400, int(floorHeight-300) ) ); 
- // entities.add(new IronBox(x+600, int(floorHeight-300) ) );
-  
-   entities.add(new Glass(x+60, int(floorHeight-400),150,50 ) );  // <-- key
-   entities.add(new Glass(x+800, int(floorHeight-400) ,150,50) );  // <-- key
-   entities.add(new Glass(x+1000, int(floorHeight-400),150,50 ) );  // <-- key
+  // entities.add(new IronBox(x+600, int(floorHeight-300) ) );
+
+  entities.add(new Glass(x+600, int(floorHeight-350), 200, 50 ) );  // <-- key
+  entities.add(new Glass(x+800, int(floorHeight-350), 200, 50) );  // <-- key
+  entities.add(new Glass(x+1000, int(floorHeight-350), 200, 50 ) );  // <-- key
 
   entities.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
   entities.add(new IronBox(x+1200, int(floorHeight-800) ) ); 
@@ -565,6 +565,9 @@ void spawnBlocks(int x) {
   entities.add(new Block(x+2000, int(floorHeight-200), -100, -45 ) );
   // entities.add(new Block(x+200, int(floorHeight-200) ) );
   // entities.add(new Block(x+400, int(floorHeight-200) ) );
+      entities.add(new Rock(x+1200, int(floorHeight-200) ) );
+    entities.add(new Rock(x+1800, int(floorHeight-200) ) );
+
   entities.add(new Block(x+1000, int(floorHeight-1200), -35, 50 ) );
 
   if (index==0) entities.add( new  TokenPowerup(x+1200, int(floorHeight-750), 200) );
@@ -889,8 +892,10 @@ void spawnFlak(int x) {
 }
 
 void spawnBlock(int x) { 
+      entities.add(new Rock(x+00, int(floorHeight-200) ) );
+
   entities.add(new Block(x+400, int(floorHeight-500)) );
- entities.add(new Glass(x+1600, int(floorHeight-100),200,100) );
+  entities.add(new Glass(x+1600, int(floorHeight-100), 200, 100) );
   entities.add(new IronBox(x+1600, int(floorHeight-300)) );
   entities.add(new IronBox(x+1600, int(floorHeight-400)) );
   entities.add(new IronBox(x+1600, int(floorHeight-600)) );
@@ -899,4 +904,7 @@ void spawnBlock(int x) {
 void spawnBarrel(int x) {
   entities.add(new Barrel(x+900, int(floorHeight-200)));
   
+    entities.add(new Rock(x+1200, int(floorHeight-200) ) );
+
 }
+

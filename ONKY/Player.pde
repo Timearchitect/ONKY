@@ -6,7 +6,7 @@ class Player {
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
-  int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange;
+  int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
@@ -165,12 +165,12 @@ class Player {
     shakeFactor=60;
 
 
-    int range=200;
+
     //fill(255, 0, 0);
     // rect( p.x,p.y-50,range,300);
     //rect( p.x-100,p.y+p.h-50  ,(p.x-100)-(p.x+p.w+100), 500);
     for (Obstacle o : obstacles) {
-      if (o.x+o.w  > p.x && o.x < p.x+range &&   o.y > p.y-50 &&   o.y+o.h < p.y+250) {
+      if (o.x+o.w  > p.x && o.x < p.x+stompRange &&   o.y > p.y-50 &&   o.y+o.h < p.y+250) {
         o.hit();
         o.death();
       }

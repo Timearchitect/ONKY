@@ -48,7 +48,7 @@ class Box extends Obstacle {
     count++;
     if (p.attractRange > 0 && type==2 && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
       type=1;
-      for(int i=0 ; i<3 ;i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
+      for (int i=0; i<3; i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500));
     }
   }
   void hit() {
@@ -180,7 +180,7 @@ class IronBox extends Obstacle {
     shakeFactor=50; 
     hitBrightness=255;
     x+=p.vx;
-    y+=-p.vy;
+    y+=p.vy;
   }
   void knock() {
     super.knock();
@@ -458,7 +458,7 @@ class Grass extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(128, 181, 113);
-   unBreakable=true;
+    unBreakable=true;
   }
   void death() {
   }
@@ -536,7 +536,10 @@ class Water extends Obstacle {
 
 
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      if (p.y>y+150)p.respawning=true;
+      if (p.y>y+150) {
+        p.respawning=true;
+        p.reduceLife();
+      }
       if (p.y>y+h*0.5) {
         p.vx*=0.8;
         if (debrisCooldown==0) {
@@ -632,8 +635,8 @@ class Snake extends Obstacle {
   }
   void update() {
     count++;
-if(count%30<10)this.x--;
-else if(count%30<20)this.x = this.x-(this.snakeSpeed+1);
+    if (count%30<10)this.x--;
+    else if (count%30<20)this.x = this.x-(this.snakeSpeed+1);
     else this.x--;
     super.update();
     this.x--;
@@ -685,7 +688,7 @@ else if(count%30<20)this.x = this.x-(this.snakeSpeed+1);
 }
 
 class Barrel extends Obstacle {
- // int debrisCooldown;
+  // int debrisCooldown;
   int angle;
   Barrel(int _x, int _y) {
     super(_x, _y+67);
@@ -714,16 +717,16 @@ class Barrel extends Obstacle {
     //fill(obstacleColor);
     //rect( x, y, w, h);
     pushMatrix();
-    translate(x+w*0.5,y+h*0.5);
+    translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
     image( cutSprite(0), -w*0.5, -w*0.5, w, h);
     popMatrix();
-    
-    
-   /* if (count%40<10)image( cutSprite (0), x, y-135, w, h);
-    else if (count%40<20)image(cutSprite (1), x, y-140, w, h);
-    else if (count%40<30)image(cutSprite (2), x, y-145, w, h);
-    else image(cutSprite (3), x, y-140, w, h);*/
+
+
+    /* if (count%40<10)image( cutSprite (0), x, y-135, w, h);
+     else if (count%40<20)image(cutSprite (1), x, y-140, w, h);
+     else if (count%40<30)image(cutSprite (2), x, y-145, w, h);
+     else image(cutSprite (3), x, y-140, w, h);*/
   }
 
   PImage cutSprite (int index) {
@@ -750,6 +753,69 @@ class Barrel extends Obstacle {
   void destroySound() {
     playSound(boxDestroySound);
   }
+}
 
+class Rock extends Obstacle {
+  int tx, ty;
+  Rock(int _x, int _y) {
+    super(_x, _y);
+    obstacleColor = color(150);
+    tx=_x;
+    ty=_y;
+    health=6;
+  }
+  void display() {
+    //super.display();
+    /* stroke(250, 250, 250);
+     strokeWeight(8);
+     point(x+10, y+10);
+     point(x+w-10, y+10);
+     point(x+w-10, y+h-10);
+     point(x+10, y+h-10);
+     
+     strokeWeight(1);
+     */
+
+      image(rock, x, y, w, h);
+
+  }
+  void update() {
+    super.update();
+    //if (x!=tx &&  y!=ty) {
+     // float diffX=tx-x, diffY=ty-y;
+      //x+=diffX*0.2*speedFactor;
+      //y+=diffY*0.2*speedFactor;
+      //if (x==tx)x=tx;
+      //if (y==ty)y=ty;
+   // }
+  }
+  void death() {
+    if (p.invincible || health<=0) {
+      super.death();
+      entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+      for (int i =0; i< 3; i++) {
+        entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
+      }
+    }
+    playSound(ironBoxDestroySound);
+  }
+  void hit() {  // hit by punching & smashing
+    super.hit();
+    shakeFactor=50; 
+    hitBrightness=255;
+    //x+=p.vx;
+   //y+=-p.vy;
+  }
+  void knock() {
+    super.knock();
+    shakeFactor=100; 
+    hitBrightness=255;
+  }
+  void knockSound() {
+    playSound(ironBoxDestroySound);
+  }
+  void  hitSound() {
+    playSound(ironBoxDestroySound);
+  }
 }
 

@@ -22,7 +22,7 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -286,10 +286,9 @@ void gameReset() {
   powerups.clear();
   debris.clear();
 
-  BGM.pause();
-  BGM = regularSong;
-  playSound(BGM);
-  BGM.loop();
+
+  if (!mute)changeMusic(regularSong);
+
 
   speedLevel=0;
 
@@ -342,10 +341,12 @@ void playSound(AudioPlayer sound) {
   }
 }
 void changeMusic(AudioPlayer song) {
-  BGM.pause();
-  BGM = song;
-  playSound(BGM);
-  BGM.loop();
+  if (!mute) { 
+    BGM.pause();
+    BGM = song;
+    playSound(BGM);
+    BGM.loop();
+  }
 }
 void UpdateGUILife() {
   GUI.clear();
@@ -374,6 +375,7 @@ void loadImages() {
 
 
   //Obstacle graphics
+  rock=loadImage("rock.png");
   Snake=loadImage("snake.png");
   Barrel=loadImage("barrel.png");
   Tire= loadImage("tire.png");
@@ -384,7 +386,6 @@ void loadImages() {
   glass = loadImage("glass.png");
   brokenBox= loadImage("woodenBoxBroken.png");
   mysteryBox= loadImage("mysteryWoodenBox.png");
-  Mountain= loadImage("backgroundfull.png");
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   sign= loadImage("sign.png");
@@ -400,6 +401,7 @@ void loadImages() {
   //paralax
   Tree =loadImage("treetile.png");
   Tree2 =loadImage("treetile2.png");
+  Mountain= loadImage("backgroundfull.png");
 
   //debris
   Leaf  =loadImage("leaf.png");
