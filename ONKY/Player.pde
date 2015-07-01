@@ -162,7 +162,7 @@ class Player {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     particles.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
-    skakeFactor=60;
+    shakeFactor=60;
 
 
     int range=200;

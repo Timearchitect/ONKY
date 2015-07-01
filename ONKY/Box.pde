@@ -54,11 +54,11 @@ class Box extends Obstacle {
   void hit() {
     super.hit();
     scaleFactor+=scaleFactor*0.05;
-    skakeFactor=50;
+    shakeFactor=50;
   }
   void knock() {
     super.knock();
-    skakeFactor=100;
+    shakeFactor=100;
   }
   void knockSound() {
     playSound(boxKnockSound);
@@ -93,7 +93,7 @@ class Tire extends Obstacle {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     playSound(rubberKnockSound);
-    for (int i =0; i< 4; i++) {
+    for (int i =0; i< 5; i++) {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5+50), int(y+random(h)-h*0.5+50), random(15)+impactForce*0.4, random(30)-20));
     }
   }
@@ -104,7 +104,7 @@ class Tire extends Obstacle {
   void hit() {
     super.hit();
     scaleFactor+=scaleFactor*0.05;
-    skakeFactor=50;
+    shakeFactor=50;
   }
   void display() {
     pushMatrix();
@@ -177,14 +177,14 @@ class IronBox extends Obstacle {
   }
   void hit() {  // hit by punching & smashing
     super.hit();
-    skakeFactor=50; 
+    shakeFactor=50; 
     hitBrightness=255;
     x+=p.vx;
     y+=-p.vy;
   }
   void knock() {
     super.knock();
-    skakeFactor=100; 
+    shakeFactor=100; 
     hitBrightness=255;
   }
   void knockSound() {
@@ -300,7 +300,7 @@ class Glass extends Obstacle {
   void knock() {
     // super.knock();
     scaleFactor+=scaleFactor*0.05;
-    skakeFactor=10;
+    shakeFactor=10;
     p.vx*=0.8;
     for (int i =0; i< 6; i++) {
       entities.add( new GlassDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
@@ -348,7 +348,7 @@ class Block extends Obstacle {
 
     if (p.invincible && invis>0) {
       vy=-100;
-      skakeFactor=300;
+      shakeFactor=300;
       scaleFactor=0.8;
       vx=-p.vx;
       playSound(smackSound);
@@ -386,7 +386,7 @@ class Block extends Obstacle {
       speedFactor=0.5;
       background(255);
     }
-    skakeFactor=100;
+    shakeFactor=100;
   }
   void knockSound() {
     playSound(boxKnockSound);
@@ -458,6 +458,7 @@ class Grass extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(128, 181, 113);
+   unBreakable=true;
   }
   void death() {
   }
@@ -496,6 +497,7 @@ class Water extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(81, 104, 151);
+    unBreakable=true;
   }
   void update() {
     super.update();
@@ -734,13 +736,13 @@ class Barrel extends Obstacle {
   void hit() {
     super.hit();
     scaleFactor+=scaleFactor*0.05;
-    skakeFactor=50;
+    shakeFactor=50;
   }
   void knock() {
     super.knock();
     impactForce=p.vx;
     death();
-    skakeFactor=100;
+    shakeFactor=100;
   }
   void knockSound() {
     playSound(boxKnockSound);

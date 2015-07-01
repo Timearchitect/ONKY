@@ -4,7 +4,7 @@ abstract class Powerup extends Entity implements Cloneable {
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
-  int upgradeLevel;
+  int upgradeLevel=int(random(4));
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
     icon= tokenIcon;
@@ -71,11 +71,14 @@ abstract class Powerup extends Entity implements Cloneable {
     // fill(powerupColor);
     // rect(50+index*interval, 100, 100, 100);
     if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20);
-    fill(0, 150);
+    fill(0, 180);
     //println(spawnTime +" : "+time);
     //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
     //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, (((PI*2)/spawnTime)*(time)-HALF_PI), PI*2-HALF_PI);
     arc(GUIoffsetX+w*0.5+index*interval, GUIoffsetY+h*0.5, 75, 75, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
+    textSize(28);
+    textAlign(RIGHT);
+    text(upgradeLevel, GUIoffsetX+w*0.5+index*interval+60, GUIoffsetY+h*0.5-20);
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
@@ -154,7 +157,6 @@ class LaserPowerup extends Powerup {
     super(_x, _y, _time);
     icon=laserIcon;
     powerupColor=color(255, 0, 0);
-    upgradeLevel=int(random(2));
   }
   LaserPowerup(int _x, int _y, int _time, boolean _instant) {
     this(_x, _y, _time);
@@ -177,11 +179,52 @@ class LaserPowerup extends Powerup {
   void use() {
     if ( toggle || instant ) {
       if (p.angle>6) {  
-        if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+        switch(upgradeLevel) {  
+        case 0:
+          if (int(time)%4==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+
+          break;
+        case 1:
+          if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          break;
+        case 2:
+          if (int(time)%2==0) {
+            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          }
+          break;
+        default:
+
+          if (int(time)%2==0) {
+            if (p.angle%360>270 || p.angle%360<90) { 
+
+              projectiles.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+80, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
+            } else   projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          }
+        }
       } else {
-        if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+        switch(upgradeLevel) {  
+        case 0:
+          if (int(time)%9==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          break;
+        case 1:
+          if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          break;
+        case 2:
+          if (int(time)%13==0) {
+            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle-2))*30));
+            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*40, sin(radians(p.angle))*30));
+            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle+2))*30));
+          }
+          break;
+        default:
+          if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          if (int(time)%20==0) {
+            for (int i=2; i<3; i++)  projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*i*10, sin(radians(p.angle))*i*5));
+            projectiles.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+100, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
+          }
+        }
       }
-       if(scaleFactor>0.25)scaleFactor-=0.01;
+      if (scaleFactor>0.25)scaleFactor-=0.01;
       time-=1*speedFactor;
       if (time<1)death();
     }
@@ -308,7 +351,7 @@ class TeleportPowerup extends Powerup {
       }
     }
     screenAngle=12;
-    skakeFactor=200;
+    shakeFactor=200;
     speedFactor=0.02;
 
     first=false;
@@ -328,10 +371,12 @@ class TeleportPowerup extends Powerup {
 }
 
 class MagnetPowerup extends Powerup {
+  int range;
   MagnetPowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*2));
     powerupColor=color(220, 0, 220);
     icon=magnetIcon;
+    range=80*(upgradeLevel)+300;
   }
   MagnetPowerup(int _x, int _y, int _time, boolean _instant) {
     this(_x, _y, int(_time*2));
@@ -349,8 +394,8 @@ class MagnetPowerup extends Powerup {
   void use() {
     if ( toggle || instant ) {
       //speedFactor=0.5; //slowrate
-      p.attractRange=500;
-      if (time%int(16/speedFactor)==0)particles.add(new RShockWave(int(p.x), int(p.y), 1000, powerupColor) );
+      p.attractRange=range;
+      if (time%int(16/speedFactor)==0)particles.add(new RShockWave(int(p.x), int(p.y), range*2, powerupColor) );
       //stroke(powerupColor);
       //noFill();
       // ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);

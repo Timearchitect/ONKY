@@ -43,7 +43,7 @@ color FlashColor;
 boolean debug, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, skakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 void setup() {
   noSmooth();
@@ -214,11 +214,11 @@ void draw() {
 }
 
 void shake() {
-  if (skakeFactor>0.5) {
-    if (MAX_SHAKE<skakeFactor) skakeFactor=MAX_SHAKE;
-    skakeFactor*=shakeDecay;
-    shakeX=random(skakeFactor)-skakeFactor*0.5;
-    shakeY=random(skakeFactor)-skakeFactor*0.5;
+  if (shakeFactor>0.5) {
+    if (MAX_SHAKE<shakeFactor) shakeFactor=MAX_SHAKE;
+    shakeFactor*=shakeDecay;
+    shakeX=random(shakeFactor)-shakeFactor*0.5;
+    shakeY=random(shakeFactor)-shakeFactor*0.5;
   }
 }
 void displayFlash() {
@@ -364,13 +364,13 @@ void loadImages() {
   p.Slide = loadImage("slide.png");
 
   //icons
-  slowIcon = loadImage("slowpower.png");
-  slashIcon = loadImage("slashpower.png");
-  laserIcon = loadImage("laserpower2.png");
-  tokenIcon = loadImage("token2.png");
-  superIcon = loadImage("speedpower.png");
-  lifeIcon = loadImage("oneup.png");
-  magnetIcon = loadImage("magnet.png");
+  slowIcon = loadImage("icon/slowpower.png");
+  slashIcon = loadImage("icon/slashpower.png");
+  laserIcon = loadImage("icon/laserpower2.png");
+  tokenIcon = loadImage("icon/token2.png");
+  superIcon = loadImage("icon/speedpower.png");
+  lifeIcon = loadImage("icon/oneup.png");
+  magnetIcon = loadImage("icon/magnet.png");
 
 
   //Obstacle graphics

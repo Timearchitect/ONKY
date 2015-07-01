@@ -3,6 +3,7 @@ abstract class Obstacle extends Entity {
   float impactForce;
   color obstacleColor;
   int hitBrightness, health=1;
+  boolean unBreakable;
   Obstacle(int _x, int _y) {
     super( _x, _y, 200, 200);
     obstacles.add( this);

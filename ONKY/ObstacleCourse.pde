@@ -321,10 +321,11 @@ void spawnTunnel(int x) {
   else entities.add(new IronBox(x, int(floorHeight-200) ) ); 
   entities.add(new IronBox(x+200, int(floorHeight-300) ) ); 
   entities.add(new IronBox(x+400, int(floorHeight-300) ) ); 
-  entities.add(new IronBox(x+600, int(floorHeight-300) ) );
-
-  // entities.add(new Box(x+800, int(floorHeight-400) ) );  // <-- key
-  // entities.add(new Box(x+1000, int(floorHeight-400) ) );  // <-- key
+ // entities.add(new IronBox(x+600, int(floorHeight-300) ) );
+  
+   entities.add(new Glass(x+60, int(floorHeight-400),150,50 ) );  // <-- key
+   entities.add(new Glass(x+800, int(floorHeight-400) ,150,50) );  // <-- key
+   entities.add(new Glass(x+1000, int(floorHeight-400),150,50 ) );  // <-- key
 
   entities.add(new IronBox(x+1200, int(floorHeight-600) ) ); 
   entities.add(new IronBox(x+1200, int(floorHeight-800) ) ); 
@@ -561,7 +562,7 @@ void spawnBlocks(int x) {
   int index= int(random(2));
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
-  entities.add(new Block(x+2000, int(floorHeight-200), -105, -40 ) );
+  entities.add(new Block(x+2000, int(floorHeight-200), -100, -45 ) );
   // entities.add(new Block(x+200, int(floorHeight-200) ) );
   // entities.add(new Block(x+400, int(floorHeight-200) ) );
   entities.add(new Block(x+1000, int(floorHeight-1200), -35, 50 ) );
@@ -888,10 +889,11 @@ void spawnFlak(int x) {
 }
 
 void spawnBlock(int x) { 
-  entities.add(new Block(x+800, int(floorHeight-500)) );
-  entities.add(new IronBox(x+2000, int(floorHeight-200)) );
-  entities.add(new IronBox(x+2000, int(floorHeight-400)) );
-  entities.add(new IronBox(x+2000, int(floorHeight-600)) );
+  entities.add(new Block(x+400, int(floorHeight-500)) );
+ entities.add(new Glass(x+1600, int(floorHeight-100),200,100) );
+  entities.add(new IronBox(x+1600, int(floorHeight-300)) );
+  entities.add(new IronBox(x+1600, int(floorHeight-400)) );
+  entities.add(new IronBox(x+1600, int(floorHeight-600)) );
 }
 
 void spawnBarrel(int x) {
