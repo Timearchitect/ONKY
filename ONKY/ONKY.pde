@@ -16,13 +16,13 @@ AudioPlayer BGM, regularSong, superSong;
 AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
-AudioPlayer leafSound;
+AudioPlayer leafSound,bloodSound;
 AudioPlayer splash, waterFall;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf,rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -404,6 +404,7 @@ void loadImages() {
   Mountain= loadImage("backgroundfull.png");
 
   //debris
+  rockDebris=loadImage("rockDebris.png");
   Leaf  =loadImage("leaf.png");
 }
 void loadSound() {
@@ -431,6 +432,7 @@ void loadSound() {
   teleportSound =minim.loadFile("sound/teleport.wav");
   splash=minim.loadFile("sound/splash.wav");
   waterFall=minim.loadFile("sound/waterfall.wav");
+  bloodSound=minim.loadFile("sound/blood.wav");
   regularSong.setGain(-10);
   laserSound.setGain(-20);
 

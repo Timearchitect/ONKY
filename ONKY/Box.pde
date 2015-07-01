@@ -675,7 +675,7 @@ class Snake extends Obstacle {
     playSound(leafSound);
   }
   void destroySound() {
-    playSound(leafSound);
+    playSound(bloodSound);
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -765,46 +765,34 @@ class Rock extends Obstacle {
     health=6;
   }
   void display() {
-    //super.display();
-    /* stroke(250, 250, 250);
-     strokeWeight(8);
-     point(x+10, y+10);
-     point(x+w-10, y+10);
-     point(x+w-10, y+h-10);
-     point(x+10, y+h-10);
-     
-     strokeWeight(1);
-     */
-
-      image(rock, x, y, w, h);
-
+    image(rock, x, y, w, h);
   }
   void update() {
     super.update();
     //if (x!=tx &&  y!=ty) {
-     // float diffX=tx-x, diffY=ty-y;
-      //x+=diffX*0.2*speedFactor;
-      //y+=diffY*0.2*speedFactor;
-      //if (x==tx)x=tx;
-      //if (y==ty)y=ty;
-   // }
+    // float diffX=tx-x, diffY=ty-y;
+    //x+=diffX*0.2*speedFactor;
+    //y+=diffY*0.2*speedFactor;
+    //if (x==tx)x=tx;
+    //if (y==ty)y=ty;
+    // }
   }
   void death() {
     if (p.invincible || health<=0) {
       super.death();
       entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
-      for (int i =0; i< 3; i++) {
-        entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
+      for (int i =0; i< 10; i++) {
+        entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
     }
-    playSound(ironBoxDestroySound);
+    playSound(blockDestroySound);
   }
   void hit() {  // hit by punching & smashing
     super.hit();
     shakeFactor=50; 
     hitBrightness=255;
     //x+=p.vx;
-   //y+=-p.vy;
+    //y+=-p.vy;
   }
   void knock() {
     super.knock();
@@ -812,7 +800,7 @@ class Rock extends Obstacle {
     hitBrightness=255;
   }
   void knockSound() {
-    playSound(ironBoxDestroySound);
+    playSound(blockDestroySound);
   }
   void  hitSound() {
     playSound(ironBoxDestroySound);

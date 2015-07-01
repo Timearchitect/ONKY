@@ -84,7 +84,28 @@ class IronBoxDebris extends Debris {
     popMatrix();
   }
 }
+class RockDebris extends Debris {
 
+
+  RockDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
+    super( _o, _x, _y, _vx, _vy);
+    angle=random(360);
+    VAngle=random(4)-2;
+    bounceFriction=0.2;
+    bounceForce=0;
+    w=50;
+    h=50;
+  }
+
+  void display() {
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(angle));
+    
+    image(rockDebris,-w*0.5, -h*0.5, w, h);
+    popMatrix();
+  }
+}
 class TireDebris extends Debris {
 
   int cooldown,size;

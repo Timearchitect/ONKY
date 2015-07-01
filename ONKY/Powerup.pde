@@ -70,6 +70,10 @@ abstract class Powerup extends Entity implements Cloneable {
     noStroke();
     // fill(powerupColor);
     // rect(50+index*interval, 100, 100, 100);
+    if (!instant && !toggle) {
+      fill(powerupColor);
+      ellipse(GUIoffsetX+10+index*interval+40, GUIoffsetY+10+40, 100, 100);
+    }
     if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20);
     fill(0, 180);
     //println(spawnTime +" : "+time);
