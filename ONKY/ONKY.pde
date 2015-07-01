@@ -22,7 +22,7 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf,rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire,Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf,rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -389,6 +389,7 @@ void loadImages() {
   Grass= loadImage("grasstile.png");
   Bush = loadImage("bush.png");
   sign= loadImage("sign.png");
+  Vines = loadImage("vines.png");
   lumber= loadImage("lumber22.png");
   lumberR= loadImage("lumber33.png");
   lumberL= loadImage("lumber11.png");
@@ -410,9 +411,9 @@ void loadImages() {
 void loadSound() {
   minim = new Minim(this);
   regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
-
   superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
   BGM = regularSong;
+  
   smackSound= minim.loadFile("sound/smack.wav");
   blockDestroySound= minim.loadFile("sound/blockDestroy.wav");
   boxDestroySound = minim.loadFile("sound/boxSmash.wav");
