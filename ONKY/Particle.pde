@@ -244,8 +244,8 @@ class sparkParticle extends Particle {
 
   void display() {
     stroke(particleColor);
-   // strokeWeight(random(size*2)+size*0.1); 
-   strokeWeight(size); 
+    // strokeWeight(random(size*2)+size*0.1); 
+    strokeWeight(size); 
     beginShape();
     vertex(this.x+0, this.y-size );
     vertex(this.x+size*0.5 -size*0.25, this.y- size*0.5+size*0.25);
@@ -311,6 +311,44 @@ class RShockWave extends Particle {
     stroke(particleColor, opacity);
     strokeWeight(int(0.3*opacity));
     ellipse(int(p.x+p.w*0.5), int(p.y+p.h*0.5), size, size);
+  }
+}
+
+class triangleParticle extends Particle {
+  float  size, angle,vAngle;
+  color particleColor;
+  triangleParticle(int _x, int _y, int _size, color _particleColor) {
+    super( _x, _y );
+    size=_size;
+    particleColor=_particleColor;
+    vAngle=random(12)-6;
+  }
+    triangleParticle(int _x, int _y,float _vx,float _vy, int _size, color _particleColor) {
+    this( _x,  _y,  _size,  _particleColor);
+    vx=_vx;
+    vy=_vy;
+  }
+  void update() {
+    super.update();
+    angle+=vAngle;
+    x+=vx;
+    y+=vy;
+    size*=0.9*speedFactor;  // decay
+    if (size<2)death();
+  }
+  void display() {
+    pushMatrix();
+    translate(x+size*0.5,y+size*0.5);
+    rotate(radians(angle));
+    strokeWeight(int(size*0.2));
+    stroke(particleColor);
+    fill(255);
+    beginShape();
+    vertex(0, -size );
+    vertex(size*0.5, 0 );
+    vertex(-size*0.5, 0 );
+    endShape(CLOSE);
+    popMatrix();
   }
 }
 

@@ -66,6 +66,7 @@ class LaserProjectile extends Projectile {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
+     for (int i=0; i<3; i++) particles.add(new triangleParticle(int(x), int(y),random(vx*0.4)-vx*0.20,random(vy*0.4+4)-vy*0.2-2, 60, projectileColor));
     strokeWeight(10);
     stroke(projectileColor);
     fill(255);
@@ -78,13 +79,13 @@ class BigLaserProjectile extends LaserProjectile {
     super( _x, _y, _vx, _vy);
     //projectiles.add(this);
     w=100;
-    projectileColor= color(255, 0, 0);
-    strokeWeight(15);
-    stroke(projectileColor);
-    fill(255);
-    ellipse(x+w, y, 75, 40);
+   // projectileColor= color(255, 0, 0);
+    //strokeWeight(15);
+    //stroke(projectileColor);
+   // fill(255);
+   // ellipse(x+w, y, 75, 40);
     playSound(laserSound);
-    shakeFactor+=20;
+    shakeFactor+=10;
     particles.add(new sparkParticle(int(x)-40, int(y), 20, projectileColor));
     particles.add(new sparkParticle(int(x)-40, int(y), 10, 255));
   }
@@ -94,7 +95,7 @@ class BigLaserProjectile extends LaserProjectile {
 
     stroke(projectileColor);
     strokeWeight(30);
-    line(x, y, x-vx*5, y-vy*5);
+    line(x, y, x-vx*6, y-vy*6);
 
     stroke(255);
     strokeWeight(15);
@@ -110,7 +111,7 @@ class BigLaserProjectile extends LaserProjectile {
         if (!o.dead && !o.unBreakable && o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
           o.damage(3);
           death();
-          shakeFactor+=30;
+          shakeFactor+=20;
         }
       }
     }
@@ -121,7 +122,8 @@ class BigLaserProjectile extends LaserProjectile {
     y+=vy;
     vx*=1.08;
     collision();
-    //if ( x>p.x+width/scaleFactor) dead=true;  //off screen
+    if(int(x)%5==0)particles.add(new triangleParticle(int(x), int(y),vx*.3,0, 40, projectileColor));
+    if ( x-vx*4>p.x+width/scaleFactor) dead=true;  //off screen
     if (time<=0) dead=true;  // timelimit
     else time--;
   }
@@ -129,10 +131,11 @@ class BigLaserProjectile extends LaserProjectile {
   void death() {
     //super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 30, 0));
-    strokeWeight(20);
-    stroke(projectileColor);
-    fill(255);
-    ellipse(int(x), int(y), 200, 200);
+    for (int i=0; i<8; i++) particles.add(new triangleParticle(int(x), int(y),random(10)+vx*.3,random(20)-10, 220, projectileColor));
+   // strokeWeight(20);
+    //stroke(projectileColor);
+    //fill(255);
+    //ellipse(int(x), int(y), 200, 200);
   }
 }
 

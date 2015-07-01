@@ -251,7 +251,7 @@ class Lumber extends Obstacle {
     image(lumber, x, y, w, h);
     if (hanging) {
       for (int i= 0; i > -1000 ; i-=40) {
-        image(Vines, x+20, y-40+i );
+        image(Vines, x, y-40+i );
         image(Vines, x+w-20, y-40+i);
       }
       /*  stroke(0, 180, 0);
