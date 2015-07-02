@@ -124,7 +124,7 @@ class TireDebris extends Debris {
   }
   void hitFloor() {
     super.hitFloor();
-    if (cooldown<1 &&opacity>50)playSound(rubberSound);
+    //if (cooldown<1 &&opacity>50)playSound(rubberSound);
     cooldown=10;
   }
   void display() {

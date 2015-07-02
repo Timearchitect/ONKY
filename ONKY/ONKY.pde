@@ -1,6 +1,6 @@
 /*
  *
- *  ONKY the game
+ *  ONKY the game for ANdroi Alpha test
  *  av Alrik He
  *
  */
@@ -8,7 +8,7 @@
 // ref:
 // http://javatechig.com/java/code-optimization-tips-for-java
 
-import ddf.minim.*;
+//import ddf.minim.*;
 //import javax.media.opengl.*;
 //import processing.opengl.*;
 
@@ -16,7 +16,7 @@ PGraphics GUI;
 PGraphics powerupGUI;
 PFont font; 
 int renderObject;
-Minim minim;
+/*Minim minim;
 AudioPlayer BGM, regularSong, superSong;
 AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
@@ -25,7 +25,7 @@ AudioPlayer leafSound, bloodSound;
 AudioPlayer splash, waterFall;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound;
-
+*/
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
@@ -48,7 +48,7 @@ color FlashColor;
 boolean debug, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
 
@@ -57,16 +57,26 @@ void setup() {
   noSmooth();
   //noClip();
   //size(720, 1080); // vertical
-  size( 1080, 720); // horisontal
-  // size( 1080, 720,P3D); // horisontal
-  //size( 1080, 720, OPENGL); // horisontal
+//  size( 1080, 720); // horisontal
+  size(displayWidth, displayHeight,P3D); // horisontal
+   orientation(LANDSCAPE);  // the hot dog way 
+  //size( displayWidth, displayHeight, OPENGL); // horisontal
   // hint();
-  // hint(DISABLE_TEXTURE_MIPMAPS);
-  //((PGraphicsOpenGL)g).textureSampling(2);
+   hint(DISABLE_TEXTURE_MIPMAPS);
+  ((PGraphicsOpenGL)g).textureSampling(2);
+  
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
   loadImages();
-  loadSound();
+  
+ /* final PGraphics pg = createGraphics(41, 41, JAVA2D);
+  pg.beginDraw();
+  pg.image( loadImage("extraLife.png"), 0, 0, 41, 41);
+  pg.endDraw();
+
+  frame.setIconImage(pg.image);
+*/
+  //loadSound();
   loadGUILayer();
 
   //UpdateGUILife();
@@ -75,29 +85,29 @@ void setup() {
   if (preloadObstacles)loadObstacle();
   p.y=floorHeight-p.h;
 
-  // entities.add(new InvisPowerup(1000, 600, 1500));
-  //entities.add(new LaserPowerup(2200, 400, 600));
-  // entities.add(new LaserPowerup(2100, 600, 600));
-  //  entities.add(new TeleportPowerup(2100, 600, 600));
-  // entities.add(new TeleportPowerup(2100, 600, 600));
-  //  entities.add(new TeleportPowerup(2100, 600, 600,false));
+  // powerups.add(new InvisPowerup(1000, 600, 1500));
+  //powerups.add(new LaserPowerup(2200, 400, 600));
+  // powerups.add(new LaserPowerup(2100, 600, 600));
+  //  powerups.add(new TeleportPowerup(2100, 600, 600));
+  // powerups.add(new TeleportPowerup(2100, 600, 600));
+  //  powerups.add(new TeleportPowerup(2100, 600, 600,false));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
-  // entities.add(new IronBox(3200, int(floorHeight-400) ) ); // 3
+   entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
   // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
-  // entities.add(new SlowPowerup(2200, 400, 1000));
-  entities.add(new RandomPowerup(2000, 400, 500)); 
-  // entities.add(new RandomPowerup(2000, 600, 500)); 
-  // entities.add(new RandomPowerup(2000, 200, 500));
+  // powerups.add(new SlowPowerup(2200, 400, 1000));
+  powerups.add(new RandomPowerup(2000, 400, 500)); 
+  // powerups.add(new RandomPowerup(2000, 600, 500)); 
+  // powerups.add(new RandomPowerup(2000, 200, 500));
 }
 
 void draw() {
-  frame.setTitle("ONKY  " +int(frameRate) + " fps");
+ // background(0,100,255);
   if (!preloadObstacles)  generateObstacle();
-  shake();
+  //shake();
   smoothScale();
   smoothOffset();
   smoothSlow();
@@ -111,7 +121,7 @@ void draw() {
   if (debug) displaySign();
   displayFlash();
   pushMatrix();
-  scale(scaleFactor);
+  scale(scaleFactor*screenFactor);
   rotate(radians(screenAngle));
   translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
   if (debug)renderObject=0; // for counting objects on screen
@@ -302,7 +312,7 @@ void gameReset() {
   debris.clear();
 
 
-  if (!mute)changeMusic(regularSong);
+ // if (!mute)changeMusic(regularSong);
 
   speedLevel=0;
 
@@ -337,9 +347,9 @@ void calcDispScore() {
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
   fill(255);
-  textSize(40);
+  textSize(int(40*screenFactor));
   textAlign(RIGHT);
-  text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.001)  +" meter", width-50, 100);
+  text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width-50, 100);
   // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
   // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
   textAlign(LEFT);
@@ -349,7 +359,7 @@ void debugScreen() {
   textSize(18);
   text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-50);
 }
-void playSound(AudioPlayer sound) {
+/*void playSound(AudioPlayer sound) {
   if (!mute) {
     sound.rewind();
     sound.play();
@@ -362,7 +372,7 @@ void changeMusic(AudioPlayer song) {
     playSound(BGM);
     BGM.loop();
   }
-}
+}*/
 
 
 
@@ -420,7 +430,7 @@ void loadImages() {
   Leaf  =loadImage("leaf.png");
 }
 void loadSound() {
-  minim = new Minim(this);
+ /* minim = new Minim(this);
   regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
   superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
   BGM = regularSong;
@@ -450,7 +460,7 @@ void loadSound() {
   laserSound.setGain(-20);
 
   BGM.play();
-  BGM.loop();
+  BGM.loop();*/
 }
 
 
