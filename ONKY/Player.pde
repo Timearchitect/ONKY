@@ -59,6 +59,7 @@ class Player {
       }
     }
     if (usedPowerup.size()>MAX_POWERUP_SIZE)usedPowerup.remove(usedPowerup.size()-1);
+    if (lives<0)gameReset();
   }
 
   void display() {
@@ -299,7 +300,7 @@ class Player {
     totalJumps=0;
     totalAttacks=0;
     averageSpeed=0;
-    
+
     respawning=false;
     punching=false; 
     ducking=false;
@@ -311,7 +312,6 @@ class Player {
     UpdateGUILife(); // updateGUI
     playSound(ughSound);
     screenAngle=-10;
-    if(lives<0)gameReset();
     background(255, 0, 0);
   }
   void respawn() {
