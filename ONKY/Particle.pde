@@ -35,7 +35,7 @@ class TrailParticle extends Particle {
   void display() {
     tint(255, int(opacity));
     image(cell, x, y, w, h);
-    g.removeCache(cell);// this is avoiding the leak
+    // g.removeCache(cell);// this is avoiding the leak
 
     noTint();
   }
@@ -86,49 +86,51 @@ class slashParticle extends Particle {
     noFill();
     stroke(p.weaponColor, int(opacity));
     strokeWeight(int(opacity*0.18));
-    if (type==0) {
+    switch(type) {
+    case 0:
       curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
-    }
-    if (type==1) { 
+      break;
+    case 1:
       curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
-    }
-    if (type==2) {
+      break;
+    case 2:
       curve(p.x-100, p.y+60, p.x+40, p.y+ 0, p.x+ 180, p.y+30, p.x- 200, p.y+180);
-    }
-    if (type==3) {
+      break;
+    case 3:
       arc(p.x+p.w*0.5+20, p.y+p.h*0.5, 190, 140, radians(p.angle*1.5-50), radians(p.angle*1.5+120));
-    }
-    if (type==4) {
+      break;
+    case 4:
       curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
-    }
-    if (type==5) {  // special
-
+      break;
+    case 5:
       line(x-distance, y, x, y);
+      break;
     }
+
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
     noFill();
-
-
-    if (type==0) {
+    
+    switch(type) {
+    case 0:
       curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
-    }
-    if (type==1) {
+      break;
+    case 1:
       curve(p.x-200, p.y+500, p.x+30, p.y+ 50, p.x+ 180, p.y+40, p.x-300, p.y+400);
-    }
-    if (type==2) {
+      break;
+    case 2:
       curve(p.x-100, p.y+60, p.x+40, p.y+ 0, p.x+ 180, p.y+30, p.x- 200, p.y+180);
-    }
-    if (type==3) {
+      break;
+    case 3:
       arc(p.x+p.w*0.5+20, p.y+p.h*0.5, 190, 140, radians(p.angle*1.5-50), radians(p.angle*1.5+120));
-    }
-    if (type==4) {
+      break;
+    case 4:
       curve(p.x-60, p.y-420, p.x+20, p.y+ 30, p.x+ 140, p.y-20, p.x- 150, p.y-780);
-    }
-    if (type==5) {
+      break;
+    case 5:
       line(x-distance, y, x, y);
+      break;
     }
-    strokeWeight(1);
   }
 }
 
@@ -149,7 +151,7 @@ class LineParticle extends Particle {
   }
   void update() {
     size*=1+0.1*speedFactor;
-    if (opacity<1)death(); 
+    if (opacity<2)death(); 
     else    opacity*=1-0.3*speedFactor;
   }
 
@@ -163,7 +165,7 @@ class LineParticle extends Particle {
     stroke(255, int(opacity)+100);
     strokeWeight(int(0.1*opacity));
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);
-   // strokeWeight(1);
+    // strokeWeight(1);
   }
 }
 class SpinParticle extends Particle {
@@ -190,7 +192,6 @@ class SpinParticle extends Particle {
     } 
     if (opacity<1)death(); 
     else opacity-=8*speedFactor;
-    
   }
 
   void display() {
@@ -199,7 +200,7 @@ class SpinParticle extends Particle {
     stroke(particleColor, int(opacity));
     strokeWeight(int(opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
-  //  strokeWeight(1);
+    //  strokeWeight(1);
   }
 }
 class smokeParticle extends Particle {

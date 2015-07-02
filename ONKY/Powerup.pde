@@ -25,9 +25,8 @@ abstract class Powerup extends Entity implements Cloneable {
     x+=vx*speedFactor;
     y+=vy*speedFactor;
     if (homing && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
-      float xDiff=((p.x+p.w*0.5)-x), yDiff=((p.y+p.h*0.5)-y);
-      vx=xDiff*0.15*speedFactor;
-      vy=yDiff*0.15*speedFactor;
+      vx=((p.x+p.w*0.5)-x)*0.15*speedFactor;
+      vy=((p.y+p.h*0.5)-y)*0.15*speedFactor;
     }
     collision();
   }

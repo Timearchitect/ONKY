@@ -55,7 +55,7 @@ boolean powerUpUnlocked[]= new boolean[5];
 
 void setup() {
   noSmooth();
-  noClip();
+  //noClip();
   //size(720, 1080); // vertical
   size( 1080, 720); // horisontal
   /*
@@ -128,7 +128,7 @@ void draw() {
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
       renderObject++;
       o.update();
-      o.display();
+     o.display();
     }
   }
 
