@@ -44,7 +44,7 @@ class Box extends Obstacle {
       break;
     case 2:
       image(brokenBox, x, y, w, h);
-      if (count%20==0)particles.add(new sparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+      if (count%20==0)particles.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
       break;
     default:
       image(mysteryBox, x, y, w, h);
@@ -53,7 +53,7 @@ class Box extends Obstacle {
     else if (type==1) image(brokenBox, x, y, w, h);
     else if (type==2) {
       image(brokenBox, x, y, w, h);
-      if (count%20==0)particles.add(new sparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+      if (count%20==0)particles.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
     } else image(mysteryBox, x, y, w, h);*/
   }
   void update() {

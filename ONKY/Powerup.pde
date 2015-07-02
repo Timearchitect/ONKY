@@ -1,5 +1,5 @@
 abstract class Powerup extends Entity implements Cloneable {
-  PImage icon= tokenIcon;
+  PImage icon;
   boolean instant=true, toggle, homing;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
@@ -7,7 +7,7 @@ abstract class Powerup extends Entity implements Cloneable {
   int upgradeLevel=int(random(4));
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
-    icon= tokenIcon;
+   // icon= tokenIcon;
     time=_time;
     spawnTime=_time;
     x=_x;
@@ -18,7 +18,7 @@ abstract class Powerup extends Entity implements Cloneable {
     totalTokens++;
   }
   void update() {
-    if (int(angle%100)==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5), 20, powerupColor));
+    if (int(angle%120)==0) particles.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
     angle+=4*speedFactor;
     offsetX=cos(radians(angle))*12*speedFactor;
     offsetY=sin(radians(angle))*12*speedFactor;
@@ -52,8 +52,8 @@ abstract class Powerup extends Entity implements Cloneable {
     tokensTaken++;
     playSound(collectSound);
     particles.add( new SpinParticle( int(x), int(y), powerupColor));
-    particles.add( new sparkParticle(int(x), int(y), 30, powerupColor));
-    particles.add( new sparkParticle(int(x), int(y), 15, 255));
+    particles.add( new SparkParticle(int(x), int(y), 50, powerupColor));
+    //particles.add( new SparkParticle(int(x), int(y), 15, 255));
     death();
     UpdatePowerupGUILife();
   }
@@ -62,7 +62,7 @@ abstract class Powerup extends Entity implements Cloneable {
   }
   void use() {
     time--;
-    background(powerupColor);
+    //background(powerupColor);
     if (time<1)death();
   }
   void displayIcon() {
@@ -76,7 +76,7 @@ abstract class Powerup extends Entity implements Cloneable {
     //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
     noStroke();
     fill(0, 180);
-    arc(GUIoffsetX+w*0.5+index*powerupGUIinterval, GUIoffsetY+h*0.5, 80, 80, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
+    arc(GUIoffsetX+w*0.5+index*powerupGUIinterval, GUIoffsetY+h*0.5, 80, 80, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
@@ -113,9 +113,6 @@ class InvisPowerup extends Powerup {
   }
   void collect() {
     if (!dead) {
-      //tokens++;
-      // playSound(collectSound);
-      // particles.add( new SpinParticle(int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }    
@@ -233,7 +230,7 @@ class SlowPowerup extends Powerup {
     icon=slowIcon;
   }
   SlowPowerup(int _x, int _y, int _time, boolean _instant) {
-    this(_x, _y, int(_time*0.3));
+    this(_x, _y, _time);
     instant=_instant;
   }
 
@@ -263,9 +260,6 @@ class LifePowerup extends Powerup {
 
   void collect() {
     if (!dead) {
-      //  tokens++;
-      //  playSound(collectSound);
-      // particles.add( new SpinParticle(  int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }        
@@ -296,9 +290,6 @@ class TeleportPowerup extends Powerup {
   }
   TeleportPowerup(int _x, int _y, int _time, boolean _instant) {
     this(_x, _y, 25);
-    //powerups.add( this);
-    //powerupColor=color(0, 50, 255);
-    //icon= slashIcon;
     this.instant=_instant;
   }
   TeleportPowerup(int _x, int _y, int _time, int _distance) {
@@ -308,10 +299,6 @@ class TeleportPowerup extends Powerup {
   }
   void collect() {
     if (!dead) {
-      //tokens++;
-      //playSound(collectSound);
-
-      //particles.add( new SpinParticle(  int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }        

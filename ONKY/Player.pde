@@ -327,7 +327,7 @@ class Player {
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {
       particles.add(new speedParticle(int(x), int(random(90)+y)));
-      if (invincible) particles.add(new sparkParticle(int(x+w), int(random(h)+y), 10, color(255, 220, 20)));
+      if (invincible) particles.add(new SparkParticle(int(x+w), int(random(h)+y), 40, color(255, 220, 20)));
     }
   }
 }

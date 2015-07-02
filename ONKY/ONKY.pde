@@ -209,10 +209,10 @@ void draw() {
 
   //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
- /* for (Paralax plx : ForegroundParalaxLayers) {
-    plx.update();
-    if (plx.x<width)plx.display(); // onscreen
-  }  */
+  /* for (Paralax plx : ForegroundParalaxLayers) {
+   plx.update();
+   if (plx.x<width)plx.display(); // onscreen
+   }  */
   image(GUI, 0, 0); // add GUIlayer
   image( powerupGUI, 0, 0); // add GUIlayer
   for ( Powerup pow : p.usedPowerup) { 
@@ -233,7 +233,7 @@ void shake() {
   }
 }
 void displayFlash() {
-  if (flashOpacity!=0) {
+  if (flashOpacity>0) {
     fill(0, flashOpacity);
     noStroke();
     rect(0, 0, width, height);

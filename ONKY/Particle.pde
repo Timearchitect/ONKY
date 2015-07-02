@@ -223,10 +223,10 @@ class smokeParticle extends Particle {
   }
 }
 
-class sparkParticle extends Particle {
+class SparkParticle extends Particle {
   float  size;
   color particleColor;
-  sparkParticle(int _x, int _y, int _size, color _particleColor) {
+  SparkParticle(int _x, int _y, int _size, color _particleColor) {
     super( _x, _y);
     particles.add(this);
     particleColor=_particleColor;
@@ -240,7 +240,8 @@ class sparkParticle extends Particle {
 
   void display() {
     stroke(particleColor);
-    strokeWeight(size); 
+    fill(255);
+    strokeWeight(int(size*0.2)); 
     beginShape();
     vertex(x+0, y-size );
     vertex(x+size*0.5 -size*0.25, y- size*0.5+size*0.25);
