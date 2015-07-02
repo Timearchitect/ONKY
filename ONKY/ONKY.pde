@@ -58,11 +58,11 @@ void setup() {
   //noClip();
   //size(720, 1080); // vertical
   size( 1080, 720); // horisontal
-  /*
-  size( 1080, 720, OPENGL); // horisontal
+ // size( 1080, 720,P3D); // horisontal
+  //size( 1080, 720, OPENGL); // horisontal
    // hint();
-   hint(DISABLE_TEXTURE_MIPMAPS);
-   ((PGraphicsOpenGL)g).textureSampling(2);*/
+  // hint(DISABLE_TEXTURE_MIPMAPS);
+   //((PGraphicsOpenGL)g).textureSampling(2);
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
   loadImages();
@@ -95,6 +95,7 @@ void setup() {
 }
 
 void draw() {
+  frame.setTitle("ONKY  " +int(frameRate) + " fps");
   if (!preloadObstacles)  generateObstacle();
   shake();
   smoothScale();

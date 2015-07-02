@@ -195,12 +195,10 @@ class SpinParticle extends Particle {
   }
 
   void display() {
-
     noFill();
     stroke(particleColor, int(opacity));
     strokeWeight(int(opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
-    //  strokeWeight(1);
   }
 }
 class smokeParticle extends Particle {
