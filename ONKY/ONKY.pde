@@ -1,8 +1,9 @@
 /*
  *
- *  ONKY the game for ANdroi Alpha test
- *  av Alrik He
+ *  ONKY the game for Android Alpha test
+ *  av Alrik He 
  *
+ * change screenFactor variable for diffrent screenRes default: 1920x1080
  */
 
 // ref:
@@ -466,7 +467,7 @@ void loadSound() {
 
 void loadParalax() {
 
-  entities.add(new Paralax(0, -int(height*1.5)-300, width*3, int( height*3), 0.01, Mountain)); // bakgrund
+  entities.add(new Paralax(0, -int(height*1.5)-200, width*3, int( height*3+200), 0.01, Mountain)); // bakgrund
   entities.add(new ParalaxObject(Tree, 0, 400, 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree2, 255, 400, 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree, 0, 420, 100, 100, 0.1)); 
