@@ -79,7 +79,7 @@ class Player {
 
     if (ducking && onGround) { 
       cell=Slide;
-      image(cell, -100*0.3, -80*0.5, 100, 80);
+      image(cell, -30, -40, 100, 80);
     } else {
       if (jumpCount==MAX_JUMP-1) {
         cell=Jump;
@@ -173,13 +173,11 @@ class Player {
     particles.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
     shakeFactor=60;
 
-
-
     //fill(255, 0, 0);
     // rect( p.x,p.y-50,range,300);
     //rect( p.x-100,p.y+p.h-50  ,(p.x-100)-(p.x+p.w+100), 500);
     for (Obstacle o : obstacles) {
-      if (o.x+o.w  > p.x && o.x < p.x+stompRange &&   o.y > p.y-50 &&   o.y+o.h < p.y+250) {
+      if (!o.unBreakable && o.x+o.w  > p.x && o.x < p.x+stompRange &&   o.y > p.y-50 &&   o.y+o.h < p.y+250) {
         o.hit();
         o.death();
       }

@@ -60,7 +60,7 @@ class speedParticle extends Particle {
     strokeWeight(3);
     noFill();
     line(x+p.vx-w, y, x-w, y);
-    strokeWeight(1);
+    //strokeWeight(1);
   }
 }
 
@@ -163,7 +163,7 @@ class LineParticle extends Particle {
     stroke(255, int(opacity)+100);
     strokeWeight(int(0.1*opacity));
     line(x-cos(radians(angle))*size, y-sin(radians(angle))*size, x+cos(radians(angle))*size, y+sin(radians(angle))*size);
-    strokeWeight(1);
+   // strokeWeight(1);
   }
 }
 class SpinParticle extends Particle {
@@ -199,7 +199,7 @@ class SpinParticle extends Particle {
     stroke(particleColor, int(opacity));
     strokeWeight(int(opacity*0.1));
     arc(x, y, size, size, radians(angle), radians(angle+180));
-    strokeWeight(1);
+  //  strokeWeight(1);
   }
 }
 class smokeParticle extends Particle {

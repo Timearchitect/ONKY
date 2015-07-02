@@ -18,16 +18,16 @@ abstract class Powerup extends Entity implements Cloneable {
     totalTokens++;
   }
   void update() {
-    if (angle%100==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5), 20, powerupColor));
-    angle+=4;
-    offsetX=cos(radians(angle))*12;
-    offsetY=sin(radians(angle))*12;
+    if (int(angle%100)==0) particles.add(new sparkParticle(int(x+offsetX*5), int(y+offsetY*5), 20, powerupColor));
+    angle+=4*speedFactor;
+    offsetX=cos(radians(angle))*12*speedFactor;
+    offsetY=sin(radians(angle))*12*speedFactor;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
     if (homing && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
       float xDiff=((p.x+p.w*0.5)-x), yDiff=((p.y+p.h*0.5)-y);
-      vx=xDiff*0.15;
-      vy=yDiff*0.15;
+      vx=xDiff*0.15*speedFactor;
+      vy=yDiff*0.15*speedFactor;
     }
     collision();
   }
@@ -218,8 +218,8 @@ class LaserPowerup extends Powerup {
           }
         }
       }
-      if (targetScaleFactor>1-upgradeLevel*0.1-0.35) {
-        targetScaleFactor=1-upgradeLevel*0.1-0.35;
+      if (targetScaleFactor>1-upgradeLevel*0.1-0.30) {
+        targetScaleFactor=1-upgradeLevel*0.1-0.30;
       }
       time-=1*speedFactor;
       if (time<1)death();

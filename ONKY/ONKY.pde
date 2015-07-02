@@ -4,6 +4,10 @@
  *  av Alrik He
  *
  */
+ 
+ // ref:
+ // http://javatechig.com/java/code-optimization-tips-for-java
+ 
 import ddf.minim.*;
 //import javax.media.opengl.*;
 //import processing.opengl.*;
@@ -92,8 +96,6 @@ void setup() {
 
 void draw() {
   if (!preloadObstacles)  generateObstacle();
-  //if (!p.invincible) background(80);
-  // else background(255, 150, 0);
   shake();
   smoothScale();
   smoothOffset();
@@ -293,7 +295,6 @@ void gameReset() {
 
 
   if (!mute)changeMusic(regularSong);
-
 
   speedLevel=0;
 

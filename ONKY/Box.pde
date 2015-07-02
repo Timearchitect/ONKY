@@ -135,7 +135,7 @@ class Tire extends Obstacle {
   }
   void surface() {
     offset=6;
-    if (p.vx>9)p.vx*=0.82;
+    if (p.vx>9)p.vx*=0.84;
     if (int(random(15/speedFactor))==0)entities.add( new TireDebris(this, int(p.x), int(y), random(20)+p.vx-10, -random(20)));
   }
 }
@@ -507,7 +507,7 @@ class Grass extends Obstacle {
 }
 class Water extends Obstacle {
   int debrisCooldown;
-  int count;
+  float count;
   //PImage cell;
   Water(int _x, int _y, int _w, int _h) {
     super(_x, _y);
@@ -518,7 +518,7 @@ class Water extends Obstacle {
   }
   void update() {
     super.update();
-    count++;
+    count+=1*speedFactor;
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
@@ -773,15 +773,13 @@ class Barrel extends Obstacle {
 }
 
 class Rock extends Obstacle {
-  int tx, ty;
   Rock(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(150);
-    tx=_x;
-    ty=_y;
     health=7;
   }
   void display() {
+
     image(rock, x, y, w, h);
   }
   void update() {
@@ -807,14 +805,14 @@ class Rock extends Obstacle {
   void hit() {  // hit by punching & smashing
     super.hit();
     shakeFactor=50; 
-    hitBrightness=255;
+    //hitBrightness=255;
     //x+=p.vx;
     //y+=-p.vy;
   }
   void knock() {
     super.knock();
     shakeFactor=100; 
-    hitBrightness=255;
+   // hitBrightness=255;
   }
   void knockSound() {
     playSound(blockDestroySound);
