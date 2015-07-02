@@ -1,6 +1,6 @@
 int  difficulty, difficultyRange=7, interval=2200, totalAmountOfCourses=34;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.2;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=2200, deleteMargin=1000;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, loadMargin=3000, deleteMargin=1000;
 boolean firstCourse=true;
 
 void generateObstacle() {
@@ -881,10 +881,10 @@ void spawnTokenParadise(int x) {
   }
 }
 void spawnSnake(int x) {
-  entities.add(new Snake(x, int(floorHeight)));
-  entities.add(new Snake(x+200, int(floorHeight)));
-  entities.add(new Snake(x+400, int(floorHeight)));
-  entities.add(new Snake(x+600, int(floorHeight)));
+  entities.add(new Snake(x, int(floorHeight-50)));
+  entities.add(new Snake(x+200, int(floorHeight-50)));
+  entities.add(new Snake(x+400, int(floorHeight-50)));
+  entities.add(new Snake(x+600, int(floorHeight-50)));
 }
 void spawnFlak(int x) { 
   for (int i=600; i < 2200; i+=200) entities.add(new Box(x+i, int(floorHeight-200)));

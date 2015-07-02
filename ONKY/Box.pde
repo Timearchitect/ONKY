@@ -35,12 +35,26 @@ class Box extends Obstacle {
      }
      strokeWeight(1);
      */
-    if (type==0) image(Box, x, y, w, h);
+    switch(type) {
+    case 0:
+      image(Box, x, y, w, h);
+      break;
+    case 1:
+      image(brokenBox, x, y, w, h);
+      break;
+    case 2:
+      image(brokenBox, x, y, w, h);
+      if (count%20==0)particles.add(new sparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+      break;
+    default:
+      image(mysteryBox, x, y, w, h);
+    }
+   /* if (type==0) image(Box, x, y, w, h);
     else if (type==1) image(brokenBox, x, y, w, h);
     else if (type==2) {
       image(brokenBox, x, y, w, h);
       if (count%20==0)particles.add(new sparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
-    } else image(mysteryBox, x, y, w, h);
+    } else image(mysteryBox, x, y, w, h);*/
   }
   void update() {
     super.update();
@@ -250,8 +264,8 @@ class Lumber extends Obstacle {
     image(lumber, x, y, w, h);
     if (hanging) {
       for (int i= 0; i > -1000; i-=40) {
-        image(Vines, x, y-40+i );
-        image(Vines, x+w-20, y-40+i);
+        image(Vines, x, y-80+i, 32, 80);
+        image(Vines, x+w-32, y-80+i, 32, 80);
       }
       /*  stroke(0, 180, 0);
        strokeWeight(6);
@@ -621,7 +635,7 @@ class Sign extends Obstacle {
 class Snake extends Obstacle {
   int debrisCooldown;
   float count;
-  int snakeSpeed = int(random(16)+1);
+  int snakeSpeed = -int(random(16)+1);
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
@@ -641,21 +655,22 @@ class Snake extends Obstacle {
     count+=1*speedFactor;
     /*
     if (count%30<10) x-=1*speedFactor;
-    else if (count%30<20) x -= snakeSpeed+1;
-    else x-=1*speedFactor;
-    
-    x-=1*speedFactor;
-    */
-    if (count%30<20  && count%30>10) x -= snakeSpeed*speedFactor;
-    if (debrisCooldown>0)debrisCooldown--;
+     else if (count%30<20) x -= snakeSpeed+1;
+     else x-=1*speedFactor;
+     
+     x-=1*speedFactor;
+     */
+    if (count%30<20  && count%30>10) x += snakeSpeed*speedFactor;
+    else
+      if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
     // image(Snake, x, y, w, h);
     //fill(obstacleColor);
     //rect( x, y, w, h);
-    if (count%30<10)image( cutSprite (0), x, y-80, w, h);
-    else if (count%30<20)image(cutSprite (2), x, y-90, w, h);
-    else image(cutSprite (1), x, y-70, w, h);
+    if (count%30<10)image( cutSprite (0), x+w*.5, y-30, w, h);
+    else if (count%30<20)image(cutSprite (2), x+w*.5, y-40, w, h);
+    else image(cutSprite (1), x+w*.5, y-20, w, h);
   }
 
   PImage cutSprite (int index) {
@@ -722,7 +737,7 @@ class Barrel extends Obstacle {
     pushMatrix();
     translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
-    image( cutSprite(0), -w*0.5, -w*0.5, w, h);
+    image( Barrel, -w*0.5, -w*0.5, w, h);
     popMatrix();
 
     /* if (count%40<10)image( cutSprite (0), x, y-135, w, h);
@@ -730,12 +745,12 @@ class Barrel extends Obstacle {
      else if (count%40<30)image(cutSprite (2), x, y-145, w, h);
      else image(cutSprite (3), x, y-140, w, h);*/
   }
-
+  /*
   PImage cutSprite (int index) {
-    final int interval= 67, imageWidth=67, imageheight=67;
-    return Barrel.get(index*(interval+1), 0, imageWidth, imageheight);
-  }
-
+   final int interval= 67, imageWidth=67, imageheight=67;
+   return Barrel.get(index*(interval+1), 0, imageWidth, imageheight);
+   }
+   */
 
 
   void hit() {
@@ -764,7 +779,7 @@ class Rock extends Obstacle {
     obstacleColor = color(150);
     tx=_x;
     ty=_y;
-    health=6;
+    health=7;
   }
   void display() {
     image(rock, x, y, w, h);

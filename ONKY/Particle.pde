@@ -28,8 +28,8 @@ class TrailParticle extends Particle {
   }
 
   void update() {
-    if (opacity>10)opacity*=1-0.1*speedFactor;
-    else death();
+    if (opacity<10) death();
+    else opacity*=1-0.1*speedFactor;
   }
 
   void display() {
@@ -47,13 +47,12 @@ class speedParticle extends Particle {
     super( _x, _y);
     particles.add(this);
     opacity=100;
-    // y=_y;
   }
 
   void update() {
     w+=1*speedFactor;
-    if (opacity>10)opacity-=4*speedFactor;
-    else death();
+    if (opacity<10) death();
+    else opacity-=4*speedFactor;
   }
 
   void display() {
@@ -79,8 +78,8 @@ class slashParticle extends Particle {
   }
 
   void update() {
-    if (opacity>0)opacity*=1-0.1*speedFactor;
-    if (opacity<=20)death();
+    if (opacity<20)death(); 
+    else    opacity*=1-0.1*speedFactor;
   }
 
   void display() {
@@ -150,8 +149,8 @@ class LineParticle extends Particle {
   }
   void update() {
     size*=1+0.1*speedFactor;
-    if (opacity>0)opacity*=1-0.3*speedFactor;
-    if (opacity<=1)death();
+    if (opacity<1)death(); 
+    else    opacity*=1-0.3*speedFactor;
   }
 
   void display() {
@@ -169,7 +168,7 @@ class LineParticle extends Particle {
 }
 class SpinParticle extends Particle {
   float size=100, angle;
-  Player player;
+  Boolean onOnky=false;
   color particleColor=color(255);
   SpinParticle( int _x, int _y, color _particleColor) {
     super( _x, _y);
@@ -178,21 +177,20 @@ class SpinParticle extends Particle {
     size=150;
     angle=random(0, 360);
   }
-  SpinParticle( Player _player) {
+  SpinParticle( Boolean _onOnky) {
     super( 0, 0);
     particles.add(this);
-    player=_player;
+    onOnky=_onOnky;
   }
   void update() {
-
     angle+=16*speedFactor;
-    opacity-=8*speedFactor;
-    if (opacity<0)opacity=0;
-    if (player!=null) {
+    if (onOnky) {
       x=int(p.x+p.w*0.5);
       y=int(p.y+p.h*0.5);
     } 
-    if (opacity<=1)death();
+    if (opacity<1)death(); 
+    else opacity-=8*speedFactor;
+    
   }
 
   void display() {
@@ -243,17 +241,16 @@ class sparkParticle extends Particle {
 
   void display() {
     stroke(particleColor);
-    // strokeWeight(random(size*2)+size*0.1); 
     strokeWeight(size); 
     beginShape();
-    vertex(this.x+0, this.y-size );
-    vertex(this.x+size*0.5 -size*0.25, this.y- size*0.5+size*0.25);
-    vertex(this.x+size, this.y+0);
-    vertex(this.x+size*0.5-size*0.25, this.y+ size*0.5-size*0.25);
-    vertex(this.x+0, this.y+ size);
-    vertex(this.x-size*0.5+size*0.25, this.y+size*0.5-size*0.25);
-    vertex(this.x-size, this.y-0);
-    vertex(this.x-size*0.5+size*0.25, this.y-size*0.5+size*0.25);
+    vertex(x+0, y-size );
+    vertex(x+size*0.5 -size*0.25, y- size*0.5+size*0.25);
+    vertex(x+size, y+0);
+    vertex(x+size*0.5-size*0.25, y+ size*0.5-size*0.25);
+    vertex(x+0, y+ size);
+    vertex(x-size*0.5+size*0.25, y+size*0.5-size*0.25);
+    vertex(x-size, y-0);
+    vertex(x-size*0.5+size*0.25, y-size*0.5+size*0.25);
     endShape(CLOSE);
   }
 }
@@ -271,7 +268,7 @@ class splashParticle extends Particle {
   }
 
   void update() {
-    super.update();
+    //super.update();
     x+=vx;
     y+=vy;
     if (size>0)size*=1-0.1*speedFactor;
@@ -300,7 +297,7 @@ class RShockWave extends Particle {
     particleColor=_particleColor;
   }
   void update() {
-    super.update();
+    //super.update();
     size-=25*speedFactor;
     opacity+=3*speedFactor;
     if (size<5)death();
@@ -314,7 +311,7 @@ class RShockWave extends Particle {
 }
 
 class triangleParticle extends Particle {
-  float  size, angle,vAngle;
+  float  size, angle, vAngle;
   color particleColor;
   triangleParticle(int _x, int _y, int _size, color _particleColor) {
     super( _x, _y );
@@ -322,13 +319,13 @@ class triangleParticle extends Particle {
     particleColor=_particleColor;
     vAngle=random(12)-6;
   }
-    triangleParticle(int _x, int _y,float _vx,float _vy, int _size, color _particleColor) {
-    this( _x,  _y,  _size,  _particleColor);
+  triangleParticle(int _x, int _y, float _vx, float _vy, int _size, color _particleColor) {
+    this( _x, _y, _size, _particleColor);
     vx=_vx;
     vy=_vy;
   }
   void update() {
-    super.update();
+    //super.update();
     angle+=vAngle;
     x+=vx;
     y+=vy;
@@ -337,9 +334,9 @@ class triangleParticle extends Particle {
   }
   void display() {
     pushMatrix();
-    translate(x+size*0.5,y+size*0.5);
+    translate(x+size*0.5, y+size*0.5);
     rotate(radians(angle));
-    strokeWeight(int(size*0.2));
+    strokeWeight(int(size*0.3));
     stroke(particleColor);
     fill(255);
     beginShape();

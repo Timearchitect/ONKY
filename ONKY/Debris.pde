@@ -8,7 +8,6 @@ abstract class Debris extends Entity {
     owner=_o;
   }
 
-
   void update() {
     angle+=VAngle*speedFactor;
     bounceOnFloor();
@@ -16,8 +15,8 @@ abstract class Debris extends Entity {
     y+=vy*speedFactor;
     vx+=ax*speedFactor;
     vy+=ay*speedFactor;
-    opacity+=opacityDecay*speedFactor;
     if (opacity<20)death();
+    else opacity+=opacityDecay*speedFactor;
   }
 
   void bounceOnFloor() {
@@ -101,20 +100,20 @@ class RockDebris extends Debris {
     pushMatrix();
     translate(x, y);
     rotate(radians(angle));
-    
-    image(rockDebris,-w*0.5, -h*0.5, w, h);
+
+    image(rockDebris, -w*0.5, -h*0.5, w, h);
     popMatrix();
   }
 }
 class TireDebris extends Debris {
 
-  int cooldown,size;
+  int cooldown, size;
   TireDebris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _o, _x, _y, _vx, _vy);
     bounceFriction=1;
     bounceForce=0.8;
     opacityDecay=-4;
-    size=int(random(50,80));
+    size=int(random(50, 80));
   }
   void update() {
     super.update();
@@ -188,7 +187,6 @@ class BushDebris extends Debris {
 
   @Override
     void update() {
-
     angle+=VAngle*speedFactor;
     offsetX=sin(radians(angle))*50;
     bounceOnFloor();
@@ -198,8 +196,8 @@ class BushDebris extends Debris {
     vy*=0.95; 
     vx+=ax*speedFactor;
     vy+=ay*speedFactor;
-    opacity+=opacityDecay*speedFactor;
-    if (opacity<20)death();
+    if (opacity<20)death(); 
+    else opacity+=opacityDecay*speedFactor;
   }
 
   void display() {

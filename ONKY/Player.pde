@@ -4,7 +4,7 @@ class Player {
   ArrayList<Powerup> usedPowerup = new ArrayList<Powerup>() ;
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide, cell; //setup
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10;
+  final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=8;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
   float punchTime, invis, toSlow;
@@ -13,7 +13,8 @@ class Player {
   boolean dead, onGround, punching, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
-  color defaultWeaponColor= color(255, 0, 0), weaponColor= defaultWeaponColor;
+  final color defaultWeaponColor= color(255, 0, 0);
+  color weaponColor= defaultWeaponColor;
   Player() {
     trailspawnTimer=millis();
   }
@@ -47,13 +48,17 @@ class Player {
     }
 
     spawnSpeedEffect();
-    
+
     if (respawning)respawn() ;
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
       usedPowerup.get(i).use();
-      if (usedPowerup.get(i).dead)usedPowerup.remove(usedPowerup.get(i));
+      if (usedPowerup.get(i).dead) {
+        usedPowerup.remove(usedPowerup.get(i));    
+        UpdatePowerupGUILife();
+      }
     }
+    if (usedPowerup.size()>MAX_POWERUP_SIZE)usedPowerup.remove(usedPowerup.size()-1);
   }
 
   void display() {
@@ -104,14 +109,17 @@ class Player {
     if (jumpCount>0) {
       totalJumps++;
       onGround=false;
-      if (ducking)p.y-=duckHeight;
+      if (ducking) {
+        p.y-=duckHeight;
+        duckTime=0;
+      }
       h=90;
       ducking=false;
       if (jumpCount==2) {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
       }
       playSound(jumpSound);
-      if (jumpCount<MAX_JUMP) particles.add( new SpinParticle( this));
+      if (jumpCount<MAX_JUMP) particles.add( new SpinParticle( true));
       jumpCount--;
       vy=-jumpHeight;
     }
@@ -129,8 +137,9 @@ class Player {
       entities.add(new LineParticle(int(x+w*0.5), int(y+h), 10, 0));
     }
     if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
-    duckTime=50;
+
     if (!ducking) {
+      duckTime=50;
       totalDucks++;
       ducking=true;
       y+=duckHeight;
@@ -284,7 +293,7 @@ class Player {
     lives=MAX_LIFE;
     vx=defaultSpeed;
     x=0;
-
+    weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
 
@@ -292,7 +301,8 @@ class Player {
     totalJumps=0;
     totalAttacks=0;
     averageSpeed=0;
-
+    
+    respawning=false;
     punching=false; 
     ducking=false;
     invincible=false;
@@ -316,8 +326,8 @@ class Player {
   }
 
   void spawnSpeedEffect() {
-    if (int(random(60/speedFactor))<vx) {
-      particles.add(new speedParticle(int(x+w), int(random(90)+p.y)));
+    if (int(random(60))<vx*speedFactor) {
+      particles.add(new speedParticle(int(x), int(random(90)+y)));
       if (invincible) particles.add(new sparkParticle(int(x+w), int(random(h)+y), 10, color(255, 220, 20)));
     }
   }

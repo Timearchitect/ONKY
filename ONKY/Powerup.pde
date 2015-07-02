@@ -32,12 +32,12 @@ abstract class Powerup extends Entity implements Cloneable {
     collision();
   }
   void display() {
-    if (icon!=null)image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, w, h);
-    else {
-      noStroke();
-      fill(powerupColor);
-      ellipse(x+offsetX, y+offsetY, w, h);
-    }
+    image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, w, h);
+    /*
+        noStroke();
+     fill(powerupColor);
+     ellipse(x+offsetX, y+offsetY, w, h);
+     */
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -56,6 +56,7 @@ abstract class Powerup extends Entity implements Cloneable {
     particles.add( new sparkParticle(int(x), int(y), 30, powerupColor));
     particles.add( new sparkParticle(int(x), int(y), 15, 255));
     death();
+    UpdatePowerupGUILife();
   }
   void death() {
     super.death();
@@ -66,23 +67,17 @@ abstract class Powerup extends Entity implements Cloneable {
     if (time<1)death();
   }
   void displayIcon() {
-    int index=p.usedPowerup.indexOf(this), interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
-    noStroke();
-    // fill(powerupColor);
-    // rect(50+index*interval, 100, 100, 100);
+    int index=p.usedPowerup.indexOf(this), GUIoffsetY=height-150;     
     if (!instant && !toggle) {
-      fill(powerupColor);
-      ellipse(GUIoffsetX+10+index*interval+40, GUIoffsetY+10+40, 100, 100);
+      noFill();
+      stroke(powerupColor);
+      strokeWeight(5);
+      ellipse(GUIoffsetX+10+index*powerupGUIinterval+40, GUIoffsetY+10+40, 100, 100);
     }
-    if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20);
+    //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
+    noStroke();
     fill(0, 180);
-    //println(spawnTime +" : "+time);
-    //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI), PI*2-HALF_PI);
-    //arc(50+w*0.5+index*interval, 100+h*0.5, 75, 75, (((PI*2)/spawnTime)*(time)-HALF_PI), PI*2-HALF_PI);
-    arc(GUIoffsetX+w*0.5+index*interval, GUIoffsetY+h*0.5, 75, 75, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
-    textSize(28);
-    textAlign(RIGHT);
-    text(upgradeLevel, GUIoffsetX+w*0.5+index*interval+60, GUIoffsetY+h*0.5-20);
+    arc(GUIoffsetX+w*0.5+index*powerupGUIinterval, GUIoffsetY+h*0.5, 80, 80, -HALF_PI, PI*2-(((PI*2)/spawnTime)*(time)+HALF_PI));
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
@@ -156,7 +151,7 @@ class InvisPowerup extends Powerup {
 }
 
 class LaserPowerup extends Powerup {
-  
+
   LaserPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     icon=laserIcon;
@@ -169,9 +164,6 @@ class LaserPowerup extends Powerup {
 
   void collect() {
     if (!dead) {
-      // tokens++;
-      // playSound(collectSound);
-      // particles.add( new SpinParticle(int(x), int(y),powerupColor));
       try {
         p.usedPowerup.add(this.clone());
       }    
@@ -186,14 +178,13 @@ class LaserPowerup extends Powerup {
         switch(upgradeLevel) {  
         case 0:
           if (int(time)%4==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
-
           break;
         case 1:
           if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           break;
         case 2:
           if (int(time)%2==0) projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
-          
+
           break;
         default:
 
@@ -221,13 +212,15 @@ class LaserPowerup extends Powerup {
           break;
         default:
           //if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
-          if (int(time)%18==0) {
-            for (int i=2; i<3; i++)  projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*i*10, sin(radians(p.angle))*i*5));
+          if (int(time)%16==0) {
+            // for (int i=2; i<3; i++)  projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*i*10, sin(radians(p.angle))*i*5));
             projectiles.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+100, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
           }
         }
       }
-      if (scaleFactor>0.25)scaleFactor-=0.01;
+      if (targetScaleFactor>1-upgradeLevel*0.1-0.35) {
+        targetScaleFactor=1-upgradeLevel*0.1-0.35;
+      }
       time-=1*speedFactor;
       if (time<1)death();
     }

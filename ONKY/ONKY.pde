@@ -9,6 +9,7 @@ import ddf.minim.*;
 //import processing.opengl.*;
 
 PGraphics GUI;
+PGraphics powerupGUI;
 PFont font; 
 int renderObject;
 Minim minim;
@@ -16,13 +17,13 @@ AudioPlayer BGM, regularSong, superSong;
 AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
-AudioPlayer leafSound,bloodSound;
+AudioPlayer leafSound, bloodSound;
 AudioPlayer splash, waterFall;
 AudioPlayer blockDestroySound, smackSound;
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, teleportSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire,Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf,rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -44,6 +45,9 @@ boolean debug, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+
+boolean powerUpUnlocked[]= new boolean[5];
+
 
 void setup() {
   noSmooth();
@@ -81,7 +85,7 @@ void setup() {
   // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
   // entities.add(new SlowPowerup(2200, 400, 1000));
-  // entities.add(new RandomPowerup(2000, 400, 500)); 
+  entities.add(new RandomPowerup(2000, 400, 500)); 
   // entities.add(new RandomPowerup(2000, 600, 500)); 
   // entities.add(new RandomPowerup(2000, 200, 500));
 }
@@ -201,13 +205,14 @@ void draw() {
   for (Paralax plx : ForegroundParalaxLayers) {
     plx.update();
     if (plx.x<width)plx.display(); // onscreen
-  }
+  }  
+  image(GUI, 0, 0); // add GUIlayer
+  image( powerupGUI, 0, 0); // add GUIlayer
   for ( Powerup pow : p.usedPowerup) { 
     pow.displayIcon();
   }
 
   if (!preloadObstacles) deletePastObstacles();
-  image(GUI, 0, 0); // add GUIlayer
   calcDispScore();
   if (debug)debugScreen();
   if (p.lives<0)gameReset();
@@ -249,7 +254,7 @@ void smoothSlow() {
   // if (targetSpeedFactor!=speedFactor) {
   float speedDiff=targetSpeedFactor-speedFactor;
   flashOpacity=int(255-255*speedFactor);
-  speedFactor+=speedDiff*0.05;
+  speedFactor+=speedDiff*0.1;
   // }
 }
 void smoothAngle() {
@@ -302,7 +307,8 @@ void gameReset() {
   }
 
   p.reset();
-  UpdateGUILife();
+  UpdateGUILife(); // resetGUI
+  UpdatePowerupGUILife();
 
 
   speedFactor=1;
@@ -348,12 +354,8 @@ void changeMusic(AudioPlayer song) {
     BGM.loop();
   }
 }
-void UpdateGUILife() {
-  GUI.clear();
-  GUI.beginDraw();
-  for (int i=0; i<p.lives; i++) GUI.image(p.Life, int(50+i*50), int(60), 40, 40);
-  GUI.endDraw();
-}
+
+
 
 void loadImages() {
   //ONKY player sprites
@@ -413,7 +415,7 @@ void loadSound() {
   regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
   superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
   BGM = regularSong;
-  
+
   smackSound= minim.loadFile("sound/smack.wav");
   blockDestroySound= minim.loadFile("sound/blockDestroy.wav");
   boxDestroySound = minim.loadFile("sound/boxSmash.wav");
@@ -429,6 +431,7 @@ void loadSound() {
   rubberKnockSound=minim.loadFile("sound/rubberKnock.wav");
   collectSound= minim.loadFile("sound/grab.wav");
   laserSound= minim.loadFile("sound/laser2.wav");
+  bigLaserSound= minim.loadFile("sound/laser.wav");
   leafSound =  minim.loadFile("sound/rustle.wav");
   teleportSound =minim.loadFile("sound/teleport.wav");
   splash=minim.loadFile("sound/splash.wav");
@@ -440,12 +443,7 @@ void loadSound() {
   BGM.play();
   BGM.loop();
 }
-void loadGUILayer() {
-  GUI=createGraphics(width, height);
-  GUI.beginDraw();
-  GUI.endDraw();
-  UpdateGUILife();
-}
+
 
 void loadParalax() {
 

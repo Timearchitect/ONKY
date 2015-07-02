@@ -79,7 +79,7 @@ class BigLaserProjectile extends LaserProjectile {
     super( _x, _y, _vx, _vy);
     //projectiles.add(this);
     w=100;
-    playSound(laserSound);
+    playSound(bigLaserSound);
     shakeFactor+=10;
     particles.add(new sparkParticle(int(x)-40, int(y), 20, projectileColor));
     particles.add(new sparkParticle(int(x)-40, int(y), 10, 255));
@@ -118,7 +118,7 @@ class BigLaserProjectile extends LaserProjectile {
     vx*=(1+.08*speedFactor);
     collision();
     if (int(x)%5==0)particles.add(new triangleParticle(int(x), int(y), vx*.3, 0, 40, projectileColor));
-    if ( x-vx*4>p.x+width/scaleFactor) dead=true;  //off screen
+    if ( x-vx*3>p.x+width/scaleFactor) dead=true;  //off screen
     //if (time<=0) dead=true;  // timelimit
     //else time--;
   }
