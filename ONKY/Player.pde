@@ -311,6 +311,7 @@ class Player {
     UpdateGUILife(); // updateGUI
     playSound(ughSound);
     screenAngle=-10;
+    if(lives<0)gameReset();
     background(255, 0, 0);
   }
   void respawn() {

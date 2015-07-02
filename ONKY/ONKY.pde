@@ -4,10 +4,10 @@
  *  av Alrik He
  *
  */
- 
- // ref:
- // http://javatechig.com/java/code-optimization-tips-for-java
- 
+
+// ref:
+// http://javatechig.com/java/code-optimization-tips-for-java
+
 import ddf.minim.*;
 //import javax.media.opengl.*;
 //import processing.opengl.*;
@@ -58,11 +58,11 @@ void setup() {
   //noClip();
   //size(720, 1080); // vertical
   size( 1080, 720); // horisontal
- // size( 1080, 720,P3D); // horisontal
+  // size( 1080, 720,P3D); // horisontal
   //size( 1080, 720, OPENGL); // horisontal
-   // hint();
+  // hint();
   // hint(DISABLE_TEXTURE_MIPMAPS);
-   //((PGraphicsOpenGL)g).textureSampling(2);
+  //((PGraphicsOpenGL)g).textureSampling(2);
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
   loadImages();
@@ -114,7 +114,7 @@ void draw() {
   scale(scaleFactor);
   rotate(radians(screenAngle));
   translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
-  renderObject=0; // for counting objects on screen
+  if (debug)renderObject=0; // for counting objects on screen
 
   //displayFloor(); legecy
 
@@ -127,9 +127,9 @@ void draw() {
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
-      renderObject++;
+      if (debug) renderObject++;
       o.update();
-     o.display();
+      o.display();
     }
   }
 
@@ -144,7 +144,7 @@ void draw() {
   }
   for (Powerup pow : powerups) {
     if (pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
-      renderObject++;
+      if (debug) renderObject++;
       pow.update();
       pow.display();
     }
@@ -154,27 +154,31 @@ void draw() {
 
   for (int i=debris.size () -1; i>=0; i--) {
     debris.get(i).update();
+    debris.get(i).display();
     if (debris.get(i).dead)debris.remove(debris.get(i));
   }
-  for (Debris d : debris)d.display();
+  // for (Debris d : debris)d.display();
 
   //-----------------------------         Particle     / Entity       -----------------------------------------------------------
 
 
   for (int i=particles.size () -1; i>=0; i--) {
     particles.get(i).update();
+    particles.get(i).display();
     if (particles.get(i).dead)particles.remove(particles.get(i));
   }
-  for (Particle par : particles)par.display();
+  //for (Particle par : particles)par.display();
 
   //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
 
 
   for (int i=projectiles.size () -1; i>=0; i--) {
     projectiles.get(i).update();
+    projectiles.get(i).display();
+
     if (projectiles.get(i).dead)projectiles.remove(projectiles.get(i));
   }
-  for (Projectile pro : projectiles)pro.display();
+  //for (Projectile pro : projectiles)pro.display();
 
   //-----------------------------         Entities           -----------------------------------------------------------
 
@@ -205,10 +209,10 @@ void draw() {
 
   //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
 
-  for (Paralax plx : ForegroundParalaxLayers) {
+ /* for (Paralax plx : ForegroundParalaxLayers) {
     plx.update();
     if (plx.x<width)plx.display(); // onscreen
-  }  
+  }  */
   image(GUI, 0, 0); // add GUIlayer
   image( powerupGUI, 0, 0); // add GUIlayer
   for ( Powerup pow : p.usedPowerup) { 
@@ -218,7 +222,6 @@ void draw() {
   if (!preloadObstacles) deletePastObstacles();
   calcDispScore();
   if (debug)debugScreen();
-  if (p.lives<0)gameReset();
 }
 
 void shake() {
