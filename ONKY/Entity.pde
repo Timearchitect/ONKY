@@ -26,8 +26,10 @@ abstract class Entity {
   }
 
   void death() {
-    dead=true;
-    entities.remove(this);
+    if (!dead) {
+      dead=true;
+      entities.remove(this);
+    }
   }
 }
 

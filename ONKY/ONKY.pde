@@ -117,19 +117,21 @@ void draw() {
   if (debug)renderObject=0; // for counting objects on screen
 
   //displayFloor(); legecy
+  if (p.respawning)p.respawn() ;
 
   p.update();
   p.display();
   //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
+
   for (int i=obstacles.size () -1; i>=0; i--) {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
   }
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
-      if (debug) renderObject++;
       o.update();
       o.display();
+      if (debug) renderObject++;
     }
   }
 
@@ -183,7 +185,7 @@ void draw() {
   //-----------------------------         Entities           -----------------------------------------------------------
 
 
-  /* for (Entity e : entities) {
+  //for (Entity e : entities) {
   /* if(!(e instanceof Paralax)){
    }*/
 
@@ -192,17 +194,19 @@ void draw() {
 
   /* if( !paralaxLayers.contains( e)){   // works
    }*/
-
+  // e.display();
+  // e.update();
 
   /*  if (! e.getClass().isInstance(paralax) && ! e.getClass().isInstance(paralaxObject)) {   // works
    e.display();
    e.update();
    }
    }*/
-  /* for (int i=entities.size () -1; i>=0; i--) {
+
+
+  /*for (int i=entities.size () -1; i>=0; i--) {
    if (entities.get(i).dead)entities.remove(entities.get(i));
    }*/
-
   //----------------------------¨-------------------------------------------------------------------------------------
 
   popMatrix();
@@ -342,8 +346,8 @@ void calcDispScore() {
 }
 void debugScreen() {
   fill(100, 255, 0);
-  textSize(20);
-  text("renderO "+renderObject+" Entities: "+ entities.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-50);
+  textSize(18);
+  text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-50);
 }
 void playSound(AudioPlayer sound) {
   if (!mute) {

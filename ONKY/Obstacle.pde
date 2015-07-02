@@ -16,14 +16,14 @@ abstract class Obstacle extends Entity {
     collision();
     hitCollision();
   }
-  void gravity() {
+  /*void gravity() {
     for (Obstacle o : obstacles) {
       if ( o.x>x+w && o.x+o.w<x && o.y+o.h<y) y++;
       else {
         vy=0;
       }
     }
-  }
+  }*/
   void display() {
     noStroke();
     fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness, alpha(obstacleColor));
@@ -44,7 +44,7 @@ abstract class Obstacle extends Entity {
             knock();
           }
           impactForce=p.vx; 
-          p.collision();          
+          p.collision();
         }
         // death();
       }

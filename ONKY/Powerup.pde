@@ -18,7 +18,7 @@ abstract class Powerup extends Entity implements Cloneable {
     totalTokens++;
   }
   void update() {
-    if (int(angle%120)==0) particles.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
+    if (int(angle%120)==0) entities.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
     angle+=4*speedFactor;
     offsetX=cos(radians(angle))*12*speedFactor;
     offsetY=sin(radians(angle))*12*speedFactor;
@@ -51,9 +51,9 @@ abstract class Powerup extends Entity implements Cloneable {
   void collect() {
     tokensTaken++;
     playSound(collectSound);
-    particles.add( new SpinParticle( int(x), int(y), powerupColor));
-    particles.add( new SparkParticle(int(x), int(y), 50, powerupColor));
-    //particles.add( new SparkParticle(int(x), int(y), 15, 255));
+    entities.add( new SpinParticle( int(x), int(y), powerupColor));
+    entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
+    //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     death();
     UpdatePowerupGUILife();
   }
@@ -173,13 +173,13 @@ class LaserPowerup extends Powerup {
       if (p.angle>6) {  
         switch(upgradeLevel) {  
         case 0:
-          if (int(time)%4==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          if (int(time)%4==0)entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*50), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           break;
         case 1:
-          if (int(time)%3==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          if (int(time)%3==0)entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*50), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           break;
         case 2:
-          if (int(time)%2==0) projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          if (int(time)%2==0) entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*50), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
 
           break;
         default:
@@ -187,30 +187,30 @@ class LaserPowerup extends Powerup {
           if (int(time)%2==0) {
             if (p.angle%360>270 || p.angle%360<90) { 
 
-              projectiles.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+80, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
-            } else   projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+              entities.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+80, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
+            } else   entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           }
         }
       } else {
         switch(upgradeLevel) {  
         case 0:
-          if (int(time)%9==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*50, sin(radians(p.angle))*20));
+          if (int(time)%9==0)entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), cos(radians(p.angle))*50, sin(radians(p.angle))*20));
           break;
         case 1:
-          if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          if (int(time)%7==0)entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           break;
         case 2:
           if (int(time)%13==0) {
-            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle-2))*60, sin(radians(p.angle-2))*30));
-            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*40, sin(radians(p.angle))*30));
-            projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle+2))*60, sin(radians(p.angle+2))*30));
+            entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), cos(radians(p.angle-2))*60, sin(radians(p.angle-2))*30));
+            entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), cos(radians(p.angle))*40, sin(radians(p.angle))*30));
+            entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), cos(radians(p.angle+2))*60, sin(radians(p.angle+2))*30));
           }
           break;
         default:
-          //if (int(time)%7==0)projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
+          //if (int(time)%7==0)entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           if (int(time)%16==0) {
-            // for (int i=2; i<3; i++)  projectiles.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*i*10, sin(radians(p.angle))*i*5));
-            projectiles.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+100, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
+            // for (int i=2; i<3; i++)  entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*i*10, sin(radians(p.angle))*i*5));
+            entities.add( new BigLaserProjectile(  int(p.x+p.w*0.5+100), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
           }
         }
       }
@@ -377,7 +377,7 @@ class MagnetPowerup extends Powerup {
     if ( toggle || instant ) {
       //speedFactor=0.5; //slowrate
       p.attractRange=range;
-      if (time%int(16/speedFactor)==0)particles.add(new RShockWave(int(p.x), int(p.y), range*2, powerupColor) );
+      if (time%int(16/speedFactor)==0)entities.add(new RShockWave(int(p.x), int(p.y), range*2, powerupColor) );
       //stroke(powerupColor);
       //noFill();
       // ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);

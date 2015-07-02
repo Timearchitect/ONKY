@@ -10,15 +10,21 @@ void generateObstacle() {
   }
 }
 void deletePastObstacles() {
-
-  for (int i=powerups.size () -1; i>=0; i--) {
-    if (powerups.get(i).x+powerups.get(i).w+deleteMargin<p.x)
-      powerups.remove(powerups.get(i));
-  }
-  for (int i=obstacles.size () -1; i>=0; i--) {
-    if (obstacles.get(i).x+obstacles.get(i).w+deleteMargin<p.x)
-      obstacles.remove(obstacles.get(i));
-  }
+ 
+    /*for (int i=entities.size () -1; i>=0; i--) {
+     if (entities.get(i).x+entities.get(i).w+deleteMargin<p.x)
+     entities.remove(entities.get(i));
+     }*/
+/*
+    for (int i=powerups.size () -1; i>=0; i--) {
+      if (powerups.get(i).x+powerups.get(i).w+deleteMargin<p.x)
+        powerups.remove(powerups.get(i));
+    }
+    for (int i=obstacles.size () -1; i>=0; i--) {
+      if (obstacles.get(i).x+obstacles.get(i).w+deleteMargin<p.x)
+        obstacles.remove(obstacles.get(i));
+    }
+  */
 }
 
 void loadObstacle() {
@@ -565,8 +571,8 @@ void spawnBlocks(int x) {
   entities.add(new Block(x+2000, int(floorHeight-200), -100, -45 ) );
   // entities.add(new Block(x+200, int(floorHeight-200) ) );
   // entities.add(new Block(x+400, int(floorHeight-200) ) );
-      entities.add(new Rock(x+1200, int(floorHeight-200) ) );
-    entities.add(new Rock(x+1800, int(floorHeight-200) ) );
+  entities.add(new Rock(x+1200, int(floorHeight-200) ) );
+  entities.add(new Rock(x+1800, int(floorHeight-200) ) );
 
   entities.add(new Block(x+1000, int(floorHeight-1200), -35, 50 ) );
 
@@ -892,7 +898,7 @@ void spawnFlak(int x) {
 }
 
 void spawnBlock(int x) { 
-      entities.add(new Rock(x+00, int(floorHeight-200) ) );
+  entities.add(new Rock(x+00, int(floorHeight-200) ) );
 
   entities.add(new Block(x+400, int(floorHeight-500)) );
   entities.add(new Glass(x+1600, int(floorHeight-100), 200, 100) );
@@ -903,8 +909,7 @@ void spawnBlock(int x) {
 
 void spawnBarrel(int x) {
   entities.add(new Barrel(x+900, int(floorHeight-200)));
-  
-    entities.add(new Rock(x+1200, int(floorHeight-200) ) );
 
+  entities.add(new Rock(x+1200, int(floorHeight-200) ) );
 }
 

@@ -29,6 +29,9 @@ abstract class Debris extends Entity {
   }
   void hitFloor() {
   }
+  void death() {
+    super.death();
+  }
 }
 class BoxDebris extends Debris {
 

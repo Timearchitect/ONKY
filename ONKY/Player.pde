@@ -49,7 +49,7 @@ class Player {
 
     spawnSpeedEffect();
 
-    if (respawning)respawn() ;
+    //if (respawning)respawn() ;
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
       usedPowerup.get(i).use();
@@ -119,7 +119,7 @@ class Player {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
       }
       playSound(jumpSound);
-      if (jumpCount<MAX_JUMP) particles.add( new SpinParticle( true));
+      if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
       jumpCount--;
       vy=-jumpHeight;
     }
@@ -170,7 +170,7 @@ class Player {
   void stomp() {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
-    particles.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
+    entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
     shakeFactor=60;
 
     //fill(255, 0, 0);
@@ -318,7 +318,7 @@ class Player {
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
-    entities.add(new Lumber(int(p.x-500), int(floorHeight-700), 400, 25, true) );
+    entities.add(new Lumber(int(p.x-100), int(floorHeight-700), 400, 25, true) );
     x-=400;
     y=-50-h;
     respawning=false;
@@ -326,8 +326,8 @@ class Player {
 
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {
-      particles.add(new speedParticle(int(x), int(random(90)+y)));
-      if (invincible) particles.add(new SparkParticle(int(x+w), int(random(h)+y), 40, color(255, 220, 20)));
+      entities.add(new speedParticle(int(x), int(random(90)+y)));
+      if (invincible) entities.add(new SparkParticle(int(x+w), int(random(h)+y), 40, color(255, 220, 20)));
     }
   }
 }

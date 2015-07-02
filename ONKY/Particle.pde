@@ -4,6 +4,7 @@ class Particle extends Entity {
   float opacity=255;
   Particle(int _x, int  _y) {
     super( _x, _y);
+    particles.add(this);
   }
   void update() {
   }
@@ -20,7 +21,7 @@ class TrailParticle extends Particle {
   PImage cell;
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
-    particles.add(this);
+    //particles.add(this);
     cell=_cell;
     opacity=200-(100*speedFactor);
     w=100;
@@ -45,7 +46,7 @@ class speedParticle extends Particle {
 
   speedParticle(int _x, int  _y) {
     super( _x, _y);
-    particles.add(this);
+    //particles.add(this);
     opacity=100;
   }
 
@@ -139,7 +140,7 @@ class LineParticle extends Particle {
   color particleColor;
   LineParticle(int _x, int _y, int _size) {
     super( _x, _y);
-    particles.add(this);
+    //particles.add(this);
     particleColor=p.weaponColor;
     size=_size;
     angle=random(360);
@@ -175,13 +176,13 @@ class SpinParticle extends Particle {
   SpinParticle( int _x, int _y, color _particleColor) {
     super( _x, _y);
     particleColor=_particleColor;
-    particles.add(this);
+    //particles.add(this);
     size=150;
     angle=random(0, 360);
   }
   SpinParticle( Boolean _onOnky) {
     super( 0, 0);
-    particles.add(this);
+    //particles.add(this);
     onOnky=_onOnky;
   }
   void update() {
@@ -228,7 +229,7 @@ class SparkParticle extends Particle {
   color particleColor;
   SparkParticle(int _x, int _y, int _size, color _particleColor) {
     super( _x, _y);
-    particles.add(this);
+    //particles.add(this);
     particleColor=_particleColor;
     size=_size;
   }
@@ -262,7 +263,7 @@ class splashParticle extends Particle {
     super( _x, _y);
     vx=_vx;
     vy=_vy;
-    particles.add(this);
+  //particles.add(this);
     particleColor=_particleColor;
     size=_size;
   }

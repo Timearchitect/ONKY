@@ -44,17 +44,17 @@ class Box extends Obstacle {
       break;
     case 2:
       image(brokenBox, x, y, w, h);
-      if (count%20==0)particles.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
+      if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
       break;
     default:
       image(mysteryBox, x, y, w, h);
     }
-   /* if (type==0) image(Box, x, y, w, h);
-    else if (type==1) image(brokenBox, x, y, w, h);
-    else if (type==2) {
-      image(brokenBox, x, y, w, h);
-      if (count%20==0)particles.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
-    } else image(mysteryBox, x, y, w, h);*/
+    /* if (type==0) image(Box, x, y, w, h);
+     else if (type==1) image(brokenBox, x, y, w, h);
+     else if (type==2) {
+     image(brokenBox, x, y, w, h);
+     if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+     } else image(mysteryBox, x, y, w, h);*/
   }
   void update() {
     super.update();
@@ -140,7 +140,7 @@ class Tire extends Obstacle {
   }
 }
 class IronBox extends Obstacle {
-  int tx, ty;
+  int tx, ty, invis;
   IronBox(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(200);
@@ -170,6 +170,7 @@ class IronBox extends Obstacle {
   }
   void update() {
     super.update();
+    if (invis>0)invis--;
     if (x!=tx &&  y!=ty) {
       float diffX=tx-x, diffY=ty-y;
       x+=diffX*0.2*speedFactor;
@@ -185,15 +186,18 @@ class IronBox extends Obstacle {
       for (int i =0; i< 3; i++) {
         entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
+      playSound(ironBoxDestroySound);
     }
-    playSound(ironBoxDestroySound);
   }
   void hit() {  // hit by punching & smashing
-    super.hit();
-    shakeFactor=50; 
-    hitBrightness=255;
-    x+=p.vx;
-    y+=p.vy;
+    if (invis<1) {
+      super.hit();
+      shakeFactor=50; 
+      hitBrightness=255;
+      x+=p.vx;
+      y+=p.vy;
+      invis=15;
+    }
   }
   void knock() {
     super.knock();
@@ -560,9 +564,9 @@ class Water extends Obstacle {
       if (p.y>y+h*0.5) {
         p.vx*=0.8;
         if (debrisCooldown==0) {
-          particles.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
-          particles.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
-          particles.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
+          entities.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
+          entities.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
+          entities.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
           playSound(splash);
           debrisCooldown=10;
         }
@@ -575,7 +579,7 @@ class Water extends Obstacle {
         p.jumpCount=p.MAX_JUMP;
         if (debrisCooldown==0) {
           playSound(waterFall);
-          particles.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));
+          entities.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));
           debrisCooldown=3;
         }
       }
@@ -773,6 +777,7 @@ class Barrel extends Obstacle {
 }
 
 class Rock extends Obstacle {
+  int invis;
   Rock(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(150);
@@ -783,6 +788,7 @@ class Rock extends Obstacle {
     image(rock, x, y, w, h);
   }
   void update() {
+    if (invis>0)invis--;
     super.update();
     //if (x!=tx &&  y!=ty) {
     // float diffX=tx-x, diffY=ty-y;
@@ -799,20 +805,21 @@ class Rock extends Obstacle {
       for (int i =0; i< 10; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
+      playSound(blockDestroySound);
     }
-    playSound(blockDestroySound);
   }
   void hit() {  // hit by punching & smashing
-    super.hit();
-    shakeFactor=50; 
-    //hitBrightness=255;
-    //x+=p.vx;
-    //y+=-p.vy;
+    if (invis<1) {
+      super.hit();
+      shakeFactor=50; 
+      //hitBrightness=255;
+      invis=20;
+    }
   }
   void knock() {
     super.knock();
     shakeFactor=100; 
-   // hitBrightness=255;
+    // hitBrightness=255;
   }
   void knockSound() {
     playSound(blockDestroySound);
