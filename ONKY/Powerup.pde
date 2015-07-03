@@ -7,14 +7,14 @@ abstract class Powerup extends Entity implements Cloneable {
   int upgradeLevel=int(random(4));
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
-   // icon= tokenIcon;
+    // icon= tokenIcon;
     time=_time;
     spawnTime=_time;
     x=_x;
     y=_y;
     w=100;
     h=100;
-   // powerups.add( this);
+    // powerups.add( this);
     totalTokens++;
   }
   void update() {
@@ -50,11 +50,10 @@ abstract class Powerup extends Entity implements Cloneable {
   }
   void collect() {
     tokensTaken++;
-   // playSound(collectSound);
+    // playSound(collectSound);
     //entities.add( new SpinParticle( int(x), int(y), powerupColor));
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
-    UpdatePowerupGUILife();
     death();
   }
   void death() {
@@ -120,6 +119,7 @@ class InvisPowerup extends Powerup {
       }
       //p.usedPowerup.time+=this.time;
       //this.death();
+      UpdatePowerupGUILife();
       super.collect();
     }
   }
@@ -165,6 +165,7 @@ class LaserPowerup extends Powerup {
       }    
       catch(CloneNotSupportedException e) {
       }
+      UpdatePowerupGUILife();
       super.collect();
     }
   }
@@ -240,6 +241,7 @@ class SlowPowerup extends Powerup {
     }        
     catch(CloneNotSupportedException e) {
     }
+    UpdatePowerupGUILife();
     super.collect();
   }
   void use() {
@@ -268,6 +270,7 @@ class LifePowerup extends Powerup {
       p.invis+=spawnTime;
       p.lives++;
       UpdateGUILife();
+      UpdatePowerupGUILife();
       super.collect();
       //death();
     }
@@ -304,13 +307,12 @@ class TeleportPowerup extends Powerup {
       }        
       catch(CloneNotSupportedException e) {
       }    
-
+      UpdatePowerupGUILife();
       super.collect();
-      //death();
     }
   }
   void ones() {
- //   playSound(teleportSound);
+    //   playSound(teleportSound);
     p.weaponColor=powerupColor; // weapon color to blue
     p.invis+=time;  
     if (instant)p.x=x-w;  // telepot to powerup
@@ -371,6 +373,7 @@ class MagnetPowerup extends Powerup {
     }        
     catch(CloneNotSupportedException e) {
     }
+    UpdatePowerupGUILife();
     super.collect();
   }
   void use() {
