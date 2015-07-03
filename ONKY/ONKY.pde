@@ -13,8 +13,8 @@
 //import javax.media.opengl.*;
 //import processing.opengl.*;
 
-PGraphics GUI;
-PGraphics powerupGUI;
+PGraphics GUI, powerupGUI, gameOverGUI ;
+
 PFont font; 
 int renderObject;
 /*Minim minim;
@@ -48,7 +48,7 @@ Player p = new Player();
 color FlashColor;
 boolean debug, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
-int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
+int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
@@ -57,14 +57,13 @@ boolean powerUpUnlocked[]= new boolean[5];
 void setup() {
   noSmooth();
   //noClip();
-
   //size(720, 1080); // vertical
   //  size( 1080, 720); // horisontal
   size(displayWidth, displayHeight, P3D); // horisontal
 
   if (displayWidth<= 1080) {
     screenFactor=0.8;
-  }else {
+  } else {
     screenFactor=1.5;
   }
 
@@ -114,136 +113,144 @@ void setup() {
 }
 
 void draw() {
-  // background(0,100,255);
-  if (!preloadObstacles)  generateObstacle();
-  //shake();
-  smoothScale();
-  smoothOffset();
-  smoothSlow();
-  smoothAngle();
-  if (!debug)adjustZoomLevel();
-  //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
-  for (Paralax plx : paralaxLayers) {
-    plx.update();
-    if ( plx.x < width) plx.display(); // onscreen
-  }
-  if (debug) displaySign();
-  displayFlash();
-  pushMatrix();
-  scale(scaleFactor*screenFactor);
-  rotate(radians(screenAngle));
-  translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
-  if (debug)renderObject=0; // for counting objects on screen
+  if (gameState==0) {
 
-  //displayFloor(); legecy
-  if (p.respawning)p.respawn() ;
-
-  p.update();
-  p.display();
-  //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
-
-  for (int i=obstacles.size () -1; i>=0; i--) {
-    if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
-  }
-  for (Obstacle o : obstacles) {
-    //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
-    if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
-      o.update();
-      o.display();
-      if (debug) renderObject++;
+    gameOverUpdate();
+  } else {
+    // background(0,100,255);
+    if (!preloadObstacles)  generateObstacle();
+    //shake();
+    smoothScale();
+    smoothOffset();
+    smoothSlow();
+    smoothAngle();
+    if (!debug)adjustZoomLevel();
+    //-----------------------------         Paralax   / Entity            -----------------------------------------------------------
+    for (Paralax plx : paralaxLayers) {
+      plx.update();
+      if ( plx.x < width) plx.display(); // onscreen
     }
-  }
+    if (debug) displaySign();
+    displayFlash();
+    pushMatrix();
+    scale(scaleFactor*screenFactor);
+    rotate(radians(screenAngle));
+    translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
+    if (debug)renderObject=0; // for counting objects on screen
 
-  if (debug) {
-    fill(0, 255, 0, 100);
-    rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
-  }
+    //displayFloor(); legecy
+    if (p.respawning)p.respawn() ;
 
-  //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
-  for (int i=powerups.size () -1; i>=0; i--) {
-    if (powerups.get(i).dead)powerups.remove(powerups.get(i));
-  }
-  for (Powerup pow : powerups) {
-    if (pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
-      if (debug) renderObject++;
-      pow.update();
-      pow.display();
+    p.update();
+    p.display();
+    //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
+
+    for (int i=obstacles.size () -1; i>=0; i--) {
+      if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
     }
+    for (Obstacle o : obstacles) {
+      //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
+      if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
+        o.update();
+        o.display();
+        if (debug) renderObject++;
+      }
+    }
+
+    if (debug) {
+      fill(0, 255, 0, 100);
+      rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
+    }
+
+    //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
+    for (int i=powerups.size () -1; i>=0; i--) {
+      if (powerups.get(i).dead)powerups.remove(powerups.get(i));
+    }
+    for (Powerup pow : powerups) {
+      if (pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
+        if (debug) renderObject++;
+        pow.update();
+        pow.display();
+      }
+    }
+
+    //-----------------------------         Debris    / Entity       -----------------------------------------------------------
+
+    for (int i=debris.size () -1; i>=0; i--) {
+      debris.get(i).update();
+      debris.get(i).display();
+      if (debris.get(i).dead)debris.remove(debris.get(i));
+    }
+    // for (Debris d : debris)d.display();
+
+    //-----------------------------         Particle     / Entity       -----------------------------------------------------------
+
+
+    for (int i=particles.size () -1; i>=0; i--) {
+      particles.get(i).update();
+      particles.get(i).display();
+      if (particles.get(i).dead)particles.remove(particles.get(i));
+    }
+    //for (Particle par : particles)par.display();
+
+    //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
+
+
+    for (int i=projectiles.size () -1; i>=0; i--) {
+      projectiles.get(i).update();
+      projectiles.get(i).display();
+
+      if (projectiles.get(i).dead)projectiles.remove(projectiles.get(i));
+    }
+    //for (Projectile pro : projectiles)pro.display();
+
+    //-----------------------------         Entities           -----------------------------------------------------------
+
+
+    //for (Entity e : entities) {
+    /* if(!(e instanceof Paralax)){
+     }*/
+
+    /*if (e.getClass() == Paralax.class) {
+     }*/
+
+    /* if( !paralaxLayers.contains( e)){   // works
+     }*/
+    // e.display();
+    // e.update();
+
+    /*  if (! e.getClass().isInstance(paralax) && ! e.getClass().isInstance(paralaxObject)) {   // works
+     e.display();
+     e.update();
+     }
+     }*/
+
+
+    /*for (int i=entities.size () -1; i>=0; i--) {
+     if (entities.get(i).dead)entities.remove(entities.get(i));
+     }*/
+    //----------------------------¨-------------------------------------------------------------------------------------
+
+    popMatrix();
+
+    //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
+
+    /* for (Paralax plx : ForegroundParalaxLayers) {
+     plx.update();
+     if (plx.x<width)plx.display(); // onscreen
+     }  */
+    image(GUI, 0, 0); // add GUIlayer
+    image( powerupGUI, 0, 0); // add GUIlayer
+
+    for ( Powerup pow : p.usedPowerup) { 
+      pow.displayIcon();
+    }
+
+
+    if (!preloadObstacles) deletePastObstacles();
+    calcDispScore();
   }
 
-  //-----------------------------         Debris    / Entity       -----------------------------------------------------------
-
-  for (int i=debris.size () -1; i>=0; i--) {
-    debris.get(i).update();
-    debris.get(i).display();
-    if (debris.get(i).dead)debris.remove(debris.get(i));
-  }
-  // for (Debris d : debris)d.display();
-
-  //-----------------------------         Particle     / Entity       -----------------------------------------------------------
-
-
-  for (int i=particles.size () -1; i>=0; i--) {
-    particles.get(i).update();
-    particles.get(i).display();
-    if (particles.get(i).dead)particles.remove(particles.get(i));
-  }
-  //for (Particle par : particles)par.display();
-
-  //-----------------------------         Projectile     / Entity       -----------------------------------------------------------
-
-
-  for (int i=projectiles.size () -1; i>=0; i--) {
-    projectiles.get(i).update();
-    projectiles.get(i).display();
-
-    if (projectiles.get(i).dead)projectiles.remove(projectiles.get(i));
-  }
-  //for (Projectile pro : projectiles)pro.display();
-
-  //-----------------------------         Entities           -----------------------------------------------------------
-
-
-  //for (Entity e : entities) {
-  /* if(!(e instanceof Paralax)){
-   }*/
-
-  /*if (e.getClass() == Paralax.class) {
-   }*/
-
-  /* if( !paralaxLayers.contains( e)){   // works
-   }*/
-  // e.display();
-  // e.update();
-
-  /*  if (! e.getClass().isInstance(paralax) && ! e.getClass().isInstance(paralaxObject)) {   // works
-   e.display();
-   e.update();
-   }
-   }*/
-
-
-  /*for (int i=entities.size () -1; i>=0; i--) {
-   if (entities.get(i).dead)entities.remove(entities.get(i));
-   }*/
-  //----------------------------¨-------------------------------------------------------------------------------------
-
-  popMatrix();
-
-  //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
-
-  /* for (Paralax plx : ForegroundParalaxLayers) {
-   plx.update();
-   if (plx.x<width)plx.display(); // onscreen
-   }  */
-  image(GUI, 0, 0); // add GUIlayer
-  image( powerupGUI, 0, 0); // add GUIlayer
-  for ( Powerup pow : p.usedPowerup) { 
-    pow.displayIcon();
-  }
-
-  if (!preloadObstacles) deletePastObstacles();
-  calcDispScore();
   if (debug)debugScreen();
 }
 
@@ -342,6 +349,7 @@ void gameReset() {
   speedFactor=1;
   targetSpeedFactor=1;
   resetScore();
+  gameState=1;
 }
 void resetScore() {
   score=0;
@@ -486,4 +494,21 @@ void loadParalax() {
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
+
+void gameOver() {
+  gameState=0;
+  gameOverCooldown=200;
+}
+
+void gameOverUpdate() {
+  if (gameOverCooldown<1)gameReset();
+  else gameOverCooldown--;
+  UpdateGameOverGUI();
+  image( gameOverGUI, 0, 0); // add GUIlayer
+}
+
+
+
+
+
 

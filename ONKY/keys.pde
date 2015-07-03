@@ -28,7 +28,6 @@ void keyPressed() {
     UpdatePowerupGUILife();
   }
   if (keyCode== DELETE ) {
-
     p.usedPowerup.clear();
   }
 
@@ -40,14 +39,13 @@ void keyPressed() {
   }
   if (key== '¤') {
     mute=!mute;
-  //  BGM.pause();
-  //  if (!mute)    BGM.play();
+    //  BGM.pause();
+    //  if (!mute)    BGM.play();
   }
   if (key== '-') {
     if (targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
   }
   if (key== '+') {
-
     if (targetSpeedFactor<1)targetSpeedFactor+=0.1;
   }
   if (key== 'r') {

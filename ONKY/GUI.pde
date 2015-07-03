@@ -1,4 +1,5 @@
 int  powerupGUIinterval=int(110), GUIoffsetX=50;
+
 void loadGUILayer() {
   GUI=createGraphics(width, height);
   GUI.beginDraw();
@@ -14,27 +15,62 @@ void loadGUILayer() {
   powerupGUI.textAlign(CENTER);
   powerupGUI.textFont(font, int(36*screenFactor));
   UpdatePowerupGUILife() ;
+
+  gameOverGUI=createGraphics(width, height);
+  gameOverGUI.beginDraw();
+  gameOverGUI.background(255, 0, 0);
+  gameOverGUI.endDraw();
+  gameOverGUI.noSmooth();
+  gameOverGUI.fill(0);
+  gameOverGUI.textAlign(CENTER);
+  gameOverGUI.textFont(font, int(36*screenFactor));
+}
+
+void UpdateGameOverGUI() {
+  gameOverGUI.beginDraw();
+  gameOverGUI.loadPixels();
+  for (int i = gameOverGUI.pixels.length; i != 0; gameOverGUI.pixels[--i] = 0);
+  gameOverGUI.updatePixels();
+      gameOverGUI.fill(255);
+
+  gameOverGUI.rect(100,100,width-100,height-100);
+    gameOverGUI.fill(0);
+  gameOverGUI.text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width*0.5, height*0.5);  
+  gameOverGUI.fill(255, 0, 0); 
+  gameOverGUI.endDraw();
 }
 
 void UpdateGUILife() {
   // GUI=createGraphics(0,0);
+  GUI.beginDraw();
+  GUI.loadPixels();
+  for (int i = GUI.pixels.length; i != 0; GUI.pixels[--i] = 0);
+  GUI.updatePixels();
+  GUI.endDraw();
+
+
   GUI.clear();
   GUI.flush();
   GUI.beginDraw();
-  GUI.clear();
-  GUI.flush();
   for (int i=0; i<p.lives; i++) GUI.image(p.Life, int((50+i*50)*screenFactor), int(60*screenFactor), 40*screenFactor, 40*screenFactor);
   GUI.endDraw();
 }
+
 void UpdatePowerupGUILife() {
   // powerupGUI=createGraphics(0,0);
+
+  powerupGUI.beginDraw();
+  powerupGUI.loadPixels();
+  for (int i = powerupGUI.pixels.length; i != 0; powerupGUI.pixels[--i] = 0);
+  powerupGUI.updatePixels();
+  powerupGUI.endDraw();
+
   powerupGUI.clear();
   powerupGUI.flush();
   powerupGUI.beginDraw();
-  powerupGUI.clear();
-    powerupGUI.flush();
 
   int index, GUIoffsetY=height-150;      
+
   for (Powerup pow : p.usedPowerup) {
     index=p.usedPowerup.indexOf(pow);
     powerupGUI.image(pow.icon, width-(GUIoffsetX+10+index*powerupGUIinterval)*screenFactor-80*screenFactor, GUIoffsetY+10, (100-20)*screenFactor, (100-20)*screenFactor);

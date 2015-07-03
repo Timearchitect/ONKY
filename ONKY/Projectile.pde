@@ -4,7 +4,6 @@ abstract class Projectile extends Entity {
   Projectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
-
     vx=_vx*speedFactor;
     vy=_vy*speedFactor;
   }
@@ -17,16 +16,16 @@ class LaserProjectile extends Projectile {
 
   LaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
-    //projectiles.add(this);
+    // projectiles.add(this);
     w=25;
     projectileColor= color(255, 0, 0);
-  //  strokeWeight(10);
-   // stroke(projectileColor);
-   // fill(255);
-   // ellipse(x+w, y, 75, 40);
-    //entities.add(new SparkParticle(int(x+w), int(random(h)+y), 10, projectileColor));
-   // playSound(laserSound);
-  }//
+    // strokeWeight(10);
+    // stroke(projectileColor);
+    // fill(255);
+    // ellipse(x+w, y, 75, 40);
+    // entities.add(new SparkParticle(int(x+w), int(random(h)+y), 10, projectileColor));
+    // playSound(laserSound);
+  } //
 
   void display() {
     super.display();
@@ -74,13 +73,13 @@ class BigLaserProjectile extends LaserProjectile {
 
   BigLaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
-    //projectiles.add(this);
+    //  projectiles.add(this);
     w=100;
     h=40;
-   // playSound(bigLaserSound);
+    //  playSound(bigLaserSound);
     shakeFactor+=5;
-  //  entities.add(new SparkParticle(int(x)-40, int(y), 20, projectileColor));
-//    entities.add(new SparkParticle(int(x)-40, int(y), 10, 255));
+    //  entities.add(new SparkParticle(int(x)-40, int(y), 20, projectileColor));
+    //  entities.add(new SparkParticle(int(x)-40, int(y), 10, 255));
   }
 
   void display() {
@@ -88,14 +87,12 @@ class BigLaserProjectile extends LaserProjectile {
     stroke(projectileColor);
     strokeWeight(30);
     line(x, y, x-vx*6, y-vy*6);
-
     stroke(255);
     strokeWeight(15);
     line(x, y, x-vx*3, y-vy*3);
   }
 
   void collision() {
-
     if (!dead ) {
       for (Obstacle o : obstacles) {
         if (!o.dead && !o.unBreakable && o.x+o.w > x-vx && o.x < x+vx  + vx && o.y+o.h > y-h &&  o.y < y+h) {

@@ -62,7 +62,7 @@ class Player {
       usedPowerup.remove(usedPowerup.size()-1);
       UpdatePowerupGUILife();
     }
-    if (lives<0)gameReset();
+    if (lives<0)gameOver();
   }
 
   void display() {
