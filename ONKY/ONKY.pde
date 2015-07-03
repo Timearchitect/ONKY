@@ -30,6 +30,7 @@ int renderObject;
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
+PImage ONKYSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -114,7 +115,6 @@ void setup() {
 
 void draw() {
   if (gameState==0) {
-
     gameOverUpdate();
   } else {
     // background(0,100,255);
@@ -395,6 +395,7 @@ void debugScreen() {
 
 void loadImages() {
   //ONKY player sprites
+  p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
   p.Life = loadImage("extraLife.png");

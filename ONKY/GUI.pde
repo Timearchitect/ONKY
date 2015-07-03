@@ -18,7 +18,6 @@ void loadGUILayer() {
 
   gameOverGUI=createGraphics(width, height);
   gameOverGUI.beginDraw();
-  gameOverGUI.background(255, 0, 0);
   gameOverGUI.endDraw();
   gameOverGUI.noSmooth();
   gameOverGUI.fill(0);
@@ -33,7 +32,7 @@ void UpdateGameOverGUI() {
   gameOverGUI.updatePixels();
   gameOverGUI.fill(255);
 
-  gameOverGUI.rect(200, 200, width-400, height-400);
+  gameOverGUI.rect(100*screenFactor, 100*screenFactor, width-200*screenFactor, height-200*screenFactor);
   gameOverGUI.fill(0);
   gameOverGUI.text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width*0.5, height*0.5);  
   gameOverGUI.text( "Your Score: "+int(score*0.002) + "   Totaltoken: "+ tokensTaken , width*0.5, height*0.65);  
@@ -52,7 +51,7 @@ void UpdateGUILife() {
 
 
   GUI.clear();
-  GUI.flush();
+
   GUI.beginDraw();
   for (int i=0; i<p.lives; i++) GUI.image(p.Life, int((50+i*50)*screenFactor), int(60*screenFactor), 40*screenFactor, 40*screenFactor);
   GUI.endDraw();
@@ -68,7 +67,7 @@ void UpdatePowerupGUILife() {
   powerupGUI.endDraw();
 
   powerupGUI.clear();
-  powerupGUI.flush();
+  
   powerupGUI.beginDraw();
 
   int index, GUIoffsetY=height-150;      

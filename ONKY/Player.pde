@@ -2,7 +2,7 @@ class Player {
 
   long trailspawnTimer;
   ArrayList<Powerup> usedPowerup = new ArrayList<Powerup>() ;
-  PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide, cell; //setup
+  PImage SpriteSheetRunning, ONKYSpriteSheet, FrontFlip, Life, Jump, DownDash, Slide, cell; //setup
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=16;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
@@ -12,7 +12,7 @@ class Player {
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
   boolean dead, onGround, punching, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
-  float averageSpeed;
+  float averageSpeed, count;
   final color defaultWeaponColor= color(255, 0, 0);
   color weaponColor= defaultWeaponColor;
   Player() {
@@ -42,10 +42,7 @@ class Player {
 
     checkIfStuck();
 
-    if (millis() > trailspawnTimer+80/speedFactor) {
-      entities.add(new TrailParticle(int(x), int(y), cell));
-      trailspawnTimer=millis();
-    }
+
 
     spawnSpeedEffect();
 
@@ -76,25 +73,40 @@ class Player {
      rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
      fill(255); 
      rect(-w*0.5, 0, w, h*0.5);*/
+    count+=0.1;
+    if (count>16)      count=0;
 
-    if (invis >1 && invis % 4 <=1) {
-      cell.filter(INVERT);
-    }
 
     if (ducking && onGround) { 
-      cell=Slide;
+      cell=cutSpriteSheet(129);
+      blink();
       image(cell, -30, -40, 100, 80);
     } else {
       if (jumpCount==MAX_JUMP-1) {
-        cell=Jump;
-        image(Jump, -w*0.5, -h*0.5, 100, 80);
+        cell=cutSpriteSheet(130);
+        blink();
+        image(cell, -w*0.5, -h*0.5, 100, 80);
       } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
+        cell=cutSpriteSheet(int(x*0.02%16));
+        blink();
         image(cell, -w*0.5, -h*0.5, w, h);
+        //image(cell, -w*0.5, -h*0.5, w, h);
       } else {
-        cell=FrontFlip;
+        cell=cutSpriteSheet(131);
+        blink();
         image(cell, -w*0.5, -h*0.5, 100, 80);
       }
     }
+
+    if (millis() > trailspawnTimer+80/speedFactor) {
+      if (ducking && onGround) { 
+        entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
+      }else{
+      entities.add(new TrailParticle(int(x), int(y), cell));
+      }
+      trailspawnTimer=millis();
+    }
+
     popMatrix();
     if (punching && punchCooldown==0)punch();
     // smash();
@@ -172,6 +184,11 @@ class Player {
      y=floorHeight-h;
      angle=2;
      }*/
+  }
+  void blink() {  
+    if (invis >1 && invis % 4 <=1) {
+      cell.filter(INVERT);
+    }
   }
   void stomp() {
     //playSound(blockDestroySound);
@@ -291,6 +308,61 @@ class Player {
     index= int(index%16);
     cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
   }
+
+  PImage cutSpriteSheet(int index ) {
+    final int imageheight=135;
+    //index= int(index%16);
+    int row=0, imageWidth=160, rowAmount=16;
+    if (index < 16) {
+      row=0; 
+      imageWidth=160;
+      rowAmount=16;
+    } else if (index < 32) {
+      row=1; 
+      imageWidth=160;
+      rowAmount=16;
+    } else if (index < 48) {
+      row=2;  
+      imageWidth=190;
+      rowAmount=16;
+    } else if (index < 64) {
+      row=3; 
+      imageWidth=190;
+      rowAmount=16;
+    } else if (index < 80) {
+      row=4; 
+      imageWidth=190;
+      rowAmount=16;
+    } else if (index < 96) {
+      row=5; 
+      imageWidth=190;
+      rowAmount=16;
+    } else if (index < 112) {
+      row=6; 
+      imageWidth=190;
+      rowAmount=16;
+    } else if (index < 128) {
+      row=7; 
+      imageWidth=190;
+      rowAmount=16;
+    } else if (index < 133) {
+      row=8; 
+      imageWidth=160;
+      rowAmount=5;
+    } else if (index < 140) {
+      row=9;  
+      imageWidth=190;
+      rowAmount=7;
+    } 
+
+
+    index=index%rowAmount;
+
+
+    return ONKYSpriteSheet.get(index*(imageWidth+1)+1, row*imageheight+1, imageWidth, imageheight);
+  }
+
+
   void reset() {
     y=floorHeight-h;
     vy=0;

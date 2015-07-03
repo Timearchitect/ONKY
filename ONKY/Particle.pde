@@ -19,10 +19,12 @@ class Particle extends Entity {
 
 class TrailParticle extends Particle {
   PImage cell;
+  float angle;
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     //particles.add(this);
-    cell=_cell;
+    cell=p.cell;
+    angle=p.angle;
     opacity=200-(100*speedFactor);
     w=100;
     h=80;
@@ -34,11 +36,14 @@ class TrailParticle extends Particle {
   }
 
   void display() {
+    pushMatrix();
+    translate(x+w*0.5,y+h*0.5);
+    rotate(radians(angle));
     tint(255, int(opacity));
-    image(cell, x, y, w, h);
+    image(this.cell, -w*0.5, -h*0.5, w, h);
     // g.removeCache(cell);// this is avoiding the leak
-
     noTint();
+    popMatrix();
   }
 }
 
