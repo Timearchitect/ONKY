@@ -14,7 +14,7 @@ abstract class Powerup extends Entity implements Cloneable {
     y=_y;
     w=100;
     h=100;
-    powerups.add( this);
+   // powerups.add( this);
     totalTokens++;
   }
   void update() {
@@ -50,12 +50,12 @@ abstract class Powerup extends Entity implements Cloneable {
   }
   void collect() {
     tokensTaken++;
-    playSound(collectSound);
-    entities.add( new SpinParticle( int(x), int(y), powerupColor));
+   // playSound(collectSound);
+    //entities.add( new SpinParticle( int(x), int(y), powerupColor));
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
-    death();
     UpdatePowerupGUILife();
+    death();
   }
   void death() {
     super.death();
@@ -71,12 +71,12 @@ abstract class Powerup extends Entity implements Cloneable {
       noFill();
       stroke(powerupColor);
       strokeWeight(5);
-      ellipse(GUIoffsetX+10+index*powerupGUIinterval+40, GUIoffsetY+10+40, 100, 100);
+      ellipse(width-(GUIoffsetX+10+index*powerupGUIinterval+40)*screenFactor, GUIoffsetY+10+40*screenFactor, 100*screenFactor, 100*screenFactor);
     }
     //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
     noStroke();
     fill(0, 180);
-    arc(GUIoffsetX+w*0.5+index*powerupGUIinterval, GUIoffsetY+h*0.5, 80, 80, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
+    arc(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, 80*screenFactor, 80*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
@@ -128,7 +128,7 @@ class InvisPowerup extends Powerup {
     p.weaponColor=powerupColor;
     if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
     p.invincible=true;  // activates supermario starpower
-    changeMusic(superSong);
+    //changeMusic(superSong);
     first=false;
   }
   void use() {
@@ -310,7 +310,7 @@ class TeleportPowerup extends Powerup {
     }
   }
   void ones() {
-    playSound(teleportSound);
+ //   playSound(teleportSound);
     p.weaponColor=powerupColor; // weapon color to blue
     p.invis+=time;  
     if (instant)p.x=x-w;  // telepot to powerup
@@ -390,32 +390,32 @@ class MagnetPowerup extends Powerup {
   }
 }
 
-class RandomPowerup extends Entity {
+class RandomPowerup extends Powerup {
   RandomPowerup(int _x, int _y, int _time) {
-    super(_x, _y);
+    super(_x, _y, _time);
     //icon= tokenIcon;
     //powerupColor=color(100, 100, 100);
     switch(int(random(6))) {
     case 0:
-      entities.add( new InvisPowerup( _x, _y, _time)); 
+      powerups.add( new InvisPowerup( _x, _y, _time)); 
       break;
     case 1:
-      entities.add( new LaserPowerup( _x, _y, _time) );
+      powerups.add( new LaserPowerup( _x, _y, _time) );
       break;
     case 2:
-      entities.add( new SlowPowerup( _x, _y, _time, false) );
+      powerups.add( new SlowPowerup( _x, _y, _time, false) );
       break;
     case 3:
-      entities.add( new LifePowerup( _x, _y, _time) );
+      powerups.add( new LifePowerup( _x, _y, _time) );
       break;
     case 4:
-      entities.add( new  TeleportPowerup( _x, _y, _time, false) );
+      powerups.add( new  TeleportPowerup( _x, _y, _time, false) );
       break;
     case 5:
-      entities.add( new  MagnetPowerup( _x, _y, _time, false) );
+      powerups.add( new  MagnetPowerup( _x, _y, _time, false) );
       break;
     default:
-      entities.add( new TokenPowerup( _x, _y, _time));
+      powerups.add( new TokenPowerup( _x, _y, _time));
     }
     death();
   }

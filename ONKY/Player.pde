@@ -4,7 +4,7 @@ class Player {
   ArrayList<Powerup> usedPowerup = new ArrayList<Powerup>() ;
   PImage SpriteSheetRunning, FrontFlip, Life, Jump, DownDash, Slide, cell; //setup
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
-  final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=8;
+  final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=16;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
   float punchTime, invis, toSlow;
@@ -58,7 +58,10 @@ class Player {
         UpdatePowerupGUILife();
       }
     }
-    if (usedPowerup.size()>MAX_POWERUP_SIZE)usedPowerup.remove(usedPowerup.size()-1);
+    if (usedPowerup.size()>MAX_POWERUP_SIZE) {
+      usedPowerup.remove(usedPowerup.size()-1);
+      UpdatePowerupGUILife();
+    }
     if (lives<0)gameReset();
   }
 
@@ -119,7 +122,7 @@ class Player {
       if (jumpCount==2) {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
       }
-      playSound(jumpSound);
+      //  playSound(jumpSound);
       if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
       jumpCount--;
       vy=-jumpHeight;
@@ -171,7 +174,7 @@ class Player {
      }*/
   }
   void stomp() {
-    playSound(blockDestroySound);
+    //playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
     shakeFactor=60;
@@ -192,7 +195,7 @@ class Player {
       invis=0;
       if (invincible) {  
         p.vx=speedLevel; 
-        changeMusic(regularSong);
+        //    changeMusic(regularSong);
       }
       invincible=false;
     }
@@ -201,7 +204,7 @@ class Player {
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
       totalAttacks++;
-      playSound(sliceSound);
+      //  playSound(sliceSound);
       if (ducking && jumpCount<MAX_JUMP) {      // down dash attack
         entities.add(new slashParticle(int(p.x), int(p.y), 4));
         punchTime=30;
@@ -231,7 +234,7 @@ class Player {
       } else {
         if (int(punchTime)==15 ) {
           entities.add(new slashParticle(int(p.x), int(p.y), 1));
-          playSound(diceSound);
+          //    playSound(diceSound);
         }
       }
     }
@@ -311,19 +314,20 @@ class Player {
   }
   void reduceLife() {
     lives--;
-    UpdateGUILife(); // updateGUI
-    playSound(ughSound);
+    //  playSound(ughSound);
     screenAngle=-10;
     background(255, 0, 0);
+    UpdateGUILife(); // updateGUIw
   }
   void respawn() {
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
-    entities.add(new Lumber(int(p.x-100), int(floorHeight-700), 400, 25, true) );
+    entities.add(new Lumber(int(p.x-400), int(floorHeight-700), 400, 25, true) );
     x-=400;
     y=-50-h;
     respawning=false;
+    UpdateGUILife(); // updateGUI
   }
 
   void spawnSpeedEffect() {

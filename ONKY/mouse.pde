@@ -1,27 +1,20 @@
-void mouseWheel(MouseEvent event) {  // krympa och förstora
-  int temp = event.getCount() ;
-  targetScaleFactor += temp * 0.05;
-  if (targetScaleFactor<=0) {
-    targetScaleFactor=0.1;
-  }
-  if (targetScaleFactor > 2) {
-    targetScaleFactor=2;
-  }
-}
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
   int index, interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
   boolean powerupTap= false;
   for ( Powerup pow : p.usedPowerup) {
     index=p.usedPowerup.indexOf(pow);
-    if (  dist(GUIoffsetX+pow.w*0.5+index*interval, GUIoffsetY+pow.h*0.5, mouseX, mouseY) < 45   ) {
+    if (  dist(width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5*screenFactor, mouseX, mouseY) < 45*screenFactor   ) {
+      fill(0);
+      rect(width-(GUIoffsetX+pow.w*0.5+index*interval)*screenFactor+200,(GUIoffsetY+pow.h*0.5)*screenFactor,100,100);
+      
       background(0, 255, 0);
       pow.toggle=!pow.toggle;
       powerupTap=true;
     }
   }
 
-  if (!powerupTap && mouseButton==LEFT) {  
+  if (!powerupTap ) {  
     if (width*0.5 < mouseX ) {
       p.startPunch();
       noStroke();
