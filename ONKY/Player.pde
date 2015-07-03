@@ -147,6 +147,8 @@ class Player {
       totalDucks++;
       ducking=true;
       y+=duckHeight;
+    } else if (ducking && duckTime>0) {      
+      duckTime=50;
     }
   }
   void checkIfObstacle(int top) {

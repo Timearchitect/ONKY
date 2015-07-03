@@ -1,4 +1,4 @@
-  int  powerupGUIinterval=int(110), GUIoffsetX=50;
+int  powerupGUIinterval=int(110), GUIoffsetX=50;
 void loadGUILayer() {
   GUI=createGraphics(width, height);
   GUI.beginDraw();
@@ -12,19 +12,28 @@ void loadGUILayer() {
   powerupGUI.noSmooth();
   powerupGUI.fill(0);
   powerupGUI.textAlign(CENTER);
-  powerupGUI.textFont(font,int(36*screenFactor));
+  powerupGUI.textFont(font, int(36*screenFactor));
   UpdatePowerupGUILife() ;
 }
 
 void UpdateGUILife() {
+  // GUI=createGraphics(0,0);
   GUI.clear();
+  GUI.flush();
   GUI.beginDraw();
+  GUI.clear();
+  GUI.flush();
   for (int i=0; i<p.lives; i++) GUI.image(p.Life, int((50+i*50)*screenFactor), int(60*screenFactor), 40*screenFactor, 40*screenFactor);
   GUI.endDraw();
 }
 void UpdatePowerupGUILife() {
+  // powerupGUI=createGraphics(0,0);
   powerupGUI.clear();
+  powerupGUI.flush();
   powerupGUI.beginDraw();
+  powerupGUI.clear();
+    powerupGUI.flush();
+
   int index, GUIoffsetY=height-150;      
   for (Powerup pow : p.usedPowerup) {
     index=p.usedPowerup.indexOf(pow);

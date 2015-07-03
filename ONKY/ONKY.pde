@@ -18,15 +18,15 @@ PGraphics powerupGUI;
 PFont font; 
 int renderObject;
 /*Minim minim;
-AudioPlayer BGM, regularSong, superSong;
-AudioPlayer boxDestroySound, boxKnockSound;
-AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
-AudioPlayer rubberSound, rubberKnockSound;
-AudioPlayer leafSound, bloodSound;
-AudioPlayer splash, waterFall;
-AudioPlayer blockDestroySound, smackSound;
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound;
-*/
+ AudioPlayer BGM, regularSong, superSong;
+ AudioPlayer boxDestroySound, boxKnockSound;
+ AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
+ AudioPlayer rubberSound, rubberKnockSound;
+ AudioPlayer leafSound, bloodSound;
+ AudioPlayer splash, waterFall;
+ AudioPlayer blockDestroySound, smackSound;
+ AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound;
+ */
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
@@ -57,26 +57,34 @@ boolean powerUpUnlocked[]= new boolean[5];
 void setup() {
   noSmooth();
   //noClip();
+
   //size(720, 1080); // vertical
-//  size( 1080, 720); // horisontal
-  size(displayWidth, displayHeight,P3D); // horisontal
-   orientation(LANDSCAPE);  // the hot dog way 
+  //  size( 1080, 720); // horisontal
+  size(displayWidth, displayHeight, P3D); // horisontal
+
+  if (displayWidth<= 1080) {
+    screenFactor=0.8;
+  }else {
+    screenFactor=1.5;
+  }
+
+  orientation(LANDSCAPE);  // the hot dog way 
   //size( displayWidth, displayHeight, OPENGL); // horisontal
   // hint();
-   hint(DISABLE_TEXTURE_MIPMAPS);
+  hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
-  
+
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
   loadImages();
-  
- /* final PGraphics pg = createGraphics(41, 41, JAVA2D);
-  pg.beginDraw();
-  pg.image( loadImage("extraLife.png"), 0, 0, 41, 41);
-  pg.endDraw();
 
-  frame.setIconImage(pg.image);
-*/
+  /* final PGraphics pg = createGraphics(41, 41, JAVA2D);
+   pg.beginDraw();
+   pg.image( loadImage("extraLife.png"), 0, 0, 41, 41);
+   pg.endDraw();
+   
+   frame.setIconImage(pg.image);
+   */
   //loadSound();
   loadGUILayer();
 
@@ -94,7 +102,7 @@ void setup() {
   //  powerups.add(new TeleportPowerup(2100, 600, 600,false));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
-   entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3
+  entities.add(new Box(3200, int(floorHeight-400), -1) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
   // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
@@ -106,7 +114,7 @@ void setup() {
 }
 
 void draw() {
- // background(0,100,255);
+  // background(0,100,255);
   if (!preloadObstacles)  generateObstacle();
   //shake();
   smoothScale();
@@ -313,7 +321,7 @@ void gameReset() {
   debris.clear();
 
 
- // if (!mute)changeMusic(regularSong);
+  // if (!mute)changeMusic(regularSong);
 
   speedLevel=0;
 
@@ -361,19 +369,19 @@ void debugScreen() {
   text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-50);
 }
 /*void playSound(AudioPlayer sound) {
-  if (!mute) {
-    sound.rewind();
-    sound.play();
-  }
-}
-void changeMusic(AudioPlayer song) {
-  if (!mute) { 
-    BGM.pause();
-    BGM = song;
-    playSound(BGM);
-    BGM.loop();
-  }
-}*/
+ if (!mute) {
+ sound.rewind();
+ sound.play();
+ }
+ }
+ void changeMusic(AudioPlayer song) {
+ if (!mute) { 
+ BGM.pause();
+ BGM = song;
+ playSound(BGM);
+ BGM.loop();
+ }
+ }*/
 
 
 
@@ -431,37 +439,37 @@ void loadImages() {
   Leaf  =loadImage("leaf.png");
 }
 void loadSound() {
- /* minim = new Minim(this);
-  regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
-  superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
-  BGM = regularSong;
-
-  smackSound= minim.loadFile("sound/smack.wav");
-  blockDestroySound= minim.loadFile("sound/blockDestroy.wav");
-  boxDestroySound = minim.loadFile("sound/boxSmash.wav");
-  boxKnockSound = minim.loadFile("sound/boxKnock.wav");
-  ironBoxDestroySound = minim.loadFile("sound/ironBoxSmash.wav");
-  ironBoxKnockSound = minim.loadFile("sound/ironBoxKnock.wav");
-  shatterSound = minim.loadFile("sound/shatter.wav");
-  jumpSound = minim.loadFile("sound/jump.wav");
-  sliceSound = minim.loadFile("sound/slice.wav");
-  diceSound= minim.loadFile("sound/dice.wav");
-  ughSound= minim.loadFile("sound/ugh.wav");
-  rubberSound= minim.loadFile("sound/rubberBounce.wav");
-  rubberKnockSound=minim.loadFile("sound/rubberKnock.wav");
-  collectSound= minim.loadFile("sound/grab.wav");
-  laserSound= minim.loadFile("sound/laser2.wav");
-  bigLaserSound= minim.loadFile("sound/laser.wav");
-  leafSound =  minim.loadFile("sound/rustle.wav");
-  teleportSound =minim.loadFile("sound/teleport.wav");
-  splash=minim.loadFile("sound/splash.wav");
-  waterFall=minim.loadFile("sound/waterfall.wav");
-  bloodSound=minim.loadFile("sound/blood.wav");
-  regularSong.setGain(-10);
-  laserSound.setGain(-20);
-
-  BGM.play();
-  BGM.loop();*/
+  /* minim = new Minim(this);
+   regularSong= minim.loadFile("music/KillerBlood-The Black(Paroto).wav");
+   superSong = minim.loadFile("music/Super Mario - Invincibility Star.wav");
+   BGM = regularSong;
+   
+   smackSound= minim.loadFile("sound/smack.wav");
+   blockDestroySound= minim.loadFile("sound/blockDestroy.wav");
+   boxDestroySound = minim.loadFile("sound/boxSmash.wav");
+   boxKnockSound = minim.loadFile("sound/boxKnock.wav");
+   ironBoxDestroySound = minim.loadFile("sound/ironBoxSmash.wav");
+   ironBoxKnockSound = minim.loadFile("sound/ironBoxKnock.wav");
+   shatterSound = minim.loadFile("sound/shatter.wav");
+   jumpSound = minim.loadFile("sound/jump.wav");
+   sliceSound = minim.loadFile("sound/slice.wav");
+   diceSound= minim.loadFile("sound/dice.wav");
+   ughSound= minim.loadFile("sound/ugh.wav");
+   rubberSound= minim.loadFile("sound/rubberBounce.wav");
+   rubberKnockSound=minim.loadFile("sound/rubberKnock.wav");
+   collectSound= minim.loadFile("sound/grab.wav");
+   laserSound= minim.loadFile("sound/laser2.wav");
+   bigLaserSound= minim.loadFile("sound/laser.wav");
+   leafSound =  minim.loadFile("sound/rustle.wav");
+   teleportSound =minim.loadFile("sound/teleport.wav");
+   splash=minim.loadFile("sound/splash.wav");
+   waterFall=minim.loadFile("sound/waterfall.wav");
+   bloodSound=minim.loadFile("sound/blood.wav");
+   regularSong.setGain(-10);
+   laserSound.setGain(-20);
+   
+   BGM.play();
+   BGM.loop();*/
 }
 
 
