@@ -845,6 +845,7 @@ void spawnIslands(int x) {
 
 void spawnPool(int x) {
   entities.add(new Water(x, int(floorHeight), 200, 200));
+  powerups.add( new  TokenPowerup(x+100, int(floorHeight-350), 100) );
   entities.add(new Water(x+200, int(floorHeight), 200, 200));
   entities.add(new Grass(x+400, int(floorHeight), 200, 200));
   entities.add(new Grass(x+600, int(floorHeight), 200, 200));
