@@ -10,7 +10,7 @@ class Player {
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
-  boolean dead, onGround, punching, smashing, ducking, invincible, respawning;
+  boolean dead, onGround, punching,stomping, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
@@ -144,6 +144,8 @@ class Player {
       totalDucks++;
       ducking=true;
       y+=duckHeight;
+    }else if(duckTime>0){
+    duckTime=50; // refresh ducktime
     }
   }
   void checkIfObstacle(int top) {

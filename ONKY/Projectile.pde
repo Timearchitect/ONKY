@@ -76,7 +76,7 @@ class BigLaserProjectile extends LaserProjectile {
     super( _x, _y, _vx, _vy);
     //projectiles.add(this);
     w=100;
-    h=20;
+    h=40;
     playSound(bigLaserSound);
     shakeFactor+=5;
   //  entities.add(new SparkParticle(int(x)-40, int(y), 20, projectileColor));
@@ -98,8 +98,8 @@ class BigLaserProjectile extends LaserProjectile {
 
     if (!dead ) {
       for (Obstacle o : obstacles) {
-        if (!o.dead && !o.unBreakable && o.x+o.w > x+vx && o.x < x  + vx && o.y+o.h > y+vy &&  o.y < y + h+vy) {
-          o.damage(3);
+        if (!o.dead && !o.unBreakable && o.x+o.w > x-vx && o.x < x+vx  + vx && o.y+o.h > y-h &&  o.y < y + h) {
+          o.damage(1);
           death();
           shakeFactor+=10;
         }
@@ -119,7 +119,7 @@ class BigLaserProjectile extends LaserProjectile {
   }
 
   void death() {
-    super.death();
+    //super.death();
     entities.add(new LineParticle(int(x), int(y), 300));
     for (int i=0; i<6; i++) entities.add(new triangleParticle(int(x), int(y), random(10)+vx*.3, random(20)-10, 220, projectileColor));
     // strokeWeight(20);

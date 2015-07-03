@@ -57,18 +57,19 @@ void setup() {
   noSmooth();
   //noClip();
   //size(720, 1080); // vertical
-  size( 1080, 720); // horisontal
-  // size( 1080, 720,P3D); // horisontal
+  //size( 1080, 720); // horisontal
+   size( 1080, 720,P3D); // horisontal
   //size( 1080, 720, OPENGL); // horisontal
   // hint();
-  // hint(DISABLE_TEXTURE_MIPMAPS);
-  //((PGraphicsOpenGL)g).textureSampling(2);
+   hint(DISABLE_TEXTURE_MIPMAPS);
+  ((PGraphicsOpenGL)g).textureSampling(2);
+  
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
   loadImages();
   loadSound();
   loadGUILayer();
-
+  loadIcon();
   //UpdateGUILife();
 
   loadParalax();
@@ -467,4 +468,10 @@ void loadParalax() {
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
-
+void loadIcon(){
+  final PGraphics pg = createGraphics(41, 41, JAVA2D);
+  pg.beginDraw();
+  pg.image( loadImage("extraLife.png"), 0, 0, 41, 41);
+  pg.endDraw();
+  frame.setIconImage(pg.image);
+}

@@ -11,11 +11,11 @@ void generateObstacle() {
 }
 void deletePastObstacles() {
  
-    /*for (int i=entities.size () -1; i>=0; i--) {
+    for (int i=entities.size () -1; i>=0; i--) {
      if (entities.get(i).x+entities.get(i).w+deleteMargin<p.x)
      entities.remove(entities.get(i));
-     }*/
-/*
+     }
+
     for (int i=powerups.size () -1; i>=0; i--) {
       if (powerups.get(i).x+powerups.get(i).w+deleteMargin<p.x)
         powerups.remove(powerups.get(i));
@@ -24,7 +24,7 @@ void deletePastObstacles() {
       if (obstacles.get(i).x+obstacles.get(i).w+deleteMargin<p.x)
         obstacles.remove(obstacles.get(i));
     }
-  */
+  
 }
 
 void loadObstacle() {
