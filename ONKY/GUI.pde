@@ -31,11 +31,13 @@ void UpdateGameOverGUI() {
   gameOverGUI.loadPixels();
   for (int i = gameOverGUI.pixels.length; i != 0; gameOverGUI.pixels[--i] = 0);
   gameOverGUI.updatePixels();
-      gameOverGUI.fill(255);
+  gameOverGUI.fill(255);
 
-  gameOverGUI.rect(100,100,width-100,height-100);
-    gameOverGUI.fill(0);
+  gameOverGUI.rect(200, 200, width-400, height-400);
+  gameOverGUI.fill(0);
   gameOverGUI.text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width*0.5, height*0.5);  
+  gameOverGUI.text( "Your Score: "+int(score*0.002) + "   Totaltoken: "+ tokensTaken , width*0.5, height*0.65);  
+
   gameOverGUI.fill(255, 0, 0); 
   gameOverGUI.endDraw();
 }
