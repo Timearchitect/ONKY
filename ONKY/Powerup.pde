@@ -14,7 +14,7 @@ abstract class Powerup extends Entity implements Cloneable {
     y=_y;
     w=100;
     h=100;
-    // powerups.add( this);
+     powerups.add( this);
     totalTokens++;
   }
   void update() {
