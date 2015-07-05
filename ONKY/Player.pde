@@ -122,7 +122,7 @@ class Player {
       if (jumpCount==2) {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
       }
-      //  playSound(jumpSound);
+        playSound(jumpSound);
       if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
       jumpCount--;
       vy=-jumpHeight;
@@ -174,7 +174,7 @@ class Player {
      }*/
   }
   void stomp() {
-    //playSound(blockDestroySound);
+    playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
     shakeFactor=60;
@@ -195,7 +195,7 @@ class Player {
       invis=0;
       if (invincible) {  
         p.vx=speedLevel; 
-        //    changeMusic(regularSong);
+        changeMusic(regularSong);
       }
       invincible=false;
     }
@@ -204,7 +204,7 @@ class Player {
   void startPunch() {
     if (punchCooldown<=0 && !punching) {
       totalAttacks++;
-      //  playSound(sliceSound);
+      playSound(sliceSound);
       if (ducking && jumpCount<MAX_JUMP) {      // down dash attack
         entities.add(new slashParticle(int(p.x), int(p.y), 4));
         punchTime=30;
@@ -234,7 +234,7 @@ class Player {
       } else {
         if (int(punchTime)==15 ) {
           entities.add(new slashParticle(int(p.x), int(p.y), 1));
-          //    playSound(diceSound);
+          playSound(diceSound);
         }
       }
     }
@@ -314,7 +314,7 @@ class Player {
   }
   void reduceLife() {
     lives--;
-    //  playSound(ughSound);
+    playSound(ughSound);
     screenAngle=-10;
     background(255, 0, 0);
     UpdateGUILife(); // updateGUIw

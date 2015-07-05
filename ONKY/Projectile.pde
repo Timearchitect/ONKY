@@ -25,7 +25,7 @@ class LaserProjectile extends Projectile {
    // fill(255);
    // ellipse(x+w, y, 75, 40);
     //entities.add(new SparkParticle(int(x+w), int(random(h)+y), 10, projectileColor));
-   // playSound(laserSound);
+    playSound(laserSound);
   }//
 
   void display() {
@@ -77,7 +77,7 @@ class BigLaserProjectile extends LaserProjectile {
     //projectiles.add(this);
     w=100;
     h=40;
-   // playSound(bigLaserSound);
+    playSound(bigLaserSound);
     shakeFactor+=5;
   //  entities.add(new SparkParticle(int(x)-40, int(y), 20, projectileColor));
 //    entities.add(new SparkParticle(int(x)-40, int(y), 10, 255));

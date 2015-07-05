@@ -40,8 +40,8 @@ void keyPressed() {
   }
   if (key== '¤') {
     mute=!mute;
-  //  BGM.pause();
-  //  if (!mute)    BGM.play();
+   BGM.pause();
+    if (!mute)    BGM.play();
   }
   if (key== '-') {
     if (targetSpeedFactor>0.1)targetSpeedFactor-=0.1;
