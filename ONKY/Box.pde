@@ -560,7 +560,7 @@ class Water extends Obstacle {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       if (p.y>y+150) {
         p.respawning=true;
-        p.reduceLife();
+        if(p.invis>0)p.reduceLife();
       }
       if (p.y>y+h*0.5) {
         p.vx*=0.8;

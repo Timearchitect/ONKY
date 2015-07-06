@@ -4,7 +4,7 @@ abstract class Powerup extends Entity implements Cloneable {
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
-  int upgradeLevel=int(random(4));
+  int upgradeLevel=int(random(4)), pulse;
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
     // icon= tokenIcon;
@@ -14,7 +14,7 @@ abstract class Powerup extends Entity implements Cloneable {
     y=_y;
     w=100;
     h=100;
-     powerups.add( this);
+    powerups.add( this);
     totalTokens++;
   }
   void update() {
@@ -31,12 +31,12 @@ abstract class Powerup extends Entity implements Cloneable {
     collision();
   }
   void display() {
+    if (!instant) { 
+      noStroke();
+      fill(powerupColor);
+      ellipse(x+offsetX, y+offsetY, w+40, h+40);
+    }
     image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, w, h);
-    /*
-        noStroke();
-     fill(powerupColor);
-     ellipse(x+offsetX, y+offsetY, w, h);
-     */
   }
   void hitCollision() {
     if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -51,7 +51,7 @@ abstract class Powerup extends Entity implements Cloneable {
   void collect() {
     tokensTaken++;
     playSound(collectSound);
-    //entities.add( new SpinParticle( int(x), int(y), powerupColor));
+    entities.add( new SpinParticle( int(x), int(y), powerupColor));
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     UpdatePowerupGUILife();
@@ -70,7 +70,8 @@ abstract class Powerup extends Entity implements Cloneable {
     if (!instant && !toggle) {
       noFill();
       stroke(powerupColor);
-      strokeWeight(5);
+      pulse++;
+      strokeWeight(pulse%25);
       ellipse(width-(GUIoffsetX+10+index*powerupGUIinterval+40)*screenFactor, GUIoffsetY+10+40*screenFactor, 100*screenFactor, 100*screenFactor);
     }
     //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
@@ -310,11 +311,11 @@ class TeleportPowerup extends Powerup {
     }
   }
   void ones() {
-    playSound(teleportSound);
     p.weaponColor=powerupColor; // weapon color to blue
     p.invis+=time;  
     if (instant)p.x=x-w;  // telepot to powerup
     if (instant)p.y=y;
+
     p.x+=distance; // forward tele
     p.vx=-4;
     p.vy=-4;
@@ -322,26 +323,62 @@ class TeleportPowerup extends Powerup {
     p.collectCooldown=20;  
     playerOffsetX=distance+100;
     playerOffsetY=0;
-    // background(255);
-    entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
+    for (int i=0; i<5; i++) entities.add(new RectParticle(int(p.x+random(100)-50), int(p.y+random(80)-40), 2, 0, int(random(30)+15), p.weaponColor));
+
+    switch(upgradeLevel ) {
+    case 0:
+
+      break;
+    case 1:
+      playSound(teleportSound);
+      entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
+      collectAll();
+      hitCollision();
+      screenAngle=12;
+      shakeFactor=100;
+      break;
+    case 2:
+      playSound(teleportSound);
+      entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
+      collectAll();
+      hitCollision();
+      screenAngle=12;
+      shakeFactor=100;
+      break;
+    default:
+      playSound(teleportSound);
+      entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
+      collectAll();
+      hitCollision();
+      screenAngle=12;
+      shakeFactor=200;
+    }
+
+    speedFactor=0.02;
+    p.angle=0;
+    first=false;
+  }
+  void collectAll() {
+    for (Powerup pow : powerups) {
+      if (pow.y+pow.h > p.y && p.y +p.h > pow.y &&  pow.x > p.x-distance && pow.x+pow.w < p.x+p.w ) {
+        pow.collect();
+        entities.add(new TrailParticle(int(pow.x-50), int(pow.y-40), p.cell));
+      }
+    }
+  }
+  void hitCollision() {
     for (Obstacle o : obstacles) {
-      //if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x ) {
       if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
         o.impactForce=60;  
         o.health=0;
         o.death();
       }
     }
-    screenAngle=12;
-    shakeFactor=200;
-    speedFactor=0.02;
-
-    first=false;
   }
   void use() {
     if ( toggle || instant ) {
-      if (first )ones();
-      screenAngle=10;
+      if (first && !dead)ones();
+      screenAngle=9;
       time-= 1*speedFactor;
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       if (time<1) {

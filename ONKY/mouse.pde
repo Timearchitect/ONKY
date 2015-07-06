@@ -8,7 +8,7 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
       fill(0);
       rect(width-(GUIoffsetX+pow.w*0.5+index*interval)*screenFactor+200,(GUIoffsetY+pow.h*0.5)*screenFactor,100,100);
       
-      background(0, 255, 0);
+      background(pow.powerupColor);
       pow.toggle=!pow.toggle;
       powerupTap=true;
     }

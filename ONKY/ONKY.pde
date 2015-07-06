@@ -49,10 +49,10 @@ color FlashColor;
 boolean debug, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor=1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
-
+boolean tutorialJump,tutorialDoubleJump,tutorialDuck,tutorialStomp,tutorialAttack;
 
 void setup() {
   noSmooth();
@@ -81,6 +81,9 @@ void setup() {
   //  entities.add(new TeleportPowerup(2100, 600, 600));
   // entities.add(new TeleportPowerup(2100, 600, 600));
   //  entities.add(new TeleportPowerup(2100, 600, 600,false));
+  
+  
+  entities.add(new textParticle(2000, int(floorHeight-200),255, color(255,0,0) , "!" ));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
    entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3

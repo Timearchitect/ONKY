@@ -37,7 +37,7 @@ class TrailParticle extends Particle {
 
   void display() {
     pushMatrix();
-    translate(x+w*0.5,y+h*0.5);
+    translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
     tint(255, int(opacity));
     image(this.cell, -w*0.5, -h*0.5, w, h);
@@ -116,7 +116,7 @@ class slashParticle extends Particle {
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
     noFill();
-    
+
     switch(type) {
     case 0:
       curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
@@ -268,7 +268,7 @@ class splashParticle extends Particle {
     super( _x, _y);
     vx=_vx;
     vy=_vy;
-  //particles.add(this);
+    //particles.add(this);
     particleColor=_particleColor;
     size=_size;
   }
@@ -351,6 +351,58 @@ class triangleParticle extends Particle {
     vertex(-size*0.5, 0 );
     endShape(CLOSE);
     popMatrix();
+  }
+}
+
+class RectParticle extends Particle {
+  float  size;
+  color particleColor;
+  RectParticle(int _x, int _y, float _vx, float _vy, int _size, color _particleColor) {
+    super( _x, _y );
+    size=_size;
+    particleColor=_particleColor;
+    vx=_vx;
+    vy=_vy;
+  }
+  void update() {
+    //super.update();
+    x+=vx;
+    y+=vy;
+    size*=0.9;  // decay
+    if (size<2)death();
+  }
+  void display() {
+    strokeWeight(int(size*0.3));
+    stroke(particleColor);
+    fill(255);
+    rect(x-size*0.5, y-size*0.5, size*3, size);
+  }
+}
+
+class textParticle extends Particle {
+  float  opacity;
+  color particleColor;
+  String text;
+  textParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
+    super( _x, _y );
+    opacity=_opacity;
+    particleColor=_particleColor;
+    text=_text;
+  }
+  void update() {
+    //super.update();
+    x+=vx;
+    y+=vy;
+    if (p.x+width*scaleFactor+playerOffsetX>x) {
+      opacity*=0.95;  // decay
+      vx=p.vx;
+    }
+    if (opacity<2)death();
+  }
+  void display() {
+    fill(particleColor, opacity);
+    textSize(400);
+    text(text, x, y);
   }
 }
 

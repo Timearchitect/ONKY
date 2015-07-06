@@ -566,6 +566,7 @@ void spawnTowerFrame(int x) {
 }
 void spawnBlocks(int x) {
   int index= int(random(2));
+  entities.add(new textParticle(x, int(floorHeight-200),255, color(255,0,0) , "!" ));
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
   entities.add(new Block(x+2000, int(floorHeight-200), -100, -45 ) );
