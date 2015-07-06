@@ -330,12 +330,12 @@ class TeleportPowerup extends Powerup {
   void ones() {
     p.weaponColor=powerupColor; // weapon color to blue
     p.invis+=time;  
-    if (instant)p.x=x-w;  // telepot to powerup
+    if (instant)p.x=x-w*0.5;  // telepot to powerup
     if (instant)p.y=y;
 
     p.x+=distance; // forward tele
-    p.vx=-4;
-    p.vy=-4;
+    p.vx=-2;
+    p.vy=-2;
     p.jumpCount++; 
     p.collectCooldown=20;  
     playerOffsetX=distance+100;

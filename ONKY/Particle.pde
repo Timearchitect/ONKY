@@ -208,24 +208,32 @@ class SpinParticle extends Particle {
   }
 }
 class smokeParticle extends Particle {
-
-  smokeParticle(int _x, int  _y, float _vx, float  _vy) {
+  float angle,size;
+  smokeParticle(int _x, int  _y, float _vx, float  _vy,int _size) {
     super( _x, _y);
     particles.add(this);
     opacity=100;
     vy=_vy;
     vx=_vx;
+    size=_size;
   }
 
   void update() {
+    angle+=10;
+    x+=vx;
+    y+=vy;
+        if (size>0)size*=1-0.05*speedFactor;
     if (opacity>10)opacity-=4*speedFactor;
     else death();
   }
 
   void display() {
-    fill(255, int(opacity));
-    noStroke();
-    ellipse(x, y, w, h);
+
+    pushMatrix();
+    translate(x+size*0.5, y+size*0.5);
+    rotate(radians(angle));
+    image(Smoke, -size*0.5, -size*0.5,size,size);
+    popMatrix();
   }
 }
 
@@ -383,6 +391,7 @@ class textParticle extends Particle {
   float  opacity;
   color particleColor;
   String text;
+  boolean active=false;
   textParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
     super( _x, _y );
     opacity=_opacity;
@@ -393,7 +402,15 @@ class textParticle extends Particle {
     //super.update();
     x+=vx;
     y+=vy;
-    if (p.x+width*scaleFactor+playerOffsetX>x) {
+    //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
+    if ((p.x+p.vx-playerOffsetX*3+width/scaleFactor*screenFactor)>x) {
+      if (!active) {
+        playSound(warning);
+        background(255);
+
+        opacity=255;
+        active=true;
+      }
       opacity*=0.95;  // decay
       vx=p.vx;
     }
@@ -403,6 +420,39 @@ class textParticle extends Particle {
     fill(particleColor, opacity);
     textSize(400);
     text(text, x, y);
+  }
+}
+
+
+class hintOverLayParticle extends Particle {
+  float  opacity;
+  color particleColor;
+  String text;
+  boolean active=false;
+  hintOverLayParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
+    super( _x, _y );
+    opacity=_opacity;
+    particleColor=_particleColor;
+    text=_text;
+  }
+  void update() {
+    //super.update();
+    x+=vx;
+    y+=vy;
+    //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
+    if ((p.x+p.vx-playerOffsetX)>x) {
+      if (!active) {
+        opacity=255;
+        active=true;
+      }
+      opacity*=0.95;  // decay
+      vx=p.vx;
+    }
+    if (opacity<2)death();
+  }
+  void display() {
+    fill(particleColor, opacity);
+    rect(x, y, width*0.5, height);
   }
 }
 

@@ -22,13 +22,13 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound, bloodSound;
-AudioPlayer splash, waterFall;
+AudioPlayer splash, waterFall,warning;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound,teleportAttackSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
+PImage Wood,Smoke,Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -41,6 +41,7 @@ ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
 ArrayList<Projectile> projectiles= new ArrayList<Projectile>();
 ArrayList<Particle> particles = new ArrayList<Particle>();
+ArrayList<Particle> overParticles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //Paralax paralax= new Paralax();
 //ParalaxObject paralaxObject=new ParalaxObject();
@@ -82,8 +83,8 @@ void setup() {
   // entities.add(new TeleportPowerup(2100, 600, 600));
   //  entities.add(new TeleportPowerup(2100, 600, 600,false));
   
-  
-  entities.add(new textParticle(2000, int(floorHeight-200),255, color(255,0,0) , "!" ));
+  entities.add(new  hintOverLayParticle(2000, int(floorHeight-200),10, color(255,0,0)  ,"JUMP") );
+  entities.add(new textParticle(2000, int(floorHeight-200),10, color(255,0,0) , "!" ));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
    entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3
@@ -280,7 +281,7 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
-  //if (p.invincible)fill(255, 50, 0);
+  //if (p.)fill(255, 50, 0);
   // else fill(128,181,113);
   noStroke();
   fill(128, 181, 113);
@@ -408,7 +409,7 @@ void loadImages() {
   lumber= loadImage("lumber22.png");
   lumberR= loadImage("lumber33.png");
   lumberL= loadImage("lumber11.png");
-
+  Wood= loadImage("wood.png");
   waterSpriteSheet= loadImage("watertile.png");
 
   Block = loadImage("blockMad.png");
@@ -420,6 +421,7 @@ void loadImages() {
   Mountain= loadImage("backgroundfull.png");
 
   //debris
+  Smoke=loadImage("smoke.png");
   rockDebris=loadImage("rockDebris.png");
   Leaf  =loadImage("leaf.png");
 }
@@ -451,6 +453,7 @@ void loadSound() {
   splash=minim.loadFile("sound/splash.wav");
   waterFall=minim.loadFile("sound/waterfall.wav");
   bloodSound=minim.loadFile("sound/blood.wav");
+  warning=minim.loadFile("sound/noticeMe.wav");
   regularSong.setGain(-10);
   laserSound.setGain(-20);
 

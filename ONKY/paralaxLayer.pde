@@ -30,7 +30,7 @@ class Paralax extends Entity {
 
   void display() {
     //noStroke();
-   /* if (!p.invincible) fill(0, 0, 255);
+   /* if (!p.) fill(0, 0, 255);
     else  fill(100, 100, 255);
     if (bg!=null)image(bg,  int(x), int(y), int(w), int(h));
     else rect(x, y, w, h);*/

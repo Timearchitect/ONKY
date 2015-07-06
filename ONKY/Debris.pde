@@ -1,13 +1,16 @@
 abstract class Debris extends Entity {
   float opacityDecay=-3, angle, VAngle=1, ax, ay=0.9, opacity=255, bounceFriction, bounceForce;
-  Obstacle owner; 
+  Obstacle owner=null; 
 
   Debris(Obstacle _o, int _x, int _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     debris.add( this);
     owner=_o;
   }
-
+  Debris(int _x, int _y, float _vx, float _vy) {
+    super( _x, _y, _vx, _vy);
+    debris.add( this);
+  }
   void update() {
     angle+=VAngle*speedFactor;
     bounceOnFloor();
@@ -204,7 +207,6 @@ class BushDebris extends Debris {
   }
 
   void display() {
-    noStroke();
     pushMatrix();
     translate(x, y);
     rotate(radians(angle));
@@ -213,6 +215,33 @@ class BushDebris extends Debris {
 
     tint(255, int(opacity));
     image(Leaf, 0+offsetX, 0);
+    noTint();
+    popMatrix();
+  }
+}
+class WoodDebris extends Debris {
+
+
+  WoodDebris(int _x, int _y, float _vx, float _vy) {
+    super( _x, _y, _vx, _vy);
+    VAngle=random(6)-3;
+    bounceFriction=0.7;
+    bounceForce=0.8;
+    w=100;
+    h=100;
+  }
+  @Override
+    void update() {
+    super.update();
+    angle+=VAngle*speedFactor;
+  }
+  void display() {
+    noStroke();
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(angle));
+    tint(255, int(opacity));
+    image(Wood, -w*0.5, -h*0.5, w, h);
     noTint();
     popMatrix();
   }

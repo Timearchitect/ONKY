@@ -190,6 +190,10 @@ class Player {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
+    
+    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), -5, 0 ,100));
+    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), 10, 0,100 ));
+    
     if (invincible) {
       entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.8, 0, 60, weaponColor));
       shakeFactor=100;
@@ -296,15 +300,22 @@ class Player {
       if (ducking)p.y-=duckHeight;
       h=90;
       ducking=false;
-    } else { // ducking
+    } else { // ducking  / sliding
       h=duckHeight;
       duckTime--;
+     // if (int(p.x%5)==0)  entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), int(random(p.vx)), 0 ));
     }
   }
   void checkIfStuck() {
     if (vx<3)toSlow+=1 *speedFactor ;
     else toSlow=0;
-    if (toSlow>100) {
+    if (toSlow>100) {     
+      speedFactor=0.02;
+      for(int i=0; i<360; i+=60){
+          entities.add( new smokeParticle(int(x), int(y), -sin(radians(i))*8, cos(radians(i))*8 ,500));
+      }
+      
+      entities.add( new WoodDebris(int(x+w*0.5), int(y), 0,-8));
       respawn();
       toSlow=0;
     }

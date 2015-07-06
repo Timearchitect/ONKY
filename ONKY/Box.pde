@@ -387,7 +387,7 @@ class Block extends Obstacle {
     vx*=0.95;
     vy*=0.95;
     gravity();
-    if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
+    if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10,200));
   }
   void gravity() {
     if (y+h<floorHeight)vy+=ay;
@@ -560,7 +560,7 @@ class Water extends Obstacle {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       if (p.y>y+150) {
         p.respawning=true;
-        if(p.invis>0)p.reduceLife();
+        if(p.invis==0)p.reduceLife();
       }
       if (p.y>y+h*0.5) {
         p.vx*=0.8;

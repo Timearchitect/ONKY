@@ -4,7 +4,6 @@ abstract class Projectile extends Entity {
   Projectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     projectiles.add(this);
-
     vx=_vx*speedFactor;
     vy=_vy*speedFactor;
   }

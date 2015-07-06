@@ -566,7 +566,9 @@ void spawnTowerFrame(int x) {
 }
 void spawnBlocks(int x) {
   int index= int(random(2));
-  entities.add(new textParticle(x, int(floorHeight-200),255, color(255,0,0) , "!" ));
+  entities.add(new textParticle(x+200, int(floorHeight-200),10, color(255,0,0) , "!" ));
+    entities.add(new textParticle(x+1000, int(floorHeight-200),10, color(255,0,0) , "!" ));
+
   // entities.add(new IronBox(x, int(floorHeight-600) ) );
   // entities.add(new IronBox(x, int(floorHeight-400) ) );
   entities.add(new Block(x+2000, int(floorHeight-200), -100, -45 ) );
@@ -575,7 +577,7 @@ void spawnBlocks(int x) {
   entities.add(new Rock(x+1200, int(floorHeight-200) ) );
   entities.add(new Rock(x+1800, int(floorHeight-200) ) );
 
-  entities.add(new Block(x+1000, int(floorHeight-1200), -35, 50 ) );
+  entities.add(new Block(x+1000, int(floorHeight-1200), -45, 10 ) );
 
   if (index==0) entities.add( new  TokenPowerup(x+1200, int(floorHeight-750), 200) );
   if (index==1) entities.add( new  TokenPowerup(x+300, int(floorHeight-150), 200) );
