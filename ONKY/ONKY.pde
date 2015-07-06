@@ -24,7 +24,7 @@ AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound, bloodSound;
 AudioPlayer splash, waterFall;
 AudioPlayer blockDestroySound, smackSound;
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound,teleportAttackSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
@@ -447,6 +447,7 @@ void loadSound() {
   bigLaserSound= minim.loadFile("sound/laser.wav");
   leafSound =  minim.loadFile("sound/rustle.wav");
   teleportSound =minim.loadFile("sound/teleport.wav");
+  teleportAttackSound =minim.loadFile("sound/teleportAttack.wav");
   splash=minim.loadFile("sound/splash.wav");
   waterFall=minim.loadFile("sound/waterfall.wav");
   bloodSound=minim.loadFile("sound/blood.wav");

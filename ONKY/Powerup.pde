@@ -125,7 +125,24 @@ class InvisPowerup extends Powerup {
     }
   }
   void ones() {
-    p.vx=30;
+    switch(upgradeLevel) {
+    case 0:
+          p.attckSpeedReduction=5;
+      break;
+    case 1:
+      p.attckSpeedReduction=10;
+        p.vx=10;
+      break;
+    case 2:
+      p.attckSpeedReduction=15;
+        p.vx=20;
+      break;
+    case 3:
+      p.attckSpeedReduction=20;
+        p.vx=30;
+      break;
+    }
+  
     p.weaponColor=powerupColor;
     if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
     p.invincible=true;  // activates supermario starpower
@@ -307,7 +324,7 @@ class TeleportPowerup extends Powerup {
       }    
 
       super.collect();
-      //death();
+      death();
     }
   }
   void ones() {
@@ -327,10 +344,15 @@ class TeleportPowerup extends Powerup {
 
     switch(upgradeLevel ) {
     case 0:
+      x=0;
+      y=0;
+      for (int i=0; i<5; i++) entities.add(new RectParticle(int(p.x+p.w-distance+random(100)-50), int(p.y+random(80)-40), 2, 0, int(random(30)+15), p.weaponColor));
+      entities.add(new TrailParticle(int(p.x+p.w-distance), int(p.y), p.cell));
+      playSound(teleportSound);
 
       break;
     case 1:
-      playSound(teleportSound);
+      playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();
@@ -338,7 +360,7 @@ class TeleportPowerup extends Powerup {
       shakeFactor=100;
       break;
     case 2:
-      playSound(teleportSound);
+      playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();
@@ -346,7 +368,7 @@ class TeleportPowerup extends Powerup {
       shakeFactor=100;
       break;
     default:
-      playSound(teleportSound);
+      playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();

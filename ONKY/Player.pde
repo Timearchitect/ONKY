@@ -9,8 +9,8 @@ class Player {
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
-  int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
-  boolean dead, onGround, punching,stomping, smashing, ducking, invincible, respawning;
+  int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
+  boolean dead, onGround, punching, stomping, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
@@ -71,8 +71,8 @@ class Player {
      rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
      fill(255); 
      rect(-w*0.5, 0, w, h*0.5);*/
-     
- if (ducking && onGround) { 
+
+    if (ducking && onGround) { 
       cell=cutSpriteSheet(129);
       blink();
       image(cell, -30, -40, 100, 80);
@@ -92,13 +92,13 @@ class Player {
         image(cell, -w*0.5, -h*0.5, 100, 80);
       }
     }
-    
-    
+
+
     if (millis() > trailspawnTimer+80/speedFactor) {
       if (ducking && onGround) { 
         entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
-      }else{
-      entities.add(new TrailParticle(int(x), int(y), cell));
+      } else {
+        entities.add(new TrailParticle(int(x), int(y), cell));
       }
       trailspawnTimer=millis();
     }
@@ -129,7 +129,7 @@ class Player {
       if (jumpCount==2) {
         entities.add(new LineParticle(int(x+w*0.5), int(y+h), 15, 0));
       }
-        playSound(jumpSound);
+      playSound(jumpSound);
       if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
       jumpCount--;
       vy=-jumpHeight;
@@ -154,8 +154,8 @@ class Player {
       totalDucks++;
       ducking=true;
       y+=duckHeight;
-    }else if(duckTime>0){
-    duckTime=50; // refresh ducktime
+    } else if (duckTime>0) {
+      duckTime=50; // refresh ducktime
     }
   }
   void checkIfObstacle(int top) {
@@ -180,8 +180,8 @@ class Player {
      angle=2;
      }*/
   }
-  
-    void blink() {  
+
+  void blink() {  
     if (invis >1 && invis % 4 <=1) {
       cell.filter(INVERT);
     }
@@ -190,7 +190,12 @@ class Player {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
-    shakeFactor=60;
+    if (invincible) {
+      entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.8, 0, 60, weaponColor));
+      shakeFactor=100;
+    } else {
+      shakeFactor=60;
+    }
 
     //fill(255, 0, 0);
     // rect( p.x,p.y-50,range,300);
@@ -240,7 +245,8 @@ class Player {
     //  rect(x+w, y, punchRange, 75);
     if (punchTime<0) {
       punching=false;
-      punchCooldown=PUNCH_MAX_CD;
+      if (invincible)  punchCooldown=PUNCH_MAX_CD-attckSpeedReduction; 
+      else punchCooldown=PUNCH_MAX_CD;
     } else {
       punchTime-= 1*speedFactor;
       if (ducking) {
@@ -248,6 +254,10 @@ class Player {
         if (int(punchTime)==15 ) {
           entities.add(new slashParticle(int(p.x), int(p.y), 1));
           playSound(diceSound);
+        }
+        if (invincible && int(punchTime)==20) {
+          entities.add(new slashParticle(int(p.x+120), int(p.y), 4));
+          playSound(sliceSound);
         }
       }
     }
@@ -342,7 +352,7 @@ class Player {
     respawning=false;
     UpdateGUILife(); // updateGUI
   }
- PImage cutSpriteSheet(int index ) {
+  PImage cutSpriteSheet(int index ) {
     final int imageheight=135;
     //index= int(index%16);
     int row=0, imageWidth=160, rowAmount=16;
@@ -398,7 +408,7 @@ class Player {
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {
       entities.add(new speedParticle(int(x), int(random(90)+y)));
-      if (invincible) entities.add(new SparkParticle(int(x+w), int(random(h)+y), 40, color(255, 220, 20)));
+      if (invincible) entities.add(new SparkParticle(int(x+w*0.5), int(random(h)+y), 30, color(255, 220, 20)));
     }
   }
 }
