@@ -71,13 +71,13 @@ abstract class Powerup extends Entity implements Cloneable {
       noFill();
       stroke(powerupColor);
       pulse++;
-      strokeWeight(pulse%25);
-      ellipse(width-(GUIoffsetX+10+index*powerupGUIinterval+40)*screenFactor, GUIoffsetY+10+40*screenFactor, 100*screenFactor, 100*screenFactor);
+      strokeWeight(pulse%15);
+      ellipse(width-(GUIoffsetX+10+index*powerupGUIinterval+40)*screenFactor, GUIoffsetY+10+40*screenFactor, (90+pulse%15*.5)*screenFactor, (90+pulse%15*.5)*screenFactor);
     }
     //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
     noStroke();
     fill(0, 180);
-    arc(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, 80*screenFactor, 80*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
+    arc(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, 90*screenFactor, 90*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
   }
 
   public Powerup clone()throws CloneNotSupportedException {  

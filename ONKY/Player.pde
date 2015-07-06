@@ -312,7 +312,7 @@ class Player {
     if (toSlow>100) {     
       speedFactor=0.02;
       for(int i=0; i<360; i+=60){
-          entities.add( new smokeParticle(int(x), int(y), -sin(radians(i))*8, cos(radians(i))*5 ,500));
+          entities.add( new smokeParticle(int(x+w*0.5), int(y), -sin(radians(i))*8, cos(radians(i))*5 ,400));
       }
       playSound(Poof);
       entities.add( new WoodDebris(int(x+w*0.5), int(y), 0,-10));

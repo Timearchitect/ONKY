@@ -209,6 +209,8 @@ class SpinParticle extends Particle {
 }
 class smokeParticle extends Particle {
   float angle, size;
+  color particleColor=255;
+  
   smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size) {
     super( _x, _y);
     particles.add(this);
@@ -216,6 +218,11 @@ class smokeParticle extends Particle {
     vy=_vy;
     vx=_vx;
     size=_size;
+  }
+  
+  smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size, color _particleColor) {
+    this( _x, _y, _vx, _vy, _size);
+    particleColor=_particleColor;
   }
 
   void update() {
@@ -228,9 +235,9 @@ class smokeParticle extends Particle {
   }
 
   void display() {
-    tint(255,opacity);
+    tint(particleColor, opacity);
     pushMatrix();
-    translate(x+size*0.5, y+size*0.5);
+    translate(x, y);
     rotate(radians(angle));
     image(Smoke, -size*0.5, -size*0.5, size, size);
     popMatrix();
@@ -446,14 +453,15 @@ class hintOverLayParticle extends Particle {
         opacity=255;
         active=true;
       }
-      opacity*=0.95;  // decay
+      opacity*=0.99;  // decay
       vx=p.vx;
     }
     if (opacity<2)death();
   }
   void display() {
     fill(particleColor, opacity);
-    rect(x, y, width*0.5, height);
+    noStroke();
+    rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
   }
 }
 
