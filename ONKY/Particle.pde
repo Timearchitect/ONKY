@@ -208,11 +208,11 @@ class SpinParticle extends Particle {
   }
 }
 class smokeParticle extends Particle {
-  float angle,size;
-  smokeParticle(int _x, int  _y, float _vx, float  _vy,int _size) {
+  float angle, size;
+  smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size) {
     super( _x, _y);
     particles.add(this);
-    opacity=100;
+    opacity=255;
     vy=_vy;
     vx=_vx;
     size=_size;
@@ -222,18 +222,19 @@ class smokeParticle extends Particle {
     angle+=10;
     x+=vx;
     y+=vy;
-        if (size>0)size*=1-0.05*speedFactor;
-    if (opacity>10)opacity-=4*speedFactor;
+    if (size>0)size*=1-0.05*speedFactor;
+    if (opacity>10)opacity-=10*speedFactor;
     else death();
   }
 
   void display() {
-
+    tint(255,opacity);
     pushMatrix();
     translate(x+size*0.5, y+size*0.5);
     rotate(radians(angle));
-    image(Smoke, -size*0.5, -size*0.5,size,size);
+    image(Smoke, -size*0.5, -size*0.5, size, size);
     popMatrix();
+    noTint();
   }
 }
 

@@ -22,7 +22,7 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound, bloodSound;
-AudioPlayer splash, waterFall,warning;
+AudioPlayer splash, waterFall,warning,Poof;
 AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound,teleportAttackSound;
 
@@ -454,6 +454,7 @@ void loadSound() {
   waterFall=minim.loadFile("sound/waterfall.wav");
   bloodSound=minim.loadFile("sound/blood.wav");
   warning=minim.loadFile("sound/noticeMe.wav");
+  Poof=minim.loadFile("sound/poof.wav");
   regularSong.setGain(-10);
   laserSound.setGain(-20);
 

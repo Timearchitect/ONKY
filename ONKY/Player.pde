@@ -307,15 +307,15 @@ class Player {
     }
   }
   void checkIfStuck() {
-    if (vx<3)toSlow+=1 *speedFactor ;
+    if (vx<4)toSlow+=1 *speedFactor ;
     else toSlow=0;
     if (toSlow>100) {     
       speedFactor=0.02;
       for(int i=0; i<360; i+=60){
-          entities.add( new smokeParticle(int(x), int(y), -sin(radians(i))*8, cos(radians(i))*8 ,500));
+          entities.add( new smokeParticle(int(x), int(y), -sin(radians(i))*8, cos(radians(i))*5 ,500));
       }
-      
-      entities.add( new WoodDebris(int(x+w*0.5), int(y), 0,-8));
+      playSound(Poof);
+      entities.add( new WoodDebris(int(x+w*0.5), int(y), 0,-10));
       respawn();
       toSlow=0;
     }
