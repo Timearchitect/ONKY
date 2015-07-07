@@ -106,7 +106,7 @@ class Player {
     if (punching && punchCooldown==0)punch();
     // smash();
     fill(0);    
-    if (debug)text ("averageSpeed:"+averageSpeed +" totalJump:"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
+    if (debug)text ("averageSpeed:"+averageSpeed +" totalJump:"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, x+300, y-200, 500, -100);
     //  if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
   }
   void collision() {
@@ -121,7 +121,7 @@ class Player {
       totalJumps++;
       onGround=false;
       if (ducking) {
-        p.y-=duckHeight;
+        y-=duckHeight;
         duckTime=0;
       }
       h=90;
@@ -203,9 +203,9 @@ class Player {
 
     //fill(255, 0, 0);
     // rect( p.x,p.y-50,range,300);
-    //rect( p.x-100,p.y+p.h-50  ,(p.x-100)-(p.x+p.w+100), 500);
+    //rect( p.x-100,p.y+h-50  ,(x-100)-(x+w+100), 500);
     for (Obstacle o : obstacles) {
-      if (!o.unBreakable && o.x+o.w  > p.x && o.x < p.x+stompRange &&   o.y > p.y-50 &&   o.y+o.h < p.y+250) {
+      if (!o.unBreakable && o.x+o.w  > x && o.x < x+stompRange &&   o.y > y-50 &&   o.y+o.h < y+250) {
         o.hit();
         o.death();
       }
@@ -216,7 +216,7 @@ class Player {
     if (invis<1) {
       invis=0;
       if (invincible) {  
-        p.vx=speedLevel; 
+        vx=speedLevel; 
         changeMusic(regularSong);
       }
       invincible=false;
@@ -228,16 +228,16 @@ class Player {
       totalAttacks++;
       playSound(sliceSound);
       if (ducking && jumpCount<MAX_JUMP) {      // down dash attack
-        entities.add(new slashParticle(int(p.x), int(p.y), 4));
+        entities.add(new slashParticle(int(x), int(y), 4));
         punchTime=30;
       } else if (ducking) {    // slide attack
-        entities.add(new slashParticle(int(p.x), int(p.y), 2));
+        entities.add(new slashParticle(int(x), int(y), 2));
         punchTime=20;
       } else if ( jumpCount==0 ) {   // jump attack
-        entities.add(new slashParticle(int(p.x), int(p.y), 3));
+        entities.add(new slashParticle(int(x), int(y), 3));
         punchTime=40;
       } else {      // normal attack
-        entities.add(new slashParticle(int(p.x), int(p.y), 0));
+        entities.add(new slashParticle(int(x), int(y), 0));
         punchTime=30;
       }
       punching=true;
@@ -256,11 +256,11 @@ class Player {
       if (ducking) {
       } else {
         if (int(punchTime)==15 ) {
-          entities.add(new slashParticle(int(p.x), int(p.y), 1));
+          entities.add(new slashParticle(int(x), int(y), 1));
           playSound(diceSound);
         }
         if (invincible && int(punchTime)==20) {
-          entities.add(new slashParticle(int(p.x+120), int(p.y), 4));
+          entities.add(new slashParticle(int(x+120), int(y), 4));
           playSound(sliceSound);
         }
       }
@@ -297,13 +297,13 @@ class Player {
   }
   void checkDuck() {
     if (duckTime<0) {
-      if (ducking)p.y-=duckHeight;
+      if (ducking)y-=duckHeight;
       h=90;
       ducking=false;
     } else { // ducking  / sliding
       h=duckHeight;
       duckTime--;
-      // if (int(p.x%5)==0)  entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), int(random(p.vx)), 0 ));
+      // if (int(x%5)==0)  entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), int(random(vx)), 0 ));
     }
   }
   void checkIfStuck() {
@@ -316,7 +316,8 @@ class Player {
       }
       playSound(Poof);
       entities.add( new WoodDebris(int(x+w*0.5), int(y), 0, -10));
-      respawn();
+      if (tutorial)tutorialRespawn() ;
+      else respawn();
       toSlow=0;
     }
   }
@@ -348,9 +349,7 @@ class Player {
   }
   void reduceLife() {
     if (tutorial) {
-      speedFactor=0.01;
-      p.x-=1200;
-      p.y=floorHeight-200+h;
+      tutorialRespawn();
     } else {
       lives--;
       playSound(ughSound);
@@ -368,6 +367,15 @@ class Player {
     y=-50-h;
     respawning=false;
     UpdateGUILife(); // updateGUI
+  }
+  void tutorialRespawn() {
+    invis=100;
+    speedFactor=0.01;
+    vx*= -0.5;
+   // scaleFactor=0.1;
+    x-=1200;
+    y=floorHeight-200+h;
+    respawning=false;
   }
   PImage cutSpriteSheet(int index ) {
     final int imageheight=135;

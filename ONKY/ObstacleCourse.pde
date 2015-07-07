@@ -1,6 +1,6 @@
 int  difficulty, difficultyRange=7, interval=2200, totalAmountOfCourses=34;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.2;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=800;
+int amountOfCourses=110, distGenerated, loadObstacleDist=2200, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=1200;
 boolean firstCourse=true;
 boolean tutorial=true, tutorialJump, tutorialDoubleJump, tutorialDuck, tutorialStomp, tutorialAttack;
 int tutorialStep;
@@ -50,14 +50,14 @@ void loadRandomObstacleCourse(int x) {
     case 0: // jumpT
       //spawnSnake(x);
       spawnFloor(x);
-      if (tutorialStep==0)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
+      if (tutorialStep==0)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "!" ));
       entities.add(new Sign(x+500, int(floorHeight-200), "Jump"));
       entities.add(new IronBox(x+800, int(floorHeight-200) ) ); 
       tutorialStep++;
       break;
     case 1:
       spawnFloor(x);
-      if (tutorialStep==1)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
+      if (tutorialStep==1)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Good" ));
       entities.add(new Sign(x+500, int(floorHeight-200), "Double jump"));
       entities.add(new IronBox(x+1000, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
@@ -65,7 +65,7 @@ void loadRandomObstacleCourse(int x) {
       break;
     case 2:
       spawnFloor(x);
-      if (tutorialStep==2)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
+      if (tutorialStep==2)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Good" ));
       entities.add(new Sign(x+500, int(floorHeight-200), "Attack"));
       entities.add(new Box(x+1000, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
@@ -74,7 +74,7 @@ void loadRandomObstacleCourse(int x) {
       break;
     case 3:
       spawnFloor(x);
-      if (tutorialStep==3)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
+      if (tutorialStep==3)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Good" ));
       entities.add(new Sign(x+500, int(floorHeight-200), "JumpAttack"));
       entities.add(new IronBox(x+1000, int(floorHeight-200) ) ); 
       entities.add(new Box(x+1000, int(floorHeight-400) ) );
@@ -82,7 +82,7 @@ void loadRandomObstacleCourse(int x) {
       tutorialStep++;
       break;
     case 4:
-      if (tutorialStep==4)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
+      if (tutorialStep==4)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Good" ));
       entities.add(new Sign(x+500, int(floorHeight-200), "Slide"));
       entities.add(new IronBox(x+1000, int(floorHeight-250) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-450) ) );
@@ -91,7 +91,7 @@ void loadRandomObstacleCourse(int x) {
       tutorialStep++;
       break;
     case 5:
-      if (tutorialStep==5)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
+      if (tutorialStep==5)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Good" ));
       entities.add(new Sign(x+500, int(floorHeight-200), "SlideAttack"));
       entities.add(new Box(x+1000, int(floorHeight-50) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-250) ) ); 
@@ -102,8 +102,9 @@ void loadRandomObstacleCourse(int x) {
       break;
     case 6:
       spawnFloor(x);
-      if (tutorialStep==6)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "?" ));
-      entities.add(new Sign(x+500, int(floorHeight-200), "Stomp"));
+      if (tutorialStep==6)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Last" ));
+      entities.add(new Sign(x+300, int(floorHeight-200), "Stomp"));
+      entities.add(new IronBox(x+600, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+800, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) ); 
       entities.add(new Sign(x+1000, int(floorHeight-600), "Attack & Down"));
@@ -115,9 +116,8 @@ void loadRandomObstacleCourse(int x) {
       tutorialStep++;
       break;
     default:
-      if (tutorialStep==0)entities.add(new textParticle(x+500, int(floorHeight-200), 10, color(0, 255, 0), "Attack the sign!!!" ));
       spawnFloor(x);
-      entities.add(new Sign(x+0, int(floorHeight-200), "Done! hit to skip!!! ", true));
+      entities.add(new Sign(x+300, int(floorHeight-200), "Kill me!!", true));
     }
   } else {
     loadMargin=defaultLoadMargin;

@@ -210,7 +210,7 @@ class SpinParticle extends Particle {
 class smokeParticle extends Particle {
   float angle, size;
   color particleColor=255;
-  
+
   smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size) {
     super( _x, _y);
     particles.add(this);
@@ -219,7 +219,7 @@ class smokeParticle extends Particle {
     vx=_vx;
     size=_size;
   }
-  
+
   smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size, color _particleColor) {
     this( _x, _y, _vx, _vy, _size);
     particleColor=_particleColor;
@@ -427,7 +427,9 @@ class textParticle extends Particle {
   void display() {
     fill(particleColor, opacity);
     textSize(400);
+    textAlign(RIGHT);
     text(text, x, y);
+    textAlign(NORMAL);
   }
 }
 
