@@ -1,9 +1,8 @@
-int  difficulty, difficultyRange=7, defaultInterval=2200,interval=defaultInterval, totalAmountOfCourses=34;
+int  difficulty, difficultyRange=7, defaultInterval=2200, interval=defaultInterval, totalAmountOfCourses=34;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.2;
-int amountOfCourses=110, distGenerated, loadObstacleDist=2200, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=1200;
-boolean firstCourse=true;
-boolean tutorial=true, tutorialJump, tutorialDoubleJump, tutorialDuck, tutorialStomp, tutorialAttack;
-int tutorialStep;
+int tutorialStep, amountOfCourses=110, distGenerated, loadObstacleDist=2200, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=1200;
+boolean firstCourse=true, tutorial=true;
+
 void generateObstacle() {
   if (p.x+p.w+loadMargin > distGenerated ) {
     loadRandomObstacleCourse(distGenerated);
@@ -11,7 +10,6 @@ void generateObstacle() {
   }
 }
 void deletePastObstacles() {
-
   for (int i=entities.size () -1; i>=0; i--) {
     if (entities.get(i).x+entities.get(i).w+deleteMargin<p.x)
       entities.remove(entities.get(i));
@@ -24,10 +22,17 @@ void deletePastObstacles() {
     if (obstacles.get(i).x+obstacles.get(i).w+deleteMargin<p.x)
       obstacles.remove(obstacles.get(i));
   }
+  for (int i=particles.size () -1; i>=0; i--) {
+    if (particles.get(i).x+particles.get(i).w+deleteMargin<p.x)
+      particles.remove(particles.get(i));
+  }
+  for (int i=debris.size () -1; i>=0; i--) {
+    if (debris.get(i).x+debris.get(i).w+deleteMargin<p.x)
+      debris.remove(debris.get(i));
+  }
 }
 
-void loadObstacle() {
-
+void loadObstacleCourse() {
   entities.add(new Box(1500, int(floorHeight-200), 1) ); // ? box
   spawnFloor(-interval);   // behind floor
   spawnFloor(0);  // first floor
@@ -47,11 +52,9 @@ void loadRandomObstacleCourse(int x) {
   } else if (tutorial) {
     switch(tutorialStep) {
     case 0: // jumpT
-      //spawnSnake(x);
       spawnFloor(x);
       if (tutorialStep==0)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "!" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Jump"));
-      //entities.add(new Sign(x+500, int(floorHeight-200), "Jump"));
       entities.add(new IronBox(x+800, int(floorHeight-200) ) ); 
       tutorialStep++;
       break;
@@ -59,7 +62,6 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==1)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Double jump"));
-      //entities.add(new Sign(x+500, int(floorHeight-200), "Double jump"));
       entities.add(new IronBox(x+1000, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
       tutorialStep++;
@@ -68,7 +70,6 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==2)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Attack"));
-      //entities.add(new Sign(x+500, int(floorHeight-200), "Attack"));
       entities.add(new Box(x+1000, int(floorHeight-200), 0 ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
       entities.add(new IronBox(x+1000, int(floorHeight-600) ) );
@@ -78,7 +79,6 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==3)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Jump attack"));
-      // entities.add(new Sign(x+500, int(floorHeight-200), "Jump attack"));
       entities.add(new IronBox(x+1000, int(floorHeight-200) ) ); 
       entities.add(new Box(x+1000, int(floorHeight-400), 0) );
       entities.add(new IronBox(x+1000, int(floorHeight-600) ) );
@@ -88,7 +88,6 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==4)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Double + jump + attack"));
-      //entities.add(new Sign(x+500, int(floorHeight-200), "Double jump attack"));
       entities.add(new IronBox(x+1000, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400)) );
       entities.add(new Box(x+1000, int(floorHeight-600), 0) );
@@ -97,8 +96,6 @@ void loadRandomObstacleCourse(int x) {
     case 5:
       if (tutorialStep==5)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Slide"));
-
-      //entities.add(new Sign(x+500, int(floorHeight-200), "Slide"));
       entities.add(new IronBox(x+1000, int(floorHeight-250) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-450) ) );
       entities.add(new IronBox(x+1000, int(floorHeight-650) ) );
@@ -108,8 +105,6 @@ void loadRandomObstacleCourse(int x) {
     case 6:
       if (tutorialStep==6)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Slide + attack"));
-
-      //entities.add(new Sign(x+500, int(floorHeight-200), "SlideAttack"));
       entities.add(new Box(x+1000, int(floorHeight-50), 0) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-250) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-450) ) );
@@ -121,7 +116,6 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==7)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+100, int(floorHeight-200), "Jump + attack + down"));
-      //entities.add(new Sign(x+300, int(floorHeight-200), "Stomp"));
       entities.add(new IronBox(x+600, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+800, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) ); 
@@ -137,7 +131,7 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==8)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+100, int(floorHeight-200), "Powerups"));
-      entities.add( new  TeleportPowerup(x+1100, int(floorHeight-150), 300,400) );
+      entities.add( new  TeleportPowerup(x+1100, int(floorHeight-150), 300, 400) );
 
       entities.add(new IronBox(x+1200, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1200, int(floorHeight-400) ) ); 
@@ -150,7 +144,7 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==9)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Last" ));
       entities.add(new  stoneSign(x+100, int(floorHeight-200), "Powerups"));
-      entities.add( new  TeleportPowerup(x+600, int(floorHeight-150),300 ,400, true) );
+      entities.add( new  TeleportPowerup(x+600, int(floorHeight-150), 300, 400, true) );
 
       entities.add(new IronBox(x+1400, int(floorHeight-600) ) );
       entities.add(new IronBox(x+1400, int(floorHeight-400) ) );

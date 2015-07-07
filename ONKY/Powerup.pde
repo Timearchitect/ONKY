@@ -1,6 +1,6 @@
 abstract class Powerup extends Entity implements Cloneable {
   PImage icon;
-  boolean instant=true, toggle, homing,regenerating;
+  boolean instant=true, toggle, homing, regenerating;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -16,6 +16,10 @@ abstract class Powerup extends Entity implements Cloneable {
     h=100;
     powerups.add( this);
     totalTokens++;
+  }
+  Powerup(int _x, int _y, int _time, boolean _regenerating) {
+    this(_x, _y, _time);
+    regenerating=_regenerating;
   }
   void update() {
     if (int(angle%120)==0) entities.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
@@ -55,12 +59,11 @@ abstract class Powerup extends Entity implements Cloneable {
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     UpdatePowerupGUILife();
-    if(regenerating)p.collectCooldown=20;
+    if (regenerating)p.collectCooldown=20;
     death();
   }
   void death() {
-   if(!regenerating) super.death();
-    
+    if (!regenerating) super.death();
   }
   void use() {
     time--;
@@ -69,21 +72,25 @@ abstract class Powerup extends Entity implements Cloneable {
   }
   void displayIcon() {
     int index=p.usedPowerup.indexOf(this), GUIoffsetY=height-150;     
-    if (!instant && !toggle) {
-      noFill();
-      stroke(powerupColor);
-      pulse++;
-      strokeWeight(pulse%15);
-      ellipse(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, (95+pulse%15*.5)*screenFactor, (95+pulse%15*.5)*screenFactor);
+    if (index<MAX_POWERUP_DISPLAYING) {
+      if (!instant && !toggle) {
+        noFill();
+        stroke(powerupColor);
+        pulse++;
+        strokeWeight(pulse%15);
+        ellipse(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, (95+pulse%15*.5)*screenFactor, (95+pulse%15*.5)*screenFactor);
+      }
+      //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
+      noStroke();
+      fill(0, 180);
+      arc(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, 90*screenFactor, 90*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
     }
-    //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
-    noStroke();
-    fill(0, 180);
-    arc(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, 90*screenFactor, 90*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
   }
 
   public Powerup clone()throws CloneNotSupportedException {  
-    return (Powerup)super.clone();
+    Powerup p= (Powerup)super.clone();
+    p.regenerating=false;
+    return p;
   }
 }
 class TokenPowerup extends Powerup {
@@ -273,7 +280,7 @@ class SlowPowerup extends Powerup {
 class LifePowerup extends Powerup {
   LifePowerup(int _x, int _y, int _time) {
     super(_x, _y, int(_time*0.1));
-    powerups.add( this);
+    //powerups.add( this);
     powerupColor=color(50, 255, 50);
     icon= lifeIcon;
   }
@@ -303,7 +310,7 @@ class TeleportPowerup extends Powerup {
   boolean first=true;
   TeleportPowerup(int _x, int _y, int _time) {
     super(_x, _y, 25);
-    powerups.add( this);
+    //powerups.add( this);
     powerupColor=color(0, 50, 255);
     icon= slashIcon;
   }
@@ -323,16 +330,15 @@ class TeleportPowerup extends Powerup {
     instant=false;
   }
   void collect() {
- 
+
     if (!dead) {
       try {
         p.usedPowerup.add(this.clone());
       }        
       catch(CloneNotSupportedException e) {
       }    
-        super.collect();
-       super.death();
-       
+      super.collect();
+      super.death();
     }
   }
   void ones() {
@@ -401,7 +407,7 @@ class TeleportPowerup extends Powerup {
       if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
         o.impactForce=60;  
         o.health=0;
-       o.death();
+        o.death();
       }
     }
   }
@@ -412,7 +418,7 @@ class TeleportPowerup extends Powerup {
       time-= 1*speedFactor;
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       if (time<1) {
-      super.death();
+        super.death();
         p.weaponColor=p.defaultWeaponColor;
       }
     }

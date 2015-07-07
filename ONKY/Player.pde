@@ -93,13 +93,9 @@ class Player {
       }
     }
 
-
     if (millis() > trailspawnTimer+80/speedFactor) {
-      if (ducking && onGround) { 
-        entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
-      } else {
-        entities.add(new TrailParticle(int(x), int(y), cell));
-      }
+      if (ducking && onGround) entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
+      else entities.add(new TrailParticle(int(x), int(y), cell));
       trailspawnTimer=millis();
     }
     popMatrix();
@@ -113,7 +109,7 @@ class Player {
     if (invis==0) {
       reduceLife();
     }
-   if(!tutorial) invis=100;
+    if (!tutorial) invis=100;
     vx*= -0.5;
   }
   void jump() {
@@ -154,7 +150,7 @@ class Player {
       totalDucks++;
       ducking=true;
       y+=duckHeight;
-    } else if (duckTime>0) {
+    } else {
       duckTime=50; // refresh ducktime
     }
   }
@@ -380,8 +376,10 @@ class Player {
     invis=10;
     speedFactor=0.01;
     vx*= -0.5;
+    duckTime=0;
     // scaleFactor=0.1;
     usedPowerup.clear();
+    UpdatePowerupGUILife();
     x-=1200;
     y=floorHeight-200+h;
     respawning=false;
@@ -432,9 +430,7 @@ class Player {
       rowAmount=7;
     } 
 
-
     index=index%rowAmount;
-
 
     return ONKYSpriteSheet.get(index*(imageWidth+1)+1, row*imageheight+1, imageWidth, imageheight);
   }

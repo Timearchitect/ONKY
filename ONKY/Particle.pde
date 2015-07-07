@@ -75,7 +75,7 @@ class slashParticle extends Particle {
 
   slashParticle(int _x, int  _y, int _type) {
     super( _x, _y);
-    particles.add(this);
+   // particles.add(this);
     type=_type;
   }
   slashParticle(int _x, int  _y, int _type, int _distance) {
@@ -226,9 +226,9 @@ class smokeParticle extends Particle {
   }
 
   void update() {
-    angle+=3;
-    x+=vx;
-    y+=vy;
+    angle+=2*speedFactor;
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
     if (size>0)size*=1-0.05*speedFactor;
     if (opacity>10)opacity-=10*speedFactor;
     else death();

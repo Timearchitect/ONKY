@@ -65,16 +65,17 @@ void setup() {
 
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
+  
   loadImages();
   loadSound();
   loadGUILayer();
   loadIcon();
-  //UpdateGUILife();
-
   loadParalax();
-  if (preloadObstacles)loadObstacle();
-  p.y=floorHeight-p.h;
+  //if (preloadObstacles)loadObstacleCourse();
+  //p.y=floorHeight-p.h;
   gameReset() ;
+  loadMargin=int(700/scaleFactor);
+
   // entities.add(new InvisPowerup(1000, 600, 1500));
   //entities.add(new LaserPowerup(2200, 400, 600));
   // entities.add(new LaserPowerup(2100, 600, 600));
@@ -120,11 +121,14 @@ void draw() {
   if (debug)renderObject=0; // for counting objects on screen
 
   //displayFloor(); legecy
-  if (p.respawning)p.respawn() ;
+  
 
+    //-----------------------------         player   / Entity         -----------------------------------------------------------
+  if (p.respawning)p.respawn() ;
   p.update();
   p.display();
-  //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
+  
+    //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
 
   for (int i=obstacles.size () -1; i>=0; i--) {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
@@ -137,7 +141,7 @@ void draw() {
       if (debug) renderObject++;
     }
   }
-
+  
   if (debug) {
     fill(0, 255, 0, 100);
     rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
@@ -308,7 +312,7 @@ void gameReset() {
 
   speedLevel=0;
 
-  if (preloadObstacles)loadObstacle();
+  if (preloadObstacles)loadObstacleCourse();
   else {
     distGenerated=0;
     firstCourse=true;
@@ -323,7 +327,6 @@ void gameReset() {
   p.reset();
   UpdateGUILife(); // resetGUI
   UpdatePowerupGUILife();
-
 
   speedFactor=1;
   targetSpeedFactor=1;
@@ -368,8 +371,6 @@ void changeMusic(AudioPlayer song) {
     BGM.loop();
   }
 }
-
-
 
 void loadImages() {
   //ONKY player sprites
