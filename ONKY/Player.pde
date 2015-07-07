@@ -362,9 +362,17 @@ class Player {
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
-    entities.add(new Lumber(int(p.x-400), int(floorHeight-700), 400, 25, true) );
     x-=400;
     y=-50-h;
+    for (Obstacle o : obstacles) {
+      if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-400 && o.x+o.w < p.x+p.w ) {
+        o.impactForce=60;  
+        o.health=0;
+        o.death();
+      }
+    }
+    entities.add(new slashParticle(int(p.x+400), int(p.y+h), 5, 400));
+    entities.add(new Lumber(int(p.x), int(floorHeight-700), 400, 25, true) );
     respawning=false;
     UpdateGUILife(); // updateGUI
   }
@@ -372,7 +380,7 @@ class Player {
     invis=100;
     speedFactor=0.01;
     vx*= -0.5;
-   // scaleFactor=0.1;
+    // scaleFactor=0.1;
     x-=1200;
     y=floorHeight-200+h;
     respawning=false;

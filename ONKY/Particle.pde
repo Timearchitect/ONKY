@@ -226,7 +226,7 @@ class smokeParticle extends Particle {
   }
 
   void update() {
-    angle+=10;
+    angle+=3;
     x+=vx;
     y+=vy;
     if (size>0)size*=1-0.05*speedFactor;
@@ -396,13 +396,12 @@ class RectParticle extends Particle {
 }
 
 class textParticle extends Particle {
-  float  opacity;
+  float  opacity=10;
   color particleColor;
   String text;
   boolean active=false;
-  textParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
+  textParticle(int _x, int _y, color _particleColor, String _text) {
     super( _x, _y );
-    opacity=_opacity;
     particleColor=_particleColor;
     text=_text;
   }
@@ -415,21 +414,23 @@ class textParticle extends Particle {
       if (!active) {
         playSound(warning);
         background(255);
-
         opacity=255;
         active=true;
+      } else {
+        opacity*=0.95;  // decay
+        vx=p.vx;
       }
-      opacity*=0.95;  // decay
-      vx=p.vx;
     }
     if (opacity<2)death();
   }
   void display() {
-    fill(particleColor, opacity);
-    textSize(400);
-    textAlign(RIGHT);
-    text(text, x, y);
-    textAlign(NORMAL);
+    if (active) {  
+      fill(particleColor, opacity);
+      textSize(400);
+      textAlign(RIGHT);
+      text(text, x, y);
+      textAlign(NORMAL);
+    }
   }
 }
 
