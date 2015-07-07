@@ -1,6 +1,6 @@
 abstract class Powerup extends Entity implements Cloneable {
   PImage icon;
-  boolean instant=true, toggle, homing;
+  boolean instant=true, toggle, homing,regenerating;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -55,10 +55,12 @@ abstract class Powerup extends Entity implements Cloneable {
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     UpdatePowerupGUILife();
+    if(regenerating)p.collectCooldown=20;
     death();
   }
   void death() {
-    super.death();
+   if(!regenerating) super.death();
+    
   }
   void use() {
     time--;
@@ -127,22 +129,22 @@ class InvisPowerup extends Powerup {
   void ones() {
     switch(upgradeLevel) {
     case 0:
-          p.attckSpeedReduction=5;
+      p.attckSpeedReduction=5;
       break;
     case 1:
       p.attckSpeedReduction=10;
-        p.vx=10;
+      p.vx=10;
       break;
     case 2:
       p.attckSpeedReduction=15;
-        p.vx=20;
+      p.vx=20;
       break;
     case 3:
       p.attckSpeedReduction=20;
-        p.vx=30;
+      p.vx=30;
       break;
     }
-  
+
     p.weaponColor=powerupColor;
     if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
     p.invincible=true;  // activates supermario starpower
@@ -304,7 +306,6 @@ class TeleportPowerup extends Powerup {
     powerups.add( this);
     powerupColor=color(0, 50, 255);
     icon= slashIcon;
-    //instant=true;
   }
   TeleportPowerup(int _x, int _y, int _time, boolean _instant) {
     this(_x, _y, 25);
@@ -315,16 +316,23 @@ class TeleportPowerup extends Powerup {
     distance=_distance;
     instant=true;
   }
+  TeleportPowerup(int _x, int _y, int _time, int _distance, boolean _regenerating) {
+    this(_x, _y, 25);
+    distance=_distance;
+    regenerating=_regenerating;
+    instant=false;
+  }
   void collect() {
+ 
     if (!dead) {
       try {
         p.usedPowerup.add(this.clone());
       }        
       catch(CloneNotSupportedException e) {
       }    
-
-      super.collect();
-      death();
+        super.collect();
+       super.death();
+       
     }
   }
   void ones() {
@@ -393,7 +401,7 @@ class TeleportPowerup extends Powerup {
       if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-distance && o.x+o.w < p.x+p.w ) {
         o.impactForce=60;  
         o.health=0;
-        o.death();
+       o.death();
       }
     }
   }
@@ -404,7 +412,7 @@ class TeleportPowerup extends Powerup {
       time-= 1*speedFactor;
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       if (time<1) {
-        death();
+      super.death();
         p.weaponColor=p.defaultWeaponColor;
       }
     }

@@ -113,7 +113,7 @@ class Player {
     if (invis==0) {
       reduceLife();
     }
-    invis=100;
+   if(!tutorial) invis=100;
     vx*= -0.5;
   }
   void jump() {
@@ -377,10 +377,11 @@ class Player {
     UpdateGUILife(); // updateGUI
   }
   void tutorialRespawn() {
-    invis=100;
+    invis=10;
     speedFactor=0.01;
     vx*= -0.5;
     // scaleFactor=0.1;
+    usedPowerup.clear();
     x-=1200;
     y=floorHeight-200+h;
     respawning=false;
