@@ -22,13 +22,13 @@ AudioPlayer boxDestroySound, boxKnockSound;
 AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
 AudioPlayer rubberSound, rubberKnockSound;
 AudioPlayer leafSound, bloodSound;
-AudioPlayer splash, waterFall,warning,Poof;
+AudioPlayer splash, waterFall, warning, Poof;
 AudioPlayer blockDestroySound, smackSound;
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound,teleportAttackSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Wood,Smoke,Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
+PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -50,10 +50,9 @@ color FlashColor;
 boolean debug, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenFactor=1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor=1.1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
-boolean tutorialJump,tutorialDoubleJump,tutorialDuck,tutorialStomp,tutorialAttack;
 
 void setup() {
   noSmooth();
@@ -61,9 +60,9 @@ void setup() {
   //size(720, 1080); // vertical
   size( 1080, 720, OPENGL); // horisontal
   // hint();
-   hint(DISABLE_TEXTURE_MIPMAPS);
+  hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
-  
+
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
   loadImages();
@@ -75,25 +74,25 @@ void setup() {
   loadParalax();
   if (preloadObstacles)loadObstacle();
   p.y=floorHeight-p.h;
-
+  gameReset() ;
   // entities.add(new InvisPowerup(1000, 600, 1500));
   //entities.add(new LaserPowerup(2200, 400, 600));
   // entities.add(new LaserPowerup(2100, 600, 600));
   //  entities.add(new TeleportPowerup(2100, 600, 600));
   // entities.add(new TeleportPowerup(2100, 600, 600));
   //  entities.add(new TeleportPowerup(2100, 600, 600,false));
-  
-  entities.add(new  hintOverLayParticle(2000, int(floorHeight-200),10, color(255,0,0)  ,"JUMP") );
-  entities.add(new textParticle(2000, int(floorHeight-200),10, color(255,0,0) , "!" ));
+
+  //entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "JUMP") );
+//  entities.add(new textParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "!" ));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
-   entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3
+  // entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
   // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
   // entities.add(new SlowPowerup(2200, 400, 1000));
-  entities.add(new RandomPowerup(2000, 400, 500)); 
+  // entities.add(new RandomPowerup(2000, 400, 500)); 
   // entities.add(new RandomPowerup(2000, 600, 500)); 
   // entities.add(new RandomPowerup(2000, 200, 500));
 }
@@ -181,7 +180,6 @@ void draw() {
   for (int i=projectiles.size () -1; i>=0; i--) {
     projectiles.get(i).update();
     projectiles.get(i).display();
-
     if (projectiles.get(i).dead)projectiles.remove(projectiles.get(i));
   }
   //for (Projectile pro : projectiles)pro.display();
@@ -268,7 +266,7 @@ void smoothSlow() {
   // if (targetSpeedFactor!=speedFactor) {
   float speedDiff=targetSpeedFactor-speedFactor;
   flashOpacity=int(255-255*speedFactor);
-  speedFactor+=speedDiff*0.1;
+  speedFactor+=speedDiff*0.05;
   // }
 }
 void smoothAngle() {
@@ -314,6 +312,9 @@ void gameReset() {
   else {
     distGenerated=0;
     firstCourse=true;
+    tutorial=true;
+    loadMargin=int(1000/scaleFactor);
+    tutorialStep=0;
     difficulty=0;
     minDifficulty=0; 
     maxDifficulty=difficultyRange;
@@ -476,10 +477,11 @@ void loadParalax() {
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
-void loadIcon(){
+void loadIcon() {
   final PGraphics pg = createGraphics(41, 41, JAVA2D);
   pg.beginDraw();
   pg.image( loadImage("extraLife.png"), 0, 0, 41, 41);
   pg.endDraw();
   frame.setIconImage(pg.image);
 }
+

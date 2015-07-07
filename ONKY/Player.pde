@@ -190,10 +190,10 @@ class Player {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
-    
-    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), -5, 0 ,100));
-    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), 10, 0,100 ));
-    
+
+    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), -5, 0, 100));
+    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), 10, 0, 100 ));
+
     if (invincible) {
       entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.8, 0, 60, weaponColor));
       shakeFactor=100;
@@ -303,19 +303,19 @@ class Player {
     } else { // ducking  / sliding
       h=duckHeight;
       duckTime--;
-     // if (int(p.x%5)==0)  entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), int(random(p.vx)), 0 ));
+      // if (int(p.x%5)==0)  entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), int(random(p.vx)), 0 ));
     }
   }
   void checkIfStuck() {
-    if (vx<4)toSlow+=1 *speedFactor ;
+    if (vx<5)toSlow+=1 *speedFactor ;
     else toSlow=0;
-    if (toSlow>100) {     
+    if (toSlow>90) {     
       speedFactor=0.02;
-      for(int i=0; i<360; i+=60){
-          entities.add( new smokeParticle(int(x+w*0.5), int(y), -sin(radians(i))*8, cos(radians(i))*5 ,400));
+      for (int i=0; i<360; i+=60) {
+        entities.add( new smokeParticle(int(x+w*0.5), int(y), -sin(radians(i))*8, cos(radians(i))*5, 400));
       }
       playSound(Poof);
-      entities.add( new WoodDebris(int(x+w*0.5), int(y), 0,-10));
+      entities.add( new WoodDebris(int(x+w*0.5), int(y), 0, -10));
       respawn();
       toSlow=0;
     }
@@ -330,7 +330,7 @@ class Player {
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
-    x=0;
+    x=-800;
     weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
@@ -347,11 +347,17 @@ class Player {
     usedPowerup.clear();
   }
   void reduceLife() {
-    lives--;
-    playSound(ughSound);
-    screenAngle=-10;
-    background(255, 0, 0);
-    UpdateGUILife(); // updateGUIw
+    if (tutorial) {
+      speedFactor=0.01;
+      p.x-=1200;
+      p.y=floorHeight-200+h;
+    } else {
+      lives--;
+      playSound(ughSound);
+      screenAngle=-10;
+      background(255, 0, 0);
+      UpdateGUILife(); // updateGUI
+    }
   }
   void respawn() {
     invis=100;
