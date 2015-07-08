@@ -130,7 +130,7 @@ void loadRandomObstacleCourse(int x) {
     case 8:
       spawnFloor(x);
       if (tutorialStep==8)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
-      entities.add(new  stoneSign(x+100, int(floorHeight-200), "Powerups"));
+      entities.add(new  stoneSign(x+100, int(floorHeight-200), "Instant powerup"));
       powerups.add( new  TeleportPowerup(x+1100, int(floorHeight-150), 300, 400) );
 
       entities.add(new IronBox(x+1200, int(floorHeight-200) ) ); 
@@ -143,7 +143,7 @@ void loadRandomObstacleCourse(int x) {
     case 9:
       spawnFloor(x);
       if (tutorialStep==9)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Last" ));
-      entities.add(new  stoneSign(x+100, int(floorHeight-200), "Powerups"));
+      entities.add(new  stoneSign(x+100, int(floorHeight-200), "Tap Icon to use"));
       powerups.add( new  TeleportPowerup(x+600, int(floorHeight-150), 300, 400, true) );
 
       entities.add(new IronBox(x+1400, int(floorHeight-600) ) );

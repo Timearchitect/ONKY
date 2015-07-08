@@ -334,7 +334,7 @@ class Player {
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
-    x=0;
+    x=-400;
     weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
