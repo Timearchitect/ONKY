@@ -18,18 +18,18 @@ PGraphics GUI, powerupGUI, gameOverGUI ;
 PFont font; 
 int renderObject;
 /*Minim minim;
- AudioPlayer BGM, regularSong, superSong;
- AudioPlayer boxDestroySound, boxKnockSound;
- AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
- AudioPlayer rubberSound, rubberKnockSound;
- AudioPlayer leafSound, bloodSound;
- AudioPlayer splash, waterFall;
- AudioPlayer blockDestroySound, smackSound;
- AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound;
+AudioPlayer BGM, regularSong, superSong;
+AudioPlayer boxDestroySound, boxKnockSound;
+AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
+AudioPlayer rubberSound, rubberKnockSound;
+AudioPlayer leafSound, bloodSound;
+AudioPlayer splash, waterFall, warning, Poof;
+AudioPlayer blockDestroySound, smackSound;
+AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
  */
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, Vines, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
-PImage Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
+PImage Tire, Vines,rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
@@ -42,6 +42,7 @@ ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
 ArrayList<Projectile> projectiles= new ArrayList<Projectile>();
 ArrayList<Particle> particles = new ArrayList<Particle>();
+ArrayList<Particle> overParticles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //Paralax paralax= new Paralax();
 //ParalaxObject paralaxObject=new ParalaxObject();
@@ -54,18 +55,17 @@ float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFac
 
 boolean powerUpUnlocked[]= new boolean[5];
 
-
 void setup() {
   noSmooth();
   //noClip();
   //size(720, 1080); // vertical
-  //  size( 1080, 720); // horisontal
-  size(displayWidth, displayHeight, P3D); // horisontal
+   // size( 1080, 720,OPENGL); // horisontal
+  size(displayWidth, displayHeight, OPENGL); // horisontal
 
-  if (displayWidth<= 1080) {
-    screenFactor=0.8;
+  if (width<= 1080) {
+    screenFactor=0.93; // low res
   } else {
-    screenFactor=1.5;
+    screenFactor=1.6; // high res
   }
 
   orientation(LANDSCAPE);  // the hot dog way 
@@ -87,11 +87,14 @@ void setup() {
    */
   //loadSound();
   loadGUILayer();
+  loadParalax();
+  gameReset() ;
+  loadMargin=int(700/scaleFactor);
 
   //UpdateGUILife();
 
   loadParalax();
-  if (preloadObstacles)loadObstacle();
+  if (preloadObstacles)loadObstacleCourse();
   p.y=floorHeight-p.h;
 
   // powerups.add(new InvisPowerup(1000, 600, 1500));
@@ -102,13 +105,13 @@ void setup() {
   //  powerups.add(new TeleportPowerup(2100, 600, 600,false));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
-  entities.add(new Box(3200, int(floorHeight-400), -1) ); // 3
+  //entities.add(new Box(3200, int(floorHeight-400), -1) ); // 3
   //entities.add(new IronBox(3000, int(floorHeight-600) ) ); // 3
   // entities.add(new IronBox(3000, int(floorHeight-200) ) ); // 3
   // entities.add(new Tire(2800, int(floorHeight-200) ) ); // 3
 
   // powerups.add(new SlowPowerup(2200, 400, 1000));
-  powerups.add(new RandomPowerup(2000, 400, 500)); 
+  //powerups.add(new RandomPowerup(2000, 400, 500)); 
   // powerups.add(new RandomPowerup(2000, 600, 500)); 
   // powerups.add(new RandomPowerup(2000, 200, 500));
 }
@@ -119,7 +122,7 @@ void draw() {
   } else {
     // background(0,100,255);
     if (!preloadObstacles)  generateObstacle();
-    //shake();
+    shake();
     smoothScale();
     smoothOffset();
     smoothSlow();
@@ -290,7 +293,7 @@ void smoothSlow() {
   // if (targetSpeedFactor!=speedFactor) {
   float speedDiff=targetSpeedFactor-speedFactor;
   flashOpacity=int(255-255*speedFactor);
-  speedFactor+=speedDiff*0.1;
+  speedFactor+=speedDiff*0.05;
   // }
 }
 void smoothAngle() {
@@ -303,8 +306,6 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
-  //if (p.invincible)fill(255, 50, 0);
-  // else fill(128,181,113);
   noStroke();
   fill(128, 181, 113);
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
@@ -332,10 +333,13 @@ void gameReset() {
 
   speedLevel=0;
 
-  if (preloadObstacles)loadObstacle();
+  if (preloadObstacles)loadObstacleCourse();
   else {
     distGenerated=0;
     firstCourse=true;
+    tutorial=true;
+    loadMargin=int(1000/scaleFactor);
+    tutorialStep=0;
     difficulty=0;
     minDifficulty=0; 
     maxDifficulty=difficultyRange;
@@ -344,8 +348,6 @@ void gameReset() {
   p.reset();
   UpdateGUILife(); // resetGUI
   UpdatePowerupGUILife();
-
-
   speedFactor=1;
   targetSpeedFactor=1;
   resetScore();
@@ -414,6 +416,7 @@ void loadImages() {
 
 
   //Obstacle graphics
+  rockSign=loadImage("stoneSign.png");
   rock=loadImage("rock.png");
   Snake=loadImage("snake.png");
   Barrel=loadImage("barrel.png");
@@ -432,7 +435,7 @@ void loadImages() {
   lumber= loadImage("lumber22.png");
   lumberR= loadImage("lumber33.png");
   lumberL= loadImage("lumber11.png");
-
+  Wood= loadImage("wood.png");
   waterSpriteSheet= loadImage("watertile.png");
 
   Block = loadImage("blockMad.png");
@@ -444,6 +447,7 @@ void loadImages() {
   Mountain= loadImage("backgroundfull.png");
 
   //debris
+  Smoke=loadImage("smoke.png");
   rockDebris=loadImage("rockDebris.png");
   Leaf  =loadImage("leaf.png");
 }
@@ -471,9 +475,12 @@ void loadSound() {
    bigLaserSound= minim.loadFile("sound/laser.wav");
    leafSound =  minim.loadFile("sound/rustle.wav");
    teleportSound =minim.loadFile("sound/teleport.wav");
+   teleportAttackSound =minim.loadFile("sound/teleportAttack.wav");
    splash=minim.loadFile("sound/splash.wav");
    waterFall=minim.loadFile("sound/waterfall.wav");
    bloodSound=minim.loadFile("sound/blood.wav");
+   warning=minim.loadFile("sound/noticeMe.wav");
+   Poof=minim.loadFile("sound/poof.wav");
    regularSong.setGain(-10);
    laserSound.setGain(-20);
    
@@ -484,13 +491,13 @@ void loadSound() {
 
 void loadParalax() {
 
-  entities.add(new Paralax(0, -int(height*1.5)-200, width*3, int( height*3+200), 0.01, Mountain)); // bakgrund
-  entities.add(new ParalaxObject(Tree, 0, 400, 50, 50, 0.02)); 
-  entities.add(new ParalaxObject(Tree2, 255, 400, 50, 50, 0.02)); 
-  entities.add(new ParalaxObject(Tree, 0, 420, 100, 100, 0.1)); 
-  entities.add(new ParalaxObject(Tree2, 300, 420, 100, 100, 0.1)); 
-  entities.add(new ParalaxObject(Tree, 0, 290, 250, 250, 0.2)); 
-  entities.add(new ParalaxObject(Tree, 0, 120, 500, 500, 0.3));
+  entities.add(new Paralax(0, -int((height*1.5+200)*screenFactor), width*3, int( height*3+200), 0.01, Mountain)); // bakgrund
+  entities.add(new ParalaxObject(Tree, 0, int(415*screenFactor), 50, 50, 0.02)); 
+  entities.add(new ParalaxObject(Tree2, 255, int(415*screenFactor), 50, 50, 0.02)); 
+  entities.add(new ParalaxObject(Tree, 0, int(430*screenFactor), 100, 100, 0.1)); 
+  entities.add(new ParalaxObject(Tree2, 300, int(430*screenFactor), 100, 100, 0.1)); 
+  entities.add(new ParalaxObject(Tree, 0, int(330*screenFactor), 250, 250, 0.2)); 
+  entities.add(new ParalaxObject(Tree, 0, int(190*screenFactor), 500, 500, 0.3));
 
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
@@ -498,7 +505,7 @@ void loadParalax() {
 
 void gameOver() {
   gameState=0;
-  gameOverCooldown=200;
+  gameOverCooldown=100;
 }
 
 void gameOverUpdate() {

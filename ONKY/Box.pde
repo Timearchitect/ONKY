@@ -12,9 +12,10 @@ class Box extends Obstacle {
   }
   void death() {
     super.death();
-    if (type==-1)  powerups.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
-    if (type==2)  for (int i=0; i <3; i++)  powerups.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+    entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 300, obstacleColor));
+    if (type==-1)  entities.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
+    if (type==2)  for (int i=0; i <3; i++)  entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
     for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -105,6 +106,7 @@ class Tire extends Obstacle {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+    entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 300, obstacleColor));
     //playSound(rubberKnockSound);
     for (int i =0; i< 5; i++) {
       entities.add( new TireDebris(this, int(x+random(w)-w*0.5+50), int(y+random(h)-h*0.5+50), random(15)+impactForce*0.4, random(30)-20));
@@ -183,6 +185,7 @@ class IronBox extends Obstacle {
     if (p.invincible || health<=0) {
       super.death();
       entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+      entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 500));
       for (int i =0; i< 3; i++) {
         entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
@@ -387,7 +390,7 @@ class Block extends Obstacle {
     vx*=0.95;
     vy*=0.95;
     gravity();
-    if (vx>1) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-10));
+    if (vx>2) entities.add( new smokeParticle( int(x+random(w)-w*0.5), int(y+h), random(15), random(10)-5, 200));
   }
   void gravity() {
     if (y+h<floorHeight)vy+=ay;
@@ -560,7 +563,7 @@ class Water extends Obstacle {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
       if (p.y>y+150) {
         p.respawning=true;
-        p.reduceLife();
+        if (p.invis==0)p.reduceLife();
       }
       if (p.y>y+h*0.5) {
         p.vx*=0.8;
@@ -594,7 +597,7 @@ class Water extends Obstacle {
 class Sign extends Obstacle {
   int debrisCooldown;
   String text;
-
+  boolean trigg;
   Sign(int _x, int _y, String _text) {
     super(_x, _y);
     obstacleColor = color(220, 180, 90);
@@ -603,12 +606,17 @@ class Sign extends Obstacle {
     health=1;
     text=_text;
   }
+  Sign(int _x, int _y, String _text, boolean _trigg) {
+    this(_x, _y, _text);
+    trigg=_trigg;
+  }
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
     for (int i= 0; i<3; i++) {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
     }
+    if (trigg)tutorial=false;
   }
   void update() {
     super.update();
@@ -727,8 +735,11 @@ class Barrel extends Obstacle {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+    entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 300));
     for (int i =0; i< 8; i++) {
-      entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
+      entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+
+      //  entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
   void update() {
@@ -803,6 +814,8 @@ class Rock extends Obstacle {
     if (p.invincible || health<=0) {
       super.death();
       entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+      entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 500, obstacleColor));
+
       for (int i =0; i< 10; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
@@ -827,6 +840,66 @@ class Rock extends Obstacle {
   }
   void  hitSound() {
   //  playSound(ironBoxDestroySound);
+  }
+}
+class stoneSign extends Obstacle {
+  int debrisCooldown;
+  String text;
+  //boolean trigg;
+  stoneSign(int _x, int _y, String _text) {
+    super(_x, _y);
+    obstacleColor = color(150);
+    w=400;
+    h=200;
+    health=5;
+    text=_text;
+  }
+ /* stoneSign(int _x, int _y, String _text, boolean _trigg) {
+    this(_x, _y, _text);
+    trigg=_trigg;
+  }
+  void death() {
+    super.death();
+    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+    for (int i= 0; i<3; i++) {
+      entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+    }
+    if (trigg)tutorial=false;
+  }*/
+  void update() {
+    super.update();
+    if (debrisCooldown>0)debrisCooldown--;
+  }
+  void display() {
+    image(rockSign, x, y, w, h);
+    fill(0);
+    textSize(30);
+    textAlign(CENTER);
+    text(text, x+w*0.5, y+h*0.5);
+  }
+  void death() {
+    if (p.invincible || health<=0) {
+      super.death();
+      entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
+      entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 600, obstacleColor));
+
+      for (int i =0; i< 15; i++) {
+        entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
+      }
+     // playSound(blockDestroySound);
+    }
+  }
+
+  void knock() {
+    if (p.invincible) death();
+  }
+  void knockSound() {
+     // playSound(blockDestroySound);
+  }
+  void destroySound() {
+    //  playSound(blockDestroySound);
+  }
+  void collision() {
   }
 }
 

@@ -9,8 +9,8 @@ class Player {
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
   float punchTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
-  int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100;
-  boolean dead, onGround, punching, smashing, ducking, invincible, respawning;
+  int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
+  boolean dead, onGround, punching, stomping, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
   float averageSpeed, count;
   final color defaultWeaponColor= color(255, 0, 0);
@@ -41,8 +41,6 @@ class Player {
     checkDuck();
 
     checkIfStuck();
-
-
 
     spawnSpeedEffect();
 
@@ -118,7 +116,7 @@ class Player {
     if (invis==0) {
       reduceLife();
     }
-    invis=100;
+    if (!tutorial) invis=100;
     vx*= -0.5;
   }
   void jump() {
@@ -194,7 +192,16 @@ class Player {
     //playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
-    shakeFactor=60;
+    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), -5, 0, 100));
+    entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), 10, 0, 100 ));
+
+    if (invincible) {
+      entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.8, 0, 60, weaponColor));
+      shakeFactor=100;
+    } else {
+      shakeFactor=60;
+    }
+
 
     //fill(255, 0, 0);
     // rect( p.x,p.y-50,range,300);
@@ -212,7 +219,7 @@ class Player {
       invis=0;
       if (invincible) {  
         p.vx=speedLevel; 
-        //    changeMusic(regularSong);
+        //changeMusic(regularSong);
       }
       invincible=false;
     }
@@ -240,18 +247,24 @@ class Player {
   }
   void punch() {
 
+
     //   fill(255, 0, 0);  // hitbox
     //  rect(x+w, y, punchRange, 75);
     if (punchTime<0) {
       punching=false;
-      punchCooldown=PUNCH_MAX_CD;
+      if (invincible)  punchCooldown=PUNCH_MAX_CD-attckSpeedReduction; 
+      else punchCooldown=PUNCH_MAX_CD;
     } else {
       punchTime-= 1*speedFactor;
       if (ducking) {
       } else {
         if (int(punchTime)==15 ) {
-          entities.add(new slashParticle(int(p.x), int(p.y), 1));
-          //    playSound(diceSound);
+          entities.add(new slashParticle(int(x), int(y), 1));
+        //  playSound(diceSound);
+        }
+        if (invincible && int(punchTime)==20) {
+          entities.add(new slashParticle(int(x+120), int(y), 4));
+          //playSound(sliceSound);
         }
       }
     }
@@ -296,10 +309,17 @@ class Player {
     }
   }
   void checkIfStuck() {
-    if (vx<3)toSlow+=1 *speedFactor ;
+    if (vx<5)toSlow+=1 *speedFactor ;
     else toSlow=0;
-    if (toSlow>100) {
-      respawn();
+    if (toSlow>90) {     
+      speedFactor=0.02;
+      for (int i=0; i<360; i+=60) {
+        entities.add( new smokeParticle(int(x+w*0.5), int(y), -sin(radians(i))*8, cos(radians(i))*5, 400));
+      }
+      //playSound(Poof);
+      entities.add( new WoodDebris(int(x+w*0.5), int(y), 0, -10));
+      if (tutorial)tutorialRespawn() ;
+      else respawn();
       toSlow=0;
     }
   }
@@ -309,6 +329,69 @@ class Player {
     cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
   }
 
+  void reset() {
+    y=floorHeight-h;
+    vy=0;
+    lives=MAX_LIFE;
+    vx=defaultSpeed;
+    x=0;
+    weaponColor=defaultWeaponColor;
+    invis=0;
+    attractRange=0;
+
+    totalDucks=0;
+    totalJumps=0;
+    totalAttacks=0;
+    averageSpeed=0;
+
+    respawning=false;
+    punching=false; 
+    ducking=false;
+    invincible=false;
+    usedPowerup.clear();
+  }
+  void reduceLife() {
+    if (tutorial) {
+      tutorialRespawn();
+    } else {
+      lives--;
+      //playSound(ughSound);
+      screenAngle=-10;
+      background(255, 0, 0);
+      UpdateGUILife(); // updateGUI
+    }
+  }
+  void respawn() {
+    invis=100;
+    vx*= -0.5;
+    scaleFactor=0.1;
+    x-=400;
+    y=-50-h;
+    for (Obstacle o : obstacles) {
+      if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-400 && o.x+o.w < p.x+p.w ) {
+        o.impactForce=60;  
+        o.health=0;
+        o.death();
+      }
+    }
+    entities.add(new slashParticle(int(p.x+400), int(p.y+h), 5, 400));
+    entities.add(new Lumber(int(p.x), int(floorHeight-700), 400, 25, true) );
+ 
+    respawning=false;
+    UpdateGUILife(); // updateGUI
+  }
+  void tutorialRespawn() {
+    invis=10;
+    speedFactor=0.01;
+    vx*= -0.5;
+    duckTime=0;
+    // scaleFactor=0.1;
+    usedPowerup.clear();
+    UpdatePowerupGUILife();
+    x-=1200;
+    y=floorHeight-200+h;
+    respawning=false;
+  }
   PImage cutSpriteSheet(int index ) {
     final int imageheight=135;
     //index= int(index%16);
@@ -362,45 +445,6 @@ class Player {
     return ONKYSpriteSheet.get(index*(imageWidth+1)+1, row*imageheight+1, imageWidth, imageheight);
   }
 
-
-  void reset() {
-    y=floorHeight-h;
-    vy=0;
-    lives=MAX_LIFE;
-    vx=defaultSpeed;
-    x=0;
-    weaponColor=defaultWeaponColor;
-    invis=0;
-    attractRange=0;
-
-    totalDucks=0;
-    totalJumps=0;
-    totalAttacks=0;
-    averageSpeed=0;
-
-    respawning=false;
-    punching=false; 
-    ducking=false;
-    invincible=false;
-    usedPowerup.clear();
-  }
-  void reduceLife() {
-    lives--;
-    //  playSound(ughSound);
-    screenAngle=-10;
-    background(255, 0, 0);
-    UpdateGUILife(); // updateGUIw
-  }
-  void respawn() {
-    invis=100;
-    vx*= -0.5;
-    scaleFactor=0.1;
-    entities.add(new Lumber(int(p.x-400), int(floorHeight-700), 400, 25, true) );
-    x-=400;
-    y=-50-h;
-    respawning=false;
-    UpdateGUILife(); // updateGUI
-  }
 
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {

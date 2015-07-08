@@ -208,24 +208,40 @@ class SpinParticle extends Particle {
   }
 }
 class smokeParticle extends Particle {
+  float angle, size;
+  color particleColor=255;
 
-  smokeParticle(int _x, int  _y, float _vx, float  _vy) {
+  smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size) {
     super( _x, _y);
     particles.add(this);
-    opacity=100;
+    opacity=255;
     vy=_vy;
     vx=_vx;
+    size=_size;
+  }
+
+  smokeParticle(int _x, int  _y, float _vx, float  _vy, int _size, color _particleColor) {
+    this( _x, _y, _vx, _vy, _size);
+    particleColor=_particleColor;
   }
 
   void update() {
-    if (opacity>10)opacity-=4*speedFactor;
+    angle+=2*speedFactor;
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
+    if (size>0)size*=1-0.05*speedFactor;
+    if (opacity>10)opacity-=10*speedFactor;
     else death();
   }
 
   void display() {
-    fill(255, int(opacity));
-    noStroke();
-    ellipse(x, y, w, h);
+    tint(particleColor, opacity);
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(angle));
+    image(Smoke, -size*0.5, -size*0.5, size, size);
+    popMatrix();
+    noTint();
   }
 }
 
@@ -351,6 +367,104 @@ class triangleParticle extends Particle {
     vertex(-size*0.5, 0 );
     endShape(CLOSE);
     popMatrix();
+  }
+}
+
+class RectParticle extends Particle {
+  float  size;
+  color particleColor;
+  RectParticle(int _x, int _y, float _vx, float _vy, int _size, color _particleColor) {
+    super( _x, _y );
+    size=_size;
+    particleColor=_particleColor;
+    vx=_vx;
+    vy=_vy;
+  }
+  void update() {
+    //super.update();
+    x+=vx;
+    y+=vy;
+    size*=0.9;  // decay
+    if (size<2)death();
+  }
+  void display() {
+    strokeWeight(int(size*0.3));
+    stroke(particleColor);
+    fill(255);
+    rect(x-size*0.5, y-size*0.5, size*3, size);
+  }
+}
+
+class textParticle extends Particle {
+  float  opacity=10;
+  color particleColor;
+  String text;
+  boolean active=false;
+  textParticle(int _x, int _y, color _particleColor, String _text) {
+    super( _x, _y );
+    particleColor=_particleColor;
+    text=_text;
+  }
+  void update() {
+    //super.update();
+    x+=vx;
+    y+=vy;
+    //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
+    if ((p.x+p.vx-playerOffsetX*3+width/scaleFactor*screenFactor)>x) {
+      if (!active) {
+        //playSound(warning);
+        background(255);
+        opacity=255;
+        active=true;
+      } else {
+        opacity*=0.95;  // decay
+        vx=p.vx;
+      }
+    }
+    if (opacity<2)death();
+  }
+  void display() {
+    if (active) {  
+      fill(particleColor, opacity);
+      textSize(400);
+      textAlign(RIGHT);
+      text(text, x, y);
+      textAlign(NORMAL);
+    }
+  }
+}
+
+
+class hintOverLayParticle extends Particle {
+  float  opacity;
+  color particleColor;
+  String text;
+  boolean active=false;
+  hintOverLayParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
+    super( _x, _y );
+    opacity=_opacity;
+    particleColor=_particleColor;
+    text=_text;
+  }
+  void update() {
+    //super.update();
+    x+=vx;
+    y+=vy;
+    //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
+    if ((p.x+p.vx-playerOffsetX)>x) {
+      if (!active) {
+        opacity=255;
+        active=true;
+      }
+      opacity*=0.99;  // decay
+      vx=p.vx;
+    }
+    if (opacity<2)death();
+  }
+  void display() {
+    fill(particleColor, opacity);
+    noStroke();
+    rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
   }
 }
 
