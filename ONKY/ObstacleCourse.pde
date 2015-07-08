@@ -154,8 +154,7 @@ void loadRandomObstacleCourse(int x) {
       break;
     default:
       spawnFloor(x);
-      entities.add(new Sign(x+100, int(floorHeight-200), "Good luck!", true));
-      tutorial=false;
+      entities.add(new Sign(x+100, int(floorHeight-200), "hit me!", true));
     }
   } else {
     loadMargin=defaultLoadMargin;
