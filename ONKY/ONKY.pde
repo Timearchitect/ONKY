@@ -486,12 +486,12 @@ void loadSound() {
    
    BGM.play();
    BGM.loop();*/
-}
+
 
 
 void loadParalax() {
 
-  entities.add(new Paralax(0, -int((height*1.5+200)*screenFactor), width*3, int( height*3+200), 0.01, Mountain)); // bakgrund
+  entities.add(new Paralax(0, -int((height*1.5-200)*screenFactor), width*3, int( height*3+200), 0.01, Mountain)); // bakgrund
   entities.add(new ParalaxObject(Tree, 0, int(415*screenFactor), 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree2, 255, int(415*screenFactor), 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree, 0, int(430*screenFactor), 100, 100, 0.1)); 

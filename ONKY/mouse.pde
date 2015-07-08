@@ -4,7 +4,7 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
     boolean powerupTap= false;
     Powerup pow=null;
     amount= (MAX_POWERUP_DISPLAYING<p.usedPowerup.size()) ? MAX_POWERUP_DISPLAYING:p.usedPowerup.size();
-
+if(gameState==0)gameOverCooldown-=50;
     //for ( Powerup pow : p.usedPowerup) {
     for (int i=0; i<amount; i++) {
       pow =p.usedPowerup.get(i);

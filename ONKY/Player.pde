@@ -85,7 +85,7 @@ class Player {
         blink();
         image(cell, -w*0.5, -h*0.5, 100, 80);
       } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
-        cell=cutSpriteSheet(int(x*0.02%16));
+        cell=cutSpriteSheet(int(x*0.03%16));
         blink();
         image(cell, -w*0.5, -h*0.5, w, h);
         //image(cell, -w*0.5, -h*0.5, w, h);
