@@ -27,9 +27,10 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
 
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, Vines,rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
+PImage cornerStar;
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -65,7 +66,7 @@ void setup() {
 
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
-  
+
   loadImages();
   loadSound();
   loadGUILayer();
@@ -82,9 +83,12 @@ void setup() {
   //  entities.add(new TeleportPowerup(2100, 600, 600));
   // entities.add(new TeleportPowerup(2100, 600, 600));
   //  entities.add(new TeleportPowerup(2100, 600, 600,false));
+//  entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(0, 100, 255), "JUMP", 0) );
+ // entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(0, 0, 255), "JUMP", 1) );
+ // entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "JUMP", 2) );
 
   //entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "JUMP") );
-//  entities.add(new textParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "!" ));
+  //  entities.add(new textParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "!" ));
 
   // entities.add(new IronBox(3200, int(floorHeight-200) ) ); // 3
   // entities.add(new Box(3200, int(floorHeight-400) ,-1) ); // 3
@@ -121,14 +125,14 @@ void draw() {
   if (debug)renderObject=0; // for counting objects on screen
 
   //displayFloor(); legecy
-  
 
-    //-----------------------------         player   / Entity         -----------------------------------------------------------
+
+  //-----------------------------         player   / Entity         -----------------------------------------------------------
   if (p.respawning)p.respawn() ;
   p.update();
   p.display();
-  
-    //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
+
+  //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
 
   for (int i=obstacles.size () -1; i>=0; i--) {
     if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
@@ -141,7 +145,7 @@ void draw() {
       if (debug) renderObject++;
     }
   }
-  
+
   if (debug) {
     fill(0, 255, 0, 100);
     rect(p.x-p.vx-playerOffsetX-shakeX+50/scaleFactor, (p.y-(height*0.3)/scaleFactor)*0.3-shakeY, (width-100+shakeX)/scaleFactor, height/scaleFactor-100+shakeY);
@@ -173,7 +177,7 @@ void draw() {
 
   for (int i=particles.size () -1; i>=0; i--) {
     particles.get(i).update();
-    particles.get(i).display();
+    if (!particles.get(i).overlay)particles.get(i).display();
     if (particles.get(i).dead)particles.remove(particles.get(i));
   }
   //for (Particle par : particles)par.display();
@@ -218,7 +222,9 @@ void draw() {
   popMatrix();
 
   //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
-
+  for (int i=particles.size () -1; i>=0; i--) {
+    if (particles.get(i).overlay) particles.get(i).display();
+  }
   /* for (Paralax plx : ForegroundParalaxLayers) {
    plx.update();
    if (plx.x<width)plx.display(); // onscreen
@@ -373,6 +379,9 @@ void changeMusic(AudioPlayer song) {
 }
 
 void loadImages() {
+  //GUI
+  cornerStar= loadImage("cornerStar.png");
+  
   //ONKY player sprites
   p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
   p.SpriteSheetRunning = loadImage("onky_running3.png");

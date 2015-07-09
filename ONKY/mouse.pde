@@ -31,15 +31,19 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
     if (!powerupTap ) {
       if (width*0.5 < mouseX ) {
         p.startPunch();
-        noStroke();
-        // fill(powerupColor);
-        // rect(50+index*interval, 100, 100, 100);
+        entities.add( new tapOverLayParticle(255, 2));
+        entities.add( new tapOverLayParticle(255, 3));
       } else {
-        if (width*0.5 > mouseX && height*0.5 < mouseY) p.duck();
-        if (width*0.5 > mouseX && height*0.5 > mouseY) p.jump();
+        if (width*0.5 > mouseX && height*0.5 < mouseY) { 
+          p.duck();
+          entities.add( new tapOverLayParticle(255, 1));
+        }
+        if (width*0.5 > mouseX && height*0.5 > mouseY) { 
+          p.jump();
+          entities.add( new tapOverLayParticle(255, 0));
+        }
       }
     }
-    
   } else if (mouseButton==RIGHT) {
     entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), 60, 0));
   } else  entities.add( new BigLaserProjectile(  int(p.x+p.w*0.5+100), int(p.y+p.h*0.2), 10, 0));

@@ -2,6 +2,7 @@
 
 class Particle extends Entity {
   float opacity=255;
+  boolean overlay, underlay;
   Particle(int _x, int  _y) {
     super( _x, _y);
     particles.add(this);
@@ -75,7 +76,7 @@ class slashParticle extends Particle {
 
   slashParticle(int _x, int  _y, int _type) {
     super( _x, _y);
-   // particles.add(this);
+    // particles.add(this);
     type=_type;
   }
   slashParticle(int _x, int  _y, int _type, int _distance) {
@@ -410,11 +411,11 @@ class textParticle extends Particle {
     x+=vx;
     y+=vy;
     //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
-    if ((p.x+p.vx-playerOffsetX*3+width/scaleFactor*screenFactor)>x) {
+    if (p.x+p.vx-playerOffsetX*3+width/scaleFactor*screenFactor>x) {
       if (!active) {
         playSound(warning);
-        background(255);
-        opacity=255;
+        background(particleColor);
+        opacity=200;
         active=true;
       } else {
         opacity*=0.95;  // decay
@@ -440,31 +441,66 @@ class hintOverLayParticle extends Particle {
   color particleColor;
   String text;
   boolean active=false;
-  hintOverLayParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
+  int action;
+  hintOverLayParticle(int _x, int _y, color _particleColor, String _text) {
     super( _x, _y );
-    opacity=_opacity;
     particleColor=_particleColor;
     text=_text;
+  }
+  hintOverLayParticle(int _x, int _y, color _particleColor, String _text, int _action) {
+    this(  _x, _y, _particleColor, _text );
+    action=_action;
+    overlay=true;
   }
   void update() {
     //super.update();
     x+=vx;
     y+=vy;
-    //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
-    if ((p.x+p.vx-playerOffsetX)>x) {
+    if (p.x+p.vx-playerOffsetX>x) {
       if (!active) {
         opacity=255;
         active=true;
       }
-      opacity*=0.99;  // decay
-      vx=p.vx;
     }
-    if (opacity<2)death();
+    if (active) {      
+      opacity-=5;  // decay
+      vx=p.vx;
+      if (opacity<10) {
+        death();
+        active=false;
+      }
+    }
   }
   void display() {
-    fill(particleColor, opacity);
     noStroke();
-    rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
+    fill(particleColor, opacity);
+    //fill(particleColor, 50);
+    if (action==0) rect(0, 0, width*0.5, height*0.5);
+    else if (action==1) rect(0, height*0.5, width*0.5, height*0.5);
+    else if (action==2) rect(width*0.5, 0, width*0.5, height);
+    else rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
+  }
+}
+class tapOverLayParticle extends Particle {
+  float opacity;
+  int action;
+  tapOverLayParticle( int _opacity, int _action) {
+    super( 0, 0 );
+    opacity=_opacity;
+    overlay=true;
+    action=_action;
+  }
+  void update() { 
+    opacity-=3;  // decay
+    if (opacity<3)death();
+  }
+  void display() {
+    tint(255, opacity);
+    if (action==0) image(cornerStar, -width*0.5, -height*0.5, width, height);
+    else if (action==1) image(cornerStar, -width*0.5, height*0.5, width, height);
+    else if (action==2) image(cornerStar, width*0.5, -height*0.5, width, height);
+    else if (action==3) image(cornerStar, width*0.5, height*0.5, width, height);
+    noTint();
   }
 }
 
