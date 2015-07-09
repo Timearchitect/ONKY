@@ -438,33 +438,81 @@ class textParticle extends Particle {
 class hintOverLayParticle extends Particle {
   float  opacity;
   color particleColor;
-  String text;
   boolean active=false;
-  hintOverLayParticle(int _x, int _y, int _opacity, color _particleColor, String _text) {
+  int action;
+  hintOverLayParticle(int _x, int _y, color _particleColor) {
     super( _x, _y );
-    opacity=_opacity;
     particleColor=_particleColor;
-    text=_text;
+  }
+  hintOverLayParticle(int _x, int _y, color _particleColor, int _action) {
+    this(  _x, _y, _particleColor );
+    action=_action;
+    overlay=true;
   }
   void update() {
     //super.update();
-    x+=vx;
-    y+=vy;
-    //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
-    if ((p.x+p.vx-playerOffsetX)>x) {
+    // x+=vx;
+    // y+=vy;
+    if (p.x+p.vx-playerOffsetX>x && p.x-p.vx-playerOffsetX < x) {
       if (!active) {
-        opacity=255;
+        opacity=100;
         active=true;
       }
-      opacity*=0.99;  // decay
-      vx=p.vx;
     }
-    if (opacity<2)death();
+    if (active) {      
+      opacity-=2;  // decay
+      // vx=p.vx;
+      if (opacity<5) {
+        // death();
+        active=false;
+      }
+    }
   }
   void display() {
-    fill(particleColor, opacity);
-    noStroke();
-    rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
+    if (active) {
+      noStroke();
+      fill(particleColor, opacity);
+      if (action==0) rect(0, 0, width*0.5, height*0.5);
+      else if (action==1) rect(0, height*0.5, width*0.5, height*0.5);
+      else if (action==2) rect(width*0.5, 0, width*0.5, height);
+      //else if (action==3) rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
+      else if (action==4) { 
+        tint(255, opacity);
+        image(tapPowerupZone, width*0.5, 0, width*0.5, height);
+        noTint();
+      }
+    }
+  }
+}
+class tapOverLayParticle extends Particle {
+  float opacity=255;
+  int action;
+  tapOverLayParticle( int _opacity, int _action) {
+    super( 0, 0 );
+    opacity=_opacity;
+    overlay=true;
+    action=_action;
+  }
+  tapOverLayParticle( int _x, int _y, int _opacity, int _action) {
+    super( _x, _y );
+    x=_x;
+    y=_y;
+    opacity=_opacity;
+    overlay=true;
+    action=_action;
+  }
+  void update() { 
+    opacity--;  // decay
+    if (opacity<3)death();
+  }
+  void display() {
+    tint(255, opacity);
+    if (action==0) image(cornerStar, -width*0.5, -height*0.5, width, height);
+    else if (action==1) image(cornerStar, -width*0.5, height*0.5, width, height);
+    else if (action==2) image(cornerStar, width*0.5, -height*0.5, width, height);
+    else if (action==3) image(cornerStar, width*0.5, height*0.5, width, height);
+    else if (action==4) image(iconZone, x-100, y-100);
+    noTint();
   }
 }
 

@@ -28,9 +28,10 @@ AudioPlayer blockDestroySound, smackSound;
 AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
  */
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, Vines,rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
+PImage cornerStar, tapPowerupZone, iconZone; // GUI
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -142,8 +143,10 @@ void draw() {
     if (debug)renderObject=0; // for counting objects on screen
 
     //displayFloor(); legecy
+    for (Obstacle o : obstacles) {
+   	  if (o.underlay)o.display();
+    }
     if (p.respawning)p.respawn() ;
-
     p.update();
     p.display();
     //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
@@ -155,7 +158,7 @@ void draw() {
       //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
       if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
         o.update();
-        o.display();
+        if (!o.underlay) o.display();
         if (debug) renderObject++;
       }
     }
@@ -191,7 +194,7 @@ void draw() {
 
     for (int i=particles.size () -1; i>=0; i--) {
       particles.get(i).update();
-      particles.get(i).display();
+     if (!particles.get(i).overlay) particles.get(i).display();
       if (particles.get(i).dead)particles.remove(particles.get(i));
     }
     //for (Particle par : particles)par.display();
@@ -237,7 +240,9 @@ void draw() {
     popMatrix();
 
     //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
-
+  for (int i=particles.size () -1; i>=0; i--) {
+    if (particles.get(i).overlay) particles.get(i).display();
+  }
     /* for (Paralax plx : ForegroundParalaxLayers) {
      plx.update();
      if (plx.x<width)plx.display(); // onscreen
@@ -365,6 +370,7 @@ void resetScore() {
 void calcDispScore() {
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
+ if (!tutorial) {  
   fill(255);
   textSize(int(40*screenFactor));
   textAlign(RIGHT);
@@ -372,6 +378,7 @@ void calcDispScore() {
   // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
   // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
   textAlign(LEFT);
+  }
 }
 void debugScreen() {
   fill(100, 255, 0);
@@ -396,6 +403,10 @@ void debugScreen() {
 
 
 void loadImages() {
+  //GUI
+  cornerStar= loadImage("cornerStar.png");
+  tapPowerupZone= loadImage("tapPowerupZone.png");
+  iconZone= loadImage("iconZone.png");
   //ONKY player sprites
   p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
   p.SpriteSheetRunning = loadImage("onky_running3.png");
@@ -487,7 +498,7 @@ void loadSound() {
    BGM.play();
    BGM.loop();*/
 
-
+}
 
 void loadParalax() {
 

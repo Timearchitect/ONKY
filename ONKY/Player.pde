@@ -12,7 +12,7 @@ class Player {
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
   boolean dead, onGround, punching, stomping, smashing, ducking, invincible, respawning;
   int totalJumps, totalAttacks, totalDucks;
-  float averageSpeed, count;
+  float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
   color weaponColor= defaultWeaponColor;
   Player() {
@@ -71,9 +71,6 @@ class Player {
      rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
      fill(255); 
      rect(-w*0.5, 0, w, h*0.5);*/
-    count+=0.1;
-    if (count>16)      count=0;
-
 
     if (ducking && onGround) { 
       cell=cutSpriteSheet(129);
@@ -334,7 +331,7 @@ class Player {
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
-    x=-600;
+    x=-800;
     weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
@@ -376,7 +373,6 @@ class Player {
     }
     entities.add(new slashParticle(int(p.x+400), int(p.y+h), 5, 400));
     entities.add(new Lumber(int(p.x), int(floorHeight-700), 400, 25, true) );
- 
     respawning=false;
     UpdateGUILife(); // updateGUI
   }
@@ -388,6 +384,11 @@ class Player {
     // scaleFactor=0.1;
     usedPowerup.clear();
     UpdatePowerupGUILife();
+    jumpCount=MAX_JUMP;
+    duckTime=0;
+    ducking=false;
+    onGround=true;
+    punching=false;
     x-=1200;
     y=floorHeight-200+h;
     respawning=false;

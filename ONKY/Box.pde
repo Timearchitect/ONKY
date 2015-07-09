@@ -161,7 +161,6 @@ class IronBox extends Obstacle {
      
      strokeWeight(1);
      */
-
     if (health==5) {
       image(ironBox, x, y, w, h);
     } else if (health>2) {
@@ -173,13 +172,9 @@ class IronBox extends Obstacle {
   void update() {
     super.update();
     if (invis>0)invis--;
-    if (x!=tx &&  y!=ty) {
       float diffX=tx-x, diffY=ty-y;
       x+=diffX*0.2*speedFactor;
       y+=diffY*0.2*speedFactor;
-      if (x==tx)x=tx;
-      if (y==ty)y=ty;
-    }
   }
   void death() {
     if (p.invincible || health<=0) {
@@ -605,6 +600,7 @@ class Sign extends Obstacle {
     h=200;
     health=1;
     text=_text;
+    underlay=true;
   }
   Sign(int _x, int _y, String _text, boolean _trigg) {
     this(_x, _y, _text);
@@ -842,6 +838,7 @@ class Rock extends Obstacle {
   //  playSound(ironBoxDestroySound);
   }
 }
+
 class stoneSign extends Obstacle {
   int debrisCooldown;
   String text;
