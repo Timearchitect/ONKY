@@ -1,5 +1,5 @@
 abstract class Entity {
-  boolean dead;
+  boolean dead,underlay,overlay;
   int x, y, w, h;
   float vx, vy;
   Entity(int _x, int  _y) {

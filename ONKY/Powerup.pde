@@ -59,7 +59,7 @@ abstract class Powerup extends Entity implements Cloneable {
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     UpdatePowerupGUILife();
-    if (regenerating)p.collectCooldown=20;
+    if (regenerating)p.collectCooldown=30;
     death();
   }
   void death() {
@@ -448,17 +448,15 @@ class MagnetPowerup extends Powerup {
   }
   void use() {
     if ( toggle || instant ) {
-      //speedFactor=0.5; //slowrate
       p.attractRange=range;
       if (time%int(16/speedFactor)==0)entities.add(new RShockWave(int(p.x), int(p.y), range*2, powerupColor) );
-      //stroke(powerupColor);
-      //noFill();
-      // ellipse(p.x+p.w*0.5,p.y+p.h*0.5,p.attractRange*2,p.attractRange*2);
       time--;
       if (time<1) {
         death();
         p.attractRange=0;
       }
+    } else {      
+      p.attractRange=0;
     }
   }
 }

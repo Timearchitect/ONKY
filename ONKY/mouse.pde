@@ -21,11 +21,12 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
       pow =p.usedPowerup.get(i);
       index=p.usedPowerup.indexOf(pow);
       if (dist(width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5*screenFactor, mouseX, mouseY) < 45*screenFactor   ) {
-        fill(0);
-        rect(width-(GUIoffsetX+pow.w*0.5+index*interval)*screenFactor+200, (GUIoffsetY+pow.h*0.5)*screenFactor, 120*screenFactor, 120*screenFactor);
+        //fill(0);
         background(pow.powerupColor);
+        //rect(width-(GUIoffsetX+pow.w*0.5+index*interval)*screenFactor+200, (GUIoffsetY+pow.h*0.5)*screenFactor, 120*screenFactor, 120*screenFactor);
         pow.toggle=!pow.toggle;
         powerupTap=true;
+        //entities.add( new tapOverLayParticle(mouseX, mouseY, 255, 4));
       }
     }
     if (!powerupTap ) {

@@ -64,7 +64,7 @@ class Player {
     pushMatrix();
     translate(int(x+w*0.5), int(y+h*0.5));
     rotate(radians(angle));
-    //fill(255);
+    //fill(255);tutorialStep
 
     /*stroke(0);  
      fill(playerColor);
@@ -375,11 +375,16 @@ class Player {
   void tutorialRespawn() {
     invis=10;
     speedFactor=0.01;
-    vx*= -0.5;
+    //vx*= -0.5;
     duckTime=0;
     // scaleFactor=0.1;
     usedPowerup.clear();
     UpdatePowerupGUILife();
+    jumpCount=MAX_JUMP;
+    duckTime=0;
+    ducking=false;
+    onGround=true;
+    punching=false;
     x-=1200;
     y=floorHeight-200+h;
     respawning=false;

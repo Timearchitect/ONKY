@@ -30,7 +30,7 @@ PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIc
 PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
-PImage cornerStar;
+PImage cornerStar, tapPowerupZone, iconZone; // GUI
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
@@ -83,9 +83,9 @@ void setup() {
   //  entities.add(new TeleportPowerup(2100, 600, 600));
   // entities.add(new TeleportPowerup(2100, 600, 600));
   //  entities.add(new TeleportPowerup(2100, 600, 600,false));
-//  entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(0, 100, 255), "JUMP", 0) );
- // entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(0, 0, 255), "JUMP", 1) );
- // entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "JUMP", 2) );
+  //  entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(0, 100, 255), "JUMP", 0) );
+  // entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(0, 0, 255), "JUMP", 1) );
+  // entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "JUMP", 2) );
 
   //entities.add(new  hintOverLayParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "JUMP") );
   //  entities.add(new textParticle(2000, int(floorHeight-200), 10, color(255, 0, 0), "!" ));
@@ -125,8 +125,9 @@ void draw() {
   if (debug)renderObject=0; // for counting objects on screen
 
   //displayFloor(); legecy
-
-
+  for (Obstacle o : obstacles) {
+    if (o.underlay)o.display();
+  }
   //-----------------------------         player   / Entity         -----------------------------------------------------------
   if (p.respawning)p.respawn() ;
   p.update();
@@ -141,7 +142,7 @@ void draw() {
     //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
     if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
       o.update();
-      o.display();
+      if (!o.underlay) o.display();
       if (debug) renderObject++;
     }
   }
@@ -348,15 +349,18 @@ void resetScore() {
   totalObstacle=0;
 }
 void calcDispScore() {
+
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
-  fill(255);
-  textSize(40);
-  textAlign(RIGHT);
-  text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width-50, 100);
-  // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
-  // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
-  textAlign(LEFT);
+  if (!tutorial) {  
+    fill(255);
+    textSize(40);
+    textAlign(RIGHT);
+    text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width-50, 100);
+    // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
+    // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
+    textAlign(LEFT);
+  }
 }
 void debugScreen() {
   fill(100, 255, 0);
@@ -381,7 +385,8 @@ void changeMusic(AudioPlayer song) {
 void loadImages() {
   //GUI
   cornerStar= loadImage("cornerStar.png");
-  
+  tapPowerupZone= loadImage("tapPowerupZone.png");
+  iconZone= loadImage("iconZone.png");
   //ONKY player sprites
   p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
   p.SpriteSheetRunning = loadImage("onky_running3.png");
