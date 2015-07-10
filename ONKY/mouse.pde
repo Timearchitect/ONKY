@@ -10,7 +10,7 @@
  }*/
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
-  if (automate) {
+  if (!automate) {
     int index, amount=0, interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
     boolean powerupTap= false;
     Powerup pow=null;

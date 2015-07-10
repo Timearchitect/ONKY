@@ -49,7 +49,7 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
 color FlashColor;
-boolean debug,automate=true,hint=true, mute, preloadObstacles=false;
+boolean debug,automate,hint, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
 int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;

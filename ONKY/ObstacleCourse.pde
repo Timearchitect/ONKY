@@ -65,14 +65,19 @@ void loadRandomObstacleCourse(int x) {
       entities.add(new IronBox(x+800, int(floorHeight-200) ) );  
 
       entities.add(new  hintOverLayParticle(x+200, int(floorHeight-200), color(0, 100, 255), 0) );
-
+      
+      if (p.tutorialCourseRetries==0)entities.add(new textParticle(x+1000, int(floorHeight-200), color(0, 255, 0), "Perfect" ));
+      else if (p.tutorialCourseRetries<2) entities.add(new textParticle(x+1000, int(floorHeight-200), color(0, 255, 0), "Great" ));
+      else entities.add(new textParticle(x+1000, int(floorHeight-200), color(0, 255, 0), "Good" ));
+      
+      
       tutorialStep++;
-
       break;
     case 1:
       resetTutorialCourseStats();      
       spawnFloor(x);
-      if (tutorialStep==1)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
+      if (tutorialStep==1)  entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
+
       entities.add(new  stoneSign(x+300, int(floorHeight-200), "Double jump"));
       entities.add(new IronBox(x+1000, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1000, int(floorHeight-400) ) );
@@ -217,7 +222,7 @@ void loadRandomObstacleCourse(int x) {
       powerups.add( new  TeleportPowerup(x+600, int(floorHeight-500), 350, 450, true) );
 
       entities.add(new  hintOverLayParticle(x+500, int(floorHeight-200), color(0, 100, 255), 4) );
-      entities.add(new  hintOverLayParticle(x+1200, int(floorHeight-200), color(0, 100, 255), 5) );
+      entities.add(new  hintOverLayParticle(x+1300, int(floorHeight-200), color(0, 100, 255), 5) );
 
       entities.add(new IronBox(x+1600, int(floorHeight-600) ) );
       entities.add(new IronBox(x+1600, int(floorHeight-400) ) );
