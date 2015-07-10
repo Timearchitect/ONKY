@@ -343,6 +343,8 @@ void gameReset() {
     distGenerated=0;
     firstCourse=true;
     tutorial=true;
+    hint=false;
+    automate=false;
     loadMargin=int(1000/scaleFactor);
     tutorialStep=0;
     difficulty=0;

@@ -1,6 +1,6 @@
 int  difficulty, difficultyRange=7, totalAmountOfCourses=35;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.2;
-int tutorialStep, amountOfCourses=110, distGenerated, defaultObstacleCourseDist=2200, obstacleCourseDist=defaultObstacleCourseDist, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=1800;
+int tutorialStep, amountOfCourses=110, distGenerated, defaultObstacleCourseDist=2200, obstacleCourseDist=defaultObstacleCourseDist, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=2400;
 boolean firstCourse=true, tutorial=true;
 
 void generateObstacle() {
@@ -203,12 +203,13 @@ void loadRandomObstacleCourse(int x) {
       spawnFloor(x);
       if (tutorialStep==9)entities.add(new textParticle(x+500, int(floorHeight-200), color(0, 255, 0), "Good" ));
       entities.add(new  stoneSign(x+100, int(floorHeight-200), "Powerups"));
-      powerups.add( new  TeleportPowerup(x+1100, int(floorHeight-100), 300, 400) );
+      powerups.add( new  TeleportPowerup(x+1100, int(floorHeight-300), 300, 400) );
 
       entities.add(new IronBox(x+1200, int(floorHeight-200) ) ); 
       entities.add(new IronBox(x+1200, int(floorHeight-400) ) ); 
       entities.add(new IronBox(x+1200, int(floorHeight-600) ) );
       //entities.add(new IronBox(x+1000, int(floorHeight-600) ) ); 
+      entities.add(new  hintOverLayParticle(x+600, int(floorHeight-200), color(0, 100, 255), 0) );
 
       tutorialStep++;
       break;
@@ -232,6 +233,7 @@ void loadRandomObstacleCourse(int x) {
       tutorialStep++;
       break;
     default:
+      resetTutorialCourseStats();
       obstacleCourseDist= defaultObstacleCourseDist ;
       spawnFloor(x);
       entities.add(new Sign(x+100, int(floorHeight-200), "hit me!", true));

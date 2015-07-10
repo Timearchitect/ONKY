@@ -134,7 +134,7 @@ class Player {
       //  playSound(jumpSound);
       if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
 
-      if (jumpCount==MAX_JUMP && punchTime>20) { // uppercut
+      if (punching && jumpCount==MAX_JUMP && punchTime>20) { // uppercut
         background(255);
         entities.add(new slashParticle(int(p.x), int(p.y), 6));
         for (Obstacle o : obstacles) {
@@ -389,6 +389,8 @@ class Player {
     }
   }
   void respawn() {
+    usedPowerup.clear();
+    angle=0;
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
@@ -419,7 +421,7 @@ class Player {
     ducking=false;
     onGround=true;
     punching=false;
-    x-=1200;
+    x-=1600;
     y=floorHeight-200+h;
     respawning=false;
     tutorialCourseRetries++;
