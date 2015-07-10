@@ -7,11 +7,11 @@ class Player {
   final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=16;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
-  float punchTime, invis, toSlow;
+  float punchTime, jumpTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
   boolean dead, onGround, punching, stomping, smashing, ducking, invincible, respawning;
-  int totalJumps, totalAttacks, totalDucks;
+  int totalJumps, totalAttacks, totalDucks, tutorialCourseRetries;
   float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
   color weaponColor= defaultWeaponColor;
@@ -43,6 +43,8 @@ class Player {
     checkIfStuck();
 
     spawnSpeedEffect();
+
+    if (!onGround)jumpTime+=1*speedFactor;
 
     //if (respawning)respawn() ;
 
@@ -96,8 +98,8 @@ class Player {
     if (millis() > trailspawnTimer+80/speedFactor) {
       if (ducking && onGround) { 
         entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
-      }else{
-      entities.add(new TrailParticle(int(x), int(y), cell));
+      } else {
+        entities.add(new TrailParticle(int(x), int(y), cell));
       }
       trailspawnTimer=millis();
     }
@@ -131,6 +133,19 @@ class Player {
       }
       //  playSound(jumpSound);
       if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
+
+      if (jumpCount==MAX_JUMP && punchTime>20) { // uppercut
+        background(255);
+        entities.add(new slashParticle(int(p.x), int(p.y), 6));
+        for (Obstacle o : obstacles) {
+          if (o.y+o.h > p.y-200 && p.y +p.h > o.y &&  o.x+o.w > p.x && o.x < p.x+p.w+200 ) {
+            o.impactForce=60;  
+            o.hit();
+            o.death();
+          }
+        }
+      }
+
       jumpCount--;
       vy=-jumpHeight;
     }
@@ -145,7 +160,7 @@ class Player {
   void duck() {
     if (!onGround) { 
       vy=downDashSpeed;
-      entities.add(new LineParticle(int(x+w*0.5), int(y+h), 10, 0));
+      if (punching) entities.add(new slashParticle(int(p.x), int(p.y), 4)); // downdash Attack
     }
     if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
 
@@ -163,6 +178,7 @@ class Player {
       if (punching && ducking && !onGround && jumpCount<MAX_JUMP) stomp(); // stomp attack
       jumpCount=MAX_JUMP;
       onGround=true;
+      jumpTime=0;
       y=top-h;
       vy=0;
       angle=0;
@@ -223,6 +239,9 @@ class Player {
     //angle=-22;
   }
   void startPunch() {
+    // fill(255, 0, 0);  // hitbox
+
+
     if (punchCooldown<=0 && !punching) {
       totalAttacks++;
       //  playSound(sliceSound);
@@ -235,15 +254,26 @@ class Player {
       } else if ( jumpCount==0 ) {   // jump attack
         entities.add(new slashParticle(int(p.x), int(p.y), 3));
         punchTime=40;
-      } else {      // normal attack
-        entities.add(new slashParticle(int(p.x), int(p.y), 0));
+      } else {     
+        if (jumpTime!=0 && jumpTime<=8) { // uppercut
+          background(255);
+          entities.add(new slashParticle(int(p.x), int(p.y), 6));
+          for (Obstacle o : obstacles) {
+            if (o.y+o.h > p.y-200 && p.y +p.h > o.y &&  o.x+o.w > p.x && o.x < p.x+p.w+200 ) {
+              o.impactForce=60;  
+              o.hit();
+              o.death();
+            }
+          }
+        } else {
+          entities.add(new slashParticle(int(p.x), int(p.y), 0)); // normal attack
+        }
         punchTime=30;
       }
       punching=true;
     }
   }
   void punch() {
-
 
     //   fill(255, 0, 0);  // hitbox
     //  rect(x+w, y, punchRange, 75);
@@ -257,7 +287,7 @@ class Player {
       } else {
         if (int(punchTime)==15 ) {
           entities.add(new slashParticle(int(x), int(y), 1));
-        //  playSound(diceSound);
+          //  playSound(diceSound);
         }
         if (invincible && int(punchTime)==20) {
           entities.add(new slashParticle(int(x+120), int(y), 4));
@@ -331,7 +361,7 @@ class Player {
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
-    x=-800;
+    x=0;
     weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
@@ -392,6 +422,10 @@ class Player {
     x-=1200;
     y=floorHeight-200+h;
     respawning=false;
+    tutorialCourseRetries++;
+    background(0);
+    if (tutorialCourseRetries>2)automate=true;
+    if (tutorialCourseRetries>1)hint=true;
   }
   PImage cutSpriteSheet(int index ) {
     final int imageheight=135;

@@ -1,20 +1,21 @@
 /*void mouseWheel(MouseEvent event) {  // krympa och förstora
-  int temp = event.getCount() ;
-  targetScaleFactor += temp * 0.05;
-  if (targetScaleFactor<=0) {
-    targetScaleFactor=0.1;
-  }
-  if (targetScaleFactor > 2) {
-    targetScaleFactor=2;
-  }
-}*/
+ int temp = event.getCount() ;
+ targetScaleFactor += temp * 0.05;
+ if (targetScaleFactor<=0) {
+ targetScaleFactor=0.1;
+ }
+ if (targetScaleFactor > 2) {
+ targetScaleFactor=2;
+ }
+ }*/
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
+  if (automate) {
     int index, amount=0, interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
     boolean powerupTap= false;
     Powerup pow=null;
     amount= (MAX_POWERUP_DISPLAYING<p.usedPowerup.size()) ? MAX_POWERUP_DISPLAYING:p.usedPowerup.size();
-if(gameState==0)gameOverCooldown-=50;
+    if (gameState==0)gameOverCooldown-=50;
     //for ( Powerup pow : p.usedPowerup) {
     for (int i=0; i<amount; i++) {
       pow =p.usedPowerup.get(i);
@@ -43,5 +44,6 @@ if(gameState==0)gameOverCooldown-=50;
         }
       }
     }
+  }
 }
 

@@ -75,10 +75,10 @@ class Box extends Obstacle {
     shakeFactor=100;
   }
   void knockSound() {
- //   playSound(boxKnockSound);
+    //   playSound(boxKnockSound);
   }
   void destroySound() {
-  //  playSound(boxDestroySound);
+    //  playSound(boxDestroySound);
   }
 }
 
@@ -133,7 +133,7 @@ class Tire extends Obstacle {
     offset=6;
   }
   void knockSound() {
-   // playSound(rubberKnockSound);
+    // playSound(rubberKnockSound);
   }
   void surface() {
     offset=6;
@@ -172,9 +172,9 @@ class IronBox extends Obstacle {
   void update() {
     super.update();
     if (invis>0)invis--;
-      float diffX=tx-x, diffY=ty-y;
-      x+=diffX*0.2*speedFactor;
-      y+=diffY*0.2*speedFactor;
+    float diffX=tx-x, diffY=ty-y;
+    x+=diffX*0.2*speedFactor;
+    y+=diffY*0.2*speedFactor;
   }
   void death() {
     if (p.invincible || health<=0) {
@@ -184,7 +184,7 @@ class IronBox extends Obstacle {
       for (int i =0; i< 3; i++) {
         entities.add( new IronBoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
- //     playSound(ironBoxDestroySound);
+      //     playSound(ironBoxDestroySound);
     }
   }
   void hit() {  // hit by punching & smashing
@@ -203,10 +203,10 @@ class IronBox extends Obstacle {
     hitBrightness=255;
   }
   void knockSound() {
-  //  playSound(ironBoxDestroySound);
+    //  playSound(ironBoxDestroySound);
   }
   void  hitSound() {
-  //  playSound(ironBoxDestroySound);
+    //  playSound(ironBoxDestroySound);
   }
 }
 
@@ -237,7 +237,7 @@ class PlatForm extends Obstacle {
   void death() {
     if (p.invincible ||health<=0) {
       super.death();
-    //  playSound(ironBoxDestroySound);
+      //  playSound(ironBoxDestroySound);
       for (int i= 0; i<w; i+=100) {
         entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
       }
@@ -279,7 +279,7 @@ class Lumber extends Obstacle {
   void death() {
     if (p.invincible ||health<=0) {
       super.death();
-   //   playSound(ironBoxDestroySound);
+      //   playSound(ironBoxDestroySound);
       for (int i= 0; i<w; i+=100) {
         entities.add( new PlatFormDebris(this, int(x+i+100)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
       }
@@ -306,7 +306,7 @@ class Glass extends Obstacle {
   }
 
   void destroySound() {
-  //  playSound(shatterSound);
+    //  playSound(shatterSound);
   }
   void hit() {
     super.hit();
@@ -370,7 +370,7 @@ class Block extends Obstacle {
       shakeFactor=300;
       scaleFactor=0.8;
       vx=-p.vx;
-    // playSound(smackSound);
+      // playSound(smackSound);
       for (int i =0; i< 5; i++)  entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(50)+impactForce*0.5, random(30)-50));
     }
     invis=20;
@@ -401,17 +401,17 @@ class Block extends Obstacle {
   void knock() {
     super.knock();
     if (abs(vx)>10) { 
-   //   playSound(smackSound);
+      //   playSound(smackSound);
       speedFactor=0.5;
       background(255);
     }
     shakeFactor=100;
   }
   void knockSound() {
-  //  playSound(boxKnockSound);
+    //  playSound(boxKnockSound);
   }
   void destroySound() {
-  //  playSound(boxDestroySound);
+    //  playSound(boxDestroySound);
   }
 }
 
@@ -456,10 +456,10 @@ class Bush extends Obstacle {
     }
   }
   void knockSound() {
- //   playSound(leafSound);
+    //   playSound(leafSound);
   }
   void destroySound() {
- //   playSound(leafSound);
+    //   playSound(leafSound);
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -566,7 +566,7 @@ class Water extends Obstacle {
           entities.add(new splashParticle(int(p.x), int(y+30), 15, 0, 30, obstacleColor));
           entities.add(new splashParticle(int(p.x), int(y+30), 0, 0, 60, obstacleColor));
           entities.add(new splashParticle(int(p.x), int(y+30), -15, 0, 30, obstacleColor));
-      //    playSound(splash);
+          //    playSound(splash);
           debrisCooldown=10;
         }
       }
@@ -577,7 +577,7 @@ class Water extends Obstacle {
         p.onGround=true;
         p.jumpCount=p.MAX_JUMP;
         if (debrisCooldown==0) {
-        //  playSound(waterFall);
+          //  playSound(waterFall);
           entities.add(new splashParticle(int(p.x), int(y+30), vx*0.5, 0, 50, obstacleColor));
           debrisCooldown=3;
         }
@@ -612,7 +612,10 @@ class Sign extends Obstacle {
     for (int i= 0; i<3; i++) {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
     }
-    if (trigg)tutorial=false;
+    if (trigg) {
+      tutorial=false;
+      UpdateGUILife();
+    }
   }
   void update() {
     super.update();
@@ -623,7 +626,7 @@ class Sign extends Obstacle {
     fill(0);
     textSize(30);
     textAlign(CENTER);
-    text(text, x+w*0.5, y+h*0.5);
+    text(text, x+w*0.5, y+h*0.3);
   }
 
   void hit() {
@@ -633,10 +636,10 @@ class Sign extends Obstacle {
     if (p.invincible) death();
   }
   void knockSound() {
-   // playSound(boxKnockSound);
+    // playSound(boxKnockSound);
   }
   void destroySound() {
-   // playSound(boxDestroySound);
+    // playSound(boxDestroySound);
   }
   void collision() {
   }
@@ -702,10 +705,10 @@ class Snake extends Obstacle {
     }
   }
   void knockSound() {
-   // playSound(leafSound);
+    // playSound(leafSound);
   }
   void destroySound() {
-   // playSound(bloodSound);
+    // playSound(bloodSound);
   }
   void collision() {
     if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
@@ -777,10 +780,10 @@ class Barrel extends Obstacle {
     shakeFactor=100;
   }
   void knockSound() {
-  //  playSound(boxKnockSound);
+    //  playSound(boxKnockSound);
   }
   void destroySound() {
-   // playSound(boxDestroySound);
+    // playSound(boxDestroySound);
   }
 }
 
@@ -815,7 +818,7 @@ class Rock extends Obstacle {
       for (int i =0; i< 10; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
-     // playSound(blockDestroySound);
+      // playSound(blockDestroySound);
     }
   }
   void hit() {  // hit by punching & smashing
@@ -832,10 +835,10 @@ class Rock extends Obstacle {
     // hitBrightness=255;
   }
   void knockSound() {
-   // playSound(blockDestroySound);
+    // playSound(blockDestroySound);
   }
   void  hitSound() {
-  //  playSound(ironBoxDestroySound);
+    //  playSound(ironBoxDestroySound);
   }
 }
 
@@ -850,19 +853,20 @@ class stoneSign extends Obstacle {
     h=200;
     health=5;
     text=_text;
+    underlay=true;
   }
- /* stoneSign(int _x, int _y, String _text, boolean _trigg) {
-    this(_x, _y, _text);
-    trigg=_trigg;
-  }
-  void death() {
-    super.death();
-    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
-    for (int i= 0; i<3; i++) {
-      entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
-    }
-    if (trigg)tutorial=false;
-  }*/
+  /* stoneSign(int _x, int _y, String _text, boolean _trigg) {
+   this(_x, _y, _text);
+   trigg=_trigg;
+   }
+   void death() {
+   super.death();
+   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+   for (int i= 0; i<3; i++) {
+   entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+   }
+   if (trigg)tutorial=false;
+   }*/
   void update() {
     super.update();
     if (debrisCooldown>0)debrisCooldown--;
@@ -883,7 +887,7 @@ class stoneSign extends Obstacle {
       for (int i =0; i< 15; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
-     // playSound(blockDestroySound);
+      // playSound(blockDestroySound);
     }
   }
 
@@ -891,7 +895,7 @@ class stoneSign extends Obstacle {
     if (p.invincible) death();
   }
   void knockSound() {
-     // playSound(blockDestroySound);
+    // playSound(blockDestroySound);
   }
   void destroySound() {
     //  playSound(blockDestroySound);

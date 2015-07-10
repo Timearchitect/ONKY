@@ -37,7 +37,7 @@ class TrailParticle extends Particle {
 
   void display() {
     pushMatrix();
-    translate(x+w*0.5,y+h*0.5);
+    translate(x+w*0.5, y+h*0.5);
     rotate(radians(angle));
     tint(255, int(opacity));
     image(this.cell, -w*0.5, -h*0.5, w, h);
@@ -111,12 +111,15 @@ class slashParticle extends Particle {
     case 5:
       line(x-distance, y, x, y);
       break;
+    case 6:
+      curve(p.x-60, p.y+520, p.x+40, p.y- 40, p.x+ 120, p.y+130, p.x+ 100, p.y+580);
+      break;
     }
 
     stroke(255, int(opacity+50));
     strokeWeight(int(opacity*0.05));
     noFill();
-    
+
     switch(type) {
     case 0:
       curve(p.x-200, p.y-40, p.x+30, p.y+ 0, p.x+ 160, p.y+90, p.x- 200, p.y+20);
@@ -135,6 +138,9 @@ class slashParticle extends Particle {
       break;
     case 5:
       line(x-distance, y, x, y);
+      break;
+    case 6:
+      curve(p.x-60, p.y+520, p.x+40, p.y- 40, p.x+ 120, p.y+130, p.x+ 100, p.y+580);
       break;
     }
   }
@@ -284,7 +290,7 @@ class splashParticle extends Particle {
     super( _x, _y);
     vx=_vx;
     vy=_vy;
-  //particles.add(this);
+    //particles.add(this);
     particleColor=_particleColor;
     size=_size;
   }
@@ -450,18 +456,34 @@ class hintOverLayParticle extends Particle {
     overlay=true;
   }
   void update() {
-    //super.update();
-    // x+=vx;
-    // y+=vy;
+
     if (p.x+p.vx-playerOffsetX>x && p.x-p.vx-playerOffsetX < x) {
       if (!active) {
         opacity=100;
         active=true;
+        if (automate) {
+          switch(action) {
+          case 0:
+            p.jump();
+            break;
+          case 1:
+            p.duck();
+            break;
+          case 2:
+            p.startPunch();
+            break;
+          case 4:
+            break;
+          case 5:
+            background(p.usedPowerup.get(0).powerupColor);
+            p.usedPowerup.get(0).toggle=!p.usedPowerup.get(0).toggle;  
+            break;
+          }
+        }
       }
     }
     if (active) {      
       opacity-=2;  // decay
-      // vx=p.vx;
       if (opacity<5) {
         // death();
         active=false;
@@ -469,18 +491,40 @@ class hintOverLayParticle extends Particle {
     }
   }
   void display() {
-    if (active) {
+    if (active && hint) {
       noStroke();
       fill(particleColor, opacity);
-      if (action==0) rect(0, 0, width*0.5, height*0.5);
-      else if (action==1) rect(0, height*0.5, width*0.5, height*0.5);
-      else if (action==2) rect(width*0.5, 0, width*0.5, height);
-      //else if (action==3) rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
-      else if (action==4) { 
+      switch(action) {
+      case 0:
+        rect(0, 0, width*0.5, height*0.5);
+        break;
+      case 1:
+        rect(0, height*0.5, width*0.5, height*0.5);
+        break;
+      case 2:
+        rect(width*0.5, 0, width*0.5, height);
+        break;
+      case 4:
         tint(255, opacity);
         image(tapPowerupZone, width*0.5, 0, width*0.5, height);
         noTint();
+        break;
+      case 5:
+        tint(0,0,255, opacity);
+        image(tapPowerupZone, width*0.5, 0, width*0.5, height); // activate
+        noTint();
+        break;
       }
+      /*
+      if (action==0) rect(0, 0, width*0.5, height*0.5);
+       else if (action==1) rect(0, height*0.5, width*0.5, height*0.5);
+       else if (action==2) rect(width*0.5, 0, width*0.5, height);
+       //else if (action==3) rect(p.x-playerOffsetX, (p.y+(height*0.5)*scaleFactor)*0.3, (width*0.5)/scaleFactor, height);
+       else if (action==4) { 
+       tint(255, opacity);
+       image(tapPowerupZone, width*0.5, 0, width*0.5, height);
+       noTint();
+       }*/
     }
   }
 }

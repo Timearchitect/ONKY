@@ -44,17 +44,19 @@ void UpdateGameOverGUI() {
 
 void UpdateGUILife() {
   // GUI=createGraphics(0,0);
-  GUI.beginDraw();
-  GUI.loadPixels();
-  for (int i = GUI.pixels.length; i != 0; GUI.pixels[--i] = 0);
-  GUI.updatePixels();
-  GUI.endDraw();
+  if (!tutorial) {
+    GUI.beginDraw();
+    GUI.loadPixels();
+    for (int i = GUI.pixels.length; i != 0; GUI.pixels[--i] = 0);
+    GUI.updatePixels();
+    GUI.endDraw();
 
 
-  GUI.clear();
-  GUI.beginDraw();
-  for (int i=0; i<p.lives; i++) GUI.image(p.Life, int((50+i*50)*screenFactor), int(60*screenFactor), 40*screenFactor, 40*screenFactor);
-  GUI.endDraw();
+    GUI.clear();
+    GUI.beginDraw();
+    for (int i=0; i<p.lives; i++) GUI.image(p.Life, int((50+i*50)*screenFactor), int(60*screenFactor), 40*screenFactor, 40*screenFactor);
+    GUI.endDraw();
+  }
 }
 
 void UpdatePowerupGUILife() {
@@ -86,5 +88,18 @@ void UpdatePowerupGUILife() {
       powerupGUI.text(pow.upgradeLevel+" LVL", width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5-80);
   }
   powerupGUI.endDraw();
+}
+
+void clearAllGUI() {
+  powerupGUI.beginDraw();
+  powerupGUI.loadPixels();
+  for (int i = powerupGUI.pixels.length; i != 0; powerupGUI.pixels[--i] = 0);
+  powerupGUI.updatePixels();
+  powerupGUI.endDraw();
+  GUI.beginDraw();
+  GUI.loadPixels();
+  for (int i = GUI.pixels.length; i != 0; GUI.pixels[--i] = 0);
+  GUI.updatePixels();
+  GUI.endDraw();
 }
 

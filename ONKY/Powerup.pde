@@ -60,7 +60,7 @@ abstract class Powerup extends Entity implements Cloneable {
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     // UpdatePowerupGUILife();
-    if (regenerating)p.collectCooldown=30;
+    if (regenerating)p.collectCooldown=50;
     death();
   }
   void death() {
@@ -216,7 +216,6 @@ class LaserPowerup extends Powerup {
 
           if (int(time)%2==0) {
             if (p.angle%360>270 || p.angle%360<90) { 
-
               entities.add( new BigLaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40)+80, int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*10, sin(radians(p.angle))*10));
             } else   entities.add( new LaserProjectile(  int(p.x+p.w*0.5+sin(radians(p.angle))*40), int(p.y+p.h*0.6-cos(radians(p.angle))*30)+10, cos(radians(p.angle))*60, sin(radians(p.angle))*30));
           }
