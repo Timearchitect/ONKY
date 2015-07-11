@@ -383,9 +383,10 @@ void calcDispScore() {
   }
 }
 void debugScreen() {
-  fill(100, 255, 0);
+  fill( 0);
   textSize(18);
-  text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-50);
+  textAlign(LEFT);
+  text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-150);
 }
 /*void playSound(AudioPlayer sound) {
  if (!mute) {

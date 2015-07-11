@@ -417,6 +417,7 @@ class Player {
     usedPowerup.clear();
     UpdatePowerupGUILife();
     jumpCount=MAX_JUMP;
+    angle=0;
     duckTime=0;
     ducking=false;
     onGround=true;
@@ -475,9 +476,7 @@ class Player {
       rowAmount=7;
     } 
 
-
     index=index%rowAmount;
-
 
     return ONKYSpriteSheet.get(index*(imageWidth+1)+1, row*imageheight+1, imageWidth, imageheight);
   }
@@ -486,7 +485,7 @@ class Player {
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {
       entities.add(new speedParticle(int(x), int(random(90)+y)));
-      if (invincible) entities.add(new SparkParticle(int(x+w), int(random(h)+y), 40, color(255, 220, 20)));
+      if (invincible) entities.add(new SparkParticle(int(x), int(random(h)+y), 20, color(255, 220, 20)));
     }
   }
 }
