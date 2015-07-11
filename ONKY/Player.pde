@@ -162,6 +162,8 @@ class Player {
       vy=downDashSpeed;
       if (punching) entities.add(new slashParticle(int(p.x), int(p.y), 4)); // downdash Attack
     }
+    if (attckSpeedReduction<20)attckSpeedReduction=20;  // redused attack cooldown when ducking
+
     if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
 
     if (!ducking) {
@@ -328,6 +330,7 @@ class Player {
   void checkDuck() {
     if (duckTime<0) {
       if (ducking)p.y-=duckHeight;
+      attckSpeedReduction=0;
       h=90;
       ducking=false;
     } else { // ducking
