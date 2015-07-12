@@ -14,7 +14,7 @@ abstract class Powerup extends Entity implements Cloneable {
     y=_y;
     w=100;
     h=100;
-    // powerups.add( this);
+    powerups.add( this);
     totalTokens++;
   }
   Powerup(int _x, int _y, int _time, boolean _regenerating) {
@@ -100,7 +100,6 @@ class TokenPowerup extends Powerup {
     powerupColor=color(255);
     icon= tokenIcon;
     //powerups.add( this);
-
     w=75;
     h=75;
     homing=true;
@@ -345,7 +344,6 @@ class TeleportPowerup extends Powerup {
     instant=false;
   }
   void collect() {
-
     if (!dead) {
       try {
         p.usedPowerup.add(this.clone());

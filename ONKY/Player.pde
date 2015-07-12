@@ -66,13 +66,6 @@ class Player {
     pushMatrix();
     translate(int(x+w*0.5), int(y+h*0.5));
     rotate(radians(angle));
-    //fill(255);
-
-    /*stroke(0);  
-     fill(playerColor);
-     rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
-     fill(255); 
-     rect(-w*0.5, 0, w, h*0.5);*/
 
     if (ducking && onGround) { 
       cell=cutSpriteSheet(129);
@@ -106,10 +99,8 @@ class Player {
 
     popMatrix();
     if (punching && punchCooldown==0)punch();
-    // smash();
     fill(0);    
     if (debug)text ("averageSpeed:"+averageSpeed +" totalJump:"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
-    //  if (debug)text ("invis:"+invis+" jumpcount:"+jumpCount + " ducking:"+ducking+" punching:"+punching, p.x, p.y, 200, -100);
   }
   void collision() {
     if (invis==0) {
@@ -238,12 +229,9 @@ class Player {
       }
       invincible=false;
     }
-    //angle=-22;
   }
   void startPunch() {
     // fill(255, 0, 0);  // hitbox
-
-
     if (punchCooldown<=0 && !punching) {
       totalAttacks++;
       //  playSound(sliceSound);

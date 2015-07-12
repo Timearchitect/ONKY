@@ -737,7 +737,6 @@ class Barrel extends Obstacle {
     entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 300));
     for (int i =0; i< 8; i++) {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
-
       //  entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }
@@ -754,11 +753,6 @@ class Barrel extends Obstacle {
     rotate(radians(angle));
     image( Barrel, -w*0.5, -w*0.5, w, h);
     popMatrix();
-
-    /* if (count%40<10)image( cutSprite (0), x, y-135, w, h);
-     else if (count%40<20)image(cutSprite (1), x, y-140, w, h);
-     else if (count%40<30)image(cutSprite (2), x, y-145, w, h);
-     else image(cutSprite (3), x, y-140, w, h);*/
   }
   /*
   PImage cutSprite (int index) {
