@@ -422,7 +422,16 @@ class Player {
       vx*= -0.4;
     }
     if (tutorialCourseRetries>0)hint=true;
+    for (Obstacle o : obstacles) {
+      println("hedfsdffa");
+      if (o.regenerating)o.regenerate();
+    }
+    for (Powerup pow : powerups) {
+      println("hedfsdffa");
+      if (pow.regenerating)pow.regenerate();
+    }
   }
+
   PImage cutSpriteSheet(int index ) {
     final int imageheight=135;
     //index= int(index%16);

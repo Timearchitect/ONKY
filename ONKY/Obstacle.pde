@@ -2,10 +2,11 @@
 abstract class Obstacle extends Entity {  
   float impactForce;
   color obstacleColor;
-  int hitBrightness, health=1;
+  int hitBrightness, defaultHealth=1, health=defaultHealth;
   boolean unBreakable;
   Obstacle(int _x, int _y) {
     super( _x, _y, 200, 200);
+    health=defaultHealth;
     obstacles.add( this);
     totalObstacle++;
   }
@@ -17,13 +18,13 @@ abstract class Obstacle extends Entity {
     hitCollision();
   }
   /*void gravity() {
-    for (Obstacle o : obstacles) {
-      if ( o.x>x+w && o.x+o.w<x && o.y+o.h<y) y++;
-      else {
-        vy=0;
-      }
-    }
-  }*/
+   for (Obstacle o : obstacles) {
+   if ( o.x>x+w && o.x+o.w<x && o.y+o.h<y) y++;
+   else {
+   vy=0;
+   }
+   }
+   }*/
   void display() {
     noStroke();
     fill(red(obstacleColor)+hitBrightness, green(obstacleColor)+hitBrightness, blue(obstacleColor)+hitBrightness, alpha(obstacleColor));
@@ -78,6 +79,10 @@ abstract class Obstacle extends Entity {
     obstacleDestroyed++;
     destroySound();
     background(255);
+  }
+  void regenerate() {
+    super.regenerate();
+    health=defaultHealth;
   }
   void hit() {
     hitSound();

@@ -12,7 +12,6 @@ class Particle extends Entity {
 
   void display() {
   }
-
   void death() {
     super.death();
   }

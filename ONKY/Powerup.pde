@@ -1,6 +1,6 @@
 abstract class Powerup extends Entity implements Cloneable {
   PImage icon;
-  boolean instant=true, toggle, homing, regenerating;
+  boolean instant=true, toggle, homing;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -63,7 +63,7 @@ abstract class Powerup extends Entity implements Cloneable {
     death();
   }
   void death() {
-    if (!regenerating) super.death();
+     super.death();
   }
   void use() {
     time--;
@@ -335,11 +335,16 @@ class TeleportPowerup extends Powerup {
     distance=_distance;
     instant=true;
   }
-  TeleportPowerup(int _x, int _y, int _time, int _distance, boolean _regenerating) {
+    TeleportPowerup(int _x, int _y, int _time, int _distance,boolean _instant) {
+    this(_x, _y, 25);
+    distance=_distance;
+    instant=_instant;
+  }
+  TeleportPowerup(int _x, int _y, int _time, int _distance,boolean _instant, boolean _regenerating) {
     this(_x, _y, 25);
     distance=_distance;
     regenerating=_regenerating;
-    instant=false;
+    instant=_instant;
   }
   void collect() {
     if (!dead) {
@@ -408,7 +413,7 @@ class TeleportPowerup extends Powerup {
   }
   void collectAll() {
     for (Powerup pow : powerups) {
-      if (pow.y+pow.h > p.y && p.y +p.h > pow.y &&  pow.x > p.x-distance && pow.x+pow.w < p.x+p.w ) {
+      if (!pow.dead &&pow.y+pow.h > p.y && p.y +p.h > pow.y &&  pow.x > p.x-distance && pow.x+pow.w < p.x+p.w ) {
         pow.collect();
         entities.add(new TrailParticle(int(pow.x-50), int(pow.y-40), p.cell));
       }

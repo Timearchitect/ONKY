@@ -3,12 +3,16 @@ class Box extends Obstacle {
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(180, 140, 50);
-    health=2;
+    defaultHealth=2;
     type=int(random(3));
   }
   Box(int _x, int _y, int _type) {
     this(_x, _y);
     type=_type;
+  }
+  Box(int _x, int _y, int _type, boolean _regenerating) {
+    this(_x, _y, _type);
+    regenerating=_regenerating;
   }
   void death() {
     super.death();
@@ -21,49 +25,50 @@ class Box extends Obstacle {
     }
   }
   void display() {
-    super.display();
-    /*
+      super.display();
+      /*
     stroke(155, 155, 100);
-     strokeWeight(8);
-     line(x, y, x+w, y+h);
-     line(x, y+h, x+w, y);
-     if (type==1) { 
-     fill(255, 255, 180);
-     textAlign(CENTER);
-     textSize(160);
-     text("?", x+w*0.5, y+h*0.8);
-     textAlign(LEFT);
-     }
-     strokeWeight(1);
-     */
-    switch(type) {
-    case 0:
-      image(Box, x, y, w, h);
-      break;
-    case 1:
-      image(brokenBox, x, y, w, h);
-      break;
-    case 2:
-      image(brokenBox, x, y, w, h);
-      if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
-      break;
-    default:
-      image(mysteryBox, x, y, w, h);
-    }
-    /* if (type==0) image(Box, x, y, w, h);
-     else if (type==1) image(brokenBox, x, y, w, h);
-     else if (type==2) {
-     image(brokenBox, x, y, w, h);
-     if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
-     } else image(mysteryBox, x, y, w, h);*/
+       strokeWeight(8);
+       line(x, y, x+w, y+h);
+       line(x, y+h, x+w, y);
+       if (type==1) { 
+       fill(255, 255, 180);
+       textAlign(CENTER);
+       textSize(160);
+       text("?", x+w*0.5, y+h*0.8);
+       textAlign(LEFT);
+       }
+       strokeWeight(1);
+       */
+      switch(type) {
+      case 0:
+        image(Box, x, y, w, h);
+        break;
+      case 1:
+        image(brokenBox, x, y, w, h);
+        break;
+      case 2:
+        image(brokenBox, x, y, w, h);
+        if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
+        break;
+      default:
+        image(mysteryBox, x, y, w, h);
+      }
+      /* if (type==0) image(Box, x, y, w, h);
+       else if (type==1) image(brokenBox, x, y, w, h);
+       else if (type==2) {
+       image(brokenBox, x, y, w, h);
+       if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+       } else image(mysteryBox, x, y, w, h);*/
+    
   }
   void update() {
-    super.update();
-    count++;
-    if (p.attractRange > 0 && type==2 && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
-      type=1;
-      for (int i=0; i<3; i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500));
-    }
+      super.update();
+      count++;
+      if (p.attractRange > 0 && type==2 && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
+        type=1;
+        for (int i=0; i<3; i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500));
+      }
   }
   void hit() {
     super.hit();
@@ -87,7 +92,7 @@ class Tire extends Obstacle {
   Tire(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 0, 0);
-    health=3;
+    defaultHealth=3;
     switch(int(random(4))) {
     case 0:
       radianer = HALF_PI;
@@ -148,33 +153,40 @@ class IronBox extends Obstacle {
     obstacleColor = color(200);
     tx=_x;
     ty=_y;
-    health=5;
+    defaultHealth=5;
+    health=defaultHealth;
+  }
+  IronBox(int _x, int _y, boolean _regenerating) {
+    this(_x, _y);
+    regenerating=_regenerating;
   }
   void display() {
-    super.display();
-    /* stroke(250, 250, 250);
-     strokeWeight(8);
-     point(x+10, y+10);
-     point(x+w-10, y+10);
-     point(x+w-10, y+h-10);
-     point(x+10, y+h-10);
-     
-     strokeWeight(1);
-     */
-    if (health==5) {
-      image(ironBox, x, y, w, h);
-    } else if (health>2) {
-      image(ironBox2, x, y, w, h);
-    } else {
-      image(ironBox3, x, y, w, h);
-    }
+      super.display();
+      /* stroke(250, 250, 250);
+       strokeWeight(8);
+       point(x+10, y+10);
+       point(x+w-10, y+10);
+       point(x+w-10, y+h-10);
+       point(x+10, y+h-10);
+       
+       strokeWeight(1);
+       */
+      if (health==5) {
+        image(ironBox, x, y, w, h);
+      } else if (health>2) {
+        image(ironBox2, x, y, w, h);
+      } else {
+        image(ironBox3, x, y, w, h);
+      }
   }
   void update() {
-    super.update();
-    if (invis>0)invis--;
+   //if (!dead) {
+      super.update();
+      if (invis>0)invis--;
       float diffX=tx-x, diffY=ty-y;
       x+=diffX*0.2*speedFactor;
       y+=diffY*0.2*speedFactor;
+   // }
   }
   void death() {
     if (p.invincible || health<=0) {
@@ -217,7 +229,7 @@ class PlatForm extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    health=4;
+    defaultHealth=4;
     obstacleColor = color(255, 50, 50);
   }
   PlatForm(int _x, int _y, int _w, int _h, boolean _hanging) {
@@ -254,7 +266,7 @@ class Lumber extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    health=4;
+    defaultHealth=4;
     obstacleColor = color(182, 69, 0);
   }
   Lumber(int _x, int _y, int _w, int _h, boolean _hanging) {
@@ -296,9 +308,12 @@ class Glass extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(0, 150, 255, 100);
-    health=1;
+    defaultHealth=1;
   }
-
+  Glass(int _x, int _y, int _w, int _h, boolean _regenerating) {
+    this(_x, _y, _w,_h);
+    regenerating=_regenerating;
+  }
   void display() {
     super.display();
     image(glass, x, y, w, h);
@@ -349,7 +364,7 @@ class Block extends Obstacle {
     obstacleColor = color(100, 100, 100);
     w=200;
     h=200;
-    health=20;
+    defaultHealth=20;
   }
   Block(int _x, int _y, int _vx, int _vy) {
     this(_x, _y);
@@ -598,7 +613,7 @@ class Sign extends Obstacle {
     obstacleColor = color(220, 180, 90);
     w=200;
     h=200;
-    health=1;
+    defaultHealth=1;
     text=_text;
     underlay=true;
   }
@@ -728,7 +743,8 @@ class Barrel extends Obstacle {
     obstacleColor = color(180, 120, 50);
     w=67*2;
     h=67*2;
-    health=1;
+    defaultHealth=1;
+    health=defaultHealth;
     vx=-2;
   }
   void death() {
@@ -791,7 +807,7 @@ class Rock extends Obstacle {
   Rock(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(150);
-    health=7;
+    defaultHealth=7;
   }
   void display() {
 
@@ -849,22 +865,22 @@ class stoneSign extends Obstacle {
     obstacleColor = color(150);
     w=400;
     h=200;
-    health=5;
+    defaultHealth=5;
     text=_text;
     underlay=true;
   }
- /* stoneSign(int _x, int _y, String _text, boolean _trigg) {
-    this(_x, _y, _text);
-    trigg=_trigg;
-  }
-  void death() {
-    super.death();
-    entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
-    for (int i= 0; i<3; i++) {
-      entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
-    }
-    if (trigg)tutorial=false;
-  }*/
+  /* stoneSign(int _x, int _y, String _text, boolean _trigg) {
+   this(_x, _y, _text);
+   trigg=_trigg;
+   }
+   void death() {
+   super.death();
+   entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
+   for (int i= 0; i<3; i++) {
+   entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
+   }
+   if (trigg)tutorial=false;
+   }*/
   void update() {
     super.update();
     if (debrisCooldown>0)debrisCooldown--;
@@ -893,10 +909,10 @@ class stoneSign extends Obstacle {
     if (p.invincible) death();
   }
   void knockSound() {
-      playSound(blockDestroySound);
+    playSound(blockDestroySound);
   }
   void destroySound() {
-      playSound(blockDestroySound);
+    playSound(blockDestroySound);
   }
   void collision() {
   }

@@ -53,6 +53,9 @@ void keyPressed() {
   if (key== 'r') {
     gameReset();
   }
+    if (key== 't') {
+    p.tutorialRespawn();
+  }
   if (!automate) {
   
   if (keyCode == UP) {
