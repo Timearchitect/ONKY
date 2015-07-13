@@ -7,11 +7,11 @@ class Player {
   final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=16;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
   int  punchCooldown=PUNCH_MAX_CD, punchRange=100, attractRange, stompRange = 150;
-  float punchTime, invis, toSlow;
+  float punchTime, jumpTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
   boolean dead, onGround, punching, stomping, smashing, ducking, invincible, respawning;
-  int totalJumps, totalAttacks, totalDucks;
+  int totalJumps, totalAttacks, totalDucks, tutorialCourseRetries;
   float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
   color weaponColor= defaultWeaponColor;
@@ -44,6 +44,8 @@ class Player {
 
     spawnSpeedEffect();
 
+    if (!onGround)jumpTime+=1*speedFactor;
+
     //if (respawning)respawn() ;
 
     for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
@@ -64,13 +66,6 @@ class Player {
     pushMatrix();
     translate(int(x+w*0.5), int(y+h*0.5));
     rotate(radians(angle));
-    //fill(255);tutorialStep
-
-    /*stroke(0);  
-     fill(playerColor);
-     rect(-w*0.5, -h*0.5, w, h*0.5);   // hitbox
-     fill(255); 
-     rect(-w*0.5, 0, w, h*0.5);*/
 
     if (ducking && onGround) { 
       cell=cutSpriteSheet(129);
@@ -82,7 +77,7 @@ class Player {
         blink();
         image(cell, -w*0.5, -h*0.5, 100, 80);
       } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
-        cell=cutSpriteSheet(int(x*0.02%16));
+        cell=cutSpriteSheet(int(x*0.03%16));
         blink();
         image(cell, -w*0.5, -h*0.5, w, h);
         //image(cell, -w*0.5, -h*0.5, w, h);
@@ -127,6 +122,19 @@ class Player {
       }
       playSound(jumpSound);
       if (jumpCount<MAX_JUMP) entities.add( new SpinParticle( true));
+
+      if (punching && jumpCount==MAX_JUMP && punchTime>20) { // uppercut
+        background(255);
+        entities.add(new slashParticle(int(p.x), int(p.y), 6));
+        for (Obstacle o : obstacles) {
+          if (o.y+o.h > p.y-200 && p.y +p.h > o.y &&  o.x+o.w > p.x && o.x < p.x+p.w+200 ) {
+            o.impactForce=60;  
+            o.hit();
+            o.death();
+          }
+        }
+      }
+
       jumpCount--;
       vy=-jumpHeight;
     }
@@ -141,8 +149,10 @@ class Player {
   void duck() {
     if (!onGround) { 
       vy=downDashSpeed;
-      entities.add(new LineParticle(int(x+w*0.5), int(y+h), 10, 0));
+      if (punching) entities.add(new slashParticle(int(p.x), int(p.y), 4)); // downdash Attack
     }
+    if (attckSpeedReduction<20)attckSpeedReduction=20;  // redused attack cooldown when ducking
+
     if (jumpCount<MAX_JUMP && !ducking)entities.add(new LineParticle(int(x+w), int(y+h*2), 60, 80));
 
     if (!ducking) {
@@ -150,8 +160,8 @@ class Player {
       totalDucks++;
       ducking=true;
       y+=duckHeight;
-    } else {
-      duckTime=50; // refresh ducktime
+    } else if (ducking && duckTime>0) {      
+      duckTime=50;
     }
   }
   void checkIfObstacle(int top) {
@@ -159,6 +169,7 @@ class Player {
       if (punching && ducking && !onGround && jumpCount<MAX_JUMP) stomp(); // stomp attack
       jumpCount=MAX_JUMP;
       onGround=true;
+      jumpTime=0;
       y=top-h;
       vy=0;
       angle=0;
@@ -186,7 +197,6 @@ class Player {
     playSound(blockDestroySound);
     entities.add(new LineParticle(int(x+w*0.5), int(y+h), 50, 0));
     entities.add(new splashParticle(int(x+w)+50, int(y+h), vx*0.5, 0, 35, weaponColor));
-
     entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), -5, 0, 100));
     entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), 10, 0, 100 ));
 
@@ -220,20 +230,33 @@ class Player {
     //angle=-22;
   }
   void startPunch() {
+    // fill(255, 0, 0);  // hitbox
     if (punchCooldown<=0 && !punching) {
       totalAttacks++;
       playSound(sliceSound);
       if (ducking && jumpCount<MAX_JUMP) {      // down dash attack
-        entities.add(new slashParticle(int(x), int(y), 4));
+        entities.add(new slashParticle(int(p.x), int(p.y), 4));
         punchTime=30;
       } else if (ducking) {    // slide attack
-        entities.add(new slashParticle(int(x), int(y), 2));
+        entities.add(new slashParticle(int(p.x), int(p.y), 2));
         punchTime=20;
       } else if ( jumpCount==0 ) {   // jump attack
-        entities.add(new slashParticle(int(x), int(y), 3));
+        entities.add(new slashParticle(int(p.x), int(p.y), 3));
         punchTime=40;
-      } else {      // normal attack
-        entities.add(new slashParticle(int(x), int(y), 0));
+      } else {     
+        if (jumpTime!=0 && jumpTime<=8) { // uppercut
+          background(255);
+          entities.add(new slashParticle(int(p.x), int(p.y), 6));
+          for (Obstacle o : obstacles) {
+            if (o.y+o.h > p.y-200 && p.y +p.h > o.y &&  o.x+o.w > p.x && o.x < p.x+p.w+200 ) {
+              o.impactForce=60;  
+              o.hit();
+              o.death();
+            }
+          }
+        } else {
+          entities.add(new slashParticle(int(p.x), int(p.y), 0)); // normal attack
+        }
         punchTime=30;
       }
       punching=true;
@@ -293,13 +316,13 @@ class Player {
   }
   void checkDuck() {
     if (duckTime<0) {
-      if (ducking)y-=duckHeight;
+      if (ducking)p.y-=duckHeight;
+      attckSpeedReduction=0;
       h=90;
       ducking=false;
-    } else { // ducking  / sliding
+    } else { // ducking
       h=duckHeight;
       duckTime--;
-      // if (int(x%5)==0)  entities.add( new smokeParticle(int(x+w*0.5), int(y+h*0.5), int(random(vx)), 0 ));
     }
   }
   void checkIfStuck() {
@@ -327,7 +350,7 @@ class Player {
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
-    x=-800;
+    x=0;
     weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
@@ -355,6 +378,8 @@ class Player {
     }
   }
   void respawn() {
+    usedPowerup.clear();
+    angle=0;
     invis=100;
     vx*= -0.5;
     scaleFactor=0.1;
@@ -375,19 +400,28 @@ class Player {
   void tutorialRespawn() {
     invis=10;
     speedFactor=0.01;
-    //vx*= -0.5;
+    vx*= -0.5;
     duckTime=0;
     // scaleFactor=0.1;
     usedPowerup.clear();
     UpdatePowerupGUILife();
     jumpCount=MAX_JUMP;
+    angle=0;
     duckTime=0;
     ducking=false;
     onGround=true;
     punching=false;
-    x-=1200;
+    x-=1600;
     y=floorHeight-200+h;
     respawning=false;
+    tutorialCourseRetries++;
+    background(0);
+    if (tutorialCourseRetries>2) {
+      automate=true;
+      speedFactor=0.001;
+      vx*= -0.4;
+    }
+    if (tutorialCourseRetries>0)hint=true;
   }
   PImage cutSpriteSheet(int index ) {
     final int imageheight=135;
@@ -443,7 +477,7 @@ class Player {
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {
       entities.add(new speedParticle(int(x), int(random(90)+y)));
-      if (invincible) entities.add(new SparkParticle(int(x+w*0.5), int(random(h)+y), 30, color(255, 220, 20)));
+      if (invincible) entities.add(new SparkParticle(int(x), int(random(h)+y), 20, color(255, 220, 20)));
     }
   }
 }

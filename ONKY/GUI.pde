@@ -18,10 +18,12 @@ void loadGUILayer() {
 }
 
 void UpdateGUILife() {
+if (!tutorial) {
   GUI.clear();
   GUI.beginDraw();
   for (int i=0; i<p.lives; i++) GUI.image(p.Life, int((50+i*50)*screenFactor), int(60*screenFactor), 40*screenFactor, 40*screenFactor);
   GUI.endDraw();
+  }
 }
 void UpdatePowerupGUILife() {
   int index, amount=0, GUIoffsetY=height-150;
@@ -40,5 +42,13 @@ void UpdatePowerupGUILife() {
       powerupGUI.text(pow.upgradeLevel+" LVL", width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5-80);
   }
   powerupGUI.endDraw();
+}
+void clearAllGUI() {
+  powerupGUI.beginDraw();
+  powerupGUI.clear();
+  powerupGUI.endDraw();
+  GUI.beginDraw();
+  GUI.clear();
+  GUI.endDraw();
 }
 

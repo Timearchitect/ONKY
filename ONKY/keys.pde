@@ -53,6 +53,8 @@ void keyPressed() {
   if (key== 'r') {
     gameReset();
   }
+  if (!automate) {
+  
   if (keyCode == UP) {
     p.jump();
   }
@@ -87,6 +89,7 @@ void keyPressed() {
   }
   if (key=='0') {
     p.startPunch();
+  }
   }
 }
 

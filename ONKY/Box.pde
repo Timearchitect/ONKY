@@ -612,7 +612,10 @@ class Sign extends Obstacle {
     for (int i= 0; i<3; i++) {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
     }
-    if (trigg)tutorial=false;
+    if (trigg) {
+      tutorial=false;
+      UpdateGUILife();
+    }
   }
   void update() {
     super.update();
@@ -623,7 +626,7 @@ class Sign extends Obstacle {
     fill(0);
     textSize(30);
     textAlign(CENTER);
-    text(text, x+w*0.5, y+h*0.5);
+    text(text, x+w*0.5, y+h*0.3);
   }
 
   void hit() {
@@ -734,7 +737,6 @@ class Barrel extends Obstacle {
     entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 300));
     for (int i =0; i< 8; i++) {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
-
       //  entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
   }

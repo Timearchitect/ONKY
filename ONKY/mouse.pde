@@ -10,6 +10,7 @@ void mouseWheel(MouseEvent event) {  // krympa och förstora
 }
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
+   if (!automate) {
   if (mouseButton==LEFT) {
     int index, amount=0, interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
     boolean powerupTap= false;
@@ -48,5 +49,6 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
   } else if (mouseButton==RIGHT) {
     entities.add( new LaserProjectile(  int(p.x+p.w*0.8), int(p.y+p.h*0.3), 60, 0));
   } else  entities.add( new BigLaserProjectile(  int(p.x+p.w*0.5+100), int(p.y+p.h*0.2), 10, 0));
+ }
 }
 

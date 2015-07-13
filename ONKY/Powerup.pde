@@ -136,22 +136,18 @@ class InvisPowerup extends Powerup {
   void ones() {
     switch(upgradeLevel) {
     case 0:
-      p.attckSpeedReduction=5;
+      if ( p.attckSpeedReduction<5) p.attckSpeedReduction=5;
       break;
     case 1:
-      p.attckSpeedReduction=10;
-      p.vx=10;
+      if ( p.attckSpeedReduction<10)  p.attckSpeedReduction=10;
       break;
     case 2:
-      p.attckSpeedReduction=15;
-      p.vx=20;
+      if ( p.attckSpeedReduction<15)  p.attckSpeedReduction=15;
       break;
     case 3:
-      p.attckSpeedReduction=20;
-      p.vx=30;
+      if ( p.attckSpeedReduction<20) p.attckSpeedReduction=20;
       break;
     }
-
     p.weaponColor=powerupColor;
     if (p.invis<spawnTime)p.invis=spawnTime;  // replace invistime if it is longer
     p.invincible=true;  // activates supermario starpower
@@ -162,7 +158,20 @@ class InvisPowerup extends Powerup {
     if (!dead &&( instant|| toggle)) {
       if (first )ones();
       p.invincible=true;
-      p.vx=30; // speed
+      switch(upgradeLevel) {
+      case 0:
+        if ( p.vx<15)  p.vx=15;
+        break;
+      case 1:
+        if ( p.vx<20)p.vx=20;
+        break;
+      case 2:
+        if ( p.vx<25) p.vx=25;
+        break;
+      case 3:
+        if ( p.vx<30) p.vx=30;
+        break;
+      } 
       if (p.weaponColor==p.defaultWeaponColor) p.weaponColor=powerupColor;
       time-=1*speedFactor;
       if (time<1) {
@@ -192,6 +201,7 @@ class LaserPowerup extends Powerup {
       }    
       catch(CloneNotSupportedException e) {
       }
+      UpdatePowerupGUILife();
       super.collect();
     }
   }
@@ -267,6 +277,7 @@ class SlowPowerup extends Powerup {
     }        
     catch(CloneNotSupportedException e) {
     }
+    UpdatePowerupGUILife();
     super.collect();
   }
   void use() {
@@ -295,6 +306,7 @@ class LifePowerup extends Powerup {
       p.invis+=spawnTime;
       p.lives++;
       UpdateGUILife();
+      UpdatePowerupGUILife();
       super.collect();
       //death();
     }
@@ -330,13 +342,13 @@ class TeleportPowerup extends Powerup {
     instant=false;
   }
   void collect() {
-
     if (!dead) {
       try {
         p.usedPowerup.add(this.clone());
       }        
       catch(CloneNotSupportedException e) {
       }    
+      UpdatePowerupGUILife();
       super.collect();
       super.death();
     }
@@ -444,6 +456,7 @@ class MagnetPowerup extends Powerup {
     }        
     catch(CloneNotSupportedException e) {
     }
+    UpdatePowerupGUILife();
     super.collect();
   }
   void use() {

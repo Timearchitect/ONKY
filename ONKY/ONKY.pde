@@ -12,8 +12,7 @@ import ddf.minim.*;
 //import javax.media.opengl.*;
 //import processing.opengl.*;
 
-PGraphics GUI;
-PGraphics powerupGUI;
+PGraphics GUI,powerupGUI;
 PFont font; 
 int renderObject;
 Minim minim;
@@ -48,9 +47,9 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
 color FlashColor;
-boolean debug, mute, preloadObstacles=false;
+boolean debug,automate,hint, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
-int floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
+int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenFactor=1.1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
@@ -290,8 +289,6 @@ void adjustZoomLevel() {
   targetScaleFactor= map(p.vx, 0, 50, 1, 0.2);
 }
 void displayFloor() {
-  //if (p.)fill(255, 50, 0);
-  // else fill(128,181,113);
   noStroke();
   fill(128, 181, 113);
   // image(Grass ,p.x-playerOffsetX-MAX_SHAKE, floorHeight+offset, width+playerOffsetX+MAX_SHAKE*2, 1000*scaleFactor);
@@ -314,6 +311,8 @@ void gameReset() {
   powerups.clear();
   debris.clear();
 
+  clearAllGUI(); // GUI clear
+  // if (!mute)changeMusic(regularSong);
 
   if (!mute)changeMusic(regularSong);
 
@@ -324,6 +323,8 @@ void gameReset() {
     distGenerated=0;
     firstCourse=true;
     tutorial=true;
+    hint=false;
+    automate=false;
     loadMargin=int(1000/scaleFactor);
     tutorialStep=0;
     difficulty=0;
@@ -334,10 +335,10 @@ void gameReset() {
   p.reset();
   UpdateGUILife(); // resetGUI
   UpdatePowerupGUILife();
-
   speedFactor=1;
   targetSpeedFactor=1;
   resetScore();
+  gameState=1;
 }
 void resetScore() {
   score=0;
@@ -365,7 +366,8 @@ void calcDispScore() {
 void debugScreen() {
   fill(100, 255, 0);
   textSize(18);
-  text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-50);
+  textAlign(LEFT);
+  text("renderO "+renderObject+" Entities: "+ entities.size()+" projetiles: "+projectiles.size()+" particles: "+particles.size()+" obstacles: "+obstacles.size() +" debris:"+debris.size()+" powerups:"+powerups.size(), 50, height-150);
 }
 void playSound(AudioPlayer sound) {
   if (!mute) {
