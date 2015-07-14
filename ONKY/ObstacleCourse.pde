@@ -56,7 +56,7 @@ void exitTutorial() {
   shakeFactor+=100;
   screenAngle=5;
 
-  if(p.x<1000)bonusSkipSpeed=3;
+  if (p.x<1000)bonusSkipSpeed=3;
   tutorial=false;
   UpdateGUILife();
 }
@@ -65,7 +65,7 @@ void loadRandomObstacleCourse(int x) {
     obstacleCourseDist=4400;
     spawnFloor(-obstacleCourseDist);
     spawnFloor(x);
-    entities.add(new Sign(x+800, int(floorHeight-200), "Tutorial?\n Hit to skip. ", true));
+    entities.add(new Sign(x+600, int(floorHeight-200), "Tutorial?\n Hit to skip. ", true));
     //        entities.add(new Sign(x+800, int(floorHeight-200), "ONKY GO!!!"));
     firstCourse=false;
   } else if (tutorial) {

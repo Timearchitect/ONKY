@@ -535,7 +535,7 @@ class Water extends Obstacle {
   void update() {
     super.update();
     count+=1*speedFactor;
-    count=int(count);
+  //  count=int(count);
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {

@@ -23,8 +23,9 @@ class Player {
     if (taunt) {
       if (tauntTime<80) {
         tauntTime++;
-        p.vx=0;
+        vx=0;
       } else {
+        vx=defaultSpeed;
         taunt=false;
         tauntTime=0;
         entities.add(new SparkParticle(int(x+w), int(y), 50, defaultWeaponColor));
@@ -362,6 +363,8 @@ class Player {
   }
   void reset() {
     y=floorHeight-h;
+    h=90;
+    duckTime=0;
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
@@ -440,11 +443,9 @@ class Player {
     }
     if (tutorialCourseRetries>0)hint=true;
     for (Obstacle o : obstacles) {
-      println("hedfsdffa");
       if (o.regenerating)o.regenerate();
     }
     for (Powerup pow : powerups) {
-      println("hedfsdffa");
       if (pow.regenerating)pow.regenerate();
     }
   }
