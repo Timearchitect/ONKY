@@ -14,7 +14,6 @@
 //import processing.opengl.*;
 
 PGraphics GUI, powerupGUI, gameOverGUI ;
-
 PFont font; 
 int renderObject;
 /*Minim minim;
@@ -53,7 +52,7 @@ boolean debug, automate, hint, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22;
 int defaultPlayerOffsetX=100, defaultPlayerOffsetY=-100;
 int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor,bonusSkipSpeed, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
 
@@ -149,19 +148,19 @@ void draw() {
 
     //displayFloor(); legecy
     for (Obstacle o : obstacles) {
-      if (o.underlay)o.display();
+      if (o.underlay && !o.dead)o.display();
     }
-    if (p.respawning)p.respawn() ;
+ if (p.respawning)p.respawn() ;
     p.update();
     p.display();
     //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
 
     for (int i=obstacles.size () -1; i>=0; i--) {
-      if (obstacles.get(i).dead)obstacles.remove(obstacles.get(i));
+      if (obstacles.get(i).dead && !obstacles.get(i).regenerating)obstacles.remove(obstacles.get(i));
     }
     for (Obstacle o : obstacles) {
       //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
-      if (o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
+      if (!o.dead && o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
         o.update();
         if (!o.underlay) o.display();
         if (debug) renderObject++;
@@ -175,10 +174,10 @@ void draw() {
 
     //-----------------------------         Powerup   / Entity         -----------------------------------------------------------
     for (int i=powerups.size () -1; i>=0; i--) {
-      if (powerups.get(i).dead)powerups.remove(powerups.get(i));
+      if (powerups.get(i).dead && !powerups.get(i).regenerating)powerups.remove(powerups.get(i));
     }
     for (Powerup pow : powerups) {
-      if (pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
+      if (!pow.dead && pow.x+pow.w+shakeX>p.x-p.vx-playerOffsetX-shakeX  && pow.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor) { // onscreen
         if (debug) renderObject++;
         pow.update();
         pow.display();

@@ -10,7 +10,7 @@
  }*/
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
-  if (!automate) {
+   if (!automate && !p.taunt) {
     int index, amount=0, interval=110;
     boolean powerupTap= false;
     Powerup pow=null;

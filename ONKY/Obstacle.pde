@@ -2,10 +2,11 @@
 abstract class Obstacle extends Entity {  
   float impactForce;
   color obstacleColor;
-  int hitBrightness, health=1;
+  int hitBrightness, defaultHealth=1, health=defaultHealth;
   boolean unBreakable;
   Obstacle(int _x, int _y) {
     super( _x, _y, 200, 200);
+    health=defaultHealth;
     obstacles.add( this);
     totalObstacle++;
   }
@@ -78,6 +79,10 @@ abstract class Obstacle extends Entity {
     obstacleDestroyed++;
     destroySound();
     background(255);
+  }
+    void regenerate() {
+    super.regenerate();
+    health=defaultHealth;
   }
   void hit() {
     hitSound();

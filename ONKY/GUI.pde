@@ -85,7 +85,7 @@ void UpdatePowerupGUILife() {
     index=p.usedPowerup.indexOf(pow);
     powerupGUI.image(pow.icon, width-(GUIoffsetX+iconSize+index*powerupGUIinterval)*screenFactor, height-GUIoffsetY*screenFactor, iconSize*screenFactor, iconSize*screenFactor);
     if (pow.upgradeLevel!=0)
-      powerupGUI.text(pow.upgradeLevel+" LVL", width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5-80);
+      powerupGUI.text(pow.upgradeLevel+" LVL",  width-(GUIoffsetX+iconSize*0.5+index*powerupGUIinterval)*screenFactor,height-GUIoffsetY*screenFactor+iconSize*0.5-iconSize);
   }
   powerupGUI.endDraw();
 }

@@ -51,7 +51,10 @@ void keyPressed() {
   if (key== 'r') {
     gameReset();
   }
-  if (!automate) {
+  if (key== 't') {
+    p.tutorialRespawn();
+  }
+  if (!automate && !p.taunt) {
 
     if (keyCode == UP) {
       p.jump();

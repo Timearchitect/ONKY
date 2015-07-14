@@ -1,6 +1,6 @@
 abstract class Powerup extends Entity implements Cloneable {
   PImage icon;
-  boolean instant=true, toggle, homing, regenerating;
+  boolean instant=true, toggle, homing;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -59,12 +59,12 @@ abstract class Powerup extends Entity implements Cloneable {
     //entities.add( new SpinParticle( int(x), int(y), powerupColor));
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
-    // UpdatePowerupGUILife();
-    if (regenerating)p.collectCooldown=50;
+    UpdatePowerupGUILife();
+    if (regenerating)p.collectCooldown=30;
     death();
   }
   void death() {
-    if (!regenerating) super.death();
+    super.death();
   }
   void use() {
     time--;
@@ -132,7 +132,7 @@ class InvisPowerup extends Powerup {
       }
       //p.usedPowerup.time+=this.time;
       //this.death();
-      UpdatePowerupGUILife();
+      //UpdatePowerupGUILife();
       super.collect();
     }
   }
@@ -148,7 +148,7 @@ class InvisPowerup extends Powerup {
       if ( p.attckSpeedReduction<15)  p.attckSpeedReduction=15;
       break;
     case 3:
-      if ( p.attckSpeedReduction<15) p.attckSpeedReduction=20;
+      if ( p.attckSpeedReduction<20) p.attckSpeedReduction=20;
       break;
     }
     p.weaponColor=powerupColor;
@@ -337,11 +337,16 @@ class TeleportPowerup extends Powerup {
     distance=_distance;
     instant=true;
   }
-  TeleportPowerup(int _x, int _y, int _time, int _distance, boolean _regenerating) {
+    TeleportPowerup(int _x, int _y, int _time, int _distance,boolean _instant) {
+    this(_x, _y, 25);
+    distance=_distance;
+    instant=_instant;
+  }
+  TeleportPowerup(int _x, int _y, int _time, int _distance,boolean _instant, boolean _regenerating) {
     this(_x, _y, 25);
     distance=_distance;
     regenerating=_regenerating;
-    instant=false;
+    instant=_instant;
   }
   void collect() {
     if (!dead) {
@@ -357,7 +362,7 @@ class TeleportPowerup extends Powerup {
   }
   void ones() {
     p.weaponColor=powerupColor; // weapon color to blue
-    p.invis+=10;  
+    p.invis+=time;  
     if (instant)p.x=x-w*0.5;  // telepot to powerup
     if (instant)p.y=y;
 
@@ -388,7 +393,7 @@ class TeleportPowerup extends Powerup {
       shakeFactor=100;
       break;
     case 2:
-      // playSound(teleportAttackSound);
+     // playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();
@@ -396,7 +401,7 @@ class TeleportPowerup extends Powerup {
       shakeFactor=100;
       break;
     default:
-      //playSound(teleportAttackSound);
+     // playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();
@@ -410,7 +415,7 @@ class TeleportPowerup extends Powerup {
   }
   void collectAll() {
     for (Powerup pow : powerups) {
-      if (pow.y+pow.h > p.y && p.y +p.h > pow.y &&  pow.x > p.x-distance && pow.x+pow.w < p.x+p.w ) {
+      if (!pow.dead &&pow.y+pow.h > p.y && p.y +p.h > pow.y &&  pow.x > p.x-distance && pow.x+pow.w < p.x+p.w ) {
         pow.collect();
         entities.add(new TrailParticle(int(pow.x-50), int(pow.y-40), p.cell));
       }

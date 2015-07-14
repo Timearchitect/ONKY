@@ -3,12 +3,16 @@ class Box extends Obstacle {
   Box(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(180, 140, 50);
-    health=2;
+    defaultHealth=2;
     type=int(random(3));
   }
   Box(int _x, int _y, int _type) {
     this(_x, _y);
     type=_type;
+  }
+  Box(int _x, int _y, int _type, boolean _regenerating) {
+    this(_x, _y, _type);
+    regenerating=_regenerating;
   }
   void death() {
     super.death();
@@ -87,7 +91,7 @@ class Tire extends Obstacle {
   Tire(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 0, 0);
-    health=3;
+    defaultHealth=3;
     switch(int(random(4))) {
     case 0:
       radianer = HALF_PI;
@@ -148,7 +152,12 @@ class IronBox extends Obstacle {
     obstacleColor = color(200);
     tx=_x;
     ty=_y;
-    health=5;
+    defaultHealth=5;
+    health=defaultHealth;
+  }
+  IronBox(int _x, int _y, boolean _regenerating) {
+    this(_x, _y);
+    regenerating=_regenerating;
   }
   void display() {
     super.display();
@@ -217,7 +226,7 @@ class PlatForm extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    health=4;
+    defaultHealth=4;
     obstacleColor = color(255, 50, 50);
   }
   PlatForm(int _x, int _y, int _w, int _h, boolean _hanging) {
@@ -254,7 +263,7 @@ class Lumber extends Obstacle {
     super(_x, _y);
     w=_w;
     h=_h;
-    health=4;
+    defaultHealth=4;
     obstacleColor = color(182, 69, 0);
   }
   Lumber(int _x, int _y, int _w, int _h, boolean _hanging) {
@@ -296,9 +305,12 @@ class Glass extends Obstacle {
     w=_w;
     h=_h;
     obstacleColor = color(0, 150, 255, 100);
-    health=1;
+    defaultHealth=1;
   }
-
+  Glass(int _x, int _y, int _w, int _h, boolean _regenerating) {
+    this(_x, _y, _w, _h);
+    regenerating=_regenerating;
+  }
   void display() {
     super.display();
     image(glass, x, y, w, h);
@@ -349,7 +361,7 @@ class Block extends Obstacle {
     obstacleColor = color(100, 100, 100);
     w=200;
     h=200;
-    health=20;
+    defaultHealth=20;
   }
   Block(int _x, int _y, int _vx, int _vy) {
     this(_x, _y);
@@ -500,7 +512,7 @@ class Grass extends Obstacle {
     //  super.display();
     fill(obstacleColor);
     noStroke();
-    rect(x, y, w, 600);
+    rect(x, y, w, 1000);
     image(Grass, x, y-margin, w, h);
   }
 
@@ -521,7 +533,7 @@ class Water extends Obstacle {
   void update() {
     super.update();
     count+=1*speedFactor;
-    count=int(count);
+  //  count=int(count);
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
@@ -532,7 +544,7 @@ class Water extends Obstacle {
      rect(x, y, w, 25);*/
     noStroke();
     fill(obstacleColor);
-    rect(x, y+50, w, 600);
+    rect(x, y+50, w, 1000);
     /* if (count%60<10)image(water1, x, y, w, h);
      else if (count%60<20)image(water2, x, y, w, h);
      else if (count%60<30)image(water3, x, y, w, h);
@@ -598,7 +610,7 @@ class Sign extends Obstacle {
     obstacleColor = color(220, 180, 90);
     w=200;
     h=200;
-    health=1;
+    defaultHealth=1;
     text=_text;
     underlay=true;
   }
@@ -613,12 +625,20 @@ class Sign extends Obstacle {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
     }
     if (trigg) {
-      tutorial=false;
-      UpdateGUILife();
+      exitTutorial();
     }
   }
   void update() {
     super.update();
+    //if (trigg && p.x< x + w-100 && p.x+p.w > x-100) { 
+    //        speedFactor= constrain(((x+w)-p.x)*0.001, 0.01,1);
+    if (trigg && dist(p.x, p.y, x -w, y+h )<250) { 
+
+      speedFactor= constrain(dist(p.x, p.y, x -w, y+h )*0.003, 0.01, 1);
+      scaleFactor=map(dist( x -w, y+h, p.x, p.y ), 90, 250, targetScaleFactor*1.1, targetScaleFactor);
+      // println(dist(p.x,p.y ,x -w,y+h ));
+    }
+   
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
@@ -728,7 +748,8 @@ class Barrel extends Obstacle {
     obstacleColor = color(180, 120, 50);
     w=67*2;
     h=67*2;
-    health=1;
+    defaultHealth=1;
+    health=defaultHealth;
     vx=-2;
   }
   void death() {
@@ -786,7 +807,7 @@ class Rock extends Obstacle {
   Rock(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(150);
-    health=7;
+    defaultHealth=7;
   }
   void display() {
 
@@ -832,10 +853,9 @@ class Rock extends Obstacle {
     // playSound(blockDestroySound);
   }
   void  hitSound() {
-    //  playSound(ironBoxDestroySound);
+   // playSound(ironBoxDestroySound);
   }
 }
-
 class stoneSign extends Obstacle {
   int debrisCooldown;
   String text;
@@ -845,7 +865,7 @@ class stoneSign extends Obstacle {
     obstacleColor = color(150);
     w=400;
     h=200;
-    health=5;
+    defaultHealth=5;
     text=_text;
     underlay=true;
   }
@@ -881,7 +901,7 @@ class stoneSign extends Obstacle {
       for (int i =0; i< 15; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
-      // playSound(blockDestroySound);
+     // playSound(blockDestroySound);
     }
   }
 
@@ -889,12 +909,11 @@ class stoneSign extends Obstacle {
     if (p.invincible) death();
   }
   void knockSound() {
-    // playSound(blockDestroySound);
+  //  playSound(blockDestroySound);
   }
   void destroySound() {
-    //  playSound(blockDestroySound);
+ //   playSound(blockDestroySound);
   }
   void collision() {
   }
 }
-

@@ -1,5 +1,5 @@
 abstract class Entity {
-  boolean dead,underlay,overlay;
+  boolean dead, underlay, overlay, regenerating; 
   int x, y, w, h;
   float vx, vy;
   Entity(int _x, int  _y) {
@@ -26,10 +26,12 @@ abstract class Entity {
   }
 
   void death() {
-    if (!dead) {
       dead=true;
-      entities.remove(this);
-    }
+      if (!regenerating)entities.remove(this);
+  }
+  void regenerate() {
+    dead=false;
+    println("regenerated");
   }
 }
 
