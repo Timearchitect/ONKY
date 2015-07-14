@@ -12,7 +12,7 @@ import ddf.minim.*;
 //import javax.media.opengl.*;
 //import processing.opengl.*;
 
-PGraphics GUI,powerupGUI;
+PGraphics GUI, powerupGUI;
 PFont font; 
 int renderObject;
 Minim minim;
@@ -47,10 +47,10 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
 color FlashColor;
-boolean debug,automate,hint, mute, preloadObstacles=false;
-final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
+boolean debug, automate, hint, mute, preloadObstacles=false;
+final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=0;
 int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenFactor=1.1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor=1.1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor,bonusSkipSpeed, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
 
@@ -120,7 +120,7 @@ void draw() {
   pushMatrix();
   scale(scaleFactor);
   rotate(radians(screenAngle));
-  translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
+  translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY+playerOffsetY);
   if (debug)renderObject=0; // for counting objects on screen
 
   //displayFloor(); legecy
@@ -140,7 +140,7 @@ void draw() {
   for (Obstacle o : obstacles) {
     //if (o.x+shakeX*2<(p.x+width/(wscaleFactor)) && (o.x+o.w-shakeX*2)/(scaleFactor)>(p.x -playerOffsetX)) {// old renderBound
     if (!o.dead && o.x+o.w+shakeX>p.x-p.vx-playerOffsetX-shakeX-400  && o.x-shakeX<p.x-p.vx-playerOffsetX-shakeX+(width)/scaleFactor+400) { // onscreen
-     o.update();
+      o.update();
       if (!o.underlay) o.display();
       if (debug) renderObject++;
     }
@@ -337,6 +337,7 @@ void gameReset() {
   UpdatePowerupGUILife();
   speedFactor=1;
   targetSpeedFactor=1;
+  bonusSkipSpeed=0;
   resetScore();
   gameState=1;
 }
@@ -351,9 +352,11 @@ void resetScore() {
 }
 void calcDispScore() {
 
-  if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
-  score=int(p.x);
+  if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel+bonusSkipSpeed); //velocitybased on score
+    score=int(p.x); // add score and accel
+
   if (!tutorial) {  
+    
     fill(255);
     textSize(40);
     textAlign(RIGHT);

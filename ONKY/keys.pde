@@ -53,46 +53,45 @@ void keyPressed() {
   if (key== 'r') {
     gameReset();
   }
-    if (key== 't') {
+  if (key== 't') {
     p.tutorialRespawn();
   }
-  if (!automate) {
-  
-  if (keyCode == UP) {
-    p.jump();
-  }
-  if (keyCode == DOWN) {
-    p.duck();
-   // p.startSmash();
-  }
-  if (keyCode == LEFT) {
-    //  p.deAccel();
-  }
-  if (keyCode == RIGHT) {
-    // p.accel();
-  }
-  if (key== 'a') {
-    //p.deAccel();
-  }
-  if (key== 'd') {
-    //p.accel();
-  }
-  if (key==' ') {
-    p.jump();
-  }
-  if (key=='w') {
-    p.jump();
-  }
-  if (key=='s') {
-    p.duck();
-   // p.startSmash();
-  }
-  if (key=='x') {
-    p.startPunch();
-  }
-  if (key=='0') {
-    p.startPunch();
-  }
+  if (!automate && !p.taunt) {
+    if (keyCode == UP) {
+      p.jump();
+    }
+    if (keyCode == DOWN) {
+      p.duck();
+      // p.startSmash();
+    }
+    if (keyCode == LEFT) {
+      //  p.deAccel();
+    }
+    if (keyCode == RIGHT) {
+      // p.accel();
+    }
+    if (key== 'a') {
+      //p.deAccel();
+    }
+    if (key== 'd') {
+      //p.accel();
+    }
+    if (key==' ') {
+      p.jump();
+    }
+    if (key=='w') {
+      p.jump();
+    }
+    if (key=='s') {
+      p.duck();
+      // p.startSmash();
+    }
+    if (key=='x') {
+      p.startPunch();
+    }
+    if (key=='0') {
+      p.startPunch();
+    }
   }
 }
 

@@ -10,7 +10,7 @@ void mouseWheel(MouseEvent event) {  // krympa och förstora
 }
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
-   if (!automate) {
+   if (!automate && !p.taunt) {
   if (mouseButton==LEFT) {
     int index, amount=0, interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
     boolean powerupTap= false;

@@ -25,50 +25,49 @@ class Box extends Obstacle {
     }
   }
   void display() {
-      super.display();
-      /*
+    super.display();
+    /*
     stroke(155, 155, 100);
-       strokeWeight(8);
-       line(x, y, x+w, y+h);
-       line(x, y+h, x+w, y);
-       if (type==1) { 
-       fill(255, 255, 180);
-       textAlign(CENTER);
-       textSize(160);
-       text("?", x+w*0.5, y+h*0.8);
-       textAlign(LEFT);
-       }
-       strokeWeight(1);
-       */
-      switch(type) {
-      case 0:
-        image(Box, x, y, w, h);
-        break;
-      case 1:
-        image(brokenBox, x, y, w, h);
-        break;
-      case 2:
-        image(brokenBox, x, y, w, h);
-        if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
-        break;
-      default:
-        image(mysteryBox, x, y, w, h);
-      }
-      /* if (type==0) image(Box, x, y, w, h);
-       else if (type==1) image(brokenBox, x, y, w, h);
-       else if (type==2) {
-       image(brokenBox, x, y, w, h);
-       if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
-       } else image(mysteryBox, x, y, w, h);*/
-    
+     strokeWeight(8);
+     line(x, y, x+w, y+h);
+     line(x, y+h, x+w, y);
+     if (type==1) { 
+     fill(255, 255, 180);
+     textAlign(CENTER);
+     textSize(160);
+     text("?", x+w*0.5, y+h*0.8);
+     textAlign(LEFT);
+     }
+     strokeWeight(1);
+     */
+    switch(type) {
+    case 0:
+      image(Box, x, y, w, h);
+      break;
+    case 1:
+      image(brokenBox, x, y, w, h);
+      break;
+    case 2:
+      image(brokenBox, x, y, w, h);
+      if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 40, 255));
+      break;
+    default:
+      image(mysteryBox, x, y, w, h);
+    }
+    /* if (type==0) image(Box, x, y, w, h);
+     else if (type==1) image(brokenBox, x, y, w, h);
+     else if (type==2) {
+     image(brokenBox, x, y, w, h);
+     if (count%20==0)entities.add(new SparkParticle(int(x+w*0.8), int(y+h*0.2), 20, 255));
+     } else image(mysteryBox, x, y, w, h);*/
   }
   void update() {
-      super.update();
-      count++;
-      if (p.attractRange > 0 && type==2 && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
-        type=1;
-        for (int i=0; i<3; i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500));
-      }
+    super.update();
+    count++;
+    if (p.attractRange > 0 && type==2 && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
+      type=1;
+      for (int i=0; i<3; i++)entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500));
+    }
   }
   void hit() {
     super.hit();
@@ -161,32 +160,32 @@ class IronBox extends Obstacle {
     regenerating=_regenerating;
   }
   void display() {
-      super.display();
-      /* stroke(250, 250, 250);
-       strokeWeight(8);
-       point(x+10, y+10);
-       point(x+w-10, y+10);
-       point(x+w-10, y+h-10);
-       point(x+10, y+h-10);
-       
-       strokeWeight(1);
-       */
-      if (health==5) {
-        image(ironBox, x, y, w, h);
-      } else if (health>2) {
-        image(ironBox2, x, y, w, h);
-      } else {
-        image(ironBox3, x, y, w, h);
-      }
+    super.display();
+    /* stroke(250, 250, 250);
+     strokeWeight(8);
+     point(x+10, y+10);
+     point(x+w-10, y+10);
+     point(x+w-10, y+h-10);
+     point(x+10, y+h-10);
+     
+     strokeWeight(1);
+     */
+    if (health==5) {
+      image(ironBox, x, y, w, h);
+    } else if (health>2) {
+      image(ironBox2, x, y, w, h);
+    } else {
+      image(ironBox3, x, y, w, h);
+    }
   }
   void update() {
-   //if (!dead) {
-      super.update();
-      if (invis>0)invis--;
-      float diffX=tx-x, diffY=ty-y;
-      x+=diffX*0.2*speedFactor;
-      y+=diffY*0.2*speedFactor;
-   // }
+    //if (!dead) {
+    super.update();
+    if (invis>0)invis--;
+    float diffX=tx-x, diffY=ty-y;
+    x+=diffX*0.2*speedFactor;
+    y+=diffY*0.2*speedFactor;
+    // }
   }
   void death() {
     if (p.invincible || health<=0) {
@@ -311,7 +310,7 @@ class Glass extends Obstacle {
     defaultHealth=1;
   }
   Glass(int _x, int _y, int _w, int _h, boolean _regenerating) {
-    this(_x, _y, _w,_h);
+    this(_x, _y, _w, _h);
     regenerating=_regenerating;
   }
   void display() {
@@ -628,12 +627,20 @@ class Sign extends Obstacle {
       entities.add( new PlatFormDebris(this, int(x)-50, int(y), random(15)+impactForce*0.3, random(30)-20));
     }
     if (trigg) {
-      tutorial=false;
-      UpdateGUILife();
+      exitTutorial();
     }
   }
   void update() {
     super.update();
+    //if (trigg && p.x< x + w-100 && p.x+p.w > x-100) { 
+    //        speedFactor= constrain(((x+w)-p.x)*0.001, 0.01,1);
+    if (trigg && dist(p.x, p.y, x -w, y+h )<250) { 
+
+      speedFactor= constrain(dist(p.x, p.y, x -w, y+h )*0.003, 0.01, 1);
+      scaleFactor=map(dist( x -w, y+h, p.x, p.y ), 90, 250, targetScaleFactor*1.1, targetScaleFactor);
+      // println(dist(p.x,p.y ,x -w,y+h ));
+    }
+   
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
