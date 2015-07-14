@@ -72,19 +72,19 @@ abstract class Powerup extends Entity implements Cloneable {
     if (time<1)death();
   }
   void displayIcon() {
-    int index=p.usedPowerup.indexOf(this), GUIoffsetY=height-150;     
+    int index=p.usedPowerup.indexOf(this);     
     if (index<MAX_POWERUP_DISPLAYING) {
       if (!instant && !toggle) {
         noFill();
         stroke(powerupColor);
         pulse++;
         strokeWeight(pulse%15);
-        ellipse(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, (95+pulse%15*.5)*screenFactor, (95+pulse%15*.5)*screenFactor);
+        ellipse(width-(GUIoffsetX+iconSize*0.5+index*powerupGUIinterval)*screenFactor, height-(GUIoffsetY-iconSize*0.5)*screenFactor, (iconSize+5+pulse%15*.5)*screenFactor, (iconSize+5+pulse%15*.5)*screenFactor);
       }
       //if (icon!=null)image(icon, GUIoffsetX+10+index*interval, GUIoffsetY+10, 100-20, 100-20); // GUILAYER
       noStroke();
       fill(0, 180);
-      arc(width-(GUIoffsetX+w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+h*0.5*screenFactor, 90*screenFactor, 90*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
+      arc(width-(GUIoffsetX+iconSize*0.5+index*powerupGUIinterval)*screenFactor, height-(GUIoffsetY-iconSize*0.5)*screenFactor, iconSize*screenFactor, iconSize*screenFactor, -HALF_PI, PI*2-(PI*2/spawnTime*time+HALF_PI));
     }
   }
 

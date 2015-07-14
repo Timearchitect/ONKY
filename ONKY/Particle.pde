@@ -416,7 +416,7 @@ class textParticle extends Particle {
     x+=vx;
     y+=vy;
     //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
-    if ((p.x+p.vx-playerOffsetX*3+width/scaleFactor*screenFactor)>x) {
+    if ((p.x+p.vx-playerOffsetX*3+width/scaleFactor/screenFactor)>x) {
       if (!active) {
         //playSound(warning);
         background(255);

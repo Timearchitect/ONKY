@@ -18,14 +18,14 @@ PGraphics GUI, powerupGUI, gameOverGUI ;
 PFont font; 
 int renderObject;
 /*Minim minim;
-AudioPlayer BGM, regularSong, superSong;
-AudioPlayer boxDestroySound, boxKnockSound;
-AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
-AudioPlayer rubberSound, rubberKnockSound;
-AudioPlayer leafSound, bloodSound;
-AudioPlayer splash, waterFall, warning, Poof;
-AudioPlayer blockDestroySound, smackSound;
-AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
+ AudioPlayer BGM, regularSong, superSong;
+ AudioPlayer boxDestroySound, boxKnockSound;
+ AudioPlayer ironBoxDestroySound, ironBoxKnockSound, shatterSound;
+ AudioPlayer rubberSound, rubberKnockSound;
+ AudioPlayer leafSound, bloodSound;
+ AudioPlayer splash, waterFall, warning, Poof;
+ AudioPlayer blockDestroySound, smackSound;
+ AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
  */
 PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
@@ -49,8 +49,9 @@ ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //ParalaxObject paralaxObject=new ParalaxObject();
 Player p = new Player();
 color FlashColor;
-boolean debug,automate,hint, mute, preloadObstacles=false;
-final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=200;
+boolean debug, automate, hint, mute, preloadObstacles=false;
+final int MAX_SHAKE=200, MAX_SPEED=22;
+int defaultPlayerOffsetX=100, defaultPlayerOffsetY=-100;
 int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
 float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
@@ -60,13 +61,17 @@ void setup() {
   noSmooth();
   //noClip();
   //size(720, 1080); // vertical
-   // size( 1080, 720,OPENGL); // horisontal
+ // size( 1080, 720, OPENGL); // horisontal
   size(displayWidth, displayHeight, OPENGL); // horisontal
 
   if (width<= 1080) {
     screenFactor=0.93; // low res
+    defaultPlayerOffsetY=0;
+    playerOffsetY=defaultPlayerOffsetY;
   } else {
     screenFactor=1.6; // high res
+    defaultPlayerOffsetY=-100;
+    playerOffsetY=defaultPlayerOffsetY;
   }
 
   orientation(LANDSCAPE);  // the hot dog way 
@@ -139,7 +144,7 @@ void draw() {
     pushMatrix();
     scale(scaleFactor*screenFactor);
     rotate(radians(screenAngle));
-    translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY);
+    translate(-p.x+playerOffsetX+shakeX, (-p.y+(height*0.5)/scaleFactor)*0.3+ shakeY+playerOffsetY);
     if (debug)renderObject=0; // for counting objects on screen
 
     //displayFloor(); legecy
@@ -194,7 +199,7 @@ void draw() {
 
     for (int i=particles.size () -1; i>=0; i--) {
       particles.get(i).update();
-     if (!particles.get(i).overlay) particles.get(i).display();
+      if (!particles.get(i).overlay) particles.get(i).display();
       if (particles.get(i).dead)particles.remove(particles.get(i));
     }
     //for (Particle par : particles)par.display();
@@ -240,9 +245,9 @@ void draw() {
     popMatrix();
 
     //-----------------------------         Paralax     / Entity       -----------------------------------------------------------
-  for (int i=particles.size () -1; i>=0; i--) {
-    if (particles.get(i).overlay) particles.get(i).display();
-  }
+    for (int i=particles.size () -1; i>=0; i--) {
+      if (particles.get(i).overlay) particles.get(i).display();
+    }
     /* for (Paralax plx : ForegroundParalaxLayers) {
      plx.update();
      if (plx.x<width)plx.display(); // onscreen
@@ -372,14 +377,14 @@ void resetScore() {
 void calcDispScore() {
   if (MAX_SPEED>speedLevel)speedLevel=int(score*0.00005+defaultSpeedLevel);
   score=int(p.x);
- if (!tutorial) {  
-  fill(255);
-  textSize(int(40*screenFactor));
-  textAlign(RIGHT);
-  text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width-50, 100);
-  // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
-  // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
-  textAlign(LEFT);
+  if (!tutorial) {  
+    fill(255);
+    textSize(int(40*screenFactor));
+    textAlign(RIGHT);
+    text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width-50, 100);
+    // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  killed: "+obstacleDestroyed +"  tokens: "+tokensTaken, width-850, 50);
+    // text( String.format( "%.1f", speedFactor)+"X"+" velocity:"+(speedLevel-defaultSpeedLevel) +"  m: "+int(score*0.01)+"  total: "+totalObstacle +"  Ttokens: "+totalTokens, width-850, 100);
+    textAlign(LEFT);
   }
 }
 void debugScreen() {
@@ -500,12 +505,11 @@ void loadSound() {
    
    BGM.play();
    BGM.loop();*/
-
 }
 
 void loadParalax() {
 
-  entities.add(new Paralax(0, -int((height*1.5-200)*screenFactor), width*3, int( height*3+200), 0.01, Mountain)); // bakgrund
+  entities.add(new Paralax(0, -int((height*2.2)), int( width*3), int( (height*3+200)), 0.01, Mountain)); // bakgrund
   entities.add(new ParalaxObject(Tree, 0, int(415*screenFactor), 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree2, 255, int(415*screenFactor), 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree, 0, int(430*screenFactor), 100, 100, 0.1)); 
@@ -528,8 +532,6 @@ void gameOverUpdate() {
   UpdateGameOverGUI();
   image( gameOverGUI, 0, 0); // add GUIlayer
 }
-
-
 
 
 

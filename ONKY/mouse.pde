@@ -11,7 +11,7 @@
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
   if (!automate) {
-    int index, amount=0, interval=110, GUIoffsetX=50, GUIoffsetY=height-150;
+    int index, amount=0, interval=110;
     boolean powerupTap= false;
     Powerup pow=null;
     amount= (MAX_POWERUP_DISPLAYING<p.usedPowerup.size()) ? MAX_POWERUP_DISPLAYING:p.usedPowerup.size();
@@ -20,7 +20,7 @@ void mousePressed(MouseEvent event) {  // krympa och förstora
     for (int i=0; i<amount; i++) {
       pow =p.usedPowerup.get(i);
       index=p.usedPowerup.indexOf(pow);
-      if (dist(width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5*screenFactor, mouseX, mouseY) < 45*screenFactor   ) {
+      if (dist(width-(GUIoffsetX+iconSize*0.5+index*powerupGUIinterval)*screenFactor, height-(GUIoffsetY-iconSize*0.5)*screenFactor, mouseX, mouseY) < iconSize*0.5*screenFactor   ) {
         //fill(0);
         background(pow.powerupColor);
         //rect(width-(GUIoffsetX+pow.w*0.5+index*interval)*screenFactor+200, (GUIoffsetY+pow.h*0.5)*screenFactor, 120*screenFactor, 120*screenFactor);

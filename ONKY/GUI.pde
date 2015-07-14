@@ -1,4 +1,4 @@
-int  powerupGUIinterval=int(110), GUIoffsetX=50;
+int  powerupGUIinterval=135, GUIoffsetX=50, GUIoffsetY=160 ,iconSize=110;
 final int MAX_POWERUP_DISPLAYING=4;
 void loadGUILayer() {
   GUI=createGraphics(width, height);
@@ -72,7 +72,7 @@ void UpdatePowerupGUILife() {
 
   powerupGUI.beginDraw();
 
-  int index, amount=0, GUIoffsetY=height-150;
+  int index, amount=0;
   Powerup pow=null;
   amount= (MAX_POWERUP_DISPLAYING<p.usedPowerup.size()) ? MAX_POWERUP_DISPLAYING:p.usedPowerup.size();
 
@@ -83,7 +83,7 @@ void UpdatePowerupGUILife() {
   for (int i=0; i<amount; i++) {
     pow =p.usedPowerup.get(i);
     index=p.usedPowerup.indexOf(pow);
-    powerupGUI.image(pow.icon, width-(GUIoffsetX+10+index*powerupGUIinterval)*screenFactor-85*screenFactor, GUIoffsetY+5*screenFactor, (110-20)*screenFactor, (110-20)*screenFactor);
+    powerupGUI.image(pow.icon, width-(GUIoffsetX+iconSize+index*powerupGUIinterval)*screenFactor, height-GUIoffsetY*screenFactor, iconSize*screenFactor, iconSize*screenFactor);
     if (pow.upgradeLevel!=0)
       powerupGUI.text(pow.upgradeLevel+" LVL", width-(GUIoffsetX+pow.w*0.5+index*powerupGUIinterval)*screenFactor, GUIoffsetY+pow.h*0.5-80);
   }
