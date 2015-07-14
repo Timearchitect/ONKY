@@ -431,7 +431,7 @@ class textParticle extends Particle {
   void display() {
     if (active) {  
       fill(particleColor, opacity);
-      textSize(350);
+      textSize(int(350*screenFactor));
       textAlign(RIGHT);
       text(text, x, y);
       textAlign(NORMAL);

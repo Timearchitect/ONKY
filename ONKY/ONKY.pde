@@ -50,7 +50,7 @@ color FlashColor;
 boolean debug, automate, hint, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22, defaultPlayerOffsetX=100, defaultPlayerOffsetY=0;
 int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenFactor=1.1, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor,bonusSkipSpeed, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor,bonusSkipSpeed, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
 
@@ -58,11 +58,19 @@ void setup() {
   noSmooth();
   //noClip();
   //size(720, 1080); // vertical
-  size( 1080, 720, OPENGL); // horisontal
+//  size( 1080, 720, OPENGL); // horisontal low
+    size( 1920, 1080, OPENGL); // horisontal High
+
   // hint();
   hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
 
+  if (width<= 1080) {
+    screenFactor=0.93; // low res
+  } else {
+    screenFactor=1.6; // high res
+  }
+  
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
 
