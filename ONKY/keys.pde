@@ -106,6 +106,7 @@ void keyReleased() {
   if (keyCode == RIGHT) {
   }
   if (key==' ') {
+    p.usedPowerup.add(new PoisonPowerdown(0, 0, 200));
   }
   if (key=='w') {
   }

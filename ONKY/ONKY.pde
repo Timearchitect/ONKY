@@ -46,13 +46,13 @@ ArrayList<Particle> overParticles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //Paralax paralax= new Paralax();
 //ParalaxObject paralaxObject=new ParalaxObject();
-Player p = new Player();
+Player p;
 color FlashColor;
 boolean debug, automate, hint, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22;
 int defaultPlayerOffsetX=100, defaultPlayerOffsetY=-100;
 int gameState=1, gameOverCooldown, floorHeight=700, spawnHeight=250, playerOffsetX=defaultPlayerOffsetX, playerOffsetY=defaultPlayerOffsetY, flashOpacity;
-float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor,bonusSkipSpeed, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
+float screenFactor=1.5, screenAngle, scaleFactor=0.5, targetScaleFactor=scaleFactor, bonusSkipSpeed, speedFactor=1, targetSpeedFactor=speedFactor, shakeFactor, shakeX, shakeY, shakeDecay=0.85;
 
 boolean powerUpUnlocked[]= new boolean[5];
 
@@ -60,7 +60,7 @@ void setup() {
   noSmooth();
   //noClip();
   //size(720, 1080); // vertical
- // size( 1080, 720, OPENGL); // horisontal
+  // size( 1080, 720, OPENGL); // horisontal
   size(displayWidth, displayHeight, OPENGL); // horisontal
 
   if (width<= 1080) {
@@ -81,6 +81,7 @@ void setup() {
 
   font=loadFont("Roboto-Bold-48.vlw");
   textFont(font);
+  p = new Player();
   loadImages();
 
   /* final PGraphics pg = createGraphics(41, 41, JAVA2D);
@@ -150,7 +151,7 @@ void draw() {
     for (Obstacle o : obstacles) {
       if (o.underlay && !o.dead)o.display();
     }
- if (p.respawning)p.respawn() ;
+    if (p.respawning)p.respawn() ;
     p.update();
     p.display();
     //-----------------------------         Obstacle   / Entity         -----------------------------------------------------------
@@ -366,7 +367,7 @@ void gameReset() {
 }
 void resetScore() {
   score=0;
-  tokensTaken=0;
+  tokensTaken=100;
   obstacleDestroyed=0;
 
   score=0;
@@ -414,7 +415,9 @@ void loadImages() {
   cornerStar= loadImage("cornerStar.png");
   tapPowerupZone= loadImage("tapPowerupZone.png");
   iconZone= loadImage("iconZone.png");
+
   //ONKY player sprites
+
   p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
   p.SpriteSheetRunning = loadImage("onky_running3.png");
   p.FrontFlip = loadImage("frontFlip.png");
@@ -422,6 +425,9 @@ void loadImages() {
   p.Jump = loadImage("jump.png");
   p.DownDash = loadImage("downDash.png");
   p.Slide = loadImage("slide.png");
+  for (int i=0; i < p.amountOfFrames; i++) {
+    p.animSprite[i]=p.cutSpriteSheet(i);
+  }
 
   //icons
   slowIcon = loadImage("icon/slowpower.png");
@@ -531,7 +537,4 @@ void gameOverUpdate() {
   UpdateGameOverGUI();
   image( gameOverGUI, 0, 0); // add GUIlayer
 }
-
-
-
 

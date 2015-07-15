@@ -19,7 +19,7 @@ class Box extends Obstacle {
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
     entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 300, obstacleColor));
     if (type==-1)  entities.add(new RandomPowerup(int(x+w*0.5), int(y+h*0.5), 500)); 
-    if (type==2)  for (int i=0; i <3; i++)  entities.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
+    if (type==2)  for (int i=0; i <3; i++)  powerups.add(new TokenPowerup(int(x+random(w)), int(y+random(h)), 500)); 
     for (int i =0; i< 8; i++) {
       entities.add( new BoxDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
     }
@@ -520,20 +520,22 @@ class Grass extends Obstacle {
   }
 }
 class Water extends Obstacle {
-  int debrisCooldown;
+  int debrisCooldown, totalFrames=4;
   float count;
-  //PImage cell;
+  PImage animSprite[]=new PImage[totalFrames];
   Water(int _x, int _y, int _w, int _h) {
     super(_x, _y);
     w=_w;
     h=_h;
     obstacleColor = color(81, 104, 151);
     unBreakable=true;
+    for (int i=0; i<totalFrames; i++) {
+      animSprite[i]=cutSprite(i);
+    }
   }
   void update() {
     super.update();
     count+=1*speedFactor;
-  //  count=int(count);
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
@@ -545,25 +547,26 @@ class Water extends Obstacle {
     noStroke();
     fill(obstacleColor);
     rect(x, y+50, w, 1000);
-    /* if (count%60<10)image(water1, x, y, w, h);
-     else if (count%60<20)image(water2, x, y, w, h);
-     else if (count%60<30)image(water3, x, y, w, h);
-     else if (count%60<40)image(water4, x, y, w, h);
-     else if (count%60<50)image(water3, x, y, w, h);
-     
-     else image(water2, x, y, w, h);*/
-    if (count%60<10)image( cutSprite (0), x, y-50, w, h);
-    else if (count%60<20)image(cutSprite (1), x, y-50, w, h);
-    else if (count%60<30)image(cutSprite (2), x, y-50, w, h);
-    else if (count%60<40)image(cutSprite (3), x, y-50, w, h);
-    else if (count%60<50)image(cutSprite (2), x, y-50, w, h);
-    else image(cutSprite (1), x, y-50, w, h);
+
+    /* if (count%60<10)image( cutSprite (0), x, y-50, w, h);
+     else if (count%60<20)image(cutSprite (1), x, y-50, w, h);
+     else if (count%60<30)image(cutSprite (2), x, y-50, w, h);
+     else if (count%60<40)image(cutSprite (3), x, y-50, w, h);
+     else if (count%60<50)image(cutSprite (2), x, y-50, w, h);
+     else image(cutSprite (1), x, y-50, w, h);*/
+    if (count%60<10)image(animSprite[0], x, y-50, w, h);
+    else if (count%60<20)image(animSprite[1], x, y-50, w, h);
+    else if (count%60<30)image(animSprite[2], x, y-50, w, h);
+    else if (count%60<40)image(animSprite[3], x, y-50, w, h);
+    else if (count%60<50)image(animSprite[2], x, y-50, w, h);
+    else image(animSprite[1], x, y-50, w, h);
   }
 
   PImage cutSprite (int index) {
     final int interval= 50, imageWidth=50, imageheight=50;
     return waterSpriteSheet.get(index*(interval+1), 0, imageWidth, imageheight);
   }
+
   void collision() {
 
 
@@ -638,7 +641,7 @@ class Sign extends Obstacle {
       scaleFactor=map(dist( x -w, y+h, p.x, p.y ), 90, 250, targetScaleFactor*1.1, targetScaleFactor);
       // println(dist(p.x,p.y ,x -w,y+h ));
     }
-   
+
     if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
@@ -665,15 +668,19 @@ class Sign extends Obstacle {
   }
 }
 class Snake extends Obstacle {
-  int debrisCooldown;
+  int debrisCooldown, totalFrames=3;
   float count;
   int snakeSpeed = -int(random(16)+1);
+  PImage animSprite[]=new PImage[totalFrames];
   Snake(int _x, int _y) {
     super(_x, _y);
     obstacleColor = color(0, 255, 50);
     w=82*2;
     h=35*2;
-    health=1;
+    defaultHealth=1;
+    for (int i=0; i<totalFrames; i++) {
+      animSprite[i]=cutSprite(i);
+    }
   }
   void death() {
     super.death();
@@ -685,24 +692,14 @@ class Snake extends Obstacle {
   void update() {
     super.update();
     count+=1*speedFactor;
-    /*
-    if (count%30<10) x-=1*speedFactor;
-     else if (count%30<20) x -= snakeSpeed+1;
-     else x-=1*speedFactor;
-     
-     x-=1*speedFactor;
-     */
     if (count%30<20  && count%30>10) x += snakeSpeed*speedFactor;
-    else
-      if (debrisCooldown>0)debrisCooldown--;
+    else if (debrisCooldown>0)debrisCooldown--;
   }
   void display() {
-    // image(Snake, x, y, w, h);
-    //fill(obstacleColor);
-    //rect( x, y, w, h);
-    if (count%30<10)image( cutSprite (0), x+w*.5, y-30, w, h);
-    else if (count%30<20)image(cutSprite (2), x+w*.5, y-40, w, h);
-    else image(cutSprite (1), x+w*.5, y-20, w, h);
+
+    if (count%30<10)image( animSprite[0], x+w*.5, y-30, w, h);
+    else if (count%30<20)image(animSprite[2], x+w*.5, y-40, w, h);
+    else image(animSprite[1], x+w*.5, y-20, w, h);
   }
 
   PImage cutSprite (int index) {
@@ -731,12 +728,18 @@ class Snake extends Obstacle {
     // playSound(bloodSound);
   }
   void collision() {
-    if (p.x+p.w > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
-      if (p.vx>5) {
-        knock();
-      }
+    if ( p.x > x && p.x < x + w  && p.y+p.h > y&&  p.y < y + h) {
+      if (!p.invincible && !p.punching  && p.invis<=0 )poisonBite();
+      if (p.vx>5)knock();
       impactForce=p.vx;
     }
+  }
+  void poisonBite() {
+    shakeFactor=50;
+    speedFactor=0.5;
+    p.usedPowerup.add(new PoisonPowerdown(0, 0, 1000));
+    UpdatePowerupGUILife();
+    p.invis=50;
   }
 }
 
@@ -853,7 +856,7 @@ class Rock extends Obstacle {
     // playSound(blockDestroySound);
   }
   void  hitSound() {
-   // playSound(ironBoxDestroySound);
+    // playSound(ironBoxDestroySound);
   }
 }
 class stoneSign extends Obstacle {
@@ -901,7 +904,7 @@ class stoneSign extends Obstacle {
       for (int i =0; i< 15; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
-     // playSound(blockDestroySound);
+      // playSound(blockDestroySound);
     }
   }
 
@@ -909,11 +912,12 @@ class stoneSign extends Obstacle {
     if (p.invincible) death();
   }
   void knockSound() {
-  //  playSound(blockDestroySound);
+    //  playSound(blockDestroySound);
   }
   void destroySound() {
- //   playSound(blockDestroySound);
+    //   playSound(blockDestroySound);
   }
   void collision() {
   }
 }
+

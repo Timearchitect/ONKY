@@ -10,17 +10,19 @@ class Player {
   float punchTime, jumpTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int tauntTime, smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
-  boolean taunt=true, dead, onGround, punching, stomping, smashing, ducking, invincible, respawning;
+  boolean taunt=true, dead, onGround, punching, stomping, smashing, ducking, invincible, respawning, tokenDroping;
   int totalJumps, totalAttacks, totalDucks, tutorialCourseRetries;
   float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
   color weaponColor= defaultWeaponColor;
+  int amountOfFrames=140;
+  PImage animSprite[]= new PImage[amountOfFrames], displaySprite;
   Player() {
     trailspawnTimer=millis();
   }
 
   void update() {
-  if (taunt) {
+    if (taunt) {
       if (tauntTime<80) {
         tauntTime++;
         vx=0;
@@ -31,53 +33,51 @@ class Player {
         entities.add(new SparkParticle(int(x+w), int(y), 50, defaultWeaponColor));
       }
     } else {
-    x+=vx*speedFactor;
-    y+=vy*speedFactor;
-    vx+=ax*speedFactor;
-    vy+=ay*speedFactor;
+      x+=vx*speedFactor;
+      y+=vy*speedFactor;
+      vx+=ax*speedFactor;
+      vy+=ay*speedFactor;
 
-    if (vx<1 && vx>-1) vx=1;
-    if (vx<speedLevel && vx>0)vx*=1+0.08*speedFactor;
-    if (vx<0)vx*= decayFactor*speedFactor;
-    if (punchTime<=0 && punchCooldown>0)punchCooldown--;
-    if (jumpCount<MAX_JUMP-1)angle+=15*speedFactor;
+      if (vx<1 && vx>-1) vx=1;
+      if (vx<speedLevel && vx>0)vx*=1+0.08*speedFactor;
+      if (vx<0)vx*= decayFactor*speedFactor;
+      if (punchTime<=0 && punchCooldown>0)punchCooldown--;
+      if (jumpCount<MAX_JUMP-1)angle+=15*speedFactor;
 
-    if (invincible|| 0<invis)recover();
-    if (0<collectCooldown)collectCooldown--; // cant collect
+      if (invincible|| 0<invis)recover();
+      if (0<collectCooldown)collectCooldown--; // cant collect
 
-    cutSprite(int(x*0.025));    //cutSprite(int(x/40));
+      cutSprite(int(x*0.025));    //cutSprite(int(x/40));
 
-    checkIfGround();
+      checkIfGround();
 
-    checkDuck();
+      checkDuck();
 
-    checkIfStuck();
+      checkIfStuck();
 
-    spawnSpeedEffect();
+      spawnSpeedEffect();
 
-    if (!onGround)jumpTime+=1*speedFactor;
 
-    //if (respawning)respawn() ;
 
-    for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
-      usedPowerup.get(i).use();
-      if (usedPowerup.get(i).dead) {
-        usedPowerup.remove(usedPowerup.get(i));    
+      if (!onGround)jumpTime+=1*speedFactor;
+
+      //if (respawning)respawn() ;
+
+      for (int i=usedPowerup.size ()-1; i>=0; i--) {  // powerup handeling
+        usedPowerup.get(i).use();
+        if (usedPowerup.get(i).dead) {
+          usedPowerup.remove(usedPowerup.get(i));    
+          UpdatePowerupGUILife();
+        }
+      }
+      if (usedPowerup.size()>MAX_POWERUP_SIZE) {
+        usedPowerup.remove(usedPowerup.size()-1);
         UpdatePowerupGUILife();
       }
-    }
-    if (usedPowerup.size()>MAX_POWERUP_SIZE) {
-      usedPowerup.remove(usedPowerup.size()-1);
-      UpdatePowerupGUILife();
-    }
-    if (millis() > trailspawnTimer+80/speedFactor) {
-        if (ducking && onGround) entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
-        else entities.add(new TrailParticle(int(x), int(y), cell));
-        trailspawnTimer=millis();
-      }
-      if (punching && punchCooldown==0)punch();
 
-    if (lives<0)gameOver();
+      if (punching && punchCooldown<=0)punch();
+
+      if (lives<0)gameOver();
     }
   }
 
@@ -85,34 +85,71 @@ class Player {
     pushMatrix();
     translate(int(x+w*0.5), int(y+h*0.5));
     rotate(radians(angle));
-if (taunt) {
-      cell=cutSpriteSheet(int(tauntTime));
+    /*  if (taunt) {
+     cell=cutSpriteSheet(int(tauntTime));
+     image(cell, -30, -40, 100, 80);
+     } else {
+     if (ducking && onGround) { 
+     cell=cutSpriteSheet(129);
+     blink();
+     image(cell, -30, -40, 100, 80);
+     } else {
+     if (jumpCount==MAX_JUMP-1) {
+     cell=cutSpriteSheet(130);
+     blink();
+     image(cell, -w*0.5, -h*0.5, 100, 80);
+     } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
+     cell=cutSpriteSheet(int(x*0.03%16));
+     blink();
+     image(cell, -w*0.5, -h*0.5, w, h);
+     } else {
+     cell=cutSpriteSheet(131);
+     blink();
+     image(cell, -w*0.5, -h*0.5, 100, 80);
+     }
+     }
+     if (millis() > trailspawnTimer+80/speedFactor) {
+     if (ducking && onGround) entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
+     else entities.add(new TrailParticle(int(x), int(y), cell));
+     trailspawnTimer=millis();
+     }*/
+    if (taunt) {
+      cell=animSprite[int(tauntTime)];
       image(cell, -30, -40, 100, 80);
     } else {
-    if (ducking && onGround) { 
-      cell=cutSpriteSheet(129);
-      blink();
-      image(cell, -30, -40, 100, 80);
-    } else {
-      if (jumpCount==MAX_JUMP-1) {
-        cell=cutSpriteSheet(130);
+      if (ducking && onGround) { 
+        cell=animSprite[129];
         blink();
-        image(cell, -w*0.5, -h*0.5, 100, 80);
-      } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
-        cell=cutSpriteSheet(int(x*0.03%16));
-        blink();
-        image(cell, -w*0.5, -h*0.5, w, h);
-        //image(cell, -w*0.5, -h*0.5, w, h);
+        image( displaySprite, -30, -40, 100, 80);
       } else {
-        cell=cutSpriteSheet(131);
-        blink();
-        image(cell, -w*0.5, -h*0.5, 100, 80);
+        if (jumpCount==MAX_JUMP-1) {
+          cell=animSprite[130];
+          blink();
+
+          image(displaySprite, -w*0.5, -h*0.5, 100, 80);
+        } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
+          cell=animSprite[int(x*0.03%16)];
+          blink();
+
+          image(displaySprite, -w*0.5, -h*0.5, w, h);
+        } else {
+          cell=animSprite[131];
+          blink();
+
+          image(displaySprite, -w*0.5, -h*0.5, 100, 80);
+        }
+      }
+      if (millis() > trailspawnTimer+80/speedFactor) {
+        if (ducking && onGround) entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
+        else entities.add(new TrailParticle(int(x), int(y), cell));
+        trailspawnTimer=millis();
       }
     }
-}
+
     popMatrix();
     fill(0);    
-    if (debug)text ("averageSpeed:"+averageSpeed +" totalJump:"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
+    // if (debug)text ("averageSpeed:"+averageSpeed +" :"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
+    if (debug)text ("ducking:"+ducking +" onGround:"+onGround +" punching:"+punching + " invincible:"+invincible+" invis:"+invis, p.x+300, p.y-200, 500, -200);
   }
   void collision() {
     if (invis==0) {
@@ -163,6 +200,7 @@ if (taunt) {
   void duck() {
     if (!onGround) { 
       vy=downDashSpeed;
+
       if (punching) entities.add(new slashParticle(int(x), int(y), 4)); // downdash Attack
     }
     if (attckSpeedReduction<30)attckSpeedReduction=30;  // redused attack cooldown when ducking
@@ -202,9 +240,11 @@ if (taunt) {
      }*/
   }
   void blink() {  
-    if (invis >1 && invis % 4 <=1) {
-      cell.filter(INVERT);
+    displaySprite=cell.get(0, 0, cell.width, cell.height);
+    if (tokenDroping || invis!=0 && invis >1 && invis % 10 >=5) {
+      displaySprite.filter(INVERT);
     }
+
   }
   void stomp() {
     //playSound(blockDestroySound);
@@ -279,7 +319,7 @@ if (taunt) {
 
     //   fill(255, 0, 0);  // hitbox
     //  rect(x+w, y, punchRange, 75);
-    if (punchTime<0) {
+    if (punchTime<=0) {
       punching=false;
       if (invincible)  punchCooldown=PUNCH_MAX_CD-attckSpeedReduction; 
       else punchCooldown=PUNCH_MAX_CD;
@@ -360,9 +400,13 @@ if (taunt) {
   }
 
   void reset() {
+    usedPowerup.clear();
+
     y=floorHeight-h;
     h=90;
     duckTime=0;
+    punchTime=0;
+    jumpTime=0;
     vy=0;
     lives=MAX_LIFE;
     vx=defaultSpeed;
@@ -371,7 +415,7 @@ if (taunt) {
     weaponColor=defaultWeaponColor;
     invis=0;
     attractRange=0;
-    
+
     taunt=true;
     totalDucks=0;
     totalJumps=0;
@@ -382,7 +426,6 @@ if (taunt) {
     punching=false; 
     ducking=false;
     invincible=false;
-    usedPowerup.clear();
   }
   void reduceLife() {
     if (tutorial) {
@@ -404,7 +447,7 @@ if (taunt) {
     x-=400;
     y=-50-h;
     for (Obstacle o : obstacles) {
-      if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-400 && o.x+o.w < p.x+p.w ) {
+      if (o.y+o.h > p.y && p.y +p.h > o.y &&  o.x > p.x-400 && o.x+o.w < p.x+p.w+800 ) {
         o.impactForce=60;  
         o.health=0;
         o.death();
@@ -505,5 +548,7 @@ if (taunt) {
       if (invincible) entities.add(new SparkParticle(int(x), int(random(h)+y), 20, color(255, 220, 20)));
     }
   }
+
+
 }
 

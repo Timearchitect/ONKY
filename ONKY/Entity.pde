@@ -1,7 +1,7 @@
 abstract class Entity {
   boolean dead, underlay, overlay, regenerating; 
   int x, y, w, h;
-  float vx, vy;
+  float vx, vy,ax,ay;
   Entity(int _x, int  _y) {
     x=_x;
     y=_y;

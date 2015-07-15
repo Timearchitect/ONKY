@@ -23,7 +23,7 @@ class TrailParticle extends Particle {
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     //particles.add(this);
-    cell=p.cell;
+    cell=p.displaySprite;
     angle=p.angle;
     opacity=200-(100*speedFactor);
     w=100;
@@ -416,7 +416,7 @@ class textParticle extends Particle {
     x+=vx;
     y+=vy;
     //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
-    if ((p.x+p.vx-playerOffsetX*3+width/scaleFactor/screenFactor)>x) {
+    if (((p.x+p.vx-playerOffsetX*3+width/scaleFactor)*screenFactor)>x) {
       if (!active) {
         //playSound(warning);
         background(255);
@@ -427,15 +427,15 @@ class textParticle extends Particle {
         vx=p.vx;
       }
     }
-    if (opacity<2)death();
+    if (opacity<10)death();
   }
   void display() {
     if (active) {  
       fill(particleColor, opacity);
-      textSize(int(350*screenFactor));
-      textAlign(RIGHT);
-      text(text, x, y);
-      textAlign(NORMAL);
+      textSize(int(250*screenFactor));
+    //  textAlign(RIGHT);
+      text(text,x, y);
+     // textAlign(NORMAL);
     }
   }
 }

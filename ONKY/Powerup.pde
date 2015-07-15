@@ -1,6 +1,6 @@
 abstract class Powerup extends Entity implements Cloneable {
   PImage icon;
-  boolean instant=true, toggle, homing;
+  boolean instant=true, toggle, homing, gravity;
   float angle, offsetX, offsetY;
   float  time, spawnTime;
   color powerupColor= color(255);
@@ -14,7 +14,7 @@ abstract class Powerup extends Entity implements Cloneable {
     y=_y;
     w=100;
     h=100;
-    powerups.add( this);
+    // powerups.add( this);
     totalTokens++;
   }
   Powerup(int _x, int _y, int _time, boolean _regenerating) {
@@ -28,9 +28,13 @@ abstract class Powerup extends Entity implements Cloneable {
     offsetY=sin(radians(angle))*12*speedFactor;
     x+=vx*speedFactor;
     y+=vy*speedFactor;
+    if (gravity) {
+      vx+=ax;
+      vy+=ay;
+    }
     if (homing && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
-      vx=((p.x+p.w*0.5)-x)*0.15*speedFactor;
-      vy=((p.y+p.h*0.5)-y)*0.15*speedFactor;
+      vx=((p.x+p.w*0.5)-x)*0.18*speedFactor;
+      vy=((p.y+p.h*0.5)-y)*0.18*speedFactor;
     }
     collision();
   }
@@ -95,16 +99,23 @@ abstract class Powerup extends Entity implements Cloneable {
   }
 }
 class TokenPowerup extends Powerup {
+
   TokenPowerup(int _x, int _y, int _time) {
     super(_x, _y, _time);
     powerupColor=color(255);
     icon= tokenIcon;
-    //powerups.add( this);
     w=75;
     h=75;
     homing=true;
   }
-
+  TokenPowerup(int _x, int _y, int _vx, int _vy, int _time) {
+    this(_x, _y, _time);
+    vx=_vx;
+    vy=_vy;
+    ax=0;
+    ay=2;
+    gravity=true;
+  }
   void collect() {
     if (!dead) {
       super.collect();
@@ -253,8 +264,8 @@ class LaserPowerup extends Powerup {
           }
         }
       }
-      if (targetScaleFactor>1-upgradeLevel*0.1-0.30) {
-        targetScaleFactor=1-upgradeLevel*0.1-0.30;
+      if (targetScaleFactor>1-upgradeLevel*0.1-0.20) {
+        targetScaleFactor=1-upgradeLevel*0.1-0.20;
       }
       time-=1*speedFactor;
       if (time<1)death();
@@ -337,12 +348,12 @@ class TeleportPowerup extends Powerup {
     distance=_distance;
     instant=true;
   }
-    TeleportPowerup(int _x, int _y, int _time, int _distance,boolean _instant) {
+  TeleportPowerup(int _x, int _y, int _time, int _distance, boolean _instant) {
     this(_x, _y, 25);
     distance=_distance;
     instant=_instant;
   }
-  TeleportPowerup(int _x, int _y, int _time, int _distance,boolean _instant, boolean _regenerating) {
+  TeleportPowerup(int _x, int _y, int _time, int _distance, boolean _instant, boolean _regenerating) {
     this(_x, _y, 25);
     distance=_distance;
     regenerating=_regenerating;
@@ -372,7 +383,8 @@ class TeleportPowerup extends Powerup {
     p.jumpCount++; 
     p.collectCooldown=20;  
     playerOffsetX=distance+100;
-    playerOffsetY=0;
+    playerOffsetY=-200;
+
     for (int i=0; i<5; i++) entities.add(new RectParticle(int(p.x+random(100)-50), int(p.y+random(80)-40), 2, 0, int(random(30)+15), p.weaponColor));
 
     switch(upgradeLevel ) {
@@ -393,7 +405,7 @@ class TeleportPowerup extends Powerup {
       shakeFactor=100;
       break;
     case 2:
-     // playSound(teleportAttackSound);
+      // playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();
@@ -401,7 +413,7 @@ class TeleportPowerup extends Powerup {
       shakeFactor=100;
       break;
     default:
-     // playSound(teleportAttackSound);
+      // playSound(teleportAttackSound);
       entities.add(new slashParticle(int(p.x), int(p.y), 5, distance));
       collectAll();
       hitCollision();
@@ -509,6 +521,45 @@ class RandomPowerup extends Powerup {
       powerups.add( new TokenPowerup( _x, _y, _time));
     }
     death();
+  }
+}
+
+class PoisonPowerdown extends Powerup {
+  PoisonPowerdown(int _x, int _y, int _time) {
+    super(_x, _y, int(_time));
+    powerupColor=color(0, 255, 0);
+    icon=magnetIcon;
+    instant=true;
+  }
+
+  void collect() {
+    try {
+      p.usedPowerup.add(this.clone());
+    }        
+    catch(CloneNotSupportedException e) {
+    }
+    UpdatePowerupGUILife();
+    super.collect();
+  }
+  void use() {
+    if ( toggle || instant ) {
+      p.tokenDroping=true;
+      if (time%int(100/speedFactor)==0)dropTokens();
+      time--;
+      if (time<1) {
+        death();
+        p.tokenDroping=false;
+      }
+    }
+  }
+  void dropTokens() {
+    println("dropde");
+    if (tokensTaken>0) {
+      tokensTaken--;
+      p.collectCooldown=20;   
+      background(powerupColor);
+      powerups.add(new TokenPowerup(int(p.x+p.w*0.5), int(p.y+p.h*0.5), int(random(20)-10+p.vx*0.5), int(random(-50)-10), 500));
+    }
   }
 }
 
