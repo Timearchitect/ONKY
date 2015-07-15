@@ -22,20 +22,23 @@ abstract class Powerup extends Entity implements Cloneable {
     regenerating=_regenerating;
   }
   void update() {
-    if (int(angle%120)==0) entities.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
-    angle+=4*speedFactor;
-    offsetX=cos(radians(angle))*12*speedFactor;
-    offsetY=sin(radians(angle))*12*speedFactor;
-    x+=vx*speedFactor;
-    y+=vy*speedFactor;
-    if (gravity) {
-      vx+=ax;
-      vy+=ay;
-    }
     if (homing && dist(x, y, p.x+p.w*0.5, p.y+p.h*0.5)<p.attractRange) {
       vx=((p.x+p.w*0.5)-x)*0.18*speedFactor;
       vy=((p.y+p.h*0.5)-y)*0.18*speedFactor;
+    } else {
+      if (int(angle%120)==0) entities.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
+      angle+=4*speedFactor;
+      offsetX=cos(radians(angle))*12*speedFactor;
+      offsetY=sin(radians(angle))*12*speedFactor;
+      if (gravity) {
+        vx+=ax;
+        vy+=ay;
+      }
     }
+    x+=vx*speedFactor;
+    y+=vy*speedFactor;
+
+
     collision();
   }
 
@@ -63,8 +66,8 @@ abstract class Powerup extends Entity implements Cloneable {
     //entities.add( new SpinParticle( int(x), int(y), powerupColor));
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
-    UpdatePowerupGUILife();
-    if (regenerating)p.collectCooldown=30;
+    //UpdatePowerupGUILife();
+    //if (regenerating)p.collectCooldown=30;
     death();
   }
   void death() {
@@ -112,7 +115,7 @@ class TokenPowerup extends Powerup {
     this(_x, _y, _time);
     vx=_vx;
     vy=_vy;
-    ax=0;
+    // ax=0;
     ay=2;
     gravity=true;
   }
@@ -544,7 +547,20 @@ class PoisonPowerdown extends Powerup {
   void use() {
     if ( toggle || instant ) {
       p.tokenDroping=true;
-      if (time%int(100/speedFactor)==0)dropTokens();
+      switch(upgradeLevel) {  
+      case 0:
+        if (time%int(100/speedFactor)==0)dropTokens();
+        break;
+      case 1:
+        if (time%int(80/speedFactor)==0)dropTokens();
+        break;
+      case 2:
+        if (time%int(60/speedFactor)==0)dropTokens();
+        break;
+      default:
+        if (time%int(40/speedFactor)==0)dropTokens();
+      }
+
       time--;
       if (time<1) {
         death();
@@ -553,9 +569,9 @@ class PoisonPowerdown extends Powerup {
     }
   }
   void dropTokens() {
-    println("dropde");
     if (tokensTaken>0) {
       tokensTaken--;
+      screenAngle=random(10)-5;
       p.collectCooldown=20;   
       background(powerupColor);
       powerups.add(new TokenPowerup(int(p.x+p.w*0.5), int(p.y+p.h*0.5), int(random(20)-10+p.vx*0.5), int(random(-50)-10), 500));
