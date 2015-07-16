@@ -34,8 +34,9 @@ void UpdateGameOverGUI() {
   gameOverGUI.fill(255);
   gameOverGUI.rect(100*screenFactor, 100*screenFactor, width-200*screenFactor, height-200*screenFactor);
   gameOverGUI.fill(0);
-  gameOverGUI.text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter", width*0.5, height*0.5);  
-  gameOverGUI.text( "Your Score: "+int(score*0.002) + "   Totaltoken: "+ tokensTaken, width*0.5, height*0.65);  
+  gameOverGUI.textAlign(CENTER);
+  gameOverGUI.text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter   "+int((deathTime-runTime)*0.001)+" sek", width*0.5, height*0.5);  
+  //gameOverGUI.text( "Your Score: "+int(score*0.002) + "   Totaltoken: "+ tokensTaken, width*0.5, height*0.65);  
   gameOverGUI.text( "time: "+gameOverCooldown, width*0.5, height*0.7);  
 
   gameOverGUI.fill(255, 0, 0); 

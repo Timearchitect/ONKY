@@ -271,7 +271,10 @@ class LaserPowerup extends Powerup {
         targetScaleFactor=1-upgradeLevel*0.1-0.20;
       }
       time-=1*speedFactor;
-      if (time<1)death();
+      if (time<1) {
+        death();      
+        UpdatePowerupGUILife();
+      }
     }
   }
 }

@@ -34,6 +34,7 @@ PImage cornerStar, tapPowerupZone, iconZone; // GUI
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
+long runTime,deathTime;
 
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
@@ -369,8 +370,8 @@ void resetScore() {
   score=0;
   tokensTaken=100;
   obstacleDestroyed=0;
+  runTime=millis();
 
-  score=0;
   totalTokens=0;
   totalObstacle=0;
 }
@@ -528,6 +529,7 @@ void loadParalax() {
 }
 
 void gameOver() {
+  deathTime=millis();
   gameState=0;
   gameOverCooldown=100;
 }

@@ -17,6 +17,7 @@ class LaserProjectile extends Projectile {
   LaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     // projectiles.add(this);
+
     w=25;
     projectileColor= color(255, 0, 0);
     // strokeWeight(10);
@@ -70,7 +71,7 @@ class LaserProjectile extends Projectile {
   }
 }
 class BigLaserProjectile extends LaserProjectile {
-
+  int health=3,cooldown;
   BigLaserProjectile(int _x, int  _y, float _vx, float _vy) {
     super( _x, _y, _vx, _vy);
     //  projectiles.add(this);
@@ -78,8 +79,7 @@ class BigLaserProjectile extends LaserProjectile {
     h=40;
     //  playSound(bigLaserSound);
     shakeFactor+=5;
-    //  entities.add(new SparkParticle(int(x)-40, int(y), 20, projectileColor));
-    //  entities.add(new SparkParticle(int(x)-40, int(y), 10, 255));
+
   }
 
   void display() {
@@ -93,10 +93,12 @@ class BigLaserProjectile extends LaserProjectile {
   }
 
   void collision() {
-    if (!dead ) {
+    if (cooldown==0 && !dead ) {
       for (Obstacle o : obstacles) {
         if (!o.dead && !o.unBreakable && o.x+o.w > x-vx && o.x < x+vx  + vx && o.y+o.h > y-h &&  o.y < y+h) {
           o.damage(1);
+          health--;
+          cooldown=3;
           death();
           shakeFactor+=10;
         }
@@ -109,6 +111,7 @@ class BigLaserProjectile extends LaserProjectile {
     y+=vy*speedFactor;
     vx*=(1+.1*speedFactor);
     collision();
+    if(cooldown!=0)cooldown--;
     if (int(x)%4==0)entities.add(new triangleParticle(int(x), int(y), vx*.3, 0, 40, projectileColor));
     if ( x-vx*3>p.x+width/scaleFactor) dead=true;  //off screen
     //if (time<=0) dead=true;  // timelimit
@@ -116,13 +119,10 @@ class BigLaserProjectile extends LaserProjectile {
   }
 
   void death() {
-    //super.death();
+    if (health<=0)super.death();
     entities.add(new LineParticle(int(x), int(y), 300));
-    for (int i=0; i<6; i++) entities.add(new triangleParticle(int(x), int(y), random(10)+vx*.3, random(20)-10, 220, projectileColor));
-    // strokeWeight(20);
-    //stroke(projectileColor);
-    //fill(255);
-    //ellipse(int(x), int(y), 200, 200);
+    for (int i=0; i<5; i++) entities.add(new triangleParticle(int(x), int(y), random(10)+vx*.3, random(20)-10, 220, projectileColor));
+
   }
 }
 
