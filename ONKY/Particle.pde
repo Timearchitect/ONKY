@@ -23,7 +23,8 @@ class TrailParticle extends Particle {
   TrailParticle(int _x, int  _y, PImage _cell) {
     super( _x, _y);
     //particles.add(this);
-    cell=p.displaySprite;
+    //cell=p.displaySprite;
+      cell=p.cell;
     angle=p.angle;
     opacity=200-(100*speedFactor);
     w=100;
@@ -554,7 +555,7 @@ class tapOverLayParticle extends Particle {
     else if (action==1) image(cornerStar, -width*0.5, height*0.5, width, height);
     else if (action==2) image(cornerStar, width*0.5, -height*0.5, width, height);
     else if (action==3) image(cornerStar, width*0.5, height*0.5, width, height);
-    else if (action==4) image(iconZone, x-100, y-100);
+   // else if (action==4) image(iconZone, x-100, y-100);
     noTint();
   }
 }

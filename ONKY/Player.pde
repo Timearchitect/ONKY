@@ -2,7 +2,7 @@ class Player {
 
   long trailspawnTimer;
   ArrayList<Powerup> usedPowerup = new ArrayList<Powerup>() ;
-  PImage SpriteSheetRunning, ONKYSpriteSheet, FrontFlip, Life, Jump, DownDash, Slide, cell; //setup
+  PImage ONKYSpriteSheet,Life, cell; //setup
   float x, y, w=100, h=90, vx=5, vy, ax, ay=0.9, angle, decayFactor=0.95;
   final int MAX_LIFE=3, MAX_JUMP=2, PUNCH_MAX_CD=20, SMASH_MAX_CD=50, defaultSpeed=10, MAX_POWERUP_SIZE=16;
   int cooldown, collectCooldown, jumpHeight=20, jumpCount=MAX_JUMP, downDashSpeed=35, lives= MAX_LIFE;
@@ -16,7 +16,7 @@ class Player {
   final color defaultWeaponColor= color(255, 0, 0);
   color weaponColor= defaultWeaponColor;
   int amountOfFrames=140;
-  PImage animSprite[]= new PImage[amountOfFrames], displaySprite;
+ // PImage animSprite[]= new PImage[amountOfFrames], displaySprite;
   Player() {
     trailspawnTimer=millis();
   }
@@ -84,7 +84,7 @@ class Player {
     pushMatrix();
     translate(int(x+w*0.5), int(y+h*0.5));
     rotate(radians(angle));
-    /*  if (taunt) {
+      if (taunt) {
      cell=cutSpriteSheet(int(tauntTime));
      image(cell, -30, -40, 100, 80);
      } else {
@@ -111,8 +111,8 @@ class Player {
      if (ducking && onGround) entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
      else entities.add(new TrailParticle(int(x), int(y), cell));
      trailspawnTimer=millis();
-     }*/
-    if (taunt) {
+     }
+    /*if (taunt) {
       cell=animSprite[int(tauntTime)];
       image(cell, -30, -40, 100, 80);
     } else {
@@ -141,7 +141,7 @@ class Player {
         if (ducking && onGround) entities.add(new TrailParticle(int(x), int(y-duckHeight*0.5), cell));
         else entities.add(new TrailParticle(int(x), int(y), cell));
         trailspawnTimer=millis();
-      }
+      }*/
     }
 
     popMatrix();
@@ -237,11 +237,17 @@ class Player {
      angle=2;
      }*/
   }
-  void blink() {  
-    displaySprite=cell.get(0, 0, cell.width, cell.height);
-    if (tokenDroping || invis!=0 && invis >1 && invis % 10 >=5) {
-      displaySprite.filter(INVERT);
+  /*void blink() {  
+   displaySprite=cell.get(0, 0, cell.width, cell.height);
+   if (  invis >1 && invis % 10 >=5) {
+     displaySprite.filter(INVERT);
     }
+  }*/
+    void blink() {  
+ //  displaySprite=cell.get(0, 0, cell.width, cell.height);
+   if ( invis >1 && invis % 10 >=5) {
+      cell.filter(INVERT);
+   }
   }
   void stomp() {
     //playSound(blockDestroySound);
@@ -390,11 +396,11 @@ class Player {
       toSlow=0;
     }
   }
-  void cutSprite (int index) {
-    final int interval= 160, imageWidth=160, imageheight=130;
-    index= int(index%16);
-    cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
-  }
+  //void cutSprite (int index) {
+    //final int interval= 160, imageWidth=160, imageheight=130;
+    //index= int(index%16);
+   // cell = SpriteSheetRunning.get(index*(interval+1)+1, 0, imageWidth, imageheight);
+ // }
 
   void reset() {
     usedPowerup.clear();

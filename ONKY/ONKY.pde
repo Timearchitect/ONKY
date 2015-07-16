@@ -27,27 +27,27 @@ int renderObject;
  AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
  */
 PImage  poisonIcon, slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
-PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
+PImage Tire, Vines, rockSign, rock, lumber, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
-PImage cornerStar, tapPowerupZone, iconZone; // GUI
-
+PImage cornerStar, tapPowerupZone; // GUI
+// lumberR, lumberL ,iconZone;
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
 long runTime, deathTime;
 
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
-ArrayList<Paralax> ForegroundParalaxLayers = new ArrayList<Paralax>();
+//ArrayList<Paralax> ForegroundParalaxLayers = new ArrayList<Paralax>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 ArrayList<Debris> debris = new ArrayList<Debris>();
 ArrayList<Projectile> projectiles= new ArrayList<Projectile>();
 ArrayList<Particle> particles = new ArrayList<Particle>();
-ArrayList<Particle> overParticles = new ArrayList<Particle>();
+//ArrayList<Particle> overParticles = new ArrayList<Particle>();
 ArrayList<Powerup> powerups = new ArrayList<Powerup>();
 //Paralax paralax= new Paralax();
 //ParalaxObject paralaxObject=new ParalaxObject();
-Player p;
+Player p= new Player();
 color FlashColor;
 boolean debug, automate, hint, mute, preloadObstacles=false;
 final int MAX_SHAKE=200, MAX_SPEED=22;
@@ -80,9 +80,8 @@ void setup() {
   hint(DISABLE_TEXTURE_MIPMAPS);
   ((PGraphicsOpenGL)g).textureSampling(2);
 
-  font=loadFont("Roboto-Bold-48.vlw");
+  font=loadFont("Roboto-Bold-30.vlw");
   textFont(font);
-  p = new Player();
   loadImages();
 
   /* final PGraphics pg = createGraphics(41, 41, JAVA2D);
@@ -102,7 +101,7 @@ void setup() {
 
   loadParalax();
   if (preloadObstacles)loadObstacleCourse();
-  p.y=floorHeight-p.h;
+ // p.y=floorHeight-p.h;
 
   // powerups.add(new InvisPowerup(1000, 600, 1500));
   //powerups.add(new LaserPowerup(2200, 400, 600));
@@ -415,20 +414,20 @@ void loadImages() {
   //GUI
   cornerStar= loadImage("cornerStar.png");
   tapPowerupZone= loadImage("tapPowerupZone.png");
-  iconZone= loadImage("iconZone.png");
+  //iconZone= loadImage("iconZone.png");
 
   //ONKY player sprites
 
   p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
-  p.SpriteSheetRunning = loadImage("onky_running3.png");
-  p.FrontFlip = loadImage("frontFlip.png");
+  //p.SpriteSheetRunning = loadImage("onky_running3.png");
+ // p.FrontFlip = loadImage("frontFlip.png");
   p.Life = loadImage("extraLife.png");
-  p.Jump = loadImage("jump.png");
-  p.DownDash = loadImage("downDash.png");
-  p.Slide = loadImage("slide.png");
-  for (int i=0; i < p.amountOfFrames; i++) {
+  //p.Jump = loadImage("jump.png");
+  //p.DownDash = loadImage("downDash.png");
+  //p.Slide = loadImage("slide.png");
+ /* for (int i=0; i < p.amountOfFrames; i++) {
     p.animSprite[i]=p.cutSpriteSheet(i);
-  }
+  }*/
 
   //icons
   poisonIcon = loadImage("icon/poison.png");
@@ -459,8 +458,8 @@ void loadImages() {
   sign= loadImage("sign.png");
   Vines = loadImage("vines.png");
   lumber= loadImage("lumber22.png");
-  lumberR= loadImage("lumber33.png");
-  lumberL= loadImage("lumber11.png");
+  //lumberR= loadImage("lumber33.png");
+  //lumberL= loadImage("lumber11.png");
   Wood= loadImage("wood.png");
   waterSpriteSheet= loadImage("watertile.png");
 

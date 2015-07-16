@@ -685,9 +685,9 @@ class Snake extends Obstacle {
   void death() {
     super.death();
     entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 100));
-    for (int i =0; i< 8; i++) {
+    /*for (int i =0; i< 5; i++) {
       entities.add( new BushDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.5, random(30)-20));
-    }
+    }*/
   }
   void update() {
     super.update();

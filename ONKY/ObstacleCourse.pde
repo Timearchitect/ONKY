@@ -1090,7 +1090,7 @@ void spawnHill(int x) {
 
 void spawnIronPath(int x) {
   obstacleCourseDist=2200;
-  int index= int(random(4));
+
   powerups.add( new  TokenPowerup(x+100, int(floorHeight-100), 100) );
   entities.add(new IronBox(x+00, int(floorHeight-400) ));
   entities.add(new IronBox(x+00, int(floorHeight-600) ));
