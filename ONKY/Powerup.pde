@@ -146,7 +146,7 @@ class InvisPowerup extends Powerup {
       }
       //p.usedPowerup.time+=this.time;
       //this.death();
-      //UpdatePowerupGUILife();
+      UpdatePowerupGUILife();
       super.collect();
     }
   }
@@ -531,7 +531,7 @@ class PoisonPowerdown extends Powerup {
   PoisonPowerdown(int _x, int _y, int _time) {
     super(_x, _y, int(_time));
     powerupColor=color(0, 255, 0);
-    icon=magnetIcon;
+    icon=poisonIcon;
     instant=true;
   }
 

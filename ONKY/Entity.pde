@@ -31,7 +31,7 @@ abstract class Entity {
   }
   void regenerate() {
     dead=false;
-    println("regenerated");
+    //println("regenerated");
   }
 }
 

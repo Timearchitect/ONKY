@@ -26,7 +26,7 @@ int renderObject;
  AudioPlayer blockDestroySound, smackSound;
  AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
  */
-PImage  slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
+PImage  poisonIcon,slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
@@ -430,6 +430,7 @@ void loadImages() {
   }
 
   //icons
+  poisonIcon = loadImage("icon/poison.png");
   slowIcon = loadImage("icon/slowpower.png");
   slashIcon = loadImage("icon/slashpower.png");
   laserIcon = loadImage("icon/laserpower2.png");
