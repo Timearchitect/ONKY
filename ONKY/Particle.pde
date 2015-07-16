@@ -402,7 +402,7 @@ class RectParticle extends Particle {
 }
 
 class textParticle extends Particle {
-  float  opacity=10;
+  float  opacity=0;
   color particleColor;
   String text;
   boolean active=false;
@@ -410,33 +410,34 @@ class textParticle extends Particle {
     super( _x, _y );
     particleColor=_particleColor;
     text=_text;
+    overlay=true;
   }
   void update() {
     //super.update();
     x+=vx;
     y+=vy;
     //    if (((p.x-playerOffsetX+width)/scaleFactor)*screenFactor>x) {
-    if (((p.x+p.vx-playerOffsetX*3+width/scaleFactor)*screenFactor)>x) {
+    //if (((p.x+p.vx-playerOffsetX*3+width/scaleFactor)*screenFactor)>x) {
+    if (p.x+p.vx-playerOffsetX>x -width*0.5 && p.x-p.vx-playerOffsetX < x) {
+
       if (!active) {
         //playSound(warning);
         background(255);
         opacity=255;
         active=true;
-      } else {
-        opacity*=0.95;  // decay
-        vx=p.vx;
       }
     }
-    if (opacity<10)death();
-  }
-  void display() {
-    if (active) {  
-      fill(particleColor, opacity);
-      textSize(int(250*screenFactor));
-    //  textAlign(RIGHT);
-      text(text,x, y);
-     // textAlign(NORMAL);
+    if (active) {        
+      opacity-=6;  // decay
+      if (opacity<0)death();
     }
+  }
+
+  void display() {
+
+    fill(particleColor, opacity);
+    textSize(int(250*screenFactor));
+    text(text, width*0.5, height*0.5);
   }
 }
 
@@ -446,12 +447,10 @@ class hintOverLayParticle extends Particle {
   color particleColor;
   boolean active=false;
   int action;
-  hintOverLayParticle(int _x, int _y, color _particleColor) {
+
+  hintOverLayParticle(int _x, int _y, color _particleColor, int _action) {
     super( _x, _y );
     particleColor=_particleColor;
-  }
-  hintOverLayParticle(int _x, int _y, color _particleColor, int _action) {
-    this(  _x, _y, _particleColor );
     action=_action;
     overlay=true;
   }
@@ -510,7 +509,7 @@ class hintOverLayParticle extends Particle {
         noTint();
         break;
       case 5:
-        tint(0,0,255, opacity);
+        tint(0, 0, 255, opacity);
         image(tapPowerupZone, width*0.5, 0, width*0.5, height); // activate
         noTint();
         break;

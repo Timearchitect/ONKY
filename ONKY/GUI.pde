@@ -1,4 +1,4 @@
-int  powerupGUIinterval=135, GUIoffsetX=50, GUIoffsetY=160 ,iconSize=110;
+int  powerupGUIinterval=135, GUIoffsetX=50, GUIoffsetY=160, iconSize=110;
 final int MAX_POWERUP_DISPLAYING=4;
 void loadGUILayer() {
   GUI=createGraphics(width, height);
@@ -37,8 +37,8 @@ void UpdateGameOverGUI() {
   gameOverGUI.textAlign(CENTER);
   gameOverGUI.text( ""+obstacleDestroyed +" boxes   "+tokensTaken +" tokens   "+int(score*0.002)  +" meter   "+int((deathTime-runTime)*0.001)+" sek", width*0.5, height*0.5);  
   //gameOverGUI.text( "Your Score: "+int(score*0.002) + "   Totaltoken: "+ tokensTaken, width*0.5, height*0.65);  
-  gameOverGUI.text( "time: "+gameOverCooldown, width*0.5, height*0.7);  
-
+  if (gameOverCooldown>0)gameOverGUI.text( "tap in: "+gameOverCooldown, width*0.5, height*0.7);  
+  else gameOverGUI.text( "Tap to retry !!!", width*0.5, height*0.7);  
   gameOverGUI.fill(255, 0, 0); 
   gameOverGUI.endDraw();
 }
@@ -86,7 +86,7 @@ void UpdatePowerupGUILife() {
     index=p.usedPowerup.indexOf(pow);
     powerupGUI.image(pow.icon, width-(GUIoffsetX+iconSize+index*powerupGUIinterval)*screenFactor, height-GUIoffsetY*screenFactor, iconSize*screenFactor, iconSize*screenFactor);
     if (pow.upgradeLevel!=0)
-      powerupGUI.text(pow.upgradeLevel+" LVL",  width-(GUIoffsetX+iconSize*0.5+index*powerupGUIinterval)*screenFactor,height-GUIoffsetY*screenFactor+iconSize*0.5-iconSize);
+      powerupGUI.text(pow.upgradeLevel+" LVL", width-(GUIoffsetX+iconSize*0.5+index*powerupGUIinterval)*screenFactor, height-GUIoffsetY*screenFactor+iconSize*0.5-iconSize);
   }
   powerupGUI.endDraw();
 }

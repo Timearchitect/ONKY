@@ -61,9 +61,9 @@ void exitTutorial() {
   UpdateGUILife();
 }
 void evaluate(int x) {
-  if (p.tutorialCourseRetries==0)entities.add(new textParticle(x-500, int(floorHeight-200), color(0, 255, 0), "Perfect" ));
-  else if (p.tutorialCourseRetries<2) entities.add(new textParticle(x-500, int(floorHeight-200), color(0, 255, 0), "Great" ));
-  else entities.add(new textParticle(x-500, int(floorHeight-200), color(0, 255, 0), "Good" ));
+  if (p.tutorialCourseRetries==0)entities.add(new textParticle(x-800, int(floorHeight-200), color(0, 255, 0), "Perfect" ));
+  else if (p.tutorialCourseRetries<2) entities.add(new textParticle(x-800, int(floorHeight-200), color(0, 255, 0), "Great" ));
+  else entities.add(new textParticle(x-800, int(floorHeight-200), color(0, 255, 0), "Good" ));
 }
 void loadRandomObstacleCourse(int x) {
   if (firstCourse) {  // first is always grass

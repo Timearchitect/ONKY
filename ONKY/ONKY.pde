@@ -26,7 +26,7 @@ int renderObject;
  AudioPlayer blockDestroySound, smackSound;
  AudioPlayer jumpSound, sliceSound, diceSound, ughSound, collectSound, laserSound, bigLaserSound, teleportSound, teleportAttackSound;
  */
-PImage  poisonIcon,slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
+PImage  poisonIcon, slashIcon, laserIcon, superIcon, tokenIcon, lifeIcon, slowIcon, magnetIcon;
 PImage Tire, Vines, rockSign, rock, lumber, lumberR, lumberL, glass, Bush, Box, brokenBox, mysteryBox, Leaf, rockDebris, Block, BlockSad, ironBox, ironBox2, ironBox3;
 PImage Wood, Smoke, Tree, Tree2, Mountain, sign, Grass, waterSpriteSheet, Snake, Barrel;
 PImage ONKYSpriteSheet;
@@ -34,7 +34,7 @@ PImage cornerStar, tapPowerupZone, iconZone; // GUI
 
 int defaultSpeedLevel=12, speedLevel=defaultSpeedLevel; // default speed level
 int score, tokensTaken, obstacleDestroyed, totalTokens, totalObstacle;
-long runTime,deathTime;
+long runTime, deathTime;
 
 ArrayList<Entity> entities = new ArrayList<Entity>(); // all objects
 ArrayList<Paralax> paralaxLayers = new ArrayList<Paralax>();
@@ -529,14 +529,14 @@ void loadParalax() {
 }
 
 void gameOver() {
-  deathTime=millis();
+  deathTime=millis(); // record time
   gameState=0;
-  gameOverCooldown=100;
+  gameOverCooldown=40;
 }
 
 void gameOverUpdate() {
-  if (gameOverCooldown<1)gameReset();
-  else gameOverCooldown--;
+  if (gameOverCooldown<0)gameReset();
+  if (gameOverCooldown>0)gameOverCooldown--;
   UpdateGameOverGUI();
   image( gameOverGUI, 0, 0); // add GUIlayer
 }

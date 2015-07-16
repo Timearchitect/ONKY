@@ -11,11 +11,11 @@
 
 void mousePressed(MouseEvent event) {  // krympa och förstora
    if (!automate && !p.taunt) {
-    int index, amount=0, interval=110;
+    int index, amount=0;
     boolean powerupTap= false;
     Powerup pow=null;
     amount= (MAX_POWERUP_DISPLAYING<p.usedPowerup.size()) ? MAX_POWERUP_DISPLAYING:p.usedPowerup.size();
-    if (gameState==0)gameOverCooldown-=50;
+    if (gameState==0 && gameOverCooldown<=0)gameOverCooldown-=50;  // reset
     //for ( Powerup pow : p.usedPowerup) {
     for (int i=0; i<amount; i++) {
       pow =p.usedPowerup.get(i);

@@ -7,7 +7,6 @@ abstract class Powerup extends Entity implements Cloneable {
   int upgradeLevel=int(random(4)), pulse;
   Powerup(int _x, int _y, int _time) {
     super(_x, _y);
-    // icon= tokenIcon;
     time=_time;
     spawnTime=_time;
     x=_x;
@@ -26,7 +25,7 @@ abstract class Powerup extends Entity implements Cloneable {
       vx=((p.x+p.w*0.5)-x)*0.18*speedFactor;
       vy=((p.y+p.h*0.5)-y)*0.18*speedFactor;
     } else {
-      if (int(angle%120)==0) entities.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 50, powerupColor));
+      if (int(angle%120)==0) entities.add(new SparkParticle(int(x+offsetX*5), int(y+offsetY*5), 40, powerupColor));
       angle+=4*speedFactor;
       offsetX=cos(radians(angle))*12*speedFactor;
       offsetY=sin(radians(angle))*12*speedFactor;
@@ -37,7 +36,6 @@ abstract class Powerup extends Entity implements Cloneable {
     }
     x+=vx*speedFactor;
     y+=vy*speedFactor;
-
 
     collision();
   }
@@ -51,9 +49,9 @@ abstract class Powerup extends Entity implements Cloneable {
     image(icon, x-w*0.5+offsetX, y-h*0.5+offsetY, w, h);
   }
   void hitCollision() {
-    if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
+    /*if (p.punching && p.x+p.w+p.punchRange > x && p.x+p.w < x + w  && p.y+p.h > y&&  p.y < y + h) {
       if (p.collectCooldown<1)collect();
-    }
+    }*/
   }
   void collision() {
     if (p.x+p.w > x- w*0.5 && p.x < x + w*0.5  && p.y+p.h > y - h*0.5 &&  p.y < y + h*0.5) {
@@ -67,7 +65,7 @@ abstract class Powerup extends Entity implements Cloneable {
     entities.add( new SparkParticle(int(x), int(y), 50, powerupColor));
     //entities.add( new SparkParticle(int(x), int(y), 15, 255));
     //UpdatePowerupGUILife();
-    //if (regenerating)p.collectCooldown=30;
+    if (regenerating)p.collectCooldown=30;
     death();
   }
   void death() {
@@ -575,7 +573,7 @@ class PoisonPowerdown extends Powerup {
     if (tokensTaken>0) {
       tokensTaken--;
       screenAngle=random(10)-5;
-      p.collectCooldown=20;   
+      p.collectCooldown=15;   
       background(powerupColor);
       powerups.add(new TokenPowerup(int(p.x+p.w*0.5), int(p.y+p.h*0.5), int(random(20)-10+p.vx*0.5), int(random(-50)-10), 500));
     }

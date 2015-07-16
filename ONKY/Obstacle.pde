@@ -68,11 +68,11 @@ abstract class Obstacle extends Entity {
       death();
     }
 
-    if (p.smashing && p.x+p.smashRange > x && p.x+p.w < x + w  && p.y+p.h+p.smashRange > y&&  p.y < y + h) {
+    /*if (p.smashing && p.x+p.smashRange > x && p.x+p.w < x + w  && p.y+p.h+p.smashRange > y&&  p.y < y + h) {
       hit();
       impactForce=p.vx+5;
       death();
-    }
+    }*/
   }
   void death() {
     super.death();

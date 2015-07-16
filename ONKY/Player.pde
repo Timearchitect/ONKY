@@ -10,7 +10,7 @@ class Player {
   float punchTime, jumpTime, invis, toSlow;
   int duckTime, duckCooldown, duckHeight=45;
   int tauntTime, smashTime, smashCooldown =SMASH_MAX_CD, smashRange=100, attckSpeedReduction;
-  boolean taunt=true, dead, onGround, punching, stomping, smashing, ducking, invincible, respawning, tokenDroping;
+  boolean taunt=true, dead, onGround, punching, stomping, ducking, invincible, respawning, tokenDroping;
   int totalJumps, totalAttacks, totalDucks, tutorialCourseRetries;
   float averageSpeed;
   final color defaultWeaponColor= color(255, 0, 0);
@@ -47,7 +47,7 @@ class Player {
       if (invincible|| 0<invis)recover();
       if (0<collectCooldown)collectCooldown--; // cant collect
 
-      cutSprite(int(x*0.025));    //cutSprite(int(x/40));
+     // cutSprite(int(x*0.025));    //cutSprite(int(x/40));
 
       checkIfGround();
 
@@ -56,7 +56,6 @@ class Player {
       checkIfStuck();
 
       spawnSpeedEffect();
-
 
 
       if (!onGround)jumpTime+=1*speedFactor;
@@ -70,10 +69,10 @@ class Player {
           UpdatePowerupGUILife();
         }
       }
-      if (usedPowerup.size()>MAX_POWERUP_SIZE) {
+     /* if (usedPowerup.size()>MAX_POWERUP_SIZE) {
         usedPowerup.remove(usedPowerup.size()-1);
         UpdatePowerupGUILife();
-      }
+      }*/
 
       if (punching && punchCooldown<=0)punch();
 
@@ -122,10 +121,9 @@ class Player {
         blink();
         image( displaySprite, -30, -40, 100, 80);
       } else {
-        if (jumpCount==MAX_JUMP-1) {
+        if (jumpCount==MAX_JUMP-1) { // jump
           cell=animSprite[130];
           blink();
-
           image(displaySprite, -w*0.5, -h*0.5, 100, 80);
         } else   if (jumpCount==MAX_JUMP) {  // jump ability restored
           cell=animSprite[int(x*0.03%16)];
@@ -149,7 +147,7 @@ class Player {
     popMatrix();
     fill(0);    
     // if (debug)text ("averageSpeed:"+averageSpeed +" :"+totalJumps +" totalducks:"+totalDucks + " totalAttack:"+totalAttacks, p.x+300, p.y-200, 500, -100);
-    if (debug)text ("ducking:"+ducking +" onGround:"+onGround +" punching:"+punching + " invincible:"+invincible+" invis:"+invis, p.x+300, p.y-200, 500, -200);
+    if (debug)text ("ducking:"+ducking +" onGround:"+onGround +" punching:"+punching + " invincible:"+invincible+" invis:"+invis+" tokenDroping"+tokenDroping, p.x+300, p.y-200, 500, -200);
   }
   void collision() {
     if (invis==0) {
@@ -244,7 +242,6 @@ class Player {
     if (tokenDroping || invis!=0 && invis >1 && invis % 10 >=5) {
       displaySprite.filter(INVERT);
     }
-
   }
   void stomp() {
     //playSound(blockDestroySound);
@@ -349,7 +346,7 @@ class Player {
     }
   }
 
-  void startSmash() {
+ /* void startSmash() {
     if (smashCooldown<=0 && !smashing) {
       smashing=true;
       smashTime=30;
@@ -366,7 +363,7 @@ class Player {
     } else {
       smashTime--;
     }
-  }
+  }*/
   void checkDuck() {
     if (duckTime<0) {
       if (ducking)y-=duckHeight;
@@ -381,7 +378,7 @@ class Player {
   void checkIfStuck() {
     if (vx<5)toSlow+=1 *speedFactor ;
     else toSlow=0;
-    if (toSlow>90) {     
+    if (toSlow>80) {     
       speedFactor=0.02;
       for (int i=0; i<360; i+=60) {
         entities.add( new smokeParticle(int(x+w*0.5), int(y), -sin(radians(i))*8, cos(radians(i))*5, 400));
@@ -416,12 +413,13 @@ class Player {
     invis=0;
     attractRange=0;
 
-    taunt=true;
     totalDucks=0;
     totalJumps=0;
     totalAttacks=0;
     averageSpeed=0;
 
+    taunt=true;
+    tokenDroping=false;
     respawning=false;
     punching=false; 
     ducking=false;
@@ -548,7 +546,5 @@ class Player {
       if (invincible) entities.add(new SparkParticle(int(x), int(random(h)+y), 20, color(255, 220, 20)));
     }
   }
-
-
 }
 

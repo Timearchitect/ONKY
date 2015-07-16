@@ -1,7 +1,6 @@
 class Achivement {
   PImage icon;
   Achivement(PImage _icon) {
-
     icon=_icon;
   }
 }
