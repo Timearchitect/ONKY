@@ -120,6 +120,7 @@ void setup() {
   //powerups.add(new RandomPowerup(2000, 400, 500)); 
   // powerups.add(new RandomPowerup(2000, 600, 500)); 
   // powerups.add(new RandomPowerup(2000, 200, 500));
+
 }
 
 void draw() {
@@ -412,13 +413,14 @@ void debugScreen() {
 
 void loadImages() {
   //GUI
-  cornerStar= loadImage("cornerStar.png");
+  cornerStar= requestImage("cornerStar.png");
+  //cornerStar= loadImage("cornerStar.png");
   tapPowerupZone= loadImage("tapPowerupZone.png");
   //iconZone= loadImage("iconZone.png");
 
   //ONKY player sprites
-
-  p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
+  p.ONKYSpriteSheet = requestImage("OnkySpriteSheet.png");
+ // p.ONKYSpriteSheet = loadImage("OnkySpriteSheet.png");
   //p.SpriteSheetRunning = loadImage("onky_running3.png");
  // p.FrontFlip = loadImage("frontFlip.png");
   p.Life = loadImage("extraLife.png");
@@ -469,7 +471,8 @@ void loadImages() {
   //paralax
   Tree =loadImage("treetile.png");
   Tree2 =loadImage("treetile2.png");
-  Mountain= loadImage("backgroundfull.png");
+  Mountain = requestImage("backgroundfull.png");
+ // Mountain= loadImage("backgroundfull.png");
 
   //debris
   Smoke=loadImage("smoke.png");
@@ -514,7 +517,6 @@ void loadSound() {
 }
 
 void loadParalax() {
-
   entities.add(new Paralax(0, -int((height*2.2)), int( width*3), int( (height*3+200)), 0.01, Mountain)); // bakgrund
   entities.add(new ParalaxObject(Tree, 0, int(415*screenFactor), 50, 50, 0.02)); 
   entities.add(new ParalaxObject(Tree2, 255, int(415*screenFactor), 50, 50, 0.02)); 
@@ -530,7 +532,7 @@ void loadParalax() {
 void gameOver() {
   deathTime=millis(); // record time
   gameState=0;
-  gameOverCooldown=40;
+  gameOverCooldown=20;
 }
 
 void gameOverUpdate() {

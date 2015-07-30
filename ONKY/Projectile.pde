@@ -112,7 +112,7 @@ class BigLaserProjectile extends LaserProjectile {
     vx*=(1+.1*speedFactor);
     collision();
     if(cooldown!=0)cooldown--;
-    if (int(x)%4==0)entities.add(new triangleParticle(int(x), int(y), vx*.3, 0, 40, projectileColor));
+    if (int(x)%6==0)entities.add(new triangleParticle(int(x-vx*4), int(y), vx*.3, 0, 40, projectileColor));
     if ( x-vx*3>p.x+width/scaleFactor) dead=true;  //off screen
     //if (time<=0) dead=true;  // timelimit
     //else time--;

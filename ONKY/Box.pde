@@ -767,6 +767,17 @@ class Barrel extends Obstacle {
   void update() {
     super.update();
     angle+=vx*2*speedFactor;
+    gravity();
+  }
+  void gravity(){
+    boolean collision=false;
+    for(Obstacle o:obstacles) {
+      if( o!=this && o.x+o.w > x && o.x < x + w  && o.y+o.h > y&&  o.y < y + h) {
+       collision=true;
+      }
+    }
+  if(collision){ vy*=-0.5; }
+  else {vy+=1;}
   }
   void display() {
     // image(Snake, x, y, w, h);
@@ -832,7 +843,6 @@ class Rock extends Obstacle {
       super.death();
       entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
       entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 500, obstacleColor));
-
       for (int i =0; i< 10; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }
@@ -900,7 +910,6 @@ class stoneSign extends Obstacle {
       super.death();
       entities.add(new LineParticle(int(x+w*0.5), int(y+h*0.5), 150));
       entities.add( new smokeParticle( int(x+w*0.5), int(y+h*0.5), 0, 0, 600, obstacleColor));
-
       for (int i =0; i< 15; i++) {
         entities.add( new RockDebris(this, int(x+random(w)-w*0.5), int(y+random(h)-h*0.5), random(15)+impactForce*0.3, random(20)-10));
       }

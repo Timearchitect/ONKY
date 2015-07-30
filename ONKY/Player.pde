@@ -541,10 +541,8 @@ class Player {
     } 
 
     index=index%rowAmount;
-
     return ONKYSpriteSheet.get(index*(imageWidth+1)+1, row*imageheight+1, imageWidth, imageheight);
   }
-
 
   void spawnSpeedEffect() {
     if (int(random(60))<vx*speedFactor) {

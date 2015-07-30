@@ -1,4 +1,4 @@
-int  difficulty, difficultyRange=7, totalAmountOfCourses=35, totalAmountOfTutorialCourses=15;
+int  difficulty, difficultyRange=8, totalAmountOfCourses=35, totalAmountOfTutorialCourses=15;
 float minDifficulty=0, maxDifficulty=difficultyRange, difficultScale=1.2;
 int tutorialStep, amountOfCourses=110, distGenerated, defaultObstacleCourseDist=2200, obstacleCourseDist=defaultObstacleCourseDist, defaultLoadMargin=2900, loadMargin=defaultLoadMargin, deleteMargin=2200;
 boolean firstCourse=true, tutorial=true;
