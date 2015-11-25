@@ -524,7 +524,6 @@ void loadParalax() {
   entities.add(new ParalaxObject(Tree2, 300, int(430*screenFactor), 100, 100, 0.1)); 
   entities.add(new ParalaxObject(Tree, 0, int(330*screenFactor), 250, 250, 0.2)); 
   entities.add(new ParalaxObject(Tree, 0, int(190*screenFactor), 500, 500, 0.3));
-
   //ForegroundParalaxLayers.add(new ParalaxObject(300, 250-400, 700, 700, 1.2, 18, 150)); 
   //ForegroundParalaxLayers.add(new ParalaxObject(500, 50-1200, 1800, 1800, 1.4, 25, 150));
 }
